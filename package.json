@@ -1,10 +1,10 @@
 {
-  "name": "mudbasics",
+  "name": "underverse",
   "version": "0.0.0",
-  "description": "A simple mud reference implementation",
+  "description": "underverse is a game of 6 vs 6",
   "repository": {
     "type": "git",
-    "url": "https://github.com/latticexyz/mudbasics.git"
+    "url": "https://github.com/giantleapgaming/underverse.git"
   },
   "private": true,
   "workspaces": {
