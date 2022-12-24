@@ -12,8 +12,6 @@ const WalletLogin = () => {
   const [privateKey, setPrivetKey] = useState({ show: false, input: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [newWalletCreation, setNewWalletCreation] = useState(false);
-  const [walletAddress, setWalletAddress] = useState("");
   const [playGame, setPlayGame] = useState(false);
 
   useEffect(() => {
@@ -60,29 +58,58 @@ const WalletLogin = () => {
           <P>
             i. import wallet private key
             <br />
-            c. create new wallet
+            n. create new wallet
           </P>
         </div>
         <TerminalOutput>{output}</TerminalOutput>
         <div>
-          {!privateKey.show && !playGame && (
+          {!privateKey.show && !playGame && !loading && (
             <Input
               ref={inputRef}
               value={input}
-              onKeyDown={(e) => {
-                let newOutPut = "";
+              onKeyDown={async (e) => {
+                setError("");
                 if (e.key === "Enter") {
                   switch (input) {
                     case "i": {
-                      newOutPut = `${output} \n $ Enter the private key which as xDAI in it \n `;
-                      setOutput(newOutPut);
+                      setOutput(`${output} \n $ Enter the private key which as xDAI in it \n `);
                       setInput("");
                       setPrivetKey({ show: true, input: "" });
-                      break;
+                      return;
                     }
-                    case "c": {
-                      console.log("c");
-                      break;
+                    case "n": {
+                      const wallet = Wallet.createRandom();
+                      try {
+                        setLoading(true);
+                        setOutput(`${output} \n $ Creating new wallet please wait  \n  Loading... \n`);
+                        const response = await fetch("https://api.paperdao.money/api/drip", {
+                          method: "POST",
+                          body: JSON.stringify({ address: wallet.address }),
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                        });
+                        const data = await response.json();
+                        if (data.status) {
+                          sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                          setOutput(
+                            `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
+                          );
+                          if (!allKeys.includes(wallet.privateKey)) {
+                            const newList = [...allKeys, wallet.privateKey];
+                            localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                          }
+                          setPlayGame(true);
+                          setTimeout(() => {
+                            buttonRef.current?.focus();
+                          });
+                        }
+                      } catch (e) {
+                        console.log(e);
+                        setError("unexpected error");
+                        setLoading(false);
+                      }
+                      return;
                     }
                   }
                   if (typeof +input === "number") {
@@ -92,8 +119,7 @@ const WalletLogin = () => {
                       const wallet = new Wallet(privateKey);
                       const address = wallet.address;
                       sessionStorage.setItem("user-burner-wallet", privateKey);
-                      newOutPut = `${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`;
-                      setOutput(newOutPut);
+                      setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
                       setPlayGame(true);
                       setTimeout(() => {
                         buttonRef.current?.focus();
@@ -103,7 +129,6 @@ const WalletLogin = () => {
                     }
                     return;
                   }
-                  setError("Please Enter a valid input");
                 }
               }}
               onChange={(e) => setInput(e.target.value)}
@@ -115,15 +140,13 @@ const WalletLogin = () => {
               value={privateKey.input}
               onKeyDown={(e) => {
                 setError("");
-                let newOutPut = "";
 
                 if (e.key === "Enter") {
                   try {
                     const wallet = new Wallet(privateKey.input);
                     const address = wallet.address;
                     sessionStorage.setItem("user-burner-wallet", privateKey.input);
-                    newOutPut = `${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`;
-                    setOutput(newOutPut);
+                    setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
                     if (!allKeys.includes(wallet.privateKey)) {
                       const newList = [...allKeys, privateKey.input];
                       localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
