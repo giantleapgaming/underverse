@@ -1,0 +1,5 @@
+{
+    "chainId": 100,
+    "rpc": "https://rpc.ankr.com/gnosis",
+    "wsRpc": "wss://rpc.gnosischain.com/wss"
+}
