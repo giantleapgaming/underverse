@@ -14,6 +14,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         camera,
         objectPool,
         config,
+        phaserScene,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -29,11 +30,13 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         id: `${i}${j}`,
         once: (gameObject) => {
           gameObject.setTexture(tile.key, tile.path);
+          gameObject.setFrame(0);
           gameObject.setPosition(x, y);
           gameObject.setDepth(2);
         },
       });
     }
   }
-  camera.centerOn(0, 0);
+  camera.setZoom(0.6);
+  camera.centerOn(0, -1);
 }
