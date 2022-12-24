@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 
@@ -84,10 +84,26 @@ const WalletLogin = () => {
                       console.log("c");
                       break;
                     }
-                    default: {
-                      setError("Enter a valid input");
-                    }
                   }
+                  if (typeof +input === "number") {
+                    const getWalletIndex = +input;
+                    const privateKey = allKeys[getWalletIndex - 1];
+                    if (privateKey) {
+                      const wallet = new Wallet(privateKey);
+                      const address = wallet.address;
+                      sessionStorage.setItem("user-burner-wallet", privateKey);
+                      newOutPut = `${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`;
+                      setOutput(newOutPut);
+                      setPlayGame(true);
+                      setTimeout(() => {
+                        buttonRef.current?.focus();
+                      });
+                    } else {
+                      setError("Please Enter a valid Input");
+                    }
+                    return;
+                  }
+                  setError("Please Enter a valid input");
                 }
               }}
               onChange={(e) => setInput(e.target.value)}
