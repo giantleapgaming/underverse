@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getComponentValue, removeComponent, setComponent } from "@latticexyz/recs";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -9,6 +8,7 @@ import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
 import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
 import { Wallet } from "ethers";
+import WalletLogin from "./layers/react/components/WalletLogin";
 
 // Assign variables that can be overridden by HMR
 let createNetworkLayer = createNetworkLayerImport;
@@ -26,24 +26,18 @@ async function bootGame() {
   let initialBoot = true;
 
   async function rebootGame(): Promise<Layers> {
-    // Remove react when starting to reboot layers, reboot react once layers are rebooted
     mountReact.current(false);
 
     const params = new URLSearchParams(window.location.search);
     const worldAddress = params.get("worldAddress");
-    let privateKey = params.get("burnerWalletPrivateKey");
+    const privateKey = sessionStorage.getItem("user-burner-wallet");
     const chainIdString = params.get("chainId");
     const jsonRpc = params.get("rpc") || undefined;
-    const wsRpc = params.get("wsRpc") || undefined; // || (jsonRpc && jsonRpc.replace("http", "ws"));
+    const wsRpc = params.get("wsRpc") || undefined;
     const checkpointUrl = params.get("checkpoint") || undefined;
     const devMode = params.get("dev") === "true";
     const initialBlockNumberString = params.get("initialBlockNumber");
     const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
-
-    if (!privateKey) {
-      privateKey = localStorage.getItem("burnerWallet") || Wallet.createRandom().privateKey;
-      localStorage.setItem("burnerWallet", privateKey);
-    }
 
     let networkLayerConfig;
     if (worldAddress && privateKey && chainIdString && jsonRpc) {
@@ -147,9 +141,15 @@ function bootReact() {
   if (!rootElement) return console.warn("React root not found");
 
   const root = ReactDOM.createRoot(rootElement);
-
+  let wallet: any;
+  try {
+    const privateKey = sessionStorage.getItem("user-burner-wallet");
+    wallet = new Wallet(privateKey || "");
+  } catch (e) {
+    console.log(e);
+  }
   function renderEngine() {
-    root.render(<Engine setLayers={setLayers} mountReact={mountReact} />);
+    root.render(wallet?.address ? <Engine setLayers={setLayers} mountReact={mountReact} /> : <WalletLogin />);
   }
 
   renderEngine();
@@ -171,9 +171,18 @@ function bootReact() {
     });
   }
 }
-
 export async function boot() {
   bootReact();
-  const game = await bootGame();
-  setLayers.current(game.layers as Layers);
+  try {
+    const privateKey = sessionStorage.getItem("user-burner-wallet");
+    if (privateKey) {
+      const wallet = new Wallet(privateKey);
+      if (wallet.address) {
+        const game = await bootGame();
+        setLayers.current(game.layers as Layers);
+      }
+    }
+  } catch (e) {
+    console.log(e);
+  }
 }
