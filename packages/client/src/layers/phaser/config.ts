@@ -12,6 +12,7 @@ import {
 } from "../phaser/assets/tilesets/overworldTileset";
 import overworldTileset from "./assets/tilesets/overworld-tileset.png";
 import mountainTileset from "./assets/tilesets/mountain-tileset.png";
+
 const ANIMATION_INTERVAL = 200;
 
 export const phaserConfig = {
@@ -30,7 +31,6 @@ export const phaserConfig = {
           key: Assets.Center,
           path: "/tile/center.png",
         },
-
         [Assets.MainAtlas]: {
           type: AssetType.MultiAtlas,
           key: Assets.MainAtlas,
