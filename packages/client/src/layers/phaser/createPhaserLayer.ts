@@ -1,4 +1,4 @@
-import { createEntity, namespaceWorld, setComponent } from "@latticexyz/recs";
+import { createEntity, namespaceWorld, setComponent, updateComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";

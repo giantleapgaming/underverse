@@ -23,6 +23,7 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = network;
 
   defineSystem(world, [Has(OwnedBy), Has(Position)], ({ entity }) => {
+    console.log(entity);
     const object = objectPool.get(entity, "Sprite");
     const position = getComponentValue(Position, entity);
     const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);

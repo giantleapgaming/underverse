@@ -1,4 +1,4 @@
-import { createWorld } from "@latticexyz/recs";
+import { createEntity, createWorld, removeComponent, setComponent } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
@@ -41,7 +41,6 @@ export async function createNetworkLayer(config: GameConfig) {
 
     Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
   };
-
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
     typeof components,
@@ -60,12 +59,18 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const moveSystem = async (x: number, y: number) => {
+    const selectId = createEntity(world);
     try {
+      setComponent(components.OwnedBy, selectId, { value: `${network.connectedAddress.get()}` });
+      setComponent(components.Position, selectId, { x, y });
       await systems["system.Build"].executeTyped(x, y);
     } catch (e) {
       console.log(e);
+      removeComponent(components.OwnedBy, selectId);
+      removeComponent(components.Position, selectId);
     }
   };
+  console.log(components);
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,

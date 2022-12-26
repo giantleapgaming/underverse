@@ -43,7 +43,7 @@ export function deployGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const selected = getComponentValue(Select, selectId);
-    if (selected) {
+    if (selected && selected?.selected) {
       setSelect(x, y, false);
       await moveSystem(x, y);
     }
