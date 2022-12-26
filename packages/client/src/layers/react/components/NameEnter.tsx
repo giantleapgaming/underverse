@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { getComponentEntities } from "@latticexyz/recs";
-import { concat, map } from "rxjs";
+import { concat, map, merge } from "rxjs";
 import { useState } from "react";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
@@ -135,7 +135,7 @@ export const registerNameScreen = () => {
           world,
         },
       } = layers;
-      return concat([1], Name.update$).pipe(
+      return merge(Name.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;

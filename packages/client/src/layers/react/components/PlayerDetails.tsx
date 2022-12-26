@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
 import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
-import { concat, map } from "rxjs";
+import { map, merge } from "rxjs";
 
 const PlayerDetails = ({ name, cash }: { name?: string; cash?: number }) => (
   <S.Container>
@@ -42,7 +42,7 @@ export const registerPlayerDetails = () => {
           world,
         },
       } = layers;
-      return concat([1], Name.update$, Cash.update$).pipe(
+      return merge(Name.update$, Cash.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
