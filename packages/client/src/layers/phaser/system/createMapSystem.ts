@@ -51,6 +51,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       gameObject.setDepth(2);
     },
   });
+  // camera.setScroll(0, 0);
   // camera.setZoom(0.6);
   // camera.centerOn(0, -1);
 }
