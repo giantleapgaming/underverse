@@ -1,17 +1,47 @@
 import styled, { keyframes } from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
-import { getComponentEntities, getComponentValue, hasComponent } from "@latticexyz/recs";
+import { getComponentEntities } from "@latticexyz/recs";
 import { concat, map } from "rxjs";
+import { useState } from "react";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
-  const a = "";
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const {
+    network: {
+      api: { initSystem },
+    },
+  } = layers;
   return (
     <Container>
       <AnimatedGradientText>Underverse</AnimatedGradientText>
       <P>Let's build your world in the space</P>
-      <Input />
-      <Button type="submit">Enter</Button>
+      <Form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (name) {
+            try {
+              setLoading(true);
+              await initSystem(name);
+              setLoading(false);
+            } catch (e) {
+              setLoading(false);
+              console.log("Error", e);
+            }
+          }
+        }}
+      >
+        <Input
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          value={name}
+        />
+        <Button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Enter"}
+        </Button>
+      </Form>
     </Container>
   );
 };
@@ -24,16 +54,26 @@ const hue = keyframes`
    -webkit-filter: hue-rotate(-360deg);
  }
 `;
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+`;
 const Container = styled.div`
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-image: url(/img/bg.jpg);
-  background-size: cover; /* <------ */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  pointer-events: all;
 `;
 const AnimatedGradientText = styled.h1`
   color: #33aadd;
@@ -91,21 +131,16 @@ export const registerNameScreen = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { OwnedBy },
+          components: { Name },
           world,
         },
       } = layers;
-
-      return concat([1], OwnedBy.update$).pipe(
+      return concat([1], Name.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
-          if (!address) return;
-          const ownedBy = [...getComponentEntities(OwnedBy)].filter(
-            (entity) => getComponentValue(OwnedBy, entity)?.value === address
-          );
-          if (ownedBy.length) {
-            if (hasComponent(OwnedBy, ownedBy[0])) return;
-          }
+          const entities = world.entities;
+          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
+          if (userLinkWithAccount) return;
           return {
             layers,
           };

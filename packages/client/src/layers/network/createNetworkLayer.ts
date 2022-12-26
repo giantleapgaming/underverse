@@ -26,6 +26,8 @@ export async function createNetworkLayer(config: GameConfig) {
   const components = {
     LoadingState: defineLoadingStateComponent(world),
 
+    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+
     Cash: defineNumberComponent(world, { id: "Cash", metadata: { contractId: "component.Cash" } }),
 
     Defence: defineNumberComponent(world, { id: "Defence", metadata: { contractId: "component.Defence" } }),
@@ -34,8 +36,6 @@ export async function createNetworkLayer(config: GameConfig) {
       id: "LastUpdatedTime",
       metadata: { contractId: "component.LastUpdatedTime" },
     }),
-
-    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "Name" } }),
 
     Offence: defineNumberComponent(world, { id: "Offence", metadata: { contractId: "component.Offence" } }),
 
@@ -54,7 +54,13 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
 
   // --- API ------------------------------------------------------------------------
-
+  const initSystem = async (name: string) => {
+    try {
+      await systems["system.Init"].executeTyped(name);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -65,7 +71,9 @@ export async function createNetworkLayer(config: GameConfig) {
     startSync,
     network,
     actions,
-    api: {},
+    api: {
+      initSystem,
+    },
     dev: setupDevSystems(world, encoders, systems),
   };
 
