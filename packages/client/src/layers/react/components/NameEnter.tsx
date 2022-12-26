@@ -1,6 +1,11 @@
 import styled, { keyframes } from "styled-components";
+import { registerUIComponent } from "../engine";
+import { Layers } from "../../../types";
+import { getComponentEntities, getComponentValue, hasComponent } from "@latticexyz/recs";
+import { concat, map } from "rxjs";
 
-const NameEnter = () => {
+const NameEnter = ({ layers }: { layers: Layers }) => {
+  const a = "";
   return (
     <Container>
       <AnimatedGradientText>Underverse</AnimatedGradientText>
@@ -10,8 +15,6 @@ const NameEnter = () => {
     </Container>
   );
 };
-
-export default NameEnter;
 
 const hue = keyframes`
  from {
@@ -74,3 +77,43 @@ const Input = styled.input`
   color: wheat;
   font-weight: 900;
 `;
+
+export const registerNameScreen = () => {
+  registerUIComponent(
+    "NameScreen",
+    {
+      colStart: 1,
+      colEnd: 13,
+      rowStart: 1,
+      rowEnd: 13,
+    },
+    (layers) => {
+      const {
+        network: {
+          network: { connectedAddress },
+          components: { OwnedBy },
+          world,
+        },
+      } = layers;
+
+      return concat([1], OwnedBy.update$).pipe(
+        map(() => connectedAddress.get()),
+        map((address) => {
+          if (!address) return;
+          const ownedBy = [...getComponentEntities(OwnedBy)].filter(
+            (entity) => getComponentValue(OwnedBy, entity)?.value === address
+          );
+          if (ownedBy.length) {
+            if (hasComponent(OwnedBy, ownedBy[0])) return;
+          }
+          return {
+            layers,
+          };
+        })
+      );
+    },
+    ({ layers }) => {
+      return <NameEnter layers={layers} />;
+    }
+  );
+};

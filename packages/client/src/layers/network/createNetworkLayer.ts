@@ -1,6 +1,12 @@
 import { createWorld } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
-import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
+import {
+  createActionSystem,
+  defineCoordComponent,
+  defineNumberComponent,
+  defineStringComponent,
+  setupMUDNetwork,
+} from "@latticexyz/std-client";
 import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
@@ -19,6 +25,23 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     LoadingState: defineLoadingStateComponent(world),
+
+    Cash: defineNumberComponent(world, { id: "Cash", metadata: { contractId: "component.Cash" } }),
+
+    Defence: defineNumberComponent(world, { id: "Defence", metadata: { contractId: "component.Defence" } }),
+
+    LastUpdatedTime: defineNumberComponent(world, {
+      id: "LastUpdatedTime",
+      metadata: { contractId: "component.LastUpdatedTime" },
+    }),
+
+    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "Name" } }),
+
+    Offence: defineNumberComponent(world, { id: "Offence", metadata: { contractId: "component.Offence" } }),
+
+    OwnedBy: defineStringComponent(world, { id: "OwnedBy", metadata: { contractId: "component.OwnedBy" } }),
+
+    Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
   };
 
   // --- SETUP ----------------------------------------------------------------------
