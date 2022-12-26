@@ -17,8 +17,6 @@ import { GameConfig, getNetworkConfig } from "./config";
  * Its purpose is to synchronize the client components with the contract components.
  */
 export async function createNetworkLayer(config: GameConfig) {
-  console.log("Network config", config);
-
   // --- WORLD ----------------------------------------------------------------------
   const world = createWorld();
 
@@ -61,6 +59,13 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log(e);
     }
   };
+  const moveSystem = async (x: number, y: number) => {
+    try {
+      await systems["system.Build"].executeTyped(x, y);
+    } catch (e) {
+      console.log(e);
+    }
+  };
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -73,6 +78,7 @@ export async function createNetworkLayer(config: GameConfig) {
     actions,
     api: {
       initSystem,
+      moveSystem,
     },
     dev: setupDevSystems(world, encoders, systems),
   };

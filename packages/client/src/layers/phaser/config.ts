@@ -31,6 +31,11 @@ export const phaserConfig = {
           key: Assets.Center,
           path: "/tile/center.png",
         },
+        [Assets.Godown]: {
+          type: AssetType.Image,
+          key: Assets.Godown,
+          path: "/godown/1.png",
+        },
         [Assets.MainAtlas]: {
           type: AssetType.MultiAtlas,
           key: Assets.MainAtlas,
