@@ -1,4 +1,26 @@
 {
-  "components": ["ExampleComponent"],
-  "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] }]
+  "components": [
+                  "LastUpdatedTimeComponent",
+                  "NameComponent",
+                  "OwnedByComponent",
+                  "PositionComponent",
+                  "CashComponent",
+                  "OffenceComponent",
+                  "DefenceComponent"
+  ],
+  "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] },
+  { "name": "InitSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "NameComponent"
+                                        ]},
+  { "name": "BuildSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "OwnedByComponent",
+                                          "PositionComponent",
+                                          "OffenceComponent",
+                                          "DefenceComponent"
+                                        ]}
+  ]
 }
