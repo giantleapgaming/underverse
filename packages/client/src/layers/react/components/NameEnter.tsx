@@ -1,17 +1,51 @@
 import styled, { keyframes } from "styled-components";
+import { registerUIComponent } from "../engine";
+import { Layers } from "../../../types";
+import { getComponentEntities } from "@latticexyz/recs";
+import { concat, map, merge } from "rxjs";
+import { useState } from "react";
+import { computedToStream } from "@latticexyz/utils";
 
-const NameEnter = () => {
+const NameEnter = ({ layers }: { layers: Layers }) => {
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const {
+    network: {
+      api: { initSystem },
+    },
+  } = layers;
   return (
     <Container>
       <AnimatedGradientText>Underverse</AnimatedGradientText>
       <P>Let's build your world in the space</P>
-      <Input />
-      <Button type="submit">Enter</Button>
+      <Form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (name) {
+            try {
+              setLoading(true);
+              await initSystem(name);
+              setLoading(false);
+            } catch (e) {
+              setLoading(false);
+              console.log("Error", e);
+            }
+          }
+        }}
+      >
+        <Input
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+          value={name}
+        />
+        <Button type="submit" disabled={loading}>
+          {loading ? "Loading..." : "Enter"}
+        </Button>
+      </Form>
     </Container>
   );
 };
-
-export default NameEnter;
 
 const hue = keyframes`
  from {
@@ -21,16 +55,26 @@ const hue = keyframes`
    -webkit-filter: hue-rotate(-360deg);
  }
 `;
+const Form = styled.form`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 10px;
+`;
 const Container = styled.div`
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  position: absolute;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-image: url(/img/bg.jpg);
-  background-size: cover; /* <------ */
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
+  pointer-events: all;
 `;
 const AnimatedGradientText = styled.h1`
   color: #33aadd;
@@ -74,3 +118,39 @@ const Input = styled.input`
   color: wheat;
   font-weight: 900;
 `;
+
+export const registerNameScreen = () => {
+  registerUIComponent(
+    "NameScreen",
+    {
+      colStart: 1,
+      colEnd: 13,
+      rowStart: 1,
+      rowEnd: 13,
+    },
+    (layers) => {
+      const {
+        network: {
+          network: { connectedAddress },
+          components: { Name },
+          world,
+        },
+      } = layers;
+      return merge(computedToStream(connectedAddress), Name.update$).pipe(
+        map(() => connectedAddress.get()),
+        map((address) => {
+          const entities = world.entities;
+          console.log({ entities });
+          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
+          if (userLinkWithAccount) return;
+          return {
+            layers,
+          };
+        })
+      );
+    },
+    ({ layers }) => {
+      return <NameEnter layers={layers} />;
+    }
+  );
+};

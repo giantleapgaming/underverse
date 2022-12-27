@@ -17,14 +17,16 @@ export function registerComponentBrowser() {
         network: { world, dev },
       } = layers;
       return (
-        <Browser
-          world={world}
-          entities={world.entities}
-          layers={layers}
-          devHighlightComponent={dev.DevHighlightComponent}
-          hoverHighlightComponent={dev.HoverHighlightComponent}
-          setContractComponentValue={dev.setContractComponentValue}
-        />
+        <div>
+          <Browser
+            world={world}
+            entities={world.entities}
+            layers={layers}
+            devHighlightComponent={dev.DevHighlightComponent}
+            hoverHighlightComponent={dev.HoverHighlightComponent}
+            setContractComponentValue={dev.setContractComponentValue}
+          />
+        </div>
       );
     }
   );

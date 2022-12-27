@@ -18,6 +18,7 @@ export enum Assets {
   MainAtlas = "MainAtlas",
   Tile = "Tile",
   Center = "Center",
+  Godown = "Godown",
 }
 
 export enum Sprites {
