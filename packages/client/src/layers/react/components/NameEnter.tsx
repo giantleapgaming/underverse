@@ -2,8 +2,9 @@ import styled, { keyframes } from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { getComponentEntities } from "@latticexyz/recs";
-import { map, merge } from "rxjs";
+import { concat, map, merge } from "rxjs";
 import { useState } from "react";
+import { computedToStream } from "@latticexyz/utils";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
@@ -135,10 +136,11 @@ export const registerNameScreen = () => {
           world,
         },
       } = layers;
-      return merge(Name.update$).pipe(
+      return merge(computedToStream(connectedAddress), Name.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
+          console.log({ entities });
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
           if (userLinkWithAccount) return;
           return {
