@@ -1,4 +1,4 @@
-import { createEntity, createWorld, removeComponent, setComponent } from "@latticexyz/recs";
+import { createEntity, createWorld, EntityID, removeComponent, setComponent } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
@@ -96,6 +96,13 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log({ e });
     }
   };
+  const buySystem = async (godownEntity: EntityID, kgs: number) => {
+    try {
+      await systems["system.Buy"].executeTyped(godownEntity, kgs);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -109,6 +116,7 @@ export async function createNetworkLayer(config: GameConfig) {
     api: {
       initSystem,
       moveSystem,
+      buySystem
     },
     dev: setupDevSystems(world, encoders, systems),
   };
