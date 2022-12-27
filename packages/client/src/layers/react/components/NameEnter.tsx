@@ -70,13 +70,13 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(/img/bg.jpg);
+  background-image: url(/img/bg.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
 `;
-const AnimatedGradientText = styled.h1`
+export const AnimatedGradientText = styled.h1`
   color: #33aadd;
   background-image: -webkit-linear-gradient(92deg, #fbd811, #0feb1a);
   -webkit-background-clip: text;
@@ -140,7 +140,6 @@ export const registerNameScreen = () => {
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
-          console.log({ entities });
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
           if (userLinkWithAccount) return;
           return {

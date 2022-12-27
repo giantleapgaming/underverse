@@ -1,11 +1,7 @@
-import { Tileset } from "./../assets/tilesets/overworldTileset";
-import { getComponentValue } from "@latticexyz/recs";
-import { defineComponentSystem, defineSystem, Has, setComponent } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
-import { Assets, Sprites } from "../constants";
+import { Sprites } from "../constants";
 import { PhaserLayer } from "../types";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { has } from "mobx";
 
 export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -14,27 +10,24 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         camera,
         objectPool,
         config,
-        phaserScene,
         maps: {
           Main: { tileWidth, tileHeight },
         },
       },
     },
   } = phaser;
-  const i = 0;
-  const j = 0;
-  const object = objectPool.get(`${i}${j}`, "Sprite");
-  const { x, y } = tileCoordToPixelCoord({ x: i, y: j }, tileWidth, tileHeight);
-  const tile = config.assets[Assets.Center];
+
+  const object = objectPool.get(`centerSun`, "Sprite");
+  const { x, y } = tileCoordToPixelCoord({ x: 0, y: 0 }, tileWidth, tileHeight);
+
+  const centerSun = config.sprites[Sprites.Player12];
   object.setComponent({
-    id: `${i}${j}`,
+    id: `centerSun-sprite`,
     once: (gameObject) => {
-      gameObject.setTexture(tile.key, tile.path);
-      gameObject.setFrame(0);
+      gameObject.setTexture(centerSun.assetKey, "centre-sun.png");
       gameObject.setPosition(x, y);
+      gameObject.setDepth(3);
     },
   });
-  // camera.setScroll(0, 0);
-  // camera.setZoom(0.6);
   camera.centerOn(0, -1);
 }

@@ -12,6 +12,7 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
         objectPool,
         config,
         input,
+        phaserScene,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -31,7 +32,10 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
     }
   });
   world.registerDisposer(() => hoverSub?.unsubscribe());
-
+  const tooltipText = phaserScene.add.text(0, 0, "", {
+    fontSize: "16px",
+    backgroundColor: "#fbdbdb",
+  });
   defineComponentSystem(world, Select, (update) => {
     const object = objectPool.get(update.entity, "Sprite");
     const position = update.value[0];
@@ -43,6 +47,18 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
         gameObject.setTexture(Assets.Godown, sprite.path);
         gameObject.setPosition(x, y);
         gameObject.depth = 2;
+        gameObject.visible = position?.selected || false;
+        gameObject.setInteractive();
+        gameObject.on("pointerover", () => {
+          tooltipText.setPadding(10, 10, 10, 10);
+          tooltipText.setText("This is a tooltip for my sprite.");
+          tooltipText.x = gameObject.x - 64;
+          tooltipText.y = gameObject.y - 32;
+          tooltipText.setVisible(true);
+        });
+        gameObject.on("pointerout", function () {
+          tooltipText.setVisible(false);
+        });
         gameObject.visible = position?.selected || false;
       },
     });

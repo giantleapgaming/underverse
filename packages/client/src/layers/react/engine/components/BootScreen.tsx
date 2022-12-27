@@ -8,7 +8,7 @@ export const BootScreen: React.FC<{ initialOpacity?: number }> = ({ children, in
 
   return (
     <Container>
-      <img src="/img/mud.png" style={{ opacity }}></img>
+      <img src="/img/logo.png" style={{ opacity }}></img>
       <div>{children || <>&nbsp;</>}</div>
     </Container>
   );
@@ -28,13 +28,15 @@ const Container = styled.div`
   grid-gap: 50px;
   z-index: 100;
   pointer-events: all;
-
+  background-image: url(/img/bg.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   div {
     font-family: "Space Grotesk", sans-serif;
   }
 
   img {
     transition: all 2s ease;
-    width: 100px;
   }
 `;

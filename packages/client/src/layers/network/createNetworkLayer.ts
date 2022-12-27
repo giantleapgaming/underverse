@@ -59,18 +59,12 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const moveSystem = async (x: number, y: number) => {
-    const selectId = createEntity(world);
     try {
-      setComponent(components.OwnedBy, selectId, { value: `${network.connectedAddress.get()}` });
-      setComponent(components.Position, selectId, { x, y });
       await systems["system.Build"].executeTyped(x, y);
     } catch (e) {
-      console.log(e);
-      removeComponent(components.OwnedBy, selectId);
-      removeComponent(components.Position, selectId);
+      console.log({ e });
     }
   };
-  console.log(components);
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
