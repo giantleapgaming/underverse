@@ -24,22 +24,39 @@ export async function createNetworkLayer(config: GameConfig) {
   const components = {
     LoadingState: defineLoadingStateComponent(world),
 
-    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+    Name: defineStringComponent(world, { id: "Name", indexed: true, metadata: { contractId: "component.Name" } }),
 
-    Cash: defineNumberComponent(world, { id: "Cash", metadata: { contractId: "component.Cash" } }),
+    Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
 
-    Defence: defineNumberComponent(world, { id: "Defence", metadata: { contractId: "component.Defence" } }),
+    Defence: defineNumberComponent(world, {
+      id: "Defence",
+      indexed: true,
+      metadata: { contractId: "component.Defence" },
+    }),
 
     LastUpdatedTime: defineNumberComponent(world, {
       id: "LastUpdatedTime",
+      indexed: true,
       metadata: { contractId: "component.LastUpdatedTime" },
     }),
 
-    Offence: defineNumberComponent(world, { id: "Offence", metadata: { contractId: "component.Offence" } }),
+    Offence: defineNumberComponent(world, {
+      id: "Offence",
+      indexed: true,
+      metadata: { contractId: "component.Offence" },
+    }),
 
-    OwnedBy: defineStringComponent(world, { id: "OwnedBy", metadata: { contractId: "component.OwnedBy" } }),
+    OwnedBy: defineStringComponent(world, {
+      id: "OwnedBy",
+      indexed: true,
+      metadata: { contractId: "component.OwnedBy" },
+    }),
 
-    Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
+    Position: defineCoordComponent(world, {
+      id: "Position",
+      indexed: true,
+      metadata: { contractId: "component.Position" },
+    }),
   };
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<

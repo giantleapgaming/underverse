@@ -7,9 +7,9 @@ import { registerGodownButton } from "./GodownButton";
 
 export function registerUIComponents() {
   registerNameScreen();
-  registerComponentBrowser();
+  // registerComponentBrowser();
   registerGodownButton();
   registerPlayerDetails();
   registerLoadingState();
-  registerActionQueue();
+  // registerActionQueue();
 }
