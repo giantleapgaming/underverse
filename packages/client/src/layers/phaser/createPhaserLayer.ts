@@ -3,7 +3,7 @@ import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
-import { Select } from "../local/components";
+import { Progress, Select } from "../local/components";
 import { deployGodownSystem, displayGodownSystem, selectSystem } from "../local/systems";
 
 /**
@@ -14,20 +14,28 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const world = namespaceWorld(network.world, "phaser");
 
   // ---ENTITY ID------
-  const unusedId = createEntity(world);
+  const progressId = createEntity(world);
   const selectId = createEntity(world);
 
   const localIds = {
     selectId,
+    progressId,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     Select: Select(world),
+    Progress: Progress(world),
   };
 
   // --- API ------------------------------------------------------------------------
   const setSelect = (x: number, y: number, selected: boolean) => {
     setComponent(components.Select, selectId, { x, y, selected });
+  };
+  const showProgress = () => {
+    setComponent(components.Progress, progressId, { value: true });
+  };
+  const hideProgress = () => {
+    setComponent(components.Progress, progressId, { value: false });
   };
 
   // --- PHASER ENGINE SETUP --------------------------------------------------------
@@ -42,7 +50,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setSelect },
+    localApi: { setSelect, hideProgress, showProgress },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------

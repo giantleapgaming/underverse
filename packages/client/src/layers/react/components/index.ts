@@ -4,11 +4,13 @@ import { registerLoadingState } from "./LoadingState";
 import { registerNameScreen } from "./NameEnter";
 import { registerPlayerDetails } from "./PlayerDetails";
 import { registerGodownButton } from "./GodownButton";
+import { registerProgressBar } from "./ProgressBar";
 
 export function registerUIComponents() {
   registerNameScreen();
   // registerComponentBrowser();
   registerGodownButton();
+  registerProgressBar();
   registerPlayerDetails();
   registerLoadingState();
   // registerActionQueue();

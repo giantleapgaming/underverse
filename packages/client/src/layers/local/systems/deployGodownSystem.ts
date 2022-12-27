@@ -17,9 +17,9 @@ export function deployGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Select },
-    localApi: { setSelect },
-    localIds: { selectId },
+    components: { Select, Progress },
+    localApi: { setSelect, showProgress },
+    localIds: { selectId, progressId },
   } = phaser;
   const {
     api: { moveSystem },
@@ -34,7 +34,7 @@ export function deployGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
   world.registerDisposer(() => hoverSub?.unsubscribe());
 
-  const rightClickSub = input.rightClick$.subscribe((p) => {
+  const rightClickSub = input.rightClick$.subscribe(() => {
     setSelect(0, 0, false);
   });
   world.registerDisposer(() => rightClickSub?.unsubscribe());
@@ -43,9 +43,11 @@ export function deployGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const selected = getComponentValue(Select, selectId);
-    if (selected && selected?.selected) {
+    const canWePlaceNextMove = getComponentValue(Progress, progressId)?.value;
+    if (selected && selected?.selected && !(x === 0 && y === 0) && !canWePlaceNextMove) {
       setSelect(x, y, false);
       await moveSystem(x, y);
+      showProgress();
     }
   });
   world.registerDisposer(() => leftClickSub?.unsubscribe());
