@@ -6,7 +6,10 @@
                   "PositionComponent",
                   "CashComponent",
                   "OffenceComponent",
-                  "DefenceComponent"
+                  "DefenceComponent",
+                  "LevelComponent",
+                  "StorageComponent",
+                  "BalanceComponent"
   ],
   "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] },
   { "name": "InitSystem", "writeAccess": [
@@ -20,7 +23,18 @@
                                           "OwnedByComponent",
                                           "PositionComponent",
                                           "OffenceComponent",
-                                          "DefenceComponent"
+                                          "DefenceComponent",
+                                          "LevelComponent",
+                                          "StorageComponent",
+                                          "BalanceComponent"
+                                        ]},
+  { "name": "BuySystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "OwnedByComponent",
+                                          "PositionComponent",
+                                          "StorageComponent",
+                                          "BalanceComponent"
                                         ]}
   ]
 }

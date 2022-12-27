@@ -9,8 +9,11 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
+import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
+import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
+import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, godownCreationCost, offenceInitialAmount, defenceInitialAmount } from "../constants.sol";
+import { actionDelayInSeconds, godownCreationCost, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -52,9 +55,18 @@ contract BuildSystem is System {
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, offenceInitialAmount);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
+    LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
+    StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
+
+    // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
       addressToEntity(msg.sender),
       playerCash - godownCreationCost
+    );
+    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
+      addressToEntity(msg.sender),
+      block.timestamp
     );
   }
 
