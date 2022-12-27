@@ -27,7 +27,7 @@ const S = {
 };
 export const registerPlayerDetails = () => {
   registerUIComponent(
-    "NameScreen",
+    "PlayerDetailsScreen",
     {
       colStart: 1,
       colEnd: 4,
