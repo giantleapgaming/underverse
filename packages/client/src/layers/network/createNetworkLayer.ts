@@ -28,6 +28,8 @@ export async function createNetworkLayer(config: GameConfig) {
 
     Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
 
+    Balance: defineNumberComponent(world, { id:"Balance", indexed: true, metadata: { contractId: "component.Balance"}}),
+
     Defence: defineNumberComponent(world, {
       id: "Defence",
       indexed: true,
@@ -38,6 +40,12 @@ export async function createNetworkLayer(config: GameConfig) {
       id: "LastUpdatedTime",
       indexed: true,
       metadata: { contractId: "component.LastUpdatedTime" },
+    }),
+
+    Level: defineNumberComponent(world, {
+      id: "Level",
+      indexed: true,
+      metadata: {contractId: "component.Level"}
     }),
 
     Offence: defineNumberComponent(world, {
@@ -57,6 +65,12 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Position" },
     }),
+
+    Storage: defineNumberComponent(world, {
+      id: "Storage",
+      indexed: true,
+      metadata: {contractId: "component.Storage"}
+    })
   };
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
