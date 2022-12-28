@@ -4,7 +4,7 @@ import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
 import { Progress, Select } from "../local/components";
-import { deployGodownSystem, displayGodownSystem, selectSystem } from "../local/systems";
+import { deployStationSystem, displayStationSystem, selectSystem } from "../local/systems";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -56,7 +56,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
   selectSystem(network, context);
-  deployGodownSystem(network, context);
-  displayGodownSystem(network, context);
+  deployStationSystem(network, context);
+  displayStationSystem(network, context);
   return context;
 }

@@ -1,10 +1,10 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, EntityIndex, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
+import { defineSystem, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Assets, Sprites } from "../../phaser/constants";
+import { Sprites } from "../../phaser/constants";
 
-export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
+export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     scenes: {

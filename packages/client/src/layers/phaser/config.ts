@@ -29,10 +29,35 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
-        [Assets.Godown]: {
+        [Assets.Station1]: {
           type: AssetType.Image,
-          key: Assets.Godown,
-          path: "/godown/1.png",
+          key: Assets.Station1,
+          path: "/station/1-1.png",
+        },
+        [Assets.Station2]: {
+          type: AssetType.Image,
+          key: Assets.Station2,
+          path: "/station/2-1.png",
+        },
+        [Assets.Station3]: {
+          type: AssetType.Image,
+          key: Assets.Station3,
+          path: "/station/3-1.png",
+        },
+        [Assets.Station4]: {
+          type: AssetType.Image,
+          key: Assets.Station4,
+          path: "/station/4-1.png",
+        },
+        [Assets.Station5]: {
+          type: AssetType.Image,
+          key: Assets.Station5,
+          path: "/station/5-1.png",
+        },
+        [Assets.Station6]: {
+          type: AssetType.Image,
+          key: Assets.Station6,
+          path: "/station/6-1.png",
         },
       },
       maps: {
