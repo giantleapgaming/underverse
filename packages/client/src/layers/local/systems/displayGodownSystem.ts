@@ -20,7 +20,6 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = phaser;
   const {
     components: { OwnedBy, Position, Name },
-    network: { connectedAddress },
   } = network;
 
   defineSystem(world, [Has(OwnedBy), Has(Position)], ({ entity }) => {

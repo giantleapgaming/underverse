@@ -1,4 +1,4 @@
-import { createEntity, createWorld, EntityID, removeComponent, setComponent } from "@latticexyz/recs";
+import { createWorld, EntityID } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
@@ -28,7 +28,11 @@ export async function createNetworkLayer(config: GameConfig) {
 
     Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
 
-    Balance: defineNumberComponent(world, { id:"Balance", indexed: true, metadata: { contractId: "component.Balance"}}),
+    Balance: defineNumberComponent(world, {
+      id: "Balance",
+      indexed: true,
+      metadata: { contractId: "component.Balance" },
+    }),
 
     Defence: defineNumberComponent(world, {
       id: "Defence",
@@ -45,7 +49,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Level: defineNumberComponent(world, {
       id: "Level",
       indexed: true,
-      metadata: {contractId: "component.Level"}
+      metadata: { contractId: "component.Level" },
     }),
 
     Offence: defineNumberComponent(world, {
@@ -69,8 +73,8 @@ export async function createNetworkLayer(config: GameConfig) {
     Storage: defineNumberComponent(world, {
       id: "Storage",
       indexed: true,
-      metadata: {contractId: "component.Storage"}
-    })
+      metadata: { contractId: "component.Storage" },
+    }),
   };
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
@@ -116,7 +120,7 @@ export async function createNetworkLayer(config: GameConfig) {
     api: {
       initSystem,
       moveSystem,
-      buySystem
+      buySystem,
     },
     dev: setupDevSystems(world, encoders, systems),
   };
