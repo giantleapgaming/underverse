@@ -1,4 +1,4 @@
-import { createEntity, createWorld, removeComponent, setComponent } from "@latticexyz/recs";
+import { createWorld, EntityID } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
@@ -24,22 +24,57 @@ export async function createNetworkLayer(config: GameConfig) {
   const components = {
     LoadingState: defineLoadingStateComponent(world),
 
-    Name: defineStringComponent(world, { id: "Name", metadata: { contractId: "component.Name" } }),
+    Name: defineStringComponent(world, { id: "Name", indexed: true, metadata: { contractId: "component.Name" } }),
 
-    Cash: defineNumberComponent(world, { id: "Cash", metadata: { contractId: "component.Cash" } }),
+    Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
 
-    Defence: defineNumberComponent(world, { id: "Defence", metadata: { contractId: "component.Defence" } }),
+    Balance: defineNumberComponent(world, {
+      id: "Balance",
+      indexed: true,
+      metadata: { contractId: "component.Balance" },
+    }),
+
+    Defence: defineNumberComponent(world, {
+      id: "Defence",
+      indexed: true,
+      metadata: { contractId: "component.Defence" },
+    }),
 
     LastUpdatedTime: defineNumberComponent(world, {
       id: "LastUpdatedTime",
+      indexed: true,
       metadata: { contractId: "component.LastUpdatedTime" },
     }),
 
-    Offence: defineNumberComponent(world, { id: "Offence", metadata: { contractId: "component.Offence" } }),
+    Level: defineNumberComponent(world, {
+      id: "Level",
+      indexed: true,
+      metadata: { contractId: "component.Level" },
+    }),
 
-    OwnedBy: defineStringComponent(world, { id: "OwnedBy", metadata: { contractId: "component.OwnedBy" } }),
+    Offence: defineNumberComponent(world, {
+      id: "Offence",
+      indexed: true,
+      metadata: { contractId: "component.Offence" },
+    }),
 
-    Position: defineCoordComponent(world, { id: "Position", metadata: { contractId: "component.Position" } }),
+    OwnedBy: defineStringComponent(world, {
+      id: "OwnedBy",
+      indexed: true,
+      metadata: { contractId: "component.OwnedBy" },
+    }),
+
+    Position: defineCoordComponent(world, {
+      id: "Position",
+      indexed: true,
+      metadata: { contractId: "component.Position" },
+    }),
+
+    Storage: defineNumberComponent(world, {
+      id: "Storage",
+      indexed: true,
+      metadata: { contractId: "component.Storage" },
+    }),
   };
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
@@ -59,18 +94,19 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const moveSystem = async (x: number, y: number) => {
-    const selectId = createEntity(world);
     try {
-      setComponent(components.OwnedBy, selectId, { value: `${network.connectedAddress.get()}` });
-      setComponent(components.Position, selectId, { x, y });
       await systems["system.Build"].executeTyped(x, y);
     } catch (e) {
-      console.log(e);
-      removeComponent(components.OwnedBy, selectId);
-      removeComponent(components.Position, selectId);
+      console.log({ e });
     }
   };
-  console.log(components);
+  const buySystem = async (godownEntity: EntityID, kgs: number) => {
+    try {
+      await systems["system.Buy"].executeTyped(godownEntity, kgs);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -84,6 +120,7 @@ export async function createNetworkLayer(config: GameConfig) {
     api: {
       initSystem,
       moveSystem,
+      buySystem,
     },
     dev: setupDevSystems(world, encoders, systems),
   };

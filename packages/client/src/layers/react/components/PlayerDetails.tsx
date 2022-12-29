@@ -3,13 +3,19 @@ import { registerUIComponent } from "../engine";
 import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 
-const PlayerDetails = ({ name, cash }: { name?: string; cash?: number }) => (
+const PlayerDetails = ({ name, cash, total }: { name?: string; cash?: number; total?: number }) => (
   <S.Container>
+    <p>Name:</p>
     <p>
-      Name: <b>{name}</b>
+      <b>{name}</b>
     </p>
+    <p>Cash:</p>
     <p>
-      Cash: <b>${cash && +cash}</b>
+      <b>${cash && +cash}</b>
+    </p>
+    <p>Players:</p>
+    <p>
+      <b>{total}</b>
     </p>
   </S.Container>
 );
@@ -19,10 +25,11 @@ const S = {
     border-radius: 10px;
     margin: 10px;
     background: gray;
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
     font-size: 20px;
-    gap: 20px;
+    gap: 10px;
   `,
 };
 export const registerPlayerDetails = () => {
@@ -46,6 +53,7 @@ export const registerPlayerDetails = () => {
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
+          const total = [...getComponentEntities(Name)].length;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
           if (userLinkWithAccount) {
             const name = getComponentValue(Name, userLinkWithAccount)?.value;
@@ -53,6 +61,7 @@ export const registerPlayerDetails = () => {
             return {
               name,
               cash,
+              total,
             };
           } else {
             return;
@@ -60,8 +69,8 @@ export const registerPlayerDetails = () => {
         })
       );
     },
-    ({ cash, name }) => {
-      return <PlayerDetails cash={cash} name={name} />;
+    ({ cash, name, total }) => {
+      return <PlayerDetails cash={cash} name={name} total={total} />;
     }
   );
 };

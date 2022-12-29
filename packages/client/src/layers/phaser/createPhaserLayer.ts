@@ -3,8 +3,8 @@ import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
-import { Select } from "../local/components";
-import { deployGodownSystem, displayGodownSystem, selectSystem } from "../local/systems";
+import { Progress, Select } from "../local/components";
+import { deployStationSystem, displayStationSystem, selectSystem } from "../local/systems";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -14,20 +14,28 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const world = namespaceWorld(network.world, "phaser");
 
   // ---ENTITY ID------
-  const unusedId = createEntity(world);
+  const progressId = createEntity(world);
   const selectId = createEntity(world);
 
   const localIds = {
     selectId,
+    progressId,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     Select: Select(world),
+    Progress: Progress(world),
   };
 
   // --- API ------------------------------------------------------------------------
   const setSelect = (x: number, y: number, selected: boolean) => {
     setComponent(components.Select, selectId, { x, y, selected });
+  };
+  const showProgress = () => {
+    setComponent(components.Progress, progressId, { value: true });
+  };
+  const hideProgress = () => {
+    setComponent(components.Progress, progressId, { value: false });
   };
 
   // --- PHASER ENGINE SETUP --------------------------------------------------------
@@ -42,13 +50,13 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setSelect },
+    localApi: { setSelect, hideProgress, showProgress },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
   selectSystem(network, context);
-  deployGodownSystem(network, context);
-  displayGodownSystem(network, context);
+  deployStationSystem(network, context);
+  displayStationSystem(network, context);
   return context;
 }
