@@ -10,10 +10,10 @@ import { OffenceComponent, ID as OffenceComponentID } from "../components/Offenc
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, godownCreationCost, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, godownCreationCost } from "../constants.sol";
+import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -26,6 +26,13 @@ contract BuildSystem is System {
     require(x >= -50 && x <= 50, "Invalid X co-ordinate");
     require(y >= -50 && y <= 50, "Invalid Y co-ordinate");
 
+    // Not allowing to build godown in central 3x3 grid (sun)
+    require(
+      ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
+      "Cannot build godown in the center of the grid"
+    );
+    // // // //
+
     uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
       .getValue(addressToEntity(msg.sender));
 
@@ -36,10 +43,47 @@ contract BuildSystem is System {
 
     Coord memory coord = Coord({ x: x, y: y });
 
-    uint256[] memory arrayOfGodownsAtCoord = PositionComponent(getAddressById(components, PositionComponentID))
-      .getEntitiesWithValue(coord);
+    // uint256[] memory arrayOfGodownsAtCoord = PositionComponent(getAddressById(components, PositionComponentID))
+    //   .getEntitiesWithValue(coord);
 
-    require(arrayOfGodownsAtCoord.length == 0, "A godown has already been placed at this positon");
+    // require(arrayOfGodownsAtCoord.length == 0, "A godown has already been placed at this positon");
+
+    // Not allowing to build godown in adjacent 8 cells
+    // For that I'm checking each neighbouring cell
+    // // // // //
+    // // // // //
+    // uint256[] memory arrayOfGodownsAtTopCoord =
+    //   PositionComponent(getAddressById(components, PositionComponentID))
+    //   .getEntitiesWithValue(Coord({ x: coord.x, y: coord.y + 1 }));
+    // require(arrayOfGodownsAtTopCoord.length == 0,
+    //   "A godown has already been placed at this positon");
+
+    //////////////
+    //////////////
+    for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
+      for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
+        uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+          .getEntitiesWithValue(Coord({ x: i, y: j }));
+        require(
+          arrayOfGodownsAtThatCoord.length == 0,
+          "A godown has already been built on the position or one of its adjacent cells"
+        );
+      }
+    }
+    //////////////
+    //////////////
+    // // // // //
+    // // // // //
+
+    // // // // //
+    // // // // //
+    // GODOWN CREATION COST
+    // uint256 sumOfCoordSquares = (uint256(int256(coord.x)) * uint256(int256(coord.x))) +
+    //   (uint256(int256(coord.y)) * uint256(int256(coord.y)));
+
+    // uint256 godownCreationCost = ((1000000) / (Math.sqrt(sumOfCoordSquares)));
+    // // // // //
+    // // // // //
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
@@ -56,7 +100,7 @@ contract BuildSystem is System {
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, offenceInitialAmount);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
-    StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
+    // StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
 
     // update player data

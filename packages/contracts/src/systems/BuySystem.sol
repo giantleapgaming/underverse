@@ -7,15 +7,14 @@ import { CashComponent, ID as CashComponentID } from "../components/CashComponen
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
+// import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
+import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds } from "../constants.sol";
+import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Buy"));
-
-uint256 constant MULTIPLIER_CONSTANT = 100000;
 
 contract BuySystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -37,16 +36,21 @@ contract BuySystem is System {
       "Need 10 seconds of delay between actions"
     );
 
-    uint256 selectedGodownStorage = StorageComponent(getAddressById(components, StorageComponentID)).getValue(
-      godownEntity
-    );
+    // uint256 selectedGodownStorage = StorageComponent(getAddressById(components, StorageComponentID)).getValue(
+    //   godownEntity
+    // );
+
+    uint256 selectedGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
 
     uint256 selectedGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       godownEntity
     );
 
+    // Level 1 godown supports 1000 storage,
+    // Level 2 godown supports 2000 storage, and so on.
+
     require(
-      selectedGodownStorage - selectedGodownBalance >= kgs,
+      (selectedGodownLevel * godownLevelStorageMultiplier) - selectedGodownBalance >= kgs,
       "Provided buy quantity is more than available godown storage"
     );
 
@@ -57,24 +61,29 @@ contract BuySystem is System {
 
     // uint256 sumOfCoordSquares = (godownPosition.x * godownPosition.x)
     //                 + (godownPosition.y * godownPosition.y);
-
     // uint256 core = uint256(int256(godownPosition.y));
-
     // uint256 result = sqrt(sumOfCoordSquares).mul(MULTIPLIER_CONSTANT);
     // uint256 price = ((10000 * MULTIPLIER_CONSTANT) / result) * BUY_MULTIPLIER;
 
-    uint256 sumOfCoordSquares = (uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-      (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y)));
-
-    uint256 price = ((10000 * MULTIPLIER_CONSTANT) / (Math.sqrt(sumOfCoordSquares) * MULTIPLIER_CONSTANT));
+    // uint256 sumOfCoordSquares = (uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
+    //   (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y)));
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
       addressToEntity(msg.sender)
     );
 
-    // uint256 totalPrice = (price * kgs) / MULTIPLIER_CONSTANT; // * 11) / 10;
-    uint256 totalPrice = (price * kgs * 11) / 10; // * 11) / 10;
+    uint256 sumOfSquaresOfCoordsIntoMultiConstant = // MULTIPLIER * (
+    (uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
+      (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y)));
+    // );
+
+    uint256 mySqrt = Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant); // / MULTIPLIER;
+
+    uint256 totalPrice = (///////////////////
+    ((((10000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)) * kgs * 11) / 10) * MULTIPLIER) /
+    ////////////
+      MULTIPLIER;
 
     require(playerCash >= totalPrice, "Not enough money to buy such quantity");
 

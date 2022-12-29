@@ -8,7 +8,6 @@
                   "OffenceComponent",
                   "DefenceComponent",
                   "LevelComponent",
-                  "StorageComponent",
                   "BalanceComponent"
   ],
   "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] },
@@ -25,7 +24,6 @@
                                           "OffenceComponent",
                                           "DefenceComponent",
                                           "LevelComponent",
-                                          "StorageComponent",
                                           "BalanceComponent"
                                         ]},
   { "name": "BuySystem", "writeAccess": [
@@ -33,7 +31,6 @@
                                           "LastUpdatedTimeComponent",
                                           "OwnedByComponent",
                                           "PositionComponent",
-                                          "StorageComponent",
                                           "BalanceComponent"
                                         ]}
   ]
