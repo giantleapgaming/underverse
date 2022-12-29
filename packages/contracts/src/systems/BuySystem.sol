@@ -79,9 +79,10 @@ contract BuySystem is System {
 
     // uint256 mySqrt = Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant); // / MULTIPLIER;
 
-    uint256 totalPrice = (((((10000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant) / MULTIPLIER2)) *
-      kgs *
-      11) / 10) * MULTIPLIER) / MULTIPLIER;
+    uint256 totalPriceRaw = ((((10000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 11) /
+      10);
+
+    uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such quantity");
 
