@@ -11,7 +11,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER } from "../constants.sol";
+import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Buy"));
@@ -73,17 +73,15 @@ contract BuySystem is System {
       addressToEntity(msg.sender)
     );
 
-    uint256 sumOfSquaresOfCoordsIntoMultiConstant = // MULTIPLIER * (
-    (uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-      (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y)));
-    // );
+    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+      ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
+        (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
 
-    uint256 mySqrt = Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant); // / MULTIPLIER;
+    // uint256 mySqrt = Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant); // / MULTIPLIER;
 
-    uint256 totalPrice = (///////////////////
-    ((((10000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)) * kgs * 11) / 10) * MULTIPLIER) /
-    ////////////
-      MULTIPLIER;
+    uint256 totalPrice = (((((10000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant) / MULTIPLIER2)) *
+      kgs *
+      11) / 10) * MULTIPLIER) / MULTIPLIER;
 
     require(playerCash >= totalPrice, "Not enough money to buy such quantity");
 
