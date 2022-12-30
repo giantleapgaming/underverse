@@ -42,7 +42,7 @@ export const phaserConfig = {
         [Assets.Center]: {
           type: AssetType.Image,
           key: Assets.Center,
-          path: "/station/center.gif",
+          path: "/station/center.png",
         },
         [Assets.Station2]: {
           type: AssetType.Image,
