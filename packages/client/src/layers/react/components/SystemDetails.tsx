@@ -1,10 +1,12 @@
 import React from "react";
 import { registerUIComponent } from "../engine";
-import { EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import { EntityID, EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 
 import styled from "styled-components";
+const images = ["/ui/1-1.png", "/ui/2-1.png", "/ui/3-1.png", "/ui/4-1.png", "/ui/5-1.png", "/ui/6-1.png"];
+
 const SystemDetails = ({ layers }: { layers: Layers }) => {
   const {
     network: {
@@ -27,6 +29,9 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const nameEntityIndex = world.entities.indexOf(ownedBy) as EntityIndex;
     const name = getComponentValue(Name, nameEntityIndex)?.value;
     const userEntityId = connectedAddress.get();
+    const allImg = {} as { [key: string]: string };
+    [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
+    const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
     return (
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
@@ -40,7 +45,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
               <p>OWNED: {name}</p>
             </div>
             <div>
-              <img src="/ui/1-1.png" />
+              <img src={userStation} />
             </div>
           </S.InlineSB>
           <S.Cargo>
