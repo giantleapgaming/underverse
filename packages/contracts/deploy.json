@@ -36,9 +36,7 @@
   { "name": "TransportSystem", "writeAccess": [
                                           "CashComponent",
                                           "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
                                           "PositionComponent",
-                                          "StorageComponent",
                                           "BalanceComponent"
                                         ]}
   ]

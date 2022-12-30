@@ -7,15 +7,13 @@ import { CashComponent, ID as CashComponentID } from "../components/CashComponen
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownStorageCapacity, getDistanceBetweenCoordinates } from "../utils.sol";
-import { actionDelayInSeconds } from "../constants.sol";
+import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
+import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Transport"));
-
-uint256 constant MULTIPLIER_CONSTANT = 100000;
 
 contract TransportSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -46,23 +44,19 @@ contract TransportSystem is System {
       "Need 10 seconds of delay between actions"
     );
 
-    // uint256 sourceGodownStorage = StorageComponent(getAddressById(components, StorageComponentID)).getValue(
+    // uint256 sourceGodownLevel = getEntityLevel(
+    //   LevelComponent(getAddressById(components, LevelComponentID)),
     //   sourceGodownEntity
     // );
 
-    // uint256 destinationGodownStorage = StorageComponent(getAddressById(components, StorageComponentID)).getValue(
-    //   destinationGodownEntity
-    // );
-
-    uint256 sourceGodownStorage = getGodownStorageCapacity(
-      StorageComponent(getAddressById(components, StorageComponentID)),
-      sourceGodownEntity
-    );
-
-    uint256 destinationGodownStorage = getGodownStorageCapacity(
-      StorageComponent(getAddressById(components, StorageComponentID)),
+    uint256 destinationGodownLevel = getEntityLevel(
+      LevelComponent(getAddressById(components, LevelComponentID)),
       destinationGodownEntity
     );
+
+    // uint256 sourceGodownCapacity = sourceGodownLevel * godownLevelStorageMultiplier;
+
+    uint256 destinationGodownCapacity = destinationGodownLevel * godownLevelStorageMultiplier;
 
     uint256 sourceGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       sourceGodownEntity
@@ -72,8 +66,10 @@ contract TransportSystem is System {
       destinationGodownEntity
     );
 
+    require(kgs <= sourceGodownBalance, "Provided transport quantity is more than source godown balance");
+
     require(
-      destinationGodownBalance + kgs <= destinationGodownStorage,
+      destinationGodownBalance + kgs <= destinationGodownCapacity,
       "Provided transport quantity is more than godown storage capacity"
     );
 
@@ -87,27 +83,13 @@ contract TransportSystem is System {
       destinationGodownEntity
     );
 
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinates(sourceGodownPosition, destinationGodownPosition);
+    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
+      sourceGodownPosition,
+      destinationGodownPosition
+    );
 
-    // uint256 sumOfCoordSquares = getDistanceBetweenCoordinates(sourceGodownPosition, sourceGodownPosition);
-
-    // uint256 sumOfCoordSquares = (godownPosition.x * godownPosition.x)
-    //                 + (godownPosition.y * godownPosition.y);
-
-    // uint256 core = uint256(int256(godownPosition.y));
-
-    // uint256 result = sqrt(sumOfCoordSquares).mul(MULTIPLIER_CONSTANT);
-    // uint256 transportCost = ((10000 * MULTIPLIER_CONSTANT) / result) * BUY_MULTIPLIER;
-
-    // uint256 sumOfCoordSquares = (uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-    //   (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y)));
-
-    // uint256 transportCost = ((10000 * MULTIPLIER_CONSTANT) / (Math.sqrt(sumOfCoordSquares) * MULTIPLIER_CONSTANT));
-    // uint256 transportCost = (distanceBetweenGodowns * kgs) ** 2;
-
-    // uint256 totalTransportCost = (transportCost * kgs) / MULTIPLIER_CONSTANT; // * 11) / 10;
-    // uint256 totalTransportCost = (transportCost * kgs * 11) / 10; // * 11) / 10;
-    uint256 totalTransportCost = (distanceBetweenGodowns * kgs)**2;
+    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2) / MULTIPLIER;
+    // uint256 totalTransportCost = totalTransportCostRaw / MULTIPLIER; // To convert in 10^6 format and preserve decimals
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

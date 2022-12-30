@@ -6,7 +6,8 @@ import { OwnedByComponent } from "./components/OwnedByComponent.sol";
 import { LastUpdatedTimeComponent } from "./components/LastUpdatedTimeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { StorageComponent } from "./components/StorageComponent.sol";
+import { LevelComponent } from "./components/LevelComponent.sol";
+import { MULTIPLIER } from "./constants.sol";
 import "./libraries/Math.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
@@ -27,15 +28,18 @@ function getPlayerCash(CashComponent cashComponent, uint256 entity) view returns
   return currentCashBytes.length == 0 ? 0 : abi.decode(currentCashBytes, (uint256));
 }
 
-function getGodownStorageCapacity(StorageComponent storageComponent, uint256 entity) view returns (uint256) {
-  bytes memory currentStorageBytes = storageComponent.getRawValue(entity);
-  return currentStorageBytes.length == 0 ? 0 : abi.decode(currentStorageBytes, (uint256));
+function getEntityLevel(LevelComponent levelComponent, uint256 entity) view returns (uint256) {
+  bytes memory currentLevelBytes = levelComponent.getRawValue(entity);
+  return currentLevelBytes.length == 0 ? 0 : abi.decode(currentLevelBytes, (uint256));
 }
 
 // Uses distance formula to calculate distance in coordinate geometry
-function getDistanceBetweenCoordinates(Coord memory coordinate1, Coord memory coordinate2) view returns (uint256) {
-  uint256 diff1 = (uint256(int256(coordinate2.x)) - uint256(int256(coordinate1.x)));
-  uint256 diff2 = (uint256(int256(coordinate2.y)) - uint256(int256(coordinate1.y)));
-  uint256 distance = Math.sqrt((diff1**2) + (diff2**2));
+function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, Coord memory coordinate2)
+  view
+  returns (uint256)
+{
+  uint256 diff1 = uint256(int256(coordinate2.x) - int256(coordinate1.x));
+  uint256 diff2 = uint256(int256(coordinate2.y) - int256(coordinate1.y));
+  uint256 distance = Math.sqrt(((diff1**2) + (diff2**2)) * MULTIPLIER); // Multiplier used to preserve decimals
   return distance;
 }
