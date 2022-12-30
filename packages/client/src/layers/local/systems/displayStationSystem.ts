@@ -16,7 +16,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       },
     },
-    components: { Select },
+    components: { Select, ShowStationDetails },
+    localIds: { stationDetailsEntityIndex },
   } = phaser;
   const {
     components: { OwnedBy, Position, Name },
