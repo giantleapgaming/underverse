@@ -3,7 +3,16 @@ import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
-import { Progress, Select, HoverIcon, ShowStationDetails } from "../local/components";
+import {
+  Progress,
+  Select,
+  HoverIcon,
+  ShowStationDetails,
+  ShowBuyModal,
+  ShowTransportModal,
+  ShowUpgradeModal,
+  ShowSellModal,
+} from "../local/components";
 import {
   createDrawHoverIconSystem,
   deployStationSystem,
@@ -23,11 +32,13 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const progressId = createEntity(world);
   const selectId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
+  const modalIndex = createEntity(world);
 
   const localIds = {
     selectId,
     progressId,
     stationDetailsEntityIndex,
+    modalIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -35,6 +46,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Progress: Progress(world),
     HoverIcon: HoverIcon(world),
     ShowStationDetails: ShowStationDetails(world),
+    ShowBuyModal: ShowBuyModal(world),
+    ShowTransportModal: ShowTransportModal(world),
+    ShowUpgradeModal: ShowUpgradeModal(world),
+    ShowSellModal: ShowSellModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -47,7 +62,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const hideProgress = () => {
     setComponent(components.Progress, progressId, { value: false });
   };
-
+  const shouldBuyModal = (open: boolean) => setComponent(components.ShowBuyModal, modalIndex, { value: open });
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
@@ -60,7 +75,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setSelect, hideProgress, showProgress },
+    localApi: { setSelect, hideProgress, showProgress, shouldBuyModal },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------

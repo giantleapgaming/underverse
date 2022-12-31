@@ -31,6 +31,10 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const stationEntity = getEntityIndexAtPosition(x, y);
     if (stationEntity) {
       setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+    } else {
+      // input.enabled.current = true
+      // setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+      // objectPool.remove("select-box");
     }
   });
 
@@ -41,7 +45,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const entityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const systemExist = getComponentValue(OwnedBy, entityId)?.value;
     const position = getComponentValue(Position, entityId);
-    if (systemExist && typeof position?.x === "number") {
+    if (systemExist && typeof position?.x === "number" && entityId) {
       const grid3X3 = get3x3Grid(position.x, position.y);
       const [iX, iY] = grid3X3[0][0];
       const { x, y } = tileCoordToPixelCoord({ x: iX, y: iY }, tileWidth, tileHeight);

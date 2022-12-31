@@ -11,7 +11,7 @@ import { defineLoadingStateComponent } from "./components";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
-
+import { BigNumber } from "ethers";
 /**
  * The Network layer is the lowest layer in the client architecture.
  * Its purpose is to synchronize the client components with the contract components.
@@ -79,7 +79,7 @@ export async function createNetworkLayer(config: GameConfig) {
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
-
+  console.log(components);
   // --- API ------------------------------------------------------------------------
   const initSystem = async (name: string) => {
     try {
@@ -97,7 +97,32 @@ export async function createNetworkLayer(config: GameConfig) {
   };
   const buySystem = async (godownEntity: EntityID, kgs: number) => {
     try {
-      await systems["system.Buy"].executeTyped(godownEntity, kgs);
+      await systems["system.Buy"].executeTyped(BigNumber.from(godownEntity), kgs);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
+  const upgradeSystem = async (godownEntity: EntityID) => {
+    const hexToDecimal = parseInt(godownEntity, 16);
+    try {
+      await systems["system.Upgrade"].executeTyped(hexToDecimal);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
+  const transportSystem = async (
+    srcGodownEntity: EntityID,
+    destinationGodownEntity: EntityID,
+    kgsToTransfer: number
+  ) => {
+    const hexToDecimalSrcGodownEntity = parseInt(srcGodownEntity, 16);
+    const hexToDestinationGodownEntity = parseInt(destinationGodownEntity, 16);
+    try {
+      await systems["system.Transport"].executeTyped(
+        hexToDecimalSrcGodownEntity,
+        hexToDestinationGodownEntity,
+        kgsToTransfer
+      );
     } catch (e) {
       console.log({ e });
     }
@@ -132,6 +157,8 @@ export async function createNetworkLayer(config: GameConfig) {
       initSystem,
       buildSystem,
       buySystem,
+      transportSystem,
+      upgradeSystem,
     },
     utils: {
       getEntityIndexAtPosition,

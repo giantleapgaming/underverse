@@ -11,12 +11,17 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Level, Position, Defence, Offence, OwnedBy },
+      components: { Name, Level, Position, Defence, Offence, OwnedBy, Balance },
       network: { connectedAddress },
+      api: { buySystem },
     },
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
+      localApi: { shouldBuyModal },
+      scenes: {
+        Main: { input },
+      },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
@@ -25,6 +30,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const offence = getComponentValue(Offence, selectedEntity)?.value;
     const position = getComponentValue(Position, selectedEntity);
     const level = getComponentValue(Level, selectedEntity)?.value;
+    const balance = getComponentValue(Balance, selectedEntity)?.value;
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value as EntityID;
     const nameEntityIndex = world.entities.indexOf(ownedBy) as EntityIndex;
     const name = getComponentValue(Name, nameEntityIndex)?.value;
@@ -32,6 +38,10 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const allImg = {} as { [key: string]: string };
     [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
+    const distance =
+      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const buyPrice = (10_000 / distance) * 1.1;
+    const sellPrice = (10_000 / distance) * 0.9;
     return (
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
@@ -49,7 +59,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </div>
           </S.InlineSB>
           <S.Cargo>
-            <p>CARGO: 5 METRIC TONNES</p>
+            <p>CARGO: {balance && +balance} METRIC TONNES</p>
           </S.Cargo>
           <S.InlineSA>
             <S.Center>
@@ -64,13 +74,14 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            <p style={{ color: "#e4e76a" }}>$5.5 P/MT</p>
-            <p style={{ color: "#cb6ce6" }}> $4.5 P/MT</p>
+            <p style={{ color: "#e4e76a", fontSize: "12px" }}>${buyPrice.toFixed(2)} P/MT</p>
+            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>${sellPrice.toFixed(2)} P/MT</p>
             {userEntityId === ownedBy && (
               <>
                 <S.InlinePointer
                   onClick={() => {
-                    console.log("hello");
+                    shouldBuyModal(true);
+                    input.enabled.current = false;
                   }}
                 >
                   <img src="/ui/yellow.png" />
@@ -92,14 +103,16 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/ui/sky.png" />
                   <S.DeployText>TRANSPORT</S.DeployText>
                 </S.InlinePointer>
-                <S.InlinePointer
-                  onClick={() => {
-                    console.log("hello");
-                  }}
-                >
-                  <img src="/ui/orange.png" />
-                  <S.DeployText>UPGRADE</S.DeployText>
-                </S.InlinePointer>
+                {level && +level < 11 && (
+                  <S.InlinePointer
+                    onClick={() => {
+                      console.log("hello");
+                    }}
+                  >
+                    <img src="/ui/orange.png" />
+                    <S.DeployText>UPGRADE</S.DeployText>
+                  </S.InlinePointer>
+                )}
               </>
             )}
           </S.Grid>
@@ -195,15 +208,14 @@ export function registerSystemDetailsComponent() {
     (layers) => {
       const {
         network: {
-          network: { connectedAddress },
-          components: { OwnedBy, Position, Balance },
+          components: { Balance, Cash },
         },
         phaser: {
           components: { ShowStationDetails },
           localIds: { stationDetailsEntityIndex },
         },
       } = layers;
-      return merge(ShowStationDetails.update$).pipe(
+      return merge(ShowStationDetails.update$, Cash.update$).pipe(
         map(() => {
           const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)
             ?.entityId as EntityIndex;

@@ -6,6 +6,7 @@ import { registerPlayerDetails } from "./PlayerDetails";
 import { registerGodownButton } from "./GodownButton";
 import { registerProgressBar } from "./ProgressBar";
 import { registerSystemDetailsComponent } from "./SystemDetails";
+import { registerBuy } from "./BuySystem";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -15,5 +16,6 @@ export function registerUIComponents() {
   registerPlayerDetails();
   registerLoadingState();
   registerSystemDetailsComponent();
+  registerBuy();
   // registerActionQueue();
 }

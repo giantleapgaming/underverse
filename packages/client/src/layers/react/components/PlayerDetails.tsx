@@ -34,7 +34,7 @@ const PlayerDetails = ({
               currency: "USD",
               minimumFractionDigits: 0,
               maximumFractionDigits: 0,
-            }).format(+cash)}
+            }).format(+cash / 1_00_000)}
         </S.CashText>
       </S.Inline>
       {showBuildButton?.includes("show") || showBuildButton?.includes("pointer") ? (
