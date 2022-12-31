@@ -38,8 +38,13 @@ function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, C
   view
   returns (uint256)
 {
-  uint256 diff1 = uint256(int256(coordinate2.x) - int256(coordinate1.x));
-  uint256 diff2 = uint256(int256(coordinate2.y) - int256(coordinate1.y));
-  uint256 distance = Math.sqrt(((diff1**2) + (diff2**2)) * MULTIPLIER); // Multiplier used to preserve decimals
+  int256 x1 = int256(coordinate1.x);
+  int256 x2 = int256(coordinate2.x);
+  int256 y1 = int256(coordinate1.y);
+  int256 y2 = int256(coordinate2.y);
+  int256 diff1 = x2 - x1;
+  int256 diff2 = y2 - y1;
+  uint256 addSquare = uint256(((diff1**2) + (diff2**2))) * MULTIPLIER;
+  uint256 distance = Math.sqrt(addSquare); // Multiplier used to preserve decimals
   return distance;
 }

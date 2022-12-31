@@ -88,8 +88,7 @@ contract TransportSystem is System {
       destinationGodownPosition
     );
 
-    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2) / MULTIPLIER;
-    // uint256 totalTransportCost = totalTransportCostRaw / MULTIPLIER; // To convert in 10^6 format and preserve decimals
+    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2);
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
