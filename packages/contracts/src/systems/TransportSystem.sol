@@ -44,17 +44,10 @@ contract TransportSystem is System {
       "Need 10 seconds of delay between actions"
     );
 
-    // uint256 sourceGodownLevel = getEntityLevel(
-    //   LevelComponent(getAddressById(components, LevelComponentID)),
-    //   sourceGodownEntity
-    // );
-
     uint256 destinationGodownLevel = getEntityLevel(
       LevelComponent(getAddressById(components, LevelComponentID)),
       destinationGodownEntity
     );
-
-    // uint256 sourceGodownCapacity = sourceGodownLevel * godownLevelStorageMultiplier;
 
     uint256 destinationGodownCapacity = destinationGodownLevel * godownLevelStorageMultiplier;
 
