@@ -49,6 +49,7 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
       Assets.Station5,
       Assets.Station6,
     ];
+
     const allImg = {} as { [key: string]: Assets };
     [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
     const address = connectedAddress.get();

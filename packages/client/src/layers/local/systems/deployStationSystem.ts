@@ -1,5 +1,5 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
-import { getComponentValue } from "@latticexyz/recs";
+import { getComponentValue, setComponent } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 
@@ -14,12 +14,12 @@ export function deployStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
-    components: { Select, Progress },
+    components: { Select, Progress, HoverIcon },
     localApi: { setSelect, showProgress },
     localIds: { selectId, progressId },
   } = phaser;
   const {
-    api: { moveSystem },
+    api: { buildSystem },
   } = network;
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
@@ -31,19 +31,20 @@ export function deployStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
   });
   world.registerDisposer(() => hoverSub?.unsubscribe());
 
-  const rightClickSub = input.rightClick$.subscribe(() => {
-    setSelect(0, 0, false);
-  });
-  world.registerDisposer(() => rightClickSub?.unsubscribe());
-
   const leftClickSub = input.click$.subscribe(async (p) => {
     const pointer = p as Phaser.Input.Pointer;
+
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-    const selected = getComponentValue(Select, selectId);
+
+    const build = getComponentValue(HoverIcon, selectId);
     const canWePlaceNextMove = getComponentValue(Progress, progressId)?.value;
-    if (selected && selected?.selected && !(x === 0 && y === 0) && !canWePlaceNextMove) {
+
+    if (build && build?.value === "show" && !(x === 0 && y === 0) && !canWePlaceNextMove) {
       setSelect(x, y, false);
-      await moveSystem(x, y);
+      setComponent(HoverIcon, selectId, {
+        value: "hide",
+      });
+      await buildSystem(x, y);
       showProgress();
     }
   });

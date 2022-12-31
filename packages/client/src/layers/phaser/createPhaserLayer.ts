@@ -1,10 +1,16 @@
-import { createEntity, namespaceWorld, setComponent, updateComponent } from "@latticexyz/recs";
+import { createEntity, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
-import { Progress, Select } from "../local/components";
-import { deployStationSystem, displayStationSystem, selectSystem } from "../local/systems";
+import { Progress, Select, HoverIcon, ShowStationDetails } from "../local/components";
+import {
+  createDrawHoverIconSystem,
+  deployStationSystem,
+  displayStationSystem,
+  selectStationSystem,
+  selectSystem,
+} from "../local/systems";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -16,15 +22,19 @@ export async function createPhaserLayer(network: NetworkLayer) {
   // ---ENTITY ID------
   const progressId = createEntity(world);
   const selectId = createEntity(world);
+  const stationDetailsEntityIndex = createEntity(world);
 
   const localIds = {
     selectId,
     progressId,
+    stationDetailsEntityIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
     Select: Select(world),
     Progress: Progress(world),
+    HoverIcon: HoverIcon(world),
+    ShowStationDetails: ShowStationDetails(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -58,5 +68,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   selectSystem(network, context);
   deployStationSystem(network, context);
   displayStationSystem(network, context);
+  createDrawHoverIconSystem(network, context);
+  selectStationSystem(network, context);
   return context;
 }

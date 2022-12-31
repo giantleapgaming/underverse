@@ -1,4 +1,4 @@
-import { createWorld, EntityID } from "@latticexyz/recs";
+import { createWorld, EntityID, EntityIndex, getComponentValue, getEntitiesWithValue } from "@latticexyz/recs";
 import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
@@ -69,13 +69,8 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Position" },
     }),
-
-    Storage: defineNumberComponent(world, {
-      id: "Storage",
-      indexed: true,
-      metadata: { contractId: "component.Storage" },
-    }),
   };
+
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
     typeof components,
@@ -93,7 +88,7 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log(e);
     }
   };
-  const moveSystem = async (x: number, y: number) => {
+  const buildSystem = async (x: number, y: number) => {
     try {
       await systems["system.Build"].executeTyped(x, y);
     } catch (e) {
@@ -107,6 +102,22 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log({ e });
     }
   };
+
+  function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
+    const entitiesAtPosition = [...getEntitiesWithValue(components.Position, { x, y })];
+    return (
+      entitiesAtPosition?.find((b) => {
+        const item = getComponentValue(components.Position, b);
+        return item;
+      }) ?? entitiesAtPosition[0]
+    );
+  }
+
+  function getEntityIdAtPosition(x: number, y: number): EntityID | undefined {
+    const entityIndex = getEntityIndexAtPosition(x, y) as EntityIndex;
+    return entityIndex ? world.entities[entityIndex] : undefined;
+  }
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -119,8 +130,12 @@ export async function createNetworkLayer(config: GameConfig) {
     actions,
     api: {
       initSystem,
-      moveSystem,
+      buildSystem,
       buySystem,
+    },
+    utils: {
+      getEntityIndexAtPosition,
+      getEntityIdAtPosition,
     },
     dev: setupDevSystems(world, encoders, systems),
   };
