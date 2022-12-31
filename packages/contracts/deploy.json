@@ -38,5 +38,11 @@
                                           "LastUpdatedTimeComponent",
                                           "PositionComponent",
                                           "BalanceComponent"
+                                        ]},
+  { "name": "UpgradeSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "LevelComponent"
                                         ]}
+  ]
 }
