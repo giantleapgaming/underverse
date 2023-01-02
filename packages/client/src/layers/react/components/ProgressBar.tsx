@@ -71,13 +71,13 @@ export const registerProgressBar = () => {
           );
           const showProgressBar = getComponentValue(Progress, progressId)?.value;
           if (userLinkWithAccount && showProgressBar) {
-            const lastUpdatedTime = getComponentValue(LastUpdatedTime, userLinkWithAccount)?.value;
-            if (lastUpdatedTime) {
-              const currentTime = Math.floor(Date.now() / 1000);
-              if (currentTime - lastUpdatedTime > 10) {
-                return { layers };
-              }
-            }
+            // const lastUpdatedTime = getComponentValue(LastUpdatedTime, userLinkWithAccount)?.value;
+            // if (lastUpdatedTime) {
+            //   const currentTime = Math.floor(Date.now() / 1000);
+            //   if (currentTime - lastUpdatedTime > 10) {
+            return { layers };
+            //   }
+            // }
           }
           return;
         })

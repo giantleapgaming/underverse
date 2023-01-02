@@ -73,9 +73,14 @@ contract BuySystem is System {
       addressToEntity(msg.sender)
     );
 
+    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    //   ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
+    //     (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
+
     uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-      ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-        (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
+      uint256(
+        (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
+      );
 
     // uint256 mySqrt = Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant); // / MULTIPLIER;
 

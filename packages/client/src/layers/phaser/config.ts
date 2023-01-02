@@ -34,6 +34,16 @@ export const phaserConfig = {
           key: Assets.Station1,
           path: "/station/1-1.png",
         },
+        [Assets.Select]: {
+          type: AssetType.Image,
+          key: Assets.Select,
+          path: "/tile/select-box.png",
+        },
+        [Assets.Center]: {
+          type: AssetType.Image,
+          key: Assets.Center,
+          path: "/station/center.png",
+        },
         [Assets.Station2]: {
           type: AssetType.Image,
           key: Assets.Station2,
@@ -65,7 +75,7 @@ export const phaserConfig = {
           chunkSize: TILE_WIDTH * 64, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [1],
+          backgroundTile: [2],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
@@ -561,6 +571,30 @@ export const phaserConfig = {
         [Sprites.CentreSun]: {
           assetKey: Assets.MainAtlas,
           frame: "centre-sun.png",
+        },
+        [Sprites.PlayerC1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-1.png",
+        },
+        [Sprites.PlayerC2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-2.png",
+        },
+        [Sprites.PlayerC3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-3.png",
+        },
+        [Sprites.PlayerC4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-4.png",
+        },
+        [Sprites.PlayerC5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-5.png",
+        },
+        [Sprites.PlayerC6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "c1-6.png",
         },
       },
       animations: [],

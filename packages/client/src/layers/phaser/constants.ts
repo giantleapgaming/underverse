@@ -24,6 +24,7 @@ export enum Assets {
   Station4 = "Station4",
   Station5 = "Station5",
   Station6 = "Station6",
+  Select = "Select",
 }
 
 export enum Sprites {
@@ -148,6 +149,12 @@ export enum Sprites {
   PlayerB69,
   PlayerB610,
   CentreSun,
+  PlayerC1,
+  PlayerC2,
+  PlayerC3,
+  PlayerC4,
+  PlayerC5,
+  PlayerC6,
 }
 
 export enum Animations {}

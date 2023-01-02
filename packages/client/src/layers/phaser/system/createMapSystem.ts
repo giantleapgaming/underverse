@@ -1,5 +1,5 @@
 import { NetworkLayer } from "../../network";
-import { Sprites } from "../constants";
+import { Assets } from "../constants";
 import { PhaserLayer } from "../types";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
@@ -20,11 +20,11 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const object = objectPool.get(`centerSun`, "Sprite");
   const { x, y } = tileCoordToPixelCoord({ x: 0, y: 0 }, tileWidth, tileHeight);
 
-  const centerSun = config.sprites[Sprites.Player12];
+  const centerSun = config.assets[Assets.Center];
   object.setComponent({
     id: `centerSun-sprite`,
     once: (gameObject) => {
-      gameObject.setTexture(centerSun.assetKey, "centre-sun.png");
+      gameObject.setTexture(centerSun.key, centerSun.path);
       gameObject.setPosition(x, y);
       gameObject.setDepth(3);
     },

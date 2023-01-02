@@ -5,13 +5,19 @@ import { registerNameScreen } from "./NameEnter";
 import { registerPlayerDetails } from "./PlayerDetails";
 import { registerGodownButton } from "./GodownButton";
 import { registerProgressBar } from "./ProgressBar";
+import { registerSystemDetailsComponent } from "./SystemDetails";
+import { registerBuy } from "./BuySystem";
+import { registerUpgrade } from "./UpgradeSystem";
 
 export function registerUIComponents() {
   registerNameScreen();
   // registerComponentBrowser();
-  registerGodownButton();
+  //registerGodownButton();
   registerProgressBar();
   registerPlayerDetails();
   registerLoadingState();
+  registerSystemDetailsComponent();
+  registerBuy();
+  registerUpgrade();
   // registerActionQueue();
 }
