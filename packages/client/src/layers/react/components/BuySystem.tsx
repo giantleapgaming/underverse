@@ -14,7 +14,7 @@ const BuyModal = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal },
+      localApi: { shouldBuyModal, showProgress },
       scenes: {
         Main: { input },
       },
@@ -32,10 +32,11 @@ const BuyModal = ({ layers }: { layers: Layers }) => {
       shouldBuyModal(false);
       input.enabled.current = true;
     };
-    const buy = (kgs: number) => {
+    const buy = async (kgs: number) => {
       if (selectedEntity) {
-        buySystem(world.entities[selectedEntity], kgs);
+        await buySystem(world.entities[selectedEntity], kgs);
         closeModal();
+        showProgress();
       }
     };
     return <Modal buyPrice={buyPrice} buySystem={buy} stock={balance && +balance} close={closeModal} />;

@@ -51,7 +51,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              gameObject.setTexture(sprit.assetKey, `c${allImg[owndBy]}-${level}.png`);
+              gameObject.setTexture(sprit.assetKey, `c1-${allImg[owndBy]}.png`);
               gameObject.setPosition(x + i * 25, y - 25);
               gameObject.depth = 4;
             },
@@ -59,12 +59,12 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         });
       balance &&
         +balance >= 5 &&
-        new Array(+balance % 5).fill(0).forEach((_, i) => {
+        new Array(+balance === 10 ? 5 : +balance % 5).fill(0).forEach((_, i) => {
           const cocainObject = objectPool.get(`${entity}${i}${i}`, "Sprite");
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              gameObject.setTexture(sprit.assetKey, `c${allImg[owndBy]}-${level}.png`);
+              gameObject.setTexture(sprit.assetKey, `c1-${allImg[owndBy]}.png`);
               gameObject.setPosition(x + i * 25, y + 89);
               gameObject.depth = 4;
             },
