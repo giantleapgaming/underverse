@@ -33,6 +33,13 @@
                                           "PositionComponent",
                                           "BalanceComponent"
                                         ]},
+  { "name": "SellSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "OwnedByComponent",
+                                          "PositionComponent",
+                                          "BalanceComponent"
+                                         ]},
   { "name": "TransportSystem", "writeAccess": [
                                           "CashComponent",
                                           "LastUpdatedTimeComponent",

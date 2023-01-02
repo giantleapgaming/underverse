@@ -12,7 +12,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, godownCreationCost } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -82,6 +82,13 @@ contract BuildSystem is System {
     //   (uint256(int256(coord.y)) * uint256(int256(coord.y)));
 
     // uint256 godownCreationCost = ((1000000) / (Math.sqrt(sumOfCoordSquares)));
+
+    // GODOWN CREATION COST
+    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(coord.x)**2) + (int256(coord.y)**2));
+
+    uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
+
+    uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
     // // // // //
     // // // // //
 
