@@ -35,6 +35,8 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Position, Name },
   } = network;
   const hoverStation = objectPool.get("build", "Sprite");
+  const textWhite = objectPool.get("build-text-white", "Text");
+  const textYellow = objectPool.get("build-text-yell", "Text");
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
     const canBeBuild = getComponentValue(Build, buildId);
@@ -99,6 +101,31 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(x, y);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
+          },
+        });
+        const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+        textWhite.setComponent({
+          id: "white-build-text",
+          once: (gameObject) => {
+            gameObject.setPosition(textPosition.x - 24, textPosition.y - 28);
+            gameObject.depth = 4;
+            gameObject.visible = !!(cursorIcon && showOnHover);
+            gameObject.setText(`BUILD $50`);
+            gameObject.setFontSize(14);
+            gameObject.setFontStyle("bold");
+            gameObject.setColor("#ffffff");
+          },
+        });
+        textYellow.setComponent({
+          id: "yellow-build-text",
+          once: (gameObject) => {
+            gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
+            gameObject.depth = 4;
+            gameObject.visible = !!(cursorIcon && showOnHover);
+            gameObject.setText(`BUILD $50`);
+            gameObject.setFontSize(20);
+            gameObject.setFontStyle("bold");
+            gameObject.setColor("#e4e76a");
           },
         });
       }
