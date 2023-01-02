@@ -84,8 +84,7 @@ contract BuildSystem is System {
     // uint256 godownCreationCost = ((1000000) / (Math.sqrt(sumOfCoordSquares)));
 
     // GODOWN CREATION COST
-    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-      ((uint256(int256(coord.x))**2) + (uint256(int256(coord.y))**2));
+    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(coord.x)**2) + (int256(coord.y)**2));
 
     uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
 

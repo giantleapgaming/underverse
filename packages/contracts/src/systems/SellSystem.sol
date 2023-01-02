@@ -47,11 +47,16 @@ contract SellSystem is System {
       godownEntity
     );
 
-    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-      ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-        (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
+    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    //   ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
+    //     (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
 
-    uint256 totalPriceRaw = ((((10000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
+    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+      uint256(
+        (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
+      );
+
+    uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
       10);
 
     uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // 10^6
