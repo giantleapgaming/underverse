@@ -8,7 +8,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { getPlayerCash } from "../utils.sol";
-import { actionDelayInSeconds } from "../constants.sol";
+import { actionDelayInSeconds, MULTIPLIER } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Upgrade"));
 
@@ -35,11 +35,11 @@ contract UpgradeSystem is System {
 
     require(selectedEntityLevel >= 1, "Invalid entity");
 
-    require(selectedEntityLevel == 10, "Maximum level reached");
+    require(selectedEntityLevel != 10, "Maximum level reached");
 
     uint256 nextLevel = selectedEntityLevel + 1;
 
-    uint256 upgradeCost = (nextLevel**2) * 1000;
+    uint256 upgradeCost = (nextLevel**2) * 1000 * MULTIPLIER;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
