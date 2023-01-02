@@ -2,7 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { getComponentEntities } from "@latticexyz/recs";
-import { concat, map, merge } from "rxjs";
+import { map, merge } from "rxjs";
 import { useState } from "react";
 import { computedToStream } from "@latticexyz/utils";
 
@@ -17,7 +17,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   return (
     <Container>
       <AnimatedGradientText>Underverse</AnimatedGradientText>
-      <P>Let's build your world in the space</P>
+      <P>Write your story in the stars</P>
       <Form
         onSubmit={async (e) => {
           e.preventDefault();

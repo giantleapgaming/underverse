@@ -16,8 +16,6 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       },
     },
-    components: { Select, ShowStationDetails },
-    localIds: { stationDetailsEntityIndex },
   } = phaser;
   const {
     components: { OwnedBy, Position, Name, Level, Balance },
@@ -38,7 +36,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     if (owndBy) {
       const sprit = config.sprites[Sprites.Player12];
       object.setComponent({
-        id: Select.id,
+        id: `${entity}`,
         once: (gameObject) => {
           gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}.png`);
           gameObject.setPosition(x, y);

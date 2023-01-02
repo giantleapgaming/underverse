@@ -5,21 +5,14 @@ import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
 import {
   Progress,
-  Select,
-  HoverIcon,
   ShowStationDetails,
   ShowBuyModal,
   ShowTransportModal,
   ShowUpgradeModal,
   ShowSellModal,
+  Build,
 } from "../local/components";
-import {
-  createDrawHoverIconSystem,
-  deployStationSystem,
-  displayStationSystem,
-  selectStationSystem,
-  selectSystem,
-} from "../local/systems";
+import { buildStationSystem, displayStationSystem, selectStationSystem } from "../local/systems";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -30,31 +23,30 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   // ---ENTITY ID------
   const progressId = createEntity(world);
-  const selectId = createEntity(world);
+  const buildId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
   const modalIndex = createEntity(world);
 
   const localIds = {
-    selectId,
+    buildId,
     progressId,
     stationDetailsEntityIndex,
     modalIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
-    Select: Select(world),
     Progress: Progress(world),
-    HoverIcon: HoverIcon(world),
     ShowStationDetails: ShowStationDetails(world),
     ShowBuyModal: ShowBuyModal(world),
     ShowTransportModal: ShowTransportModal(world),
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
+    Build: Build(world),
   };
 
   // --- API ------------------------------------------------------------------------
-  const setSelect = (x: number, y: number, selected: boolean) => {
-    setComponent(components.Select, selectId, { x, y, selected });
+  const setBuild = (x: number, y: number, show: boolean, canPlace: boolean) => {
+    setComponent(components.Build, buildId, { x, y, show, canPlace });
   };
   const showProgress = () => {
     setComponent(components.Progress, progressId, { value: true });
@@ -80,15 +72,13 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setSelect, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal, shouldSellModal },
+    localApi: { setBuild, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal, shouldSellModal },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
-  selectSystem(network, context);
-  deployStationSystem(network, context);
   displayStationSystem(network, context);
-  createDrawHoverIconSystem(network, context);
   selectStationSystem(network, context);
+  buildStationSystem(network, context);
   return context;
 }

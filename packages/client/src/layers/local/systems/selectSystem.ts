@@ -18,8 +18,6 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Select },
-    localApi: { setSelect },
     localIds: { selectId },
   } = phaser;
   const {

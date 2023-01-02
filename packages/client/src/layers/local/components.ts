@@ -1,11 +1,21 @@
 import { defineComponent, Type, World } from "@latticexyz/recs";
-import { defineBoolComponent, defineStringComponent } from "@latticexyz/std-client";
+import { defineBoolComponent } from "@latticexyz/std-client";
 
 export const Progress = (world: World) => {
   return defineBoolComponent(world, { id: "progress" });
 };
-export const HoverIcon = (world: World) => {
-  return defineStringComponent(world, { id: "icon" });
+
+export const Build = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      x: Type.Number,
+      y: Type.Number,
+      show: Type.Boolean,
+      canPlace: Type.Boolean,
+    },
+    { id: "build" }
+  );
 };
 export const Select = (world: World) => {
   return defineComponent(world, { x: Type.Number, y: Type.Number, selected: Type.Boolean }, { id: "select" });

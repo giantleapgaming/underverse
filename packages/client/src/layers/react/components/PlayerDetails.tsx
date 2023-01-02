@@ -1,28 +1,18 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
-import { getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 
-const PlayerDetails = ({
-  name,
-  cash,
-  total,
-  layers,
-  showBuildButton,
-}: {
-  name?: string;
-  cash?: number;
-  total?: number;
-  layers: Layers;
-  showBuildButton?: string;
-}) => {
+const PlayerDetails = ({ cash, layers }: { name?: string; cash?: number; total?: number; layers: Layers }) => {
   const {
     phaser: {
-      localIds: { selectId },
-      components: { HoverIcon },
+      localIds: { buildId },
+      localApi: { setBuild },
+      components: { Build },
     },
   } = layers;
+  const showBuildButton = getComponentValue(Build, buildId)?.show;
   return (
     <S.Container>
       <S.Inline>
@@ -37,20 +27,15 @@ const PlayerDetails = ({
             }).format(+cash / 1_000_000)}
         </S.CashText>
       </S.Inline>
-      {showBuildButton?.includes("show") || showBuildButton?.includes("pointer") ? (
-        <S.Inline
-          onClick={() => {
-            setComponent(HoverIcon, selectId, { value: "show" });
-          }}
-          style={{ visibility: "hidden" }}
-        >
+      {showBuildButton ? (
+        <S.Inline style={{ visibility: "hidden" }}>
           <S.Img src="/ui/yellow.png" />
           <S.DeployText>BUILD</S.DeployText>
         </S.Inline>
       ) : (
         <S.InlinePointer
           onClick={() => {
-            setComponent(HoverIcon, selectId, { value: "show" });
+            setBuild(0, 0, true, false);
           }}
         >
           <S.Img src="/ui/yellow.png" />
@@ -110,11 +95,10 @@ export const registerPlayerDetails = () => {
           world,
         },
         phaser: {
-          components: { HoverIcon },
-          localIds: { selectId },
+          components: { Build },
         },
       } = layers;
-      return merge(Name.update$, Cash.update$, HoverIcon.update$).pipe(
+      return merge(Name.update$, Cash.update$, Build.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
@@ -123,13 +107,11 @@ export const registerPlayerDetails = () => {
           if (userLinkWithAccount) {
             const name = getComponentValue(Name, userLinkWithAccount)?.value;
             const cash = getComponentValue(Cash, userLinkWithAccount)?.value;
-            const showBuildButton = getComponentValue(HoverIcon, selectId)?.value;
             return {
               name,
               cash,
               total,
               layers,
-              showBuildButton,
             };
           } else {
             return;
@@ -137,8 +119,8 @@ export const registerPlayerDetails = () => {
         })
       );
     },
-    ({ cash, name, total, layers, showBuildButton }) => {
-      return <PlayerDetails cash={cash} name={name} total={total} layers={layers} showBuildButton={showBuildButton} />;
+    ({ cash, name, total, layers }) => {
+      return <PlayerDetails cash={cash} name={name} total={total} layers={layers} />;
     }
   );
 };

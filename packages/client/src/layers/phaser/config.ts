@@ -75,7 +75,7 @@ export const phaserConfig = {
           chunkSize: TILE_WIDTH * 64, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [2],
+          backgroundTile: [OverworldTileset.Tron],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
@@ -612,8 +612,8 @@ export const phaserConfig = {
     phaserSelector: "phaser-game",
     pinchSpeed: 1,
     wheelSpeed: 1,
-    maxZoom: 1.5,
-    minZoom: 0.75,
+    maxZoom: 2,
+    minZoom: 0.1,
   }),
-  cullingChunkSize: TILE_HEIGHT * 16,
+  cullingChunkSize: TILE_HEIGHT * 64,
 };
