@@ -45,6 +45,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.depth = 2;
         },
       });
+      new Array(10).fill(0).forEach((_, i) => {
+        objectPool.remove(`${entity}${i}${i}`);
+        objectPool.remove(`${entity}${i}`);
+      });
       balance &&
         new Array(+balance >= 5 ? 5 : +balance).fill(0).forEach((_, i) => {
           const cocainObject = objectPool.get(`${entity}${i}`, "Sprite");
