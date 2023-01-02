@@ -2,14 +2,14 @@ import { useState } from "react";
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
-export const BuyModal = ({
-  buyPrice,
-  buySystem,
+export const SellModal = ({
+  sellPrice,
+  sellSystem,
   stock,
   close,
 }: {
-  buyPrice: number;
-  buySystem: (kgs: number) => void;
+  sellPrice: number;
+  sellSystem: (kgs: number) => void;
   stock?: number;
   close: () => void;
 }) => {
@@ -37,13 +37,13 @@ export const BuyModal = ({
           </p>
           <S.Details>
             <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>
-              BUY {convertPrice(buyPrice)} PER MT
+              Sell {convertPrice(sellPrice)} PER MT
             </p>
             {typeof stock === "number" && (
               <div
                 style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
               >
-                {new Array(10 - stock).fill(0).map((_, i) => {
+                {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
                       key={`key${i}`}
@@ -60,18 +60,18 @@ export const BuyModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                BUY Total {convertPrice(+selected * buyPrice)}
+                Sell Total {convertPrice(+selected * sellPrice)}
               </p>
             )}
             <S.InlinePointer
               onClick={() => {
                 if (+selected > 0) {
-                  buySystem(+selected);
+                  sellSystem(+selected);
                 }
               }}
             >
               <S.Img src="/ui/yellow.png" />
-              <S.DeployText>Buy</S.DeployText>
+              <S.DeployText>Sell</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>

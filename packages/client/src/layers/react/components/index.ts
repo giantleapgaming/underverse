@@ -8,6 +8,7 @@ import { registerProgressBar } from "./ProgressBar";
 import { registerSystemDetailsComponent } from "./SystemDetails";
 import { registerBuy } from "./BuySystem";
 import { registerUpgrade } from "./UpgradeSystem";
+import { registerSell } from "./SellSystem";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -19,5 +20,6 @@ export function registerUIComponents() {
   registerSystemDetailsComponent();
   registerBuy();
   registerUpgrade();
+  registerSell();
   // registerActionQueue();
 }

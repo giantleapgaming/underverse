@@ -13,12 +13,11 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
       world,
       components: { Name, Level, Position, Defence, Offence, OwnedBy, Balance },
       network: { connectedAddress },
-      api: { buySystem },
     },
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal, shouldUpgradeModal },
+      localApi: { shouldBuyModal, shouldUpgradeModal, shouldSellModal },
       scenes: {
         Main: { input },
       },
@@ -40,8 +39,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
     const distance =
       position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const buyPrice = (10_000 / distance) * 1.1;
-    const sellPrice = (10_000 / distance) * 0.9;
+    const buyPrice = (100_000 / distance) * 1.1;
+    const sellPrice = (100_000 / distance) * 0.9;
     return (
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
@@ -89,7 +88,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 </S.InlinePointer>
                 <S.InlinePointer
                   onClick={() => {
-                    console.log("hello");
+                    shouldSellModal(true);
+                    input.enabled.current = false;
                   }}
                 >
                   <img src="/ui/pink.png" />
