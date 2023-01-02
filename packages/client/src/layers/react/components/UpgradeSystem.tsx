@@ -2,19 +2,19 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { BuyModal } from "./modal/BuyModal";
+import { UpgradeModal } from "./modal/UpgradeModal";
 
-const BuySystem = ({ layers }: { layers: Layers }) => {
+const UpgradeSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Balance },
-      api: { buySystem },
+      components: { Level },
+      api: { upgradeSystem },
     },
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal, showProgress },
+      localApi: { shouldUpgradeModal, showProgress },
       scenes: {
         Main: { input },
       },
@@ -22,32 +22,27 @@ const BuySystem = ({ layers }: { layers: Layers }) => {
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
-    const position = getComponentValue(Position, selectedEntity);
-    const balance = getComponentValue(Balance, selectedEntity)?.value;
-
-    const distance =
-      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const buyPrice = (10_000 / distance) * 1.1;
+    const level = getComponentValue(Level, selectedEntity)?.value;
     const closeModal = () => {
-      shouldBuyModal(false);
+      shouldUpgradeModal(false);
       input.enabled.current = true;
     };
-    const buy = async (kgs: number) => {
+    const upgrade = async () => {
       if (selectedEntity) {
-        await buySystem(world.entities[selectedEntity], kgs);
+        await upgradeSystem(world.entities[selectedEntity]);
         closeModal();
         showProgress();
       }
     };
-    return <BuyModal buyPrice={buyPrice} buySystem={buy} stock={balance && +balance} close={closeModal} />;
+    return <UpgradeModal upgradeSystem={upgrade} level={level && +level} close={closeModal} />;
   } else {
     return null;
   }
 };
 
-export const registerBuy = () => {
+export const registerUpgrade = () => {
   registerUIComponent(
-    "BuySystem",
+    "UpgradeSystem",
     {
       colStart: 1,
       colEnd: 13,
@@ -62,16 +57,16 @@ export const registerBuy = () => {
           world,
         },
         phaser: {
-          components: { ShowBuyModal },
+          components: { ShowUpgradeModal },
           localIds: { modalIndex },
         },
       } = layers;
-      return merge(ShowBuyModal.update$).pipe(
+      return merge(ShowUpgradeModal.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          const showModal = getComponentValue(ShowBuyModal, modalIndex);
+          const showModal = getComponentValue(ShowUpgradeModal, modalIndex);
           if (userLinkWithAccount && showModal?.value) {
             return { layers };
           }
@@ -80,7 +75,7 @@ export const registerBuy = () => {
       );
     },
     ({ layers }) => {
-      return <BuySystem layers={layers} />;
+      return <UpgradeSystem layers={layers} />;
     }
   );
 };

@@ -7,6 +7,7 @@ import { registerGodownButton } from "./GodownButton";
 import { registerProgressBar } from "./ProgressBar";
 import { registerSystemDetailsComponent } from "./SystemDetails";
 import { registerBuy } from "./BuySystem";
+import { registerUpgrade } from "./UpgradeSystem";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -17,5 +18,6 @@ export function registerUIComponents() {
   registerLoadingState();
   registerSystemDetailsComponent();
   registerBuy();
+  registerUpgrade();
   // registerActionQueue();
 }

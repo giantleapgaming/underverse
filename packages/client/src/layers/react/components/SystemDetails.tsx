@@ -18,7 +18,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal },
+      localApi: { shouldBuyModal, shouldUpgradeModal },
       scenes: {
         Main: { input },
       },
@@ -106,7 +106,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 {level && +level < 11 && (
                   <S.InlinePointer
                     onClick={() => {
-                      console.log("hello");
+                      shouldUpgradeModal(true);
+                      input.enabled.current = false;
                     }}
                   >
                     <img src="/ui/orange.png" />

@@ -103,9 +103,8 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const upgradeSystem = async (godownEntity: EntityID) => {
-    const hexToDecimal = parseInt(godownEntity, 16);
     try {
-      await systems["system.Upgrade"].executeTyped(hexToDecimal);
+      await systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
     } catch (e) {
       console.log({ e });
     }

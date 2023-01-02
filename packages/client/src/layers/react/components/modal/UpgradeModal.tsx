@@ -1,19 +1,16 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../utils/priceConverter";
+import { convertPrice } from "../../utils/priceConverter";
 
-export const Modal = ({
-  buyPrice,
-  buySystem,
-  stock,
+export const UpgradeModal = ({
   close,
+  upgradeSystem,
+  level,
 }: {
-  buyPrice: number;
-  buySystem: (kgs: number) => void;
-  stock?: number;
+  upgradeSystem: () => void;
+  level?: number;
   close: () => void;
 }) => {
-  const [selected, setSelected] = useState("-1");
   return (
     <ModalContainer>
       <ModalContent>
@@ -36,42 +33,21 @@ export const Modal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>
-              But {convertPrice(buyPrice)} PER MT
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>UPGRADE STATION</p>
+            <p style={{ width: "100%", marginLeft: "80px" }}>UPGRAD TO LEVEL {level && level + 1} STATION</p>
+            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
+              COST: {level && (level + 1) * 1_000}
             </p>
-            {typeof stock === "number" && (
-              <div
-                style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
-              >
-                {new Array(10 - stock).fill(0).map((_, i) => {
-                  return (
-                    <S.Slanted
-                      key={`key${i}`}
-                      selected={+selected > i}
-                      onClick={() => {
-                        setSelected((i + 1).toString());
-                      }}
-                    >
-                      {i + 1}
-                    </S.Slanted>
-                  );
-                })}
-              </div>
-            )}
-            {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                But Total {convertPrice(+selected * buyPrice)}
-              </p>
-            )}
+            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
+              CARGO HOLD: {level} - {level && level + 1}
+            </p>
             <S.InlinePointer
               onClick={() => {
-                if (+selected > 0) {
-                  buySystem(+selected);
-                }
+                upgradeSystem();
               }}
             >
               <S.Img src="/ui/yellow.png" />
-              <S.DeployText>Buy</S.DeployText>
+              <S.DeployText>Upgrade</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>

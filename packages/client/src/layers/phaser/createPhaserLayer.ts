@@ -63,6 +63,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     setComponent(components.Progress, progressId, { value: false });
   };
   const shouldBuyModal = (open: boolean) => setComponent(components.ShowBuyModal, modalIndex, { value: open });
+  const shouldUpgradeModal = (open: boolean) => setComponent(components.ShowUpgradeModal, modalIndex, { value: open });
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
@@ -75,7 +76,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setSelect, hideProgress, showProgress, shouldBuyModal },
+    localApi: { setSelect, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------
