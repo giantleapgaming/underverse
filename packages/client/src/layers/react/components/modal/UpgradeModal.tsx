@@ -36,7 +36,7 @@ export const UpgradeModal = ({
             <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>UPGRADE STATION</p>
             <p style={{ width: "100%", marginLeft: "80px" }}>UPGRAD TO LEVEL {level && level + 1} STATION</p>
             <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
-              COST: {level && (level + 1) * 1_000}
+              COST: {level && Math.pow(level + 1, 2) * 1_000}
             </p>
             <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
               CARGO HOLD: {level} - {level && level + 1}
