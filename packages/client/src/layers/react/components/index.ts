@@ -8,6 +8,7 @@ import { registerSystemDetailsComponent } from "./SystemDetails";
 import { registerBuy } from "./BuySystem";
 import { registerUpgrade } from "./UpgradeSystem";
 import { registerSell } from "./SellSystem";
+import { registerOpenEyeDetails } from "./OpenEye";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -19,5 +20,6 @@ export function registerUIComponents() {
   registerBuy();
   registerUpgrade();
   registerSell();
+  registerOpenEyeDetails()
   // registerActionQueue();
 }
