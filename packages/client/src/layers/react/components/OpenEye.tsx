@@ -1,24 +1,32 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
-import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 
-const OpenEye = ({ cash, layers }: { name?: string; cash?: number; total?: number; layers: Layers }) => {
+const OpenEye = ({ name, layers }: { name?: string, layers: Layers }) => {
   const {
     phaser: {
-      localIds: { buildId },
-      localApi: { setBuild },
-      components: { Build },
+      localIds: { showCircleForOwnedByIndex },
+      localApi: { shouldShowCircleForOwnedBy },
+      components: { ShowCircleForOwnedBy },
     },
   } = layers;
-  const showBuildButton = getComponentValue(Build, buildId)?.show;
+  const showOpenEye = getComponentValue(ShowCircleForOwnedBy, showCircleForOwnedByIndex)?.value
   return (
     <div>
-      <img src="/ui/OpenEye.png" />
+      <S.Img src={showOpenEye ? "/ui/OpenEye.png" : "/ui/CloseEye.png"} onClick={() => {
+        shouldShowCircleForOwnedBy(!showOpenEye)
+      }} />
     </div>
   );
 };
+
+const S = {
+  Img: styled.img`
+  pointer-events: fill;
+  `
+}
 
 export const registerOpenEyeDetails = () => {
   registerUIComponent(
@@ -33,26 +41,22 @@ export const registerOpenEyeDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, Cash },
+          components: { Name },
           world,
         },
         phaser: {
-          components: { Build },
+          components: { ShowCircleForOwnedBy },
         },
       } = layers;
-      return merge(Name.update$, Cash.update$, Build.update$).pipe(
+      return merge(Name.update$, ShowCircleForOwnedBy.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
-          const total = [...getComponentEntities(Name)].length;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
           if (userLinkWithAccount) {
             const name = getComponentValue(Name, userLinkWithAccount)?.value;
-            const cash = getComponentValue(Cash, userLinkWithAccount)?.value;
             return {
               name,
-              cash,
-              total,
               layers,
             };
           } else {
@@ -61,8 +65,8 @@ export const registerOpenEyeDetails = () => {
         })
       );
     },
-    ({ cash, name, total, layers }) => {
-      return <OpenEye cash={cash} name={name} total={total} layers={layers} />;
+    ({ name, layers }) => {
+      return <OpenEye name={name} layers={layers} />;
     }
   );
 };
