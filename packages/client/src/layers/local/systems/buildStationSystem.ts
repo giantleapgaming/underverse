@@ -4,6 +4,7 @@ import { defineComponentSystem, getComponentEntities, getComponentValue } from "
 import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
+import { convertPrice } from "../../react/utils/priceConverter";
 const stationColor = [
   Assets.Station1,
   Assets.Station2,
@@ -103,6 +104,10 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.visible = !!(cursorIcon && showOnHover);
           },
         });
+        const distance =
+          xCoord && typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
+        const price = (1000_000 / distance) * 1.1;
+        const buildPrice = convertPrice(price);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "white-build-text",
@@ -110,8 +115,8 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(textPosition.x - 24, textPosition.y - 28);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
-            gameObject.setText(`BUILD $50`);
-            gameObject.setFontSize(14);
+            gameObject.setText(`BUILD ${buildPrice}`);
+            gameObject.setFontSize(12);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
           },
@@ -122,8 +127,8 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
-            gameObject.setText(`BUILD $50`);
-            gameObject.setFontSize(20);
+            gameObject.setText(`BUILD ${buildPrice}`);
+            gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
           },
