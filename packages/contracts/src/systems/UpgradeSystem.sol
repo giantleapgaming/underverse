@@ -7,6 +7,7 @@ import { CashComponent, ID as CashComponentID } from "../components/CashComponen
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
+import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { getPlayerCash } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER } from "../constants.sol";
 
@@ -35,7 +36,7 @@ contract UpgradeSystem is System {
 
     require(selectedEntityLevel >= 1, "Invalid entity");
 
-    require(selectedEntityLevel != 10, "Maximum level reached");
+    require(selectedEntityLevel <= 10, "Maximum level reached");
 
     uint256 nextLevel = selectedEntityLevel + 1;
 
@@ -53,6 +54,7 @@ contract UpgradeSystem is System {
       playerCash - upgradeCost
     );
     LevelComponent(getAddressById(components, LevelComponentID)).set(entity, nextLevel);
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(entity, nextLevel * 100);
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
       block.timestamp
