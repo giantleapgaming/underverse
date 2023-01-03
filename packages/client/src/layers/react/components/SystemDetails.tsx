@@ -17,7 +17,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal, shouldUpgradeModal, shouldSellModal },
+      localApi: { shouldBuyModal, shouldUpgradeModal, shouldSellModal, shouldTransport },
       scenes: {
         Main: { input },
       },
@@ -97,7 +97,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 </S.InlinePointer>
                 <S.InlinePointer
                   onClick={() => {
-                    console.log("hello");
+                    shouldTransport(false, true);
                   }}
                 >
                   <img src="/ui/sky.png" />

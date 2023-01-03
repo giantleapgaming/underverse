@@ -49,6 +49,16 @@ export const Transport = (world: World) => {
   );
 };
 
+export const TransportCords = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      x: Type.Number,
+      y: Type.Number,
+    },
+    { id: "TransportCords" }
+  );
+};
 export const ShowCircleForOwnedBy = (world: World) => {
   return defineBoolComponent(world, { id: "ShowCircleForOwnedBy" });
 };

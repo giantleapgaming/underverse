@@ -12,6 +12,7 @@ import {
   Build,
   Transport,
   ShowCircleForOwnedBy,
+  TransportCords,
 } from "../local/components";
 import { buildStationSystem, displayStationSystem, selectStationSystem } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
@@ -35,7 +36,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     progressId,
     stationDetailsEntityIndex,
     modalIndex,
-    showCircleForOwnedByIndex
+    showCircleForOwnedByIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -46,12 +47,16 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
     Build: Build(world),
-    ShowCircleForOwnedBy: ShowCircleForOwnedBy(world)
+    ShowCircleForOwnedBy: ShowCircleForOwnedBy(world),
+    TransportCords: TransportCords(world),
   };
 
   // --- API ------------------------------------------------------------------------
   const setBuild = (x: number, y: number, show: boolean, canPlace: boolean) => {
     setComponent(components.Build, buildId, { x, y, show, canPlace });
+  };
+  const setTransportCords = (x: number, y: number) => {
+    setComponent(components.TransportCords, modalIndex, { x, y });
   };
   const showProgress = () => {
     setComponent(components.Progress, progressId, { value: true });
@@ -65,7 +70,11 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
-  const shouldShowCircleForOwnedBy= (open: boolean) => setComponent(components.ShowCircleForOwnedBy,showCircleForOwnedByIndex , { value: open });
+  const shouldShowCircleForOwnedBy = (open: boolean) =>
+    setComponent(components.ShowCircleForOwnedBy, showCircleForOwnedByIndex, { value: open });
+
+  const shouldTransport = (showModal: boolean, showLine: boolean, entityId?: number) =>
+    setComponent(components.Transport, modalIndex, { showModal, showLine, entityId });
 
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -79,7 +88,17 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setBuild, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal, shouldSellModal,shouldShowCircleForOwnedBy },
+    localApi: {
+      setBuild,
+      hideProgress,
+      showProgress,
+      shouldBuyModal,
+      shouldUpgradeModal,
+      shouldSellModal,
+      shouldShowCircleForOwnedBy,
+      shouldTransport,
+      setTransportCords,
+    },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------

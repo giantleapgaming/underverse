@@ -7,7 +7,7 @@ import { Assets } from "../../phaser/constants";
 export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowStationDetails },
+    components: { ShowStationDetails, Transport },
     scenes: {
       Main: {
         input,
@@ -18,7 +18,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
-    localIds: { stationDetailsEntityIndex },
+    localIds: { stationDetailsEntityIndex, modalIndex },
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
@@ -29,7 +29,8 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const stationEntity = getEntityIndexAtPosition(x, y);
-    if (stationEntity) {
+    const line = getComponentValue(Transport, modalIndex);
+    if (stationEntity && !line?.showModal && !line?.showLine) {
       setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
     } else {
       // input.enabled.current = true

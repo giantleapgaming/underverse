@@ -1,6 +1,12 @@
 import { Assets } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import {
+  defineComponentSystem,
+  EntityID,
+  EntityIndex,
+  getComponentEntities,
+  getComponentValue,
+} from "@latticexyz/recs";
 import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
@@ -20,32 +26,73 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Progress, Build },
-    localApi: { setBuild, showProgress },
-    localIds: { buildId, progressId },
+    components: { Transport, ShowStationDetails, TransportCords },
+    localApi: { shouldTransport, setTransportCords },
+    localIds: { modalIndex, stationDetailsEntityIndex },
   } = phaser;
   const {
-    api: { buildSystem },
+    utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, Name },
+    components: { Position, OwnedBy },
   } = network;
-  // const graphics = phaserScene.add.graphics()
-  // graphics.moveTo(100, 100);
-  // graphics.lineStyle(2, 0xff0000, 1);
-  // const lineSub = input.pointermove$.subscribe((p) => {
-  //  const { pointer } = p;
-  //  const getPixleCoord = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-  //  const x2 = pointer.worldX;
-  //  const y2 = pointer.worldY;
+  const graphics = phaserScene.add.graphics();
+  graphics.lineStyle(2, 0xff0000, 1);
 
-  //  // Redraw the line with the updated ending point
-  //  graphics.clear();
-  //  graphics.lineStyle(5, 0xff0000);
-  //  graphics.moveTo(0, 0);
-  //  graphics.lineTo(x2, y2);
-  //  graphics.strokePath();
+  const lineSub = input.pointermove$.subscribe((p) => {
+    const { pointer } = p;
+    const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    if (sourceEntityId) {
+      const sourcePosition = getComponentValue(Position, sourceEntityId);
+      const transportDetails = getComponentValue(Transport, modalIndex);
+      if (sourcePosition?.x && transportDetails?.showLine && !transportDetails?.showModal) {
+        const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
+        graphics.clear();
+        graphics.lineStyle(5, 0xff0000);
+        graphics.moveTo(source.x + 32, source.y + 32);
+        graphics.lineTo(pointer.worldX, pointer.worldY);
+        graphics.strokePath();
+      }
+    }
+  });
+  world.registerDisposer(() => lineSub?.unsubscribe());
 
-  // });
+  const click = input.click$.subscribe((p) => {
+    const pointer = p;
+    const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+    const stationEntity = getEntityIndexAtPosition(x, y);
+    const transportDetails = getComponentValue(Transport, modalIndex);
+    const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    if (transportDetails?.showLine && !transportDetails?.showModal && sourceEntityId) {
+      const ownedBy = getComponentValue(OwnedBy, sourceEntityId)?.value as EntityID;
+      const userEntityId = connectedAddress.get();
+      if (userEntityId === ownedBy) {
+        setTransportCords(x, y);
+        shouldTransport(true, false, stationEntity);
+      }
+    }
+  });
 
-  // world.registerDisposer(() => lineSub?.unsubscribe());
+  world.registerDisposer(() => click?.unsubscribe());
+
+  defineComponentSystem(world, Transport, () => {
+    const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    const destinationDetails = getComponentValue(Transport, modalIndex);
+    const destinationEntityId = destinationDetails?.entityId as EntityIndex;
+    if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
+      const sourcePosition = getComponentValue(Position, sourceEntityId);
+      const transportCord = getComponentValue(TransportCords, modalIndex);
+      if (sourcePosition?.x && transportCord?.y) {
+        const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
+        const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
+        graphics.clear();
+        graphics.lineStyle(5, 0xff0000);
+        graphics.moveTo(source.x + 32, source.y + 32);
+        graphics.lineTo(distraction.x + 32, distraction.y + 32);
+        graphics.strokePath();
+      }
+    }
+    if (!destinationEntityId && !destinationDetails?.showLine && !destinationDetails?.showModal) {
+      graphics.clear();
+    }
+  });
 }
