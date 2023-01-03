@@ -48,3 +48,7 @@ export const Transport = (world: World) => {
     { id: "ShowTransportModal" }
   );
 };
+
+export const ShowCircleForOwnedBy = (world: World) => {
+  return defineBoolComponent(world, { id: "ShowCircleForOwnedBy" });
+};

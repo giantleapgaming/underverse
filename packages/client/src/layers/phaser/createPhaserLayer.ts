@@ -11,6 +11,7 @@ import {
   ShowSellModal,
   Build,
   Transport,
+  ShowCircleForOwnedBy,
 } from "../local/components";
 import { buildStationSystem, displayStationSystem, selectStationSystem } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
@@ -27,12 +28,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const buildId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
   const modalIndex = createEntity(world);
+  const showCircleForOwnedByIndex = createEntity(world);
 
   const localIds = {
     buildId,
     progressId,
     stationDetailsEntityIndex,
     modalIndex,
+    showCircleForOwnedByIndex
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -43,6 +46,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
     Build: Build(world),
+    ShowCircleForOwnedBy: ShowCircleForOwnedBy(world)
   };
 
   // --- API ------------------------------------------------------------------------
@@ -61,6 +65,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
+  const shouldShowCircleForOwnedBy= (open: boolean) => setComponent(components.ShowCircleForOwnedBy,showCircleForOwnedByIndex , { value: open });
+
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
@@ -73,7 +79,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     game,
     localIds,
     scenes,
-    localApi: { setBuild, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal, shouldSellModal },
+    localApi: { setBuild, hideProgress, showProgress, shouldBuyModal, shouldUpgradeModal, shouldSellModal,shouldShowCircleForOwnedBy },
   };
 
   // --- SYSTEMS --------------------------------------------------------------------
