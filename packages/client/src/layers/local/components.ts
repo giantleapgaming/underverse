@@ -37,6 +37,14 @@ export const ShowSellModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowSellModal" });
 };
 
-export const ShowTransportModal = (world: World) => {
-  return defineBoolComponent(world, { id: "ShowTransportModal" });
+export const Transport = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showModal: Type.Boolean,
+      showLine: Type.Boolean,
+      entityId: Type.OptionalNumber,
+    },
+    { id: "ShowTransportModal" }
+  );
 };

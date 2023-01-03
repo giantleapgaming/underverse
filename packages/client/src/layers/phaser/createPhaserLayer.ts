@@ -7,12 +7,13 @@ import {
   Progress,
   ShowStationDetails,
   ShowBuyModal,
-  ShowTransportModal,
   ShowUpgradeModal,
   ShowSellModal,
   Build,
+  Transport,
 } from "../local/components";
 import { buildStationSystem, displayStationSystem, selectStationSystem } from "../local/systems";
+import { transportSystem } from "../local/systems/transportSystem";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -38,7 +39,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Progress: Progress(world),
     ShowStationDetails: ShowStationDetails(world),
     ShowBuyModal: ShowBuyModal(world),
-    ShowTransportModal: ShowTransportModal(world),
+    Transport: Transport(world),
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
     Build: Build(world),
@@ -80,5 +81,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayStationSystem(network, context);
   selectStationSystem(network, context);
   buildStationSystem(network, context);
+  transportSystem(network, context);
   return context;
 }

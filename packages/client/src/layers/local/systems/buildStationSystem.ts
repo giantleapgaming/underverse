@@ -77,7 +77,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const rightClickSub = input.rightClick$.subscribe(() => {
     setBuild(0, 0, false, false);
   });
-  defineComponentSystem(world, Build, (a) => {
+  defineComponentSystem(world, Build, () => {
     const build = getComponentValue(Build, buildId);
     const cursorIcon = build?.canPlace;
     const xCoord = build?.x;
