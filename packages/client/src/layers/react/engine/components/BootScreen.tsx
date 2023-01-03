@@ -33,7 +33,7 @@ const Container = styled.div`
   background-position: center center;
   div {
     font-family: "Space Grotesk", sans-serif;
-    padding-top: 45ss0px;
+    padding-top: 450px;
   }
 
   img {
