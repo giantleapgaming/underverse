@@ -14,7 +14,7 @@ import {
   ShowCircleForOwnedBy,
   TransportCords,
 } from "../local/components";
-import { buildStationSystem, displayStationSystem, selectStationSystem } from "../local/systems";
+import { buildStationSystem, displayStationSystem, selectStationSystem, showUserStations } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
 
 /**
@@ -107,5 +107,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   selectStationSystem(network, context);
   buildStationSystem(network, context);
   transportSystem(network, context);
+  showUserStations(network, context);
   return context;
 }
