@@ -40,7 +40,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
           id: `Rectangle-${entity}`,
           once: (gameObject) => {
             gameObject.setSize(192, 192)
-    gameObject.setPosition(x-64, y-64),
+            gameObject.setPosition(x-64, y-64),
     gameObject.setStrokeStyle(3, 0x00ff00),
       gameObject.setFillStyle(0x00ff00, 0)
     gameObject.setVisible(!!showOpenEye)
