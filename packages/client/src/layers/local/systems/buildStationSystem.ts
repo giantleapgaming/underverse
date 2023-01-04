@@ -106,7 +106,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         });
         const distance =
           xCoord && typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
-        const price = (1000_000 / distance) * 1.1;
+        const price = 1_000_000 / distance;
         const buildPrice = convertPrice(price);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
