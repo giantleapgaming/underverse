@@ -49,12 +49,14 @@ contract UpgradeSystem is System {
 
     require(playerCash >= upgradeCost, "Not enough money to upgrade");
 
+    uint256 selectedEntityDefence = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(entity);
+
     CashComponent(getAddressById(components, CashComponentID)).set(
       addressToEntity(msg.sender),
       playerCash - upgradeCost
     );
     LevelComponent(getAddressById(components, LevelComponentID)).set(entity, nextLevel);
-    DefenceComponent(getAddressById(components, DefenceComponentID)).set(entity, nextLevel * 100);
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(entity, selectedEntityDefence + 100);
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
       block.timestamp
