@@ -1,16 +1,7 @@
-import { Assets } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineComponentSystem,
-  EntityID,
-  EntityIndex,
-  getComponentEntities,
-  getComponentValue,
-} from "@latticexyz/recs";
-import { get3x3Grid } from "../../../utils/get3X3Grid";
+import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { convertPrice } from "../../react/utils/priceConverter";
 
 export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -18,8 +9,6 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     scenes: {
       Main: {
         input,
-        objectPool,
-        config,
         phaserScene,
         maps: {
           Main: { tileWidth, tileHeight },
