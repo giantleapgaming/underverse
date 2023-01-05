@@ -64,9 +64,13 @@ contract BuyWeaponSystem is System {
         (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
       );
 
-    uint256 totalPriceRaw = ((10000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)) * buyQuantity;
+    uint256 totalPriceRaw = ((10000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
 
-    uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // To convert in 10^6 format
+    // uint256 totalPrice = totalPriceRaw * MULTIPLIER2;
+
+    // 174928556845.36 // keep this number here for ref. Its price of 1 torpedo at 15,9.
+
+    uint256 totalPrice = (totalPriceRaw / MULTIPLIER2) * buyQuantity; // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such weapon quantity");
 
@@ -88,7 +92,7 @@ contract BuyWeaponSystem is System {
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
   }
 
-  function executeTyped(uint256 godownEntity, uint256 kgs) public returns (bytes memory) {
-    return execute(abi.encode(godownEntity, kgs));
+  function executeTyped(uint256 godownEntity, uint256 buyQuantity) public returns (bytes memory) {
+    return execute(abi.encode(godownEntity, buyQuantity));
   }
 }
