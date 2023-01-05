@@ -45,6 +45,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (canBeBuild.x === pointer.worldX && canBeBuild.y === pointer.worldY) return;
       const allPositionEntity = [...getComponentEntities(Position)];
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      console.log( x,y)
       const checkIfWeCanMakeAmove = allPositionEntity.find((entity) => {
         const cord = getComponentValue(Position, entity);
         if (cord) {
