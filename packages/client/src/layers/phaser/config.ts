@@ -44,6 +44,11 @@ export const phaserConfig = {
           key: Assets.Center,
           path: "/station/center.png",
         },
+         [Assets.ShowOwnedStationBackground]: {
+          type: AssetType.Image,
+          key: Assets.ShowOwnedStationBackground,
+          path: "/station/ShowOwnedStationsYellowBG.png",
+        },
         [Assets.Station2]: {
           type: AssetType.Image,
           key: Assets.Station2,
@@ -75,7 +80,7 @@ export const phaserConfig = {
           chunkSize: TILE_WIDTH * 64, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [1],
+          backgroundTile: [OverworldTileset.Tron],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
