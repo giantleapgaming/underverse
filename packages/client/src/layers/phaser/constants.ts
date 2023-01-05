@@ -25,6 +25,7 @@ export enum Assets {
   Station5 = "Station5",
   Station6 = "Station6",
   Select = "Select",
+  ShowOwnedStationBackground = "ShowOwnedStationBackground"
 }
 
 export enum Sprites {

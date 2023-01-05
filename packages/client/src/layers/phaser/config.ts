@@ -44,6 +44,11 @@ export const phaserConfig = {
           key: Assets.Center,
           path: "/station/center.png",
         },
+         [Assets.ShowOwnedStationBackground]: {
+          type: AssetType.Image,
+          key: Assets.ShowOwnedStationBackground,
+          path: "/station/ShowOwnedStationBackground.png",
+        },
         [Assets.Station2]: {
           type: AssetType.Image,
           key: Assets.Station2,

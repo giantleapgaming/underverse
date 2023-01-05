@@ -42,7 +42,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     once: (gameObject) => {
       gameObject.setTexture(centerSun.key, centerSun.path);
       gameObject.setPosition(x, y);
-      gameObject.setDepth(1000);
+      gameObject.setDepth(10);
     },
   });
   camera.centerOn(0, -1);
