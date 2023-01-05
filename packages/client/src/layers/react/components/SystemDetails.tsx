@@ -17,7 +17,14 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldBuyModal, shouldUpgradeModal, shouldSellModal, shouldTransport },
+      localApi: {
+        shouldBuyModal,
+        shouldUpgradeModal,
+        shouldSellModal,
+        shouldTransport,
+        shouldShowWeaponModal,
+        shouldShowAttackModal,
+      },
       scenes: {
         Main: { input },
       },
@@ -114,6 +121,22 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     <S.DeployText>UPGRADE</S.DeployText>
                   </S.InlinePointer>
                 )}
+                <S.InlinePointer
+                  onClick={() => {
+                    shouldShowWeaponModal(true);
+                  }}
+                >
+                  <img src="/ui/sky.png" />
+                  <S.DeployText>WEAPONS</S.DeployText>
+                </S.InlinePointer>
+                <S.InlinePointer
+                  onClick={() => {
+                    shouldShowAttackModal(true);
+                  }}
+                >
+                  <img src="/ui/sky.png" />
+                  <S.DeployText>ATTACK</S.DeployText>
+                </S.InlinePointer>
               </>
             )}
           </S.Grid>
@@ -153,7 +176,7 @@ const S = {
   `,
   Absolute: styled.div`
     height: 100%;
-    left: 20px;
+    left: 26px;
     position: absolute;
     display: flex;
     align-items: center;
@@ -163,7 +186,7 @@ const S = {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
-    margin-top: 90px;
+    margin-top: 30px;
     margin-right: 15px;
   `,
   InlinePointer: styled.div`

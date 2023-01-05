@@ -35,9 +35,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     network: { connectedAddress },
     components: { Position, Name },
   } = network;
-  const hoverStation = objectPool.get("build", "Sprite");
-  const textWhite = objectPool.get("build-text-white", "Text");
-  const textYellow = objectPool.get("build-text-yell", "Text");
+
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
     const canBeBuild = getComponentValue(Build, buildId);
@@ -45,7 +43,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (canBeBuild.x === pointer.worldX && canBeBuild.y === pointer.worldY) return;
       const allPositionEntity = [...getComponentEntities(Position)];
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-      console.log( x,y)
+      console.log(x, y);
       const checkIfWeCanMakeAmove = allPositionEntity.find((entity) => {
         const cord = getComponentValue(Position, entity);
         if (cord) {
@@ -85,6 +83,9 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const yCoord = build?.y;
     const showOnHover = build?.show;
     if (typeof xCoord === "number" && typeof yCoord === "number") {
+      const hoverStation = objectPool.get("build", "Sprite");
+      const textWhite = objectPool.get("build-text-white", "Text");
+      const textYellow = objectPool.get("build-text-yell", "Text");
       const userHoverStation = {} as { [key: string]: Assets };
       [...getComponentEntities(Name)].map(
         (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])

@@ -62,3 +62,23 @@ export const TransportCords = (world: World) => {
 export const ShowCircleForOwnedBy = (world: World) => {
   return defineBoolComponent(world, { id: "ShowCircleForOwnedBy" });
 };
+
+export const ShowWeaponModal = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showModal: Type.Boolean,
+    },
+    { id: "ShowWeaponModal" }
+  );
+};
+
+export const ShowAttackModal = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showModal: Type.Boolean,
+    },
+    { id: "ShowAttackModal" }
+  );
+};

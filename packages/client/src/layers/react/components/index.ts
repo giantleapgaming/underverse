@@ -10,6 +10,8 @@ import { registerUpgrade } from "./UpgradeSystem";
 import { registerSell } from "./SellSystem";
 import { registerOpenEyeDetails } from "./OpenEye";
 import { registerTransport } from "./TransportSystem";
+import { registerWeaponDetails } from "./WeaponSystem";
+import { registerAttackDetails } from "./AttackSystem";
 export function registerUIComponents() {
   registerNameScreen();
   // registerComponentBrowser();
@@ -22,5 +24,8 @@ export function registerUIComponents() {
   registerSell();
   registerOpenEyeDetails();
   registerTransport();
+  registerWeaponDetails();
+  registerAttackDetails();
+
   // registerActionQueue();
 }

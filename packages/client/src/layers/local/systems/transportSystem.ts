@@ -25,7 +25,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Position, OwnedBy },
   } = network;
   const graphics = phaserScene.add.graphics();
-  graphics.lineStyle(2, 0xff0000, 1);
+  graphics.lineStyle(1, 0xffffff, 1);
 
   const lineSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
@@ -36,7 +36,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (sourcePosition?.x && transportDetails?.showLine && !transportDetails?.showModal) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         graphics.clear();
-        graphics.lineStyle(5, 0xff0000);
+        graphics.lineStyle(1, 0xffffff);
         graphics.moveTo(source.x + 32, source.y + 32);
         graphics.lineTo(pointer.worldX, pointer.worldY);
         graphics.strokePath();
@@ -51,8 +51,8 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const transportDetails = getComponentValue(Transport, modalIndex);
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-    if (transportDetails?.showLine && !transportDetails?.showModal && sourceEntityId) {
-      const ownedBy = getComponentValue(OwnedBy, sourceEntityId)?.value as EntityID;
+    if (transportDetails?.showLine && !transportDetails?.showModal && sourceEntityId && stationEntity) {
+      const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
       const userEntityId = connectedAddress.get();
       if (userEntityId === ownedBy) {
         setTransportCords(x, y);
@@ -74,7 +74,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
         graphics.clear();
-        graphics.lineStyle(5, 0xff0000);
+        graphics.lineStyle(1, 0xffffff);
         graphics.moveTo(source.x + 32, source.y + 32);
         graphics.lineTo(distraction.x + 32, distraction.y + 32);
         graphics.strokePath();

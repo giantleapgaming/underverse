@@ -13,6 +13,8 @@ import {
   Transport,
   ShowCircleForOwnedBy,
   TransportCords,
+  ShowWeaponModal,
+  ShowAttackModal,
 } from "../local/components";
 import { buildStationSystem, displayStationSystem, selectStationSystem, showUserStations } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
@@ -49,6 +51,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Build: Build(world),
     ShowCircleForOwnedBy: ShowCircleForOwnedBy(world),
     TransportCords: TransportCords(world),
+    showWeaponModal: ShowWeaponModal(world),
+    showAttackModal: ShowAttackModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -76,6 +80,12 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const shouldTransport = (showModal: boolean, showLine: boolean, entityId?: number) =>
     setComponent(components.Transport, modalIndex, { showModal, showLine, entityId });
 
+  const shouldShowWeaponModal = (showModal: boolean) =>
+    setComponent(components.showWeaponModal, modalIndex, { showModal });
+
+  const shouldShowAttackModal = (showModal: boolean) =>
+    setComponent(components.showAttackModal, modalIndex, { showModal });
+
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
@@ -98,6 +108,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldShowCircleForOwnedBy,
       shouldTransport,
       setTransportCords,
+      shouldShowWeaponModal,
+      shouldShowAttackModal,
     },
   };
 
