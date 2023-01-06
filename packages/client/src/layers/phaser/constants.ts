@@ -26,6 +26,13 @@ export enum Assets {
   Station6 = "Station6",
   Select = "Select",
   Cargo = "Cargo",
+  HoverStation1 = "HoverStation1",
+  HoverStation2 = "HoverStation2",
+  HoverStation3 = "HoverStation3",
+  HoverStation4 = "HoverStation4",
+  HoverStation5 = "HoverStation5",
+  HoverStation6 = "HoverStation6",
+
   ShowOwnedStationBackground = "ShowOwnedStationBackground",
 }
 

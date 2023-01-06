@@ -79,6 +79,37 @@ export const phaserConfig = {
           key: Assets.Station6,
           path: "/station/6-1.png",
         },
+
+        [Assets.HoverStation1]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation1,
+          path: "/station/coloredCircle/1.png",
+        },
+        [Assets.HoverStation2]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation2,
+          path: "/station/coloredCircle/2.png",
+        },
+        [Assets.HoverStation3]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation3,
+          path: "/station/coloredCircle/3.png",
+        },
+        [Assets.HoverStation4]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation4,
+          path: "/station/coloredCircle/4.png",
+        },
+        [Assets.HoverStation5]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation5,
+          path: "/station/coloredCircle/5.png",
+        },
+        [Assets.HoverStation6]: {
+          type: AssetType.Image,
+          key: Assets.HoverStation6,
+          path: "/station/coloredCircle/6.png",
+        },
       },
       maps: {
         [Maps.Main]: defineMapConfig({

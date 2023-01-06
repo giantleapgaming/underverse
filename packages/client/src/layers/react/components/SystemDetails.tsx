@@ -191,7 +191,7 @@ const S = {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
-    margin-top: 30px;
+    margin-top: 35px;
     margin-right: 15px;
   `,
   InlinePointer: styled.div<{ isDisabled?: boolean }>`
@@ -213,6 +213,7 @@ const S = {
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-top: 15px;
     gap: 30px;
   `,
   InlineSB: styled.div`
