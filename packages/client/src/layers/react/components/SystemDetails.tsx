@@ -1,6 +1,6 @@
 import React from "react";
 import { registerUIComponent } from "../engine";
-import { EntityID, EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { EntityID, EntityIndex, getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 
@@ -30,6 +30,9 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
       },
     },
   } = layers;
+  const close = () => {
+    setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+  };
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
     const defence = getComponentValue(Defence, selectedEntity)?.value;
@@ -52,6 +55,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
         <S.Absolute>
+          <S.Close onClick={close}>X</S.Close>
           <S.InlineSB>
             <div>
               <p>STATION: LVL {level && +level}</p>
@@ -219,6 +223,17 @@ const S = {
     align-items: center;
     margin-bottom: 30px;
     margin-top: 30px;
+  `,
+
+  Close: styled.p`
+    text-align: right;
+    width: 100%;
+    position: absolute;
+    top: -5px;
+    left: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 4;
   `,
 };
 export function registerSystemDetailsComponent() {

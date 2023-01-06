@@ -46,6 +46,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const entityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const systemExist = getComponentValue(OwnedBy, entityId)?.value;
     const position = getComponentValue(Position, entityId);
+
     if (systemExist && typeof position?.x === "number" && entityId) {
       const grid3X3 = get3x3Grid(position.x, position.y);
       const [iX, iY] = grid3X3[0][0];
@@ -57,6 +58,15 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setTexture(select.key, select.path);
           gameObject.setPosition(x, y);
           gameObject.depth = 2;
+          gameObject.setVisible(true);
+        },
+      });
+    } else {
+      object.setComponent({
+        id: "select-box-ui",
+        once: (gameObject) => {
+          gameObject.depth = 2;
+          gameObject.setVisible(false);
         },
       });
     }
