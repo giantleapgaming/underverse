@@ -33,14 +33,11 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
       shouldTransport(false, false, false);
       input.enabled.current = true;
     };
-    const closeModalAfterTransport = () => {
-      shouldTransport(false, true, true, transport.entityId);
-    };
     const startTransport = async (kgs: number) => {
       if (selectedEntity) {
         const sourceEntityId = world.entities[selectedEntity];
         const destinationEntityId = world.entities[transport.entityId as EntityIndex];
-        closeModalAfterTransport();
+        shouldTransport(false, true, true, transport.entityId, kgs);
         await transportSystem(sourceEntityId, destinationEntityId, kgs);
         showProgress();
       }

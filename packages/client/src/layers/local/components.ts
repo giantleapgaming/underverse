@@ -45,6 +45,7 @@ export const Transport = (world: World) => {
       showLine: Type.Boolean,
       entityId: Type.OptionalNumber,
       showAnimation: Type.Boolean,
+      amount: Type.OptionalNumber,
     },
     { id: "ShowTransportModal" }
   );

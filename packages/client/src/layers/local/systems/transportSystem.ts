@@ -71,6 +71,19 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   world.registerDisposer(() => click?.unsubscribe());
 
+  const product = [
+    Assets.Product1,
+    Assets.Product2,
+    Assets.Product3,
+    Assets.Product4,
+    Assets.Product5,
+    Assets.Product6,
+    Assets.Product7,
+    Assets.Product8,
+    Assets.Product9,
+    Assets.Product10,
+  ];
+
   defineComponentSystem(world, Transport, () => {
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const destinationDetails = getComponentValue(Transport, modalIndex);
@@ -86,14 +99,23 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         graphics.moveTo(source.x + 32, source.y + 32);
         graphics.lineTo(distraction.x + 32, distraction.y + 32);
         graphics.strokePath();
+        const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI) + 90;
 
         if (
           destinationEntityId &&
           destinationDetails?.showAnimation &&
           !destinationDetails?.showModal &&
-          destinationDetails.showLine
+          destinationDetails.showLine &&
+          destinationDetails?.amount
         ) {
-          const cloudImage = phaserScene.add.image(source.x + 32, source.y + 32, Assets.Cargo, 0);
+          const cloudImage = phaserScene.add.image(
+            source.x + 32,
+            source.y + 32,
+            product[destinationDetails.amount - 1],
+            0
+          );
+          // cloudImage.setAngle(180);
+          cloudImage.setAngle(angle);
           phaserScene.add.tween({
             targets: cloudImage,
             x: {
@@ -109,6 +131,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 10_000,
             onComplete: () => {
               graphics.clear();
+              cloudImage.setVisible(false);
               shouldTransport(false, false, false);
               input.enabled.current = true;
             },
@@ -120,7 +143,8 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       !destinationDetails?.showLine &&
       !destinationDetails?.showModal &&
       !destinationDetails?.showAnimation &&
-      !destinationDetails?.entityId
+      !destinationDetails?.entityId &&
+      !destinationDetails?.amount
     ) {
       graphics.clear();
     }

@@ -79,7 +79,6 @@ export const phaserConfig = {
           key: Assets.Station6,
           path: "/station/6-1.png",
         },
-
         [Assets.HoverStation1]: {
           type: AssetType.Image,
           key: Assets.HoverStation1,
@@ -109,6 +108,56 @@ export const phaserConfig = {
           type: AssetType.Image,
           key: Assets.HoverStation6,
           path: "/station/coloredCircle/6.png",
+        },
+        [Assets.Product1]: {
+          type: AssetType.Image,
+          key: Assets.Product1,
+          path: "/product/1.png",
+        },
+        [Assets.Product2]: {
+          type: AssetType.Image,
+          key: Assets.Product2,
+          path: "/product/2.png",
+        },
+        [Assets.Product3]: {
+          type: AssetType.Image,
+          key: Assets.Product3,
+          path: "/product/3.png",
+        },
+        [Assets.Product4]: {
+          type: AssetType.Image,
+          key: Assets.Product4,
+          path: "/product/4.png",
+        },
+        [Assets.Product5]: {
+          type: AssetType.Image,
+          key: Assets.Product5,
+          path: "/product/5.png",
+        },
+        [Assets.Product6]: {
+          type: AssetType.Image,
+          key: Assets.Product6,
+          path: "/product/6.png",
+        },
+        [Assets.Product7]: {
+          type: AssetType.Image,
+          key: Assets.Product7,
+          path: "/product/7.png",
+        },
+        [Assets.Product8]: {
+          type: AssetType.Image,
+          key: Assets.Product8,
+          path: "/product/8.png",
+        },
+        [Assets.Product9]: {
+          type: AssetType.Image,
+          key: Assets.Product9,
+          path: "/product/9.png",
+        },
+        [Assets.Product10]: {
+          type: AssetType.Image,
+          key: Assets.Product10,
+          path: "/product/10.png",
         },
       },
       maps: {

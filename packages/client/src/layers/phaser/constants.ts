@@ -32,7 +32,16 @@ export enum Assets {
   HoverStation4 = "HoverStation4",
   HoverStation5 = "HoverStation5",
   HoverStation6 = "HoverStation6",
-
+  Product1 = "Product1",
+  Product2 = "Product2",
+  Product3 = "Product3",
+  Product4 = "Product4",
+  Product5 = "Product5",
+  Product6 = "Product6",
+  Product7 = "Product7",
+  Product8 = "Product8",
+  Product9 = "Product9",
+  Product10 = "Product10",
   ShowOwnedStationBackground = "ShowOwnedStationBackground",
 }
 
