@@ -115,7 +115,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/ui/sky.png" />
                   <S.DeployText>TRANSPORT</S.DeployText>
                 </S.InlinePointer>
-                {level && +level < 11 && (
+                {level && +level < 10 && (
                   <S.InlinePointer
                     onClick={() => {
                       shouldUpgradeModal(true);

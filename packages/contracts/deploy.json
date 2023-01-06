@@ -1,73 +1,82 @@
 {
   "components": [
-                  "LastUpdatedTimeComponent",
-                  "NameComponent",
-                  "OwnedByComponent",
-                  "PositionComponent",
-                  "CashComponent",
-                  "OffenceComponent",
-                  "DefenceComponent",
-                  "LevelComponent",
-                  "BalanceComponent"
+    "LastUpdatedTimeComponent",
+    "NameComponent",
+    "OwnedByComponent",
+    "PositionComponent",
+    "CashComponent",
+    "OffenceComponent",
+    "DefenceComponent",
+    "LevelComponent",
+    "BalanceComponent"
   ],
-  "systems": [{ "name": "ComponentDevSystem", "writeAccess": ["*"] },
-  { "name": "InitSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "NameComponent"
-                                        ]},
-  { "name": "BuildSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
-                                          "PositionComponent",
-                                          "OffenceComponent",
-                                          "DefenceComponent",
-                                          "LevelComponent",
-                                          "BalanceComponent"
-                                        ]},
-  { "name": "BuySystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
-                                          "PositionComponent",
-                                          "BalanceComponent"
-                                        ]},
-  { "name": "SellSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
-                                          "PositionComponent",
-                                          "BalanceComponent"
-                                         ]},
-  { "name": "TransportSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "PositionComponent",
-                                          "BalanceComponent"
-                                        ]},
-  { "name": "UpgradeSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "LevelComponent"
-                                        ]},
-  { "name": "BuyWeaponSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
-                                          "PositionComponent",
-                                          "OffenceComponent",
-                                          "DefenceComponent",
-                                          "LevelComponent"
-                                        ]},
-  { "name": "AttackSystem", "writeAccess": [
-                                          "CashComponent",
-                                          "LastUpdatedTimeComponent",
-                                          "OwnedByComponent",
-                                          "PositionComponent",
-                                          "OffenceComponent",
-                                          "DefenceComponent",
-                                          "LevelComponent"
-                                        ]}
+  "systems": [
+    { "name": "ComponentDevSystem", "writeAccess": ["*"] },
+    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent"] },
+    {
+      "name": "BuildSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent"
+      ]
+    },
+    {
+      "name": "BuySystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "BalanceComponent"
+      ]
+    },
+    {
+      "name": "SellSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "BalanceComponent"
+      ]
+    },
+    {
+      "name": "TransportSystem",
+      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "PositionComponent", "BalanceComponent"]
+    },
+    {
+      "name": "UpgradeSystem",
+      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "LevelComponent", "DefenceComponent"]
+    },
+    {
+      "name": "BuyWeaponSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent"
+      ]
+    },
+    {
+      "name": "AttackSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent"
+      ]
+    }
   ]
 }

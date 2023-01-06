@@ -617,6 +617,10 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "cargo-1.png",
         },
+        [Sprites.Missile]: {
+          assetKey: Assets.MainAtlas,
+          frame: "missile-1.png",
+        },
       },
       animations: [],
       tilesets: {

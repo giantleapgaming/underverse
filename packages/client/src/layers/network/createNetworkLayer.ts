@@ -101,6 +101,27 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log({ e });
     }
   };
+
+  const buyWeaponSystem = async (godownEntity: EntityID, kgs: number) => {
+    try {
+      await systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs);
+    } catch (e) {
+      console.log({ e });
+    }
+  };
+
+  const attackSystem = async (srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgsToTransfer: number) => {
+    try {
+      await systems["system.Attack"].executeTyped(
+        BigNumber.from(srcGodownEntity),
+        BigNumber.from(destinationGodownEntity),
+        kgsToTransfer
+      );
+    } catch (e) {
+      console.log({ e });
+    }
+  };
+
   const sellSystem = async (godownEntity: EntityID, kgs: number) => {
     try {
       await systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs);
@@ -109,7 +130,7 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const upgradeSystem = async (godownEntity: EntityID) => {
-    console.log({ godownEntity, big: BigNumber.from(godownEntity) });
+    console.log(godownEntity);
     try {
       await systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
     } catch (e) {
@@ -165,6 +186,8 @@ export async function createNetworkLayer(config: GameConfig) {
       transportSystem,
       upgradeSystem,
       sellSystem,
+      buyWeaponSystem,
+      attackSystem,
     },
     utils: {
       getEntityIndexAtPosition,

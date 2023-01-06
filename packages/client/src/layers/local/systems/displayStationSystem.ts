@@ -18,10 +18,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     },
   } = phaser;
   const {
-    components: { OwnedBy, Position, Name, Level, Balance },
+    components: { OwnedBy, Position, Name, Level, Balance, Offence },
   } = network;
 
-  defineSystem(world, [Has(OwnedBy), Has(Position), Has(Level), Has(Balance)], ({ entity }) => {
+  defineSystem(world, [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence)], ({ entity }) => {
     const images = ["1", "2", "3", "4", "5", "6"];
     const allImg = {} as { [key: string]: string };
     [...getComponentEntities(Name)].forEach(
@@ -31,11 +31,13 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     const position = getComponentValue(Position, entity);
     const level = getComponentValue(Level, entity)?.value;
     const balance = getComponentValue(Balance, entity)?.value;
+    const offence = getComponentValue(Offence, entity)?.value;
     const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
     const owndBy = getComponentValue(OwnedBy, entity)?.value;
     if (owndBy) {
       const sprit = config.sprites[Sprites.Player12];
       const cargo = config.sprites[Sprites.Cargo];
+      const missile = config.sprites[Sprites.Missile];
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
@@ -45,19 +47,18 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       });
       new Array(10).fill(0).forEach((_, i) => {
-        objectPool.remove(`${entity}${i}${i}`);
-        objectPool.remove(`${entity}${i}`);
+        objectPool.remove(`c${entity}${i}${i}`);
+        objectPool.remove(`c${entity}${i}`);
       });
-
 
       balance &&
         new Array(+balance >= 5 ? 5 : +balance).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`${entity}${i}`, "Sprite");
+          const cocainObject = objectPool.get(`c${entity}${i}`, "Sprite");
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition((x-24) + i * 25, y - 50);
+              gameObject.setPosition(x - 24 + i * 25, y - 50);
               gameObject.depth = 4;
             },
           });
@@ -65,12 +66,42 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       balance &&
         +balance >= 5 &&
         new Array(+balance === 10 ? 5 : +balance % 5).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`${entity}${i}${i}`, "Sprite");
+          const cocainObject = objectPool.get(`c${entity}${i}${i}`, "Sprite");
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition((x-24) + i * 25, y - 25);
+              gameObject.setPosition(x - 24 + i * 25, y - 25);
+              gameObject.depth = 4;
+            },
+          });
+        });
+      new Array(10).fill(0).forEach((_, i) => {
+        objectPool.remove(`m${entity}${i}${i}`);
+        objectPool.remove(`m${entity}${i}`);
+      });
+
+      offence &&
+        new Array(+offence >= 5 ? 5 : +offence).fill(0).forEach((_, i) => {
+          const cocainObject = objectPool.get(`m${entity}${i}`, "Sprite");
+          cocainObject.setComponent({
+            id: `coc ${i}`,
+            once: (gameObject) => {
+              gameObject.setTexture(missile.assetKey, missile.frame);
+              gameObject.setPosition(x - 24 + i * 25, y + 75);
+              gameObject.depth = 4;
+            },
+          });
+        });
+      offence &&
+        +offence >= 5 &&
+        new Array(+offence === 10 ? 5 : +offence % 5).fill(0).forEach((_, i) => {
+          const cocainObject = objectPool.get(`m${entity}${i}${i}`, "Sprite");
+          cocainObject.setComponent({
+            id: `coc ${i}`,
+            once: (gameObject) => {
+              gameObject.setTexture(missile.assetKey, missile.frame);
+              gameObject.setPosition(x - 24 + i * 25, y + 100);
               gameObject.depth = 4;
             },
           });

@@ -8,8 +8,8 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Balance },
-      api: { buySystem },
+      components: { Position, Offence },
+      api: { buyWeaponSystem },
     },
     phaser: {
       components: { ShowStationDetails },
@@ -23,23 +23,25 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
     const position = getComponentValue(Position, selectedEntity);
-    const balance = getComponentValue(Balance, selectedEntity)?.value;
+    const offence = getComponentValue(Offence, selectedEntity)?.value;
 
     const distance =
       position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
+
     const closeModal = () => {
       shouldShowWeaponModal(false);
       input.enabled.current = true;
     };
+
     const buy = async (kgs: number) => {
       if (selectedEntity) {
-        await buySystem(world.entities[selectedEntity], kgs);
+        await buyWeaponSystem(world.entities[selectedEntity], kgs);
         closeModal();
         showProgress();
       }
     };
-    return <WeaponModal buyPrice={buyPrice} buySystem={buy} stock={balance && +balance} close={closeModal} />;
+    return <WeaponModal buyPrice={buyPrice} buySystem={buy} stock={offence && +offence} close={closeModal} />;
   } else {
     return null;
   }

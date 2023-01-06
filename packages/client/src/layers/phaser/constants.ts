@@ -159,6 +159,7 @@ export enum Sprites {
   PlayerB610,
   CentreSun,
   Cargo,
+  Missile,
 }
 
 export enum Animations {}
