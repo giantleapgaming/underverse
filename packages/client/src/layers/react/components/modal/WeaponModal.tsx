@@ -10,7 +10,7 @@ export const WeaponModal = ({
 }: {
   buyPrice: number;
   buySystem: (kgs: number) => void;
-  stock?: number;
+  stock?: number | false;
   close: () => void;
 }) => {
   const [selected, setSelected] = useState("-1");
@@ -41,7 +41,7 @@ export const WeaponModal = ({
               <div
                 style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
               >
-                {new Array(10 - stock).fill(0).map((_, i) => {
+                {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
                       key={`key${i}`}

@@ -43,7 +43,7 @@ export const BuyModal = ({
               <div
                 style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
               >
-                {new Array(10 - stock).fill(0).map((_, i) => {
+                {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
                       key={`key${i}`}

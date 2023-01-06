@@ -8,7 +8,7 @@ const BuySystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Balance },
+      components: { Position, Balance, Level },
       api: { buySystem },
     },
     phaser: {
@@ -24,6 +24,7 @@ const BuySystem = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     const position = getComponentValue(Position, selectedEntity);
     const balance = getComponentValue(Balance, selectedEntity)?.value;
+    const level = getComponentValue(Level, selectedEntity)?.value;
 
     const distance =
       position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
@@ -39,7 +40,9 @@ const BuySystem = ({ layers }: { layers: Layers }) => {
         showProgress();
       }
     };
-    return <BuyModal buyPrice={buyPrice} buySystem={buy} stock={balance && +balance} close={closeModal} />;
+    return (
+      <BuyModal buyPrice={buyPrice} buySystem={buy} stock={balance && level && +level - +balance} close={closeModal} />
+    );
   } else {
     return null;
   }
