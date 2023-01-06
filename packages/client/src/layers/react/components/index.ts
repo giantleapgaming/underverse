@@ -12,6 +12,7 @@ import { registerOpenEyeDetails } from "./OpenEye";
 import { registerTransport } from "./TransportSystem";
 import { registerWeaponDetails } from "./WeaponSystem";
 import { registerAttackDetails } from "./AttackSystem";
+import { registerBgScreen } from "./GameBg";
 export function registerUIComponents() {
   registerNameScreen();
   // registerComponentBrowser();
@@ -26,6 +27,6 @@ export function registerUIComponents() {
   registerTransport();
   registerWeaponDetails();
   registerAttackDetails();
-
+  registerBgScreen();
   // registerActionQueue();
 }
