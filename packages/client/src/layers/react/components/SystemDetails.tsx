@@ -104,7 +104,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 </S.InlinePointer>
                 <S.InlinePointer
                   onClick={() => {
-                    shouldTransport(false, true);
+                    shouldTransport(false, true, false);
                   }}
                 >
                   <img src="/ui/sky.png" />

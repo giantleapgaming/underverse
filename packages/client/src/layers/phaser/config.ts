@@ -44,7 +44,7 @@ export const phaserConfig = {
           key: Assets.Center,
           path: "/station/center.png",
         },
-         [Assets.ShowOwnedStationBackground]: {
+        [Assets.ShowOwnedStationBackground]: {
           type: AssetType.Image,
           key: Assets.ShowOwnedStationBackground,
           path: "/station/ShowOwnedStationsYellowBG.png",
@@ -58,6 +58,11 @@ export const phaserConfig = {
           type: AssetType.Image,
           key: Assets.Station3,
           path: "/station/3-1.png",
+        },
+        [Assets.Cargo]: {
+          type: AssetType.Image,
+          key: Assets.Cargo,
+          path: "/station/cargo.png",
         },
         [Assets.Station4]: {
           type: AssetType.Image,

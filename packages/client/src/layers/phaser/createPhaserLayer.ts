@@ -77,8 +77,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const shouldShowCircleForOwnedBy = (open: boolean) =>
     setComponent(components.ShowCircleForOwnedBy, showCircleForOwnedByIndex, { value: open });
 
-  const shouldTransport = (showModal: boolean, showLine: boolean, entityId?: number) =>
-    setComponent(components.Transport, modalIndex, { showModal, showLine, entityId });
+  const shouldTransport = (showModal: boolean, showLine: boolean, showAnimation: boolean, entityId?: number) =>
+    setComponent(components.Transport, modalIndex, { showModal, showLine, entityId, showAnimation });
 
   const shouldShowWeaponModal = (showModal: boolean) =>
     setComponent(components.showWeaponModal, modalIndex, { showModal });

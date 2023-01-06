@@ -1,3 +1,4 @@
+import { Assets, Sprites } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -10,6 +11,8 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       Main: {
         input,
         phaserScene,
+        objectPool,
+        config,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -33,7 +36,12 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const transportDetails = getComponentValue(Transport, modalIndex);
-      if (sourcePosition?.x && transportDetails?.showLine && !transportDetails?.showModal) {
+      if (
+        sourcePosition?.x &&
+        transportDetails?.showLine &&
+        !transportDetails?.showModal &&
+        !transportDetails.showAnimation
+      ) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         graphics.clear();
         graphics.lineStyle(1, 0xffffff);
@@ -56,7 +64,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const userEntityId = connectedAddress.get();
       if (userEntityId === ownedBy) {
         setTransportCords(x, y);
-        shouldTransport(true, false, stationEntity);
+        shouldTransport(true, false, false, stationEntity);
       }
     }
   });
@@ -78,10 +86,50 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         graphics.moveTo(source.x + 32, source.y + 32);
         graphics.lineTo(distraction.x + 32, distraction.y + 32);
         graphics.strokePath();
+
+        if (
+          destinationEntityId &&
+          destinationDetails?.showAnimation &&
+          !destinationDetails?.showModal &&
+          destinationDetails.showLine
+        ) {
+          const cloudImage = phaserScene.add.image(source.x + 32, source.y + 32, Assets.Cargo, 0);
+          phaserScene.add.tween({
+            targets: cloudImage,
+            x: {
+              from: cloudImage.x,
+              to: distraction.x + 32,
+            },
+            y: {
+              from: cloudImage.y,
+              to: distraction.y + 32,
+            },
+            repeat: 0,
+            yoyo: false,
+            duration: 10_000,
+          });
+          // object.setComponent({
+          //   id: 'move-transport',
+          //   once: async (gameObject) => {
+          //     gameObject.setTexture(godown.assetKey, godown.frame)
+          //     gameObject.scene.tweens.add({
+          //       targets: cloudImage,
+          //       x: distraction.x + 32,
+          //       y: distraction.y + 32,
+          //       duration: 10000,
+          //       ease: 'Linear',
+          //       repeat: 0,
+          //       yoyo: false,
+          //       onComplete: () => {
+          //         graphics.clear();
+          //         object.removeComponent('movement', true)
+          //         shouldTransport(false, false, false);
+          //       },
+          //     });
+          //   }
+          // })
+        }
       }
-    }
-    if (!destinationEntityId && !destinationDetails?.showLine && !destinationDetails?.showModal) {
-      graphics.clear();
     }
   });
 }
