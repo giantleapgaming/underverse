@@ -48,6 +48,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         objectPool.remove(`${entity}${i}${i}`);
         objectPool.remove(`${entity}${i}`);
       });
+
+
       balance &&
         new Array(+balance >= 5 ? 5 : +balance).fill(0).forEach((_, i) => {
           const cocainObject = objectPool.get(`${entity}${i}`, "Sprite");
@@ -55,7 +57,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition(x + i * 25, y - 25);
+              gameObject.setPosition((x-24) + i * 25, y - 50);
               gameObject.depth = 4;
             },
           });
@@ -68,7 +70,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition(x + i * 25, y + 89);
+              gameObject.setPosition((x-24) + i * 25, y - 25);
               gameObject.depth = 4;
             },
           });
