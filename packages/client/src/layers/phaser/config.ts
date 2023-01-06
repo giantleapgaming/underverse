@@ -582,29 +582,9 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "centre-sun.png",
         },
-        [Sprites.PlayerC1]: {
+        [Sprites.Cargo]: {
           assetKey: Assets.MainAtlas,
-          frame: "c1-1.png",
-        },
-        [Sprites.PlayerC2]: {
-          assetKey: Assets.MainAtlas,
-          frame: "c1-2.png",
-        },
-        [Sprites.PlayerC3]: {
-          assetKey: Assets.MainAtlas,
-          frame: "c1-3.png",
-        },
-        [Sprites.PlayerC4]: {
-          assetKey: Assets.MainAtlas,
-          frame: "c1-4.png",
-        },
-        [Sprites.PlayerC5]: {
-          assetKey: Assets.MainAtlas,
-          frame: "c1-5.png",
-        },
-        [Sprites.PlayerC6]: {
-          assetKey: Assets.MainAtlas,
-          frame: "c1-6.png",
+          frame: "cargo-1.png",
         },
       },
       animations: [],

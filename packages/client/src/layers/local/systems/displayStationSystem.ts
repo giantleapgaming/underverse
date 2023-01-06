@@ -35,6 +35,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     const owndBy = getComponentValue(OwnedBy, entity)?.value;
     if (owndBy) {
       const sprit = config.sprites[Sprites.Player12];
+      const cargo = config.sprites[Sprites.Cargo];
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
@@ -53,7 +54,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              gameObject.setTexture(sprit.assetKey, `c1-${allImg[owndBy]}.png`);
+              gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
               gameObject.setPosition(x + i * 25, y - 25);
               gameObject.depth = 4;
             },
@@ -66,7 +67,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              gameObject.setTexture(sprit.assetKey, `c1-${allImg[owndBy]}.png`);
+              gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
               gameObject.setPosition(x + i * 25, y + 89);
               gameObject.depth = 4;
             },
