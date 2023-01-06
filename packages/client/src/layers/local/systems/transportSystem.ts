@@ -107,29 +107,22 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             yoyo: false,
             duration: 10_000,
+            onComplete: () => {
+              graphics.clear();
+              shouldTransport(false, false, false);
+              input.enabled.current = true;
+            },
           });
-          // object.setComponent({
-          //   id: 'move-transport',
-          //   once: async (gameObject) => {
-          //     gameObject.setTexture(godown.assetKey, godown.frame)
-          //     gameObject.scene.tweens.add({
-          //       targets: cloudImage,
-          //       x: distraction.x + 32,
-          //       y: distraction.y + 32,
-          //       duration: 10000,
-          //       ease: 'Linear',
-          //       repeat: 0,
-          //       yoyo: false,
-          //       onComplete: () => {
-          //         graphics.clear();
-          //         object.removeComponent('movement', true)
-          //         shouldTransport(false, false, false);
-          //       },
-          //     });
-          //   }
-          // })
         }
       }
+    }
+    if (
+      !destinationDetails?.showLine &&
+      !destinationDetails?.showModal &&
+      !destinationDetails?.showAnimation &&
+      !destinationDetails?.entityId
+    ) {
+      graphics.clear();
     }
   });
 }

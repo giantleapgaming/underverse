@@ -30,14 +30,17 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
       position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const sellPrice = (100_000 / distance) * 0.9;
     const closeModal = () => {
-      shouldTransport(false, true, true, transport.entityId);
+      shouldTransport(false, false, false);
       input.enabled.current = true;
+    };
+    const closeModalAfterTransport = () => {
+      shouldTransport(false, true, true, transport.entityId);
     };
     const startTransport = async (kgs: number) => {
       if (selectedEntity) {
         const sourceEntityId = world.entities[selectedEntity];
         const destinationEntityId = world.entities[transport.entityId as EntityIndex];
-        closeModal();
+        closeModalAfterTransport();
         await transportSystem(sourceEntityId, destinationEntityId, kgs);
         showProgress();
       }

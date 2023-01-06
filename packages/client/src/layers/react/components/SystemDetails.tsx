@@ -103,8 +103,9 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <S.DeployText>SELL</S.DeployText>
                 </S.InlinePointer>
                 <S.InlinePointer
+                  isDisabled={!(balance && +balance > 0)}
                   onClick={() => {
-                    shouldTransport(false, true, false);
+                    if (balance && +balance > 0) shouldTransport(false, true, false);
                   }}
                 >
                   <img src="/ui/sky.png" />
@@ -189,12 +190,12 @@ const S = {
     margin-top: 30px;
     margin-right: 15px;
   `,
-  InlinePointer: styled.div`
+  InlinePointer: styled.div<{ isDisabled?: boolean }>`
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
+    cursor: ${({ isDisabled }) => (isDisabled ? "not-allowed" : "pointer")};
   `,
   Inline: styled.div`
     position: relative;
