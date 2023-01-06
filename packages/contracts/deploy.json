@@ -50,6 +50,24 @@
                                           "CashComponent",
                                           "LastUpdatedTimeComponent",
                                           "LevelComponent"
+                                        ]},
+  { "name": "BuyWeaponSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "OwnedByComponent",
+                                          "PositionComponent",
+                                          "OffenceComponent",
+                                          "DefenceComponent",
+                                          "LevelComponent"
+                                        ]},
+  { "name": "AttackSystem", "writeAccess": [
+                                          "CashComponent",
+                                          "LastUpdatedTimeComponent",
+                                          "OwnedByComponent",
+                                          "PositionComponent",
+                                          "OffenceComponent",
+                                          "DefenceComponent",
+                                          "LevelComponent"
                                         ]}
   ]
 }

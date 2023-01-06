@@ -1,14 +1,19 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.8.0;
 
-import { PositionComponent, Coord } from "./components/PositionComponent.sol";
-import { OwnedByComponent } from "./components/OwnedByComponent.sol";
-import { LastUpdatedTimeComponent } from "./components/LastUpdatedTimeComponent.sol";
+import { PositionComponent, ID as PositionComponentID, Coord } from "./components/PositionComponent.sol";
+import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "./components/LastUpdatedTimeComponent.sol";
+import { OwnedByComponent, ID as OwnedByComponentID } from "./components/OwnedByComponent.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
+import { DefenceComponent, ID as DefenceComponentID } from "./components/DefenceComponent.sol";
+import { BalanceComponent, ID as BalanceComponentID } from "./components/BalanceComponent.sol";
+import { LevelComponent, ID as LevelComponentID } from "./components/LevelComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
 import { LevelComponent } from "./components/LevelComponent.sol";
 import { MULTIPLIER } from "./constants.sol";
 import "./libraries/Math.sol";
+import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
@@ -47,4 +52,14 @@ function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, C
   uint256 addSquare = uint256(((diff1**2) + (diff2**2))) * MULTIPLIER;
   uint256 distance = Math.sqrt(addSquare); // Multiplier used to preserve decimals
   return distance;
+}
+
+function deleteGodown(uint256 godownEntity, IUint256Component components) {
+  PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
+  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).remove(godownEntity);
+  OwnedByComponent(getAddressById(components, OwnedByComponentID)).remove(godownEntity);
+  OffenceComponent(getAddressById(components, OffenceComponentID)).remove(godownEntity);
+  DefenceComponent(getAddressById(components, DefenceComponentID)).remove(godownEntity);
+  BalanceComponent(getAddressById(components, BalanceComponentID)).remove(godownEntity);
+  LevelComponent(getAddressById(components, LevelComponentID)).remove(godownEntity);
 }
