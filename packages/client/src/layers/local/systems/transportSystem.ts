@@ -131,7 +131,6 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 10_000,
             onComplete: () => {
               graphics.clear();
-              cloudImage.setVisible(false);
               shouldTransport(false, false, false);
               input.enabled.current = true;
             },
