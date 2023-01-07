@@ -8,38 +8,44 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Balance },
-      api: { buySystem },
+      components: { Position, Offence },
+      api: { attackSystem },
     },
     phaser: {
-      components: { ShowStationDetails },
-      localIds: { stationDetailsEntityIndex },
-      localApi: { shouldShowAttackModal, showProgress },
+      components: { ShowStationDetails, Attack },
+      localIds: { stationDetailsEntityIndex, modalIndex },
+      localApi: { shouldAttack, showProgress },
       scenes: {
         Main: { input },
       },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-  if (selectedEntity) {
+  const attack = getComponentValue(Attack, modalIndex);
+  if (selectedEntity && attack?.showModal && attack.entityId) {
     const position = getComponentValue(Position, selectedEntity);
-    const balance = getComponentValue(Balance, selectedEntity)?.value;
+
+    const offence = getComponentValue(Offence, selectedEntity)?.value;
 
     const distance =
       position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const buyPrice = (100_000 / distance) * 1.1;
+    const attackPrice = (100_000 / distance) * 1.1;
     const closeModal = () => {
-      shouldShowAttackModal(false);
+      shouldAttack(false, false, false);
       input.enabled.current = true;
     };
-    const buy = async (kgs: number) => {
+    const startAttack = async (kgs: number) => {
       if (selectedEntity) {
-        await buySystem(world.entities[selectedEntity], kgs);
-        closeModal();
+        const sourceEntityId = world.entities[selectedEntity];
+        const destinationEntityId = world.entities[attack.entityId as EntityIndex];
+        shouldAttack(false, true, true, attack.entityId, kgs);
+        await attackSystem(sourceEntityId, destinationEntityId, kgs);
         showProgress();
       }
     };
-    return <AttackModal buyPrice={buyPrice} buySystem={buy} stock={balance && +balance} close={closeModal} />;
+    return (
+      <AttackModal startAttack={startAttack} stock={offence && +offence} attackPrice={attackPrice} close={closeModal} />
+    );
   } else {
     return null;
   }
@@ -62,16 +68,16 @@ export const registerAttackDetails = () => {
           world,
         },
         phaser: {
-          components: { showAttackModal },
+          components: { Attack },
           localIds: { modalIndex },
         },
       } = layers;
-      return merge(showAttackModal.update$).pipe(
+      return merge(Attack.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          const showModal = getComponentValue(showAttackModal, modalIndex)?.showModal;
+          const showModal = getComponentValue(Attack, modalIndex)?.showModal;
           if (userLinkWithAccount && showModal) {
             return { layers };
           }

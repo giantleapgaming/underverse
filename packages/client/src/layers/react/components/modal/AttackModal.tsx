@@ -3,13 +3,13 @@ import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
 export const AttackModal = ({
-  buyPrice,
-  buySystem,
+  startAttack,
   stock,
+  attackPrice,
   close,
 }: {
-  buyPrice: number;
-  buySystem: (kgs: number) => void;
+  attackPrice: number;
+  startAttack: (kgs: number) => void;
   stock?: number;
   close: () => void;
 }) => {
@@ -58,13 +58,13 @@ export const AttackModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                select Total {convertPrice(+selected * buyPrice)}
+                select Total {convertPrice(+selected * attackPrice)}
               </p>
             )}
             <S.InlinePointer
               onClick={() => {
                 if (+selected > 0) {
-                  buySystem(+selected);
+                  startAttack(+selected);
                 }
               }}
             >

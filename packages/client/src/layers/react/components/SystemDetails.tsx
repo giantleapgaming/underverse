@@ -23,7 +23,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
         shouldSellModal,
         shouldTransport,
         shouldShowWeaponModal,
-        shouldShowAttackModal,
+        shouldAttack,
       },
       scenes: {
         Main: { input },
@@ -135,8 +135,9 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <S.DeployText>WEAPONS</S.DeployText>
                 </S.InlinePointer>
                 <S.InlinePointer
+                  isDisabled={!(offence && +offence > 0)}
                   onClick={() => {
-                    shouldShowAttackModal(true);
+                    if (offence && +offence > 0) shouldAttack(false, true, false);
                   }}
                 >
                   <img src="/ui/sky.png" />

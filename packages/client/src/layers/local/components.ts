@@ -75,12 +75,27 @@ export const ShowWeaponModal = (world: World) => {
   );
 };
 
-export const ShowAttackModal = (world: World) => {
+export const Attack = (world: World) => {
   return defineComponent(
     world,
     {
       showModal: Type.Boolean,
+      showLine: Type.Boolean,
+      entityId: Type.OptionalNumber,
+      showAnimation: Type.Boolean,
+      amount: Type.OptionalNumber,
     },
     { id: "ShowAttackModal" }
+  );
+};
+
+export const AttackCords = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      x: Type.Number,
+      y: Type.Number,
+    },
+    { id: "AttackCords" }
   );
 };
