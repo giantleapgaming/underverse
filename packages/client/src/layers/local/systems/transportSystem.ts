@@ -26,7 +26,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Position, OwnedBy },
   } = network;
   const graphics = phaserScene.add.graphics();
-  graphics.lineStyle(1, 0xffffff, 1);
+  graphics.lineStyle(2, 0xeeeeee, 1);
 
   const lineSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
@@ -42,9 +42,21 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       ) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         graphics.clear();
-        graphics.lineStyle(1, 0xffffff);
-        graphics.moveTo(source.x + 32, source.y + 32);
-        graphics.lineTo(pointer.worldX, pointer.worldY);
+        graphics.lineStyle(2, 0xeeeeee, 1);
+        const x1 = source.x + 32,
+          y1 = source.y + 32,
+          x2 = pointer.worldX,
+          y2 = pointer.worldY; // coordinates of the start and end points
+        const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
+        const dotSize = 4; // size of the dots in pixels
+        const gapSize = 8; // size of the gaps between dots in pixels
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        graphics.moveTo(x1, y1);
+        for (let i = 0; i < lineLength; i += dotSize + gapSize) {
+          graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
+          graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
+        }
+        graphics.lineTo(x2, y2);
         graphics.strokePath();
       }
     }
@@ -89,14 +101,11 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const transportCord = getComponentValue(TransportCords, modalIndex);
-      if (sourcePosition?.x && transportCord?.y) {
+      console.log("outside final", sourceEntityId, destinationEntityId, sourcePosition?.x, transportCord?.y);
+      if (typeof sourcePosition?.x !== "undefined" && typeof transportCord?.y !== "undefined") {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
-        graphics.clear();
-        graphics.lineStyle(1, 0xffffff);
-        graphics.moveTo(source.x + 32, source.y + 32);
-        graphics.lineTo(distraction.x + 32, distraction.y + 32);
-        graphics.strokePath();
+
         const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI) + 90;
 
         if (
@@ -112,7 +121,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             product[destinationDetails.amount - 1],
             0
           );
-          // cloudImage.setAngle(180);
+          cloudImage.setVisible(true);
           cloudImage.setAngle(angle);
           phaserScene.add.tween({
             targets: cloudImage,
@@ -127,8 +136,12 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             yoyo: false,
             duration: 10_000,
-            onComplete: () => {
+            onStart: () => {
               graphics.clear();
+              cloudImage.setVisible(true);
+            },
+            onComplete: () => {
+              cloudImage.setVisible(false);
               shouldTransport(false, false, false);
               input.enabled.current = true;
             },
