@@ -16,7 +16,7 @@ export const TransportModal = ({
     <ModalContainer>
       <ModalContent>
         <S.ModalContainer>
-          <S.Img src="/ui/buyModal.png" />
+          <S.Img src="/popup/white-b.png" />
           <p
             onClick={close}
             style={{
@@ -42,7 +42,7 @@ export const TransportModal = ({
                 {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
-                      key={`key${i}`}
+                      key={`white${i}`}
                       selected={+selected > i}
                       onClick={() => {
                         setSelected((i + 1).toString());
@@ -67,7 +67,7 @@ export const TransportModal = ({
                 }
               }}
             >
-              <S.Img src="/ui/yellow.png" />
+              <S.Img src="/button/white-b.png" />
               <S.DeployText>Transport</S.DeployText>
             </S.InlinePointer>
           </S.Details>

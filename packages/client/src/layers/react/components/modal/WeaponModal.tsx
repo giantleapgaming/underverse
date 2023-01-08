@@ -18,7 +18,7 @@ export const WeaponModal = ({
     <ModalContainer>
       <ModalContent>
         <S.ModalContainer>
-          <S.Img src="/ui/buyModal.png" />
+          <S.Img src="/popup/blue-b.png" />
           <p
             onClick={close}
             style={{
@@ -44,7 +44,7 @@ export const WeaponModal = ({
                 {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
-                      key={`key${i}`}
+                      key={`orange${i}`}
                       selected={+selected > i}
                       onClick={() => {
                         setSelected((i + 1).toString());
@@ -68,7 +68,7 @@ export const WeaponModal = ({
                 }
               }}
             >
-              <S.Img src="/ui/yellow.png" />
+              <S.Img src="/button/blue-b.png" />
               <S.DeployText>Buy</S.DeployText>
             </S.InlinePointer>
           </S.Details>
@@ -106,7 +106,6 @@ const S = {
     cursor: pointer;
     text-align: center;
     &::before {
-      position: absolute;
       position: absolute;
       top: 0;
       left: -14%;

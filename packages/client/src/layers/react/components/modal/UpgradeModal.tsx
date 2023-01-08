@@ -15,7 +15,7 @@ export const UpgradeModal = ({
     <ModalContainer>
       <ModalContent>
         <S.ModalContainer>
-          <S.Img src="/ui/buyModal.png" />
+          <S.Img src="/popup/orange-b.png" />
           <p
             onClick={close}
             style={{
@@ -46,7 +46,7 @@ export const UpgradeModal = ({
                 upgradeSystem();
               }}
             >
-              <S.Img src="/ui/yellow.png" />
+              <S.Img src="/button/orange-b.png" />
               <S.DeployText>Upgrade</S.DeployText>
             </S.InlinePointer>
           </S.Details>

@@ -18,7 +18,7 @@ export const AttackModal = ({
     <ModalContainer>
       <ModalContent>
         <S.ModalContainer>
-          <S.Img src="/ui/buyModal.png" />
+          <S.Img src="/popup/red-b.png" />
           <p
             onClick={close}
             style={{
@@ -44,7 +44,7 @@ export const AttackModal = ({
                 {new Array(10 - stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
-                      key={`key${i}`}
+                      key={`red${i}`}
                       selected={+selected > i}
                       onClick={() => {
                         setSelected((i + 1).toString());
@@ -68,7 +68,7 @@ export const AttackModal = ({
                 }
               }}
             >
-              <S.Img src="/ui/yellow.png" />
+              <S.Img src="/button/red-b.png" />
               <S.DeployText>ATTACK</S.DeployText>
             </S.InlinePointer>
           </S.Details>

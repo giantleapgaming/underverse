@@ -94,7 +94,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     input.enabled.current = false;
                   }}
                 >
-                  <img src="/ui/yellow.png" />
+                  <img src="/button/yellow-b.png" />
                   <S.DeployText>BUY</S.DeployText>
                 </S.InlinePointer>
                 <S.InlinePointer
@@ -103,7 +103,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     input.enabled.current = false;
                   }}
                 >
-                  <img src="/ui/pink.png" />
+                  <img src="/button/pink-b.png" />
                   <S.DeployText>SELL</S.DeployText>
                 </S.InlinePointer>
                 <S.InlinePointer
@@ -112,7 +112,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     if (balance && +balance > 0) shouldTransport(false, true, false);
                   }}
                 >
-                  <img src="/ui/sky.png" />
+                  <img src="/button/white-b.png" />
                   <S.DeployText>TRANSPORT</S.DeployText>
                 </S.InlinePointer>
                 {level && +level < 10 && (
@@ -122,7 +122,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       input.enabled.current = false;
                     }}
                   >
-                    <img src="/ui/orange.png" />
+                    <img src="/button/orange-b.png" />
                     <S.DeployText>UPGRADE</S.DeployText>
                   </S.InlinePointer>
                 )}
@@ -131,7 +131,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     shouldShowWeaponModal(true);
                   }}
                 >
-                  <img src="/ui/sky.png" />
+                  <img src="/button/blue-b.png" />
                   <S.DeployText>WEAPONS</S.DeployText>
                 </S.InlinePointer>
                 <S.InlinePointer
@@ -140,7 +140,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     if (offence && +offence > 0) shouldAttack(false, true, false);
                   }}
                 >
-                  <img src="/ui/sky.png" />
+                  <img src="/button/red-b.png" />
                   <S.DeployText>ATTACK</S.DeployText>
                 </S.InlinePointer>
               </>
