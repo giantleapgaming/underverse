@@ -78,8 +78,13 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       }
     }
   });
-
   world.registerDisposer(() => click?.unsubscribe());
+
+  const rightClick = input.rightClick$.subscribe(() => {
+    shouldTransport(false, false, false);
+  });
+
+  world.registerDisposer(() => rightClick?.unsubscribe());
 
   const product = [
     Assets.Product1,

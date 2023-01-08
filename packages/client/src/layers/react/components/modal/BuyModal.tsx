@@ -36,7 +36,7 @@ export const BuyModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a", fontWeight: "bold" }}>
               BUY {convertPrice(buyPrice)} PER MT
             </p>
             {typeof stock === "number" && (
@@ -58,10 +58,12 @@ export const BuyModal = ({
                 })}
               </div>
             )}
-            {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>
+            {+selected > 0 ? (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
                 BUY Total {convertPrice(+selected * buyPrice)}
               </p>
+            ) : (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>BUY Total -:-</p>
             )}
             <S.InlinePointer
               onClick={() => {
@@ -71,7 +73,7 @@ export const BuyModal = ({
               }}
             >
               <S.Img src="/button/yellow-b.png" />
-              <S.DeployText>Buy</S.DeployText>
+              <S.DeployText>BUY</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
@@ -33,13 +32,15 @@ export const UpgradeModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>UPGRADE STATION</p>
-            <p style={{ width: "100%", marginLeft: "80px" }}>UPGRAD TO LEVEL {level && level + 1} STATION</p>
-            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
-              COST: {level && Math.pow(level + 1, 2) * 1_000}
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#fb934e" }}>UPGRADE STATION</p>
+            <p style={{ width: "100%", marginLeft: "80px", color: "#fb934e" }}>
+              UPGRADE TO LEVEL {level && level + 1} STATION
             </p>
-            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px" }}>
-              CARGO HOLD: {level} - {level && level + 1}
+            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#fb934e" }}>
+              COST: {level && convertPrice(Math.pow(level + 1, 2) * 1_000)}
+            </p>
+            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#fb934e" }}>
+              CARGO HOLD: <span style={{ color: "white" }}>{level}</span> - {level && level + 1}
             </p>
             <S.InlinePointer
               onClick={() => {
@@ -47,7 +48,7 @@ export const UpgradeModal = ({
               }}
             >
               <S.Img src="/button/orange-b.png" />
-              <S.DeployText>Upgrade</S.DeployText>
+              <S.DeployText>UPGRADE</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -91,7 +92,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#e4e76a"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#fb934e"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -110,6 +111,7 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
+    color: #fb934e;
   `,
   InlinePointer: styled.div`
     position: relative;
@@ -118,6 +120,7 @@ const S = {
     align-items: center;
     cursor: pointer;
     pointer-events: all;
+    color: "#fb934e";
   `,
 };
 const ModalContent = styled.div`

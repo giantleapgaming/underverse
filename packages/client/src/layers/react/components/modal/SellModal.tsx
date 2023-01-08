@@ -36,7 +36,7 @@ export const SellModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#cb6ce6", fontWeight: "bold" }}>
               Sell {convertPrice(sellPrice)} PER MT
             </p>
             {typeof stock === "number" && (
@@ -58,10 +58,12 @@ export const SellModal = ({
                 })}
               </div>
             )}
-            {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                Sell Total {convertPrice(+selected * sellPrice)}
+            {+selected > 0 ? (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
+                SELL Total {convertPrice(+selected * sellPrice)}
               </p>
+            ) : (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>SELL Total -:-</p>
             )}
             <S.InlinePointer
               onClick={() => {
@@ -71,7 +73,7 @@ export const SellModal = ({
               }}
             >
               <S.Img src="/button/pink-b.png" />
-              <S.DeployText>Sell</S.DeployText>
+              <S.DeployText>SELL</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -115,7 +117,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#e4e76a"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#cb6ce6"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -134,6 +136,7 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
+    color: #cb6ce6;
   `,
   InlinePointer: styled.div`
     position: relative;
