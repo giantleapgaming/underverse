@@ -113,7 +113,7 @@ const S = {
       height: 100%;
       content: "";
       border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#4057c7"}`};
-      z-index: -1;
+      z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
     }
