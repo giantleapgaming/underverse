@@ -668,7 +668,7 @@ export const phaserConfig = {
         },
         [Sprites.Missile]: {
           assetKey: Assets.MainAtlas,
-          frame: "missile-1.png",
+          frame: "missile-2.png",
         },
       },
       animations: [],

@@ -47,8 +47,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const allImg = {} as { [key: string]: string };
     [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
-    const distance =
-      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;
     return (
@@ -235,7 +234,6 @@ const S = {
     left: 20px;
     font-size: 15px;
     cursor: pointer;
-    z-index: 4;
   `,
 };
 export function registerSystemDetailsComponent() {

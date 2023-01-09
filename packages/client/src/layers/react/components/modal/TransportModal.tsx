@@ -6,10 +6,12 @@ export const TransportModal = ({
   startTransport,
   close,
   stock,
+  transportPrice,
 }: {
   startTransport: (kgs: number) => void;
   close: () => void;
   stock?: number;
+  transportPrice: number;
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
@@ -56,8 +58,7 @@ export const TransportModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                Transport Total
-                {/* {convertPrice(+selected * sellPrice)} */}
+                TRANSPORT TOTAL {convertPrice(Math.pow(+selected * transportPrice, 2))}
               </p>
             )}
             <S.InlinePointer

@@ -25,8 +25,7 @@ const SellSystem = ({ layers }: { layers: Layers }) => {
     const position = getComponentValue(Position, selectedEntity);
     const balance = getComponentValue(Balance, selectedEntity)?.value;
 
-    const distance =
-      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const sellPrice = (100_000 / distance) * 0.9;
     const closeModal = () => {
       shouldSellModal(false);
