@@ -39,9 +39,21 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
       if (sourcePosition?.x && attackDetails?.showLine && !attackDetails?.showModal && !attackDetails.showAnimation) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         graphics.clear();
-        graphics.lineStyle(1, 0xffffff);
-        graphics.moveTo(source.x + 32, source.y + 32);
-        graphics.lineTo(pointer.worldX, pointer.worldY);
+        graphics.lineStyle(2, 0xeeeeee, 1);
+        const x1 = source.x + 32,
+          y1 = source.y + 32,
+          x2 = pointer.worldX,
+          y2 = pointer.worldY; // coordinates of the start and end points
+        const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
+        const dotSize = 4; // size of the dots in pixels
+        const gapSize = 8; // size of the gaps between dots in pixels
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+        graphics.moveTo(x1, y1);
+        for (let i = 0; i < lineLength; i += dotSize + gapSize) {
+          graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
+          graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
+        }
+        graphics.lineTo(x2, y2);
         graphics.strokePath();
       }
     }
@@ -65,7 +77,11 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
 
   world.registerDisposer(() => click?.unsubscribe());
+  const rightClick = input.rightClick$.subscribe(() => {
+    shouldAttack(false, false, false);
+  });
 
+  world.registerDisposer(() => rightClick?.unsubscribe());
   defineComponentSystem(world, Attack, () => {
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const destinationDetails = getComponentValue(Attack, modalIndex);
