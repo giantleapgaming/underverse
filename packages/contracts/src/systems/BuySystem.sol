@@ -11,7 +11,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Buy"));
@@ -50,7 +50,7 @@ contract BuySystem is System {
     // Level 2 godown supports 2000 storage, and so on.
 
     require(
-      (selectedGodownLevel * godownLevelStorageMultiplier) - selectedGodownBalance >= kgs,
+      selectedGodownLevel - selectedGodownBalance >= kgs,
       "Provided buy quantity is more than available godown storage"
     );
 

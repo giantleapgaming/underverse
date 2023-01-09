@@ -10,7 +10,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { actionDelayInSeconds, godownLevelStorageMultiplier, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Transport"));
@@ -36,6 +36,8 @@ contract TransportSystem is System {
       "Destination godown not owned by user"
     );
 
+    require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
+
     uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
       .getValue(addressToEntity(msg.sender));
 
@@ -49,8 +51,6 @@ contract TransportSystem is System {
       destinationGodownEntity
     );
 
-    uint256 destinationGodownCapacity = destinationGodownLevel * godownLevelStorageMultiplier;
-
     uint256 sourceGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       sourceGodownEntity
     );
@@ -62,7 +62,7 @@ contract TransportSystem is System {
     require(kgs <= sourceGodownBalance, "Provided transport quantity is more than source godown balance");
 
     require(
-      destinationGodownBalance + kgs <= destinationGodownCapacity,
+      destinationGodownBalance + kgs <= destinationGodownLevel,
       "Provided transport quantity is more than godown storage capacity"
     );
 
