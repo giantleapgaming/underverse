@@ -107,7 +107,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const transportCord = getComponentValue(TransportCords, modalIndex);
       console.log("outside final", sourceEntityId, destinationEntityId, sourcePosition?.x, transportCord?.y);
-      if (typeof sourcePosition?.x !== "undefined" && typeof transportCord?.y !== "undefined") {
+      if (typeof sourcePosition?.x === "number" && typeof transportCord?.y === "number") {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
 

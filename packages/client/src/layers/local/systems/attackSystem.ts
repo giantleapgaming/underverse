@@ -36,7 +36,12 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const attackDetails = getComponentValue(Attack, modalIndex);
-      if (sourcePosition?.x && attackDetails?.showLine && !attackDetails?.showModal && !attackDetails.showAnimation) {
+      if (
+        typeof sourcePosition?.x == "number" &&
+        attackDetails?.showLine &&
+        !attackDetails?.showModal &&
+        !attackDetails.showAnimation
+      ) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         graphics.clear();
         graphics.lineStyle(2, 0xeeeeee, 1);
