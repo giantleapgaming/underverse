@@ -178,497 +178,677 @@ export const phaserConfig = {
         }),
       },
       sprites: {
-        [Sprites.Player11]: {
+        [Sprites.Station110]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-1.png",
+          frame: "1-1-0.png",
         },
-        [Sprites.Player12]: {
+        [Sprites.Station120]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-2.png",
+          frame: "1-2-0.png",
         },
-        [Sprites.Player13]: {
+        [Sprites.Station130]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-3.png",
+          frame: "1-3-0.png",
         },
-        [Sprites.Player14]: {
+        [Sprites.Station140]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-4.png",
+          frame: "1-4-0.png",
         },
-        [Sprites.Player15]: {
+        [Sprites.Station150]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-5.png",
+          frame: "1-5-0.png",
         },
-        [Sprites.Player16]: {
+        [Sprites.Station160]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-6.png",
+          frame: "1-6-0.png",
         },
-        [Sprites.Player17]: {
+        [Sprites.Station170]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-7.png",
+          frame: "1-7-0.png",
         },
-        [Sprites.Player18]: {
+        [Sprites.Station180]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-8.png",
+          frame: "1-8-0.png",
         },
-        [Sprites.Player19]: {
+        [Sprites.Station210]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-9.png",
+          frame: "2-1-0.png",
         },
-        [Sprites.Player110]: {
+        [Sprites.Station211]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-10.png",
+          frame: "2-1-1.png",
         },
-        [Sprites.Player21]: {
+        [Sprites.Station220]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-1.png",
+          frame: "2-2-0.png",
         },
-        [Sprites.Player22]: {
+        [Sprites.Station221]: {
           assetKey: Assets.MainAtlas,
-          frame: "1-2.png",
+          frame: "2-2-1.png",
         },
-        [Sprites.Player23]: {
+        [Sprites.Station230]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-3.png",
+          frame: "2-3-0.png",
         },
-        [Sprites.Player24]: {
+        [Sprites.Station231]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-4.png",
+          frame: "2-3-1.png",
         },
-        [Sprites.Player25]: {
+        [Sprites.Station240]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-5.png",
+          frame: "2-4-0.png",
         },
-        [Sprites.Player26]: {
+        [Sprites.Station241]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-6.png",
+          frame: "2-4-1.png",
         },
-        [Sprites.Player27]: {
+        [Sprites.Station250]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-7.png",
+          frame: "2-5-0.png",
         },
-        [Sprites.Player28]: {
+        [Sprites.Station251]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-8.png",
+          frame: "2-5-1.png",
         },
-        [Sprites.Player29]: {
+        [Sprites.Station260]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-9.png",
+          frame: "2-6-0.png",
         },
-        [Sprites.Player210]: {
+        [Sprites.Station261]: {
           assetKey: Assets.MainAtlas,
-          frame: "2-10.png",
+          frame: "2-6-1.png",
         },
-        [Sprites.Player31]: {
+        [Sprites.Station270]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-1.png",
+          frame: "2-7-0.png",
         },
-        [Sprites.Player32]: {
+        [Sprites.Station271]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-2.png",
+          frame: "2-7-1.png",
         },
-        [Sprites.Player33]: {
+        [Sprites.Station280]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-3.png",
+          frame: "2-8-0.png",
         },
-        [Sprites.Player34]: {
+        [Sprites.Station281]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-4.png",
+          frame: "2-8-1.png",
         },
-        [Sprites.Player35]: {
+        [Sprites.Station310]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-5.png",
+          frame: "3-1-0.png",
         },
-        [Sprites.Player36]: {
+        [Sprites.Station311]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-6.png",
+          frame: "3-1-1.png",
         },
-        [Sprites.Player37]: {
+        [Sprites.Station312]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-7.png",
+          frame: "3-1-2.png",
         },
-        [Sprites.Player38]: {
+        [Sprites.Station320]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-8.png",
+          frame: "3-2-0.png",
         },
-        [Sprites.Player39]: {
+        [Sprites.Station321]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-9.png",
+          frame: "3-2-1.png",
         },
-        [Sprites.Player310]: {
+        [Sprites.Station322]: {
           assetKey: Assets.MainAtlas,
-          frame: "3-10.png",
+          frame: "3-2-2.png",
         },
-        [Sprites.Player41]: {
+        [Sprites.Station330]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-1.png",
+          frame: "3-3-0.png",
         },
-        [Sprites.Player42]: {
+        [Sprites.Station331]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-2.png",
+          frame: "3-3-1.png",
         },
-        [Sprites.Player43]: {
+        [Sprites.Station332]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-3.png",
+          frame: "3-3-2.png",
         },
-        [Sprites.Player44]: {
+        [Sprites.Station340]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-4.png",
+          frame: "3-4-0.png",
         },
-        [Sprites.Player45]: {
+        [Sprites.Station341]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-5.png",
+          frame: "3-4-1.png",
         },
-        [Sprites.Player46]: {
+        [Sprites.Station342]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-6.png",
+          frame: "3-4-2.png",
         },
-        [Sprites.Player47]: {
+        [Sprites.Station350]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-7.png",
+          frame: "3-5-0.png",
         },
-        [Sprites.Player48]: {
+        [Sprites.Station351]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-8.png",
+          frame: "3-5-1.png",
         },
-        [Sprites.Player49]: {
+        [Sprites.Station352]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-9.png",
+          frame: "3-5-2.png",
         },
-        [Sprites.Player410]: {
+        [Sprites.Station360]: {
           assetKey: Assets.MainAtlas,
-          frame: "4-10.png",
+          frame: "3-6-0.png",
         },
-        [Sprites.Player51]: {
+        [Sprites.Station361]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-1.png",
+          frame: "3-6-1.png",
         },
-        [Sprites.Player52]: {
+        [Sprites.Station362]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-2.png",
+          frame: "3-6-2.png",
         },
-        [Sprites.Player53]: {
+        [Sprites.Station370]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-3.png",
+          frame: "3-7-0.png",
         },
-        [Sprites.Player54]: {
+        [Sprites.Station371]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-4.png",
+          frame: "3-7-1.png",
         },
-        [Sprites.Player55]: {
+        [Sprites.Station372]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-5.png",
+          frame: "3-7-2.png",
         },
-        [Sprites.Player56]: {
+        [Sprites.Station380]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-6.png",
+          frame: "3-8-0.png",
         },
-        [Sprites.Player57]: {
+        [Sprites.Station381]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-7.png",
+          frame: "3-8-1.png",
         },
-        [Sprites.Player58]: {
+        [Sprites.Station382]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-8.png",
+          frame: "3-8-2.png",
         },
-        [Sprites.Player59]: {
+        [Sprites.Station410]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-9.png",
+          frame: "4-1-0.png",
         },
-        [Sprites.Player510]: {
+        [Sprites.Station411]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-10.png",
+          frame: "4-1-1.png",
         },
-        [Sprites.Player61]: {
+        [Sprites.Station412]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-1.png",
+          frame: "4-1-2.png",
         },
-        [Sprites.Player62]: {
+        [Sprites.Station413]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-2.png",
+          frame: "4-1-3.png",
         },
-        [Sprites.Player63]: {
+        [Sprites.Station420]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-3.png",
+          frame: "4-2-0.png",
         },
-        [Sprites.Player64]: {
+        [Sprites.Station421]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-4.png",
+          frame: "4-2-1.png",
         },
-        [Sprites.Player65]: {
+        [Sprites.Station422]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-5.png",
+          frame: "4-2-2.png",
         },
-        [Sprites.Player66]: {
+        [Sprites.Station423]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-6.png",
+          frame: "4-2-3.png",
         },
-        [Sprites.Player67]: {
+        [Sprites.Station430]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-7.png",
+          frame: "4-3-0.png",
         },
-        [Sprites.Player68]: {
+        [Sprites.Station431]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-8.png",
+          frame: "4-3-1.png",
         },
-        [Sprites.Player69]: {
+        [Sprites.Station432]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-9.png",
+          frame: "4-3-2.png",
         },
-        [Sprites.Player610]: {
+        [Sprites.Station433]: {
           assetKey: Assets.MainAtlas,
-          frame: "6-10.png",
+          frame: "4-3-3.png",
         },
-        [Sprites.PlayerB11]: {
+        [Sprites.Station440]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-1.png",
+          frame: "4-4-0.png",
         },
-        [Sprites.PlayerB12]: {
+        [Sprites.Station441]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-2.png",
+          frame: "4-4-1.png",
         },
-        [Sprites.PlayerB13]: {
+        [Sprites.Station442]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-3.png",
+          frame: "4-4-2.png",
         },
-        [Sprites.PlayerB14]: {
+        [Sprites.Station443]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-4.png",
+          frame: "4-4-3.png",
         },
-        [Sprites.PlayerB15]: {
+        [Sprites.Station450]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-5.png",
+          frame: "4-5-0.png",
         },
-        [Sprites.PlayerB16]: {
+        [Sprites.Station451]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-6.png",
+          frame: "4-5-1.png",
         },
-        [Sprites.PlayerB17]: {
+        [Sprites.Station452]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-7.png",
+          frame: "4-5-2.png",
         },
-        [Sprites.PlayerB18]: {
+        [Sprites.Station453]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-8.png",
+          frame: "4-5-3.png",
         },
-        [Sprites.PlayerB19]: {
+        [Sprites.Station460]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-9.png",
+          frame: "4-6-0.png",
         },
-        [Sprites.PlayerB110]: {
+        [Sprites.Station461]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-10.png",
+          frame: "4-6-1.png",
         },
-        [Sprites.PlayerB21]: {
+        [Sprites.Station462]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-1.png",
+          frame: "4-6-2.png",
         },
-        [Sprites.PlayerB22]: {
+        [Sprites.Station463]: {
           assetKey: Assets.MainAtlas,
-          frame: "b1-2.png",
+          frame: "4-6-3.png",
         },
-        [Sprites.PlayerB23]: {
+        [Sprites.Station470]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-3.png",
+          frame: "4-7-0.png",
         },
-        [Sprites.PlayerB24]: {
+        [Sprites.Station471]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-4.png",
+          frame: "4-7-1.png",
         },
-        [Sprites.PlayerB25]: {
+        [Sprites.Station472]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-5.png",
+          frame: "4-7-2.png",
         },
-        [Sprites.PlayerB26]: {
+        [Sprites.Station473]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-6.png",
+          frame: "4-7-3.png",
         },
-        [Sprites.PlayerB27]: {
+        [Sprites.Station480]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-7.png",
+          frame: "4-8-0.png",
         },
-        [Sprites.PlayerB28]: {
+        [Sprites.Station481]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-8.png",
+          frame: "4-8-1.png",
         },
-        [Sprites.PlayerB29]: {
+        [Sprites.Station482]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-9.png",
+          frame: "4-8-2.png",
         },
-        [Sprites.PlayerB210]: {
+        [Sprites.Station483]: {
           assetKey: Assets.MainAtlas,
-          frame: "b2-10.png",
+          frame: "4-8-3.png",
         },
-        [Sprites.PlayerB31]: {
+        [Sprites.Station510]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-1.png",
+          frame: "5-1-0.png",
         },
-        [Sprites.PlayerB32]: {
+        [Sprites.Station511]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-2.png",
+          frame: "5-1-1.png",
         },
-        [Sprites.PlayerB33]: {
+        [Sprites.Station512]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-3.png",
+          frame: "5-1-2.png",
         },
-        [Sprites.PlayerB34]: {
+        [Sprites.Station513]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-4.png",
+          frame: "5-1-3.png",
         },
-        [Sprites.PlayerB35]: {
+        [Sprites.Station514]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-5.png",
+          frame: "5-1-4.png",
         },
-        [Sprites.PlayerB36]: {
+        [Sprites.Station520]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-6.png",
+          frame: "5-2-0.png",
         },
-        [Sprites.PlayerB37]: {
+        [Sprites.Station521]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-7.png",
+          frame: "5-2-1.png",
         },
-        [Sprites.PlayerB38]: {
+        [Sprites.Station522]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-8.png",
+          frame: "5-2-2.png",
         },
-        [Sprites.PlayerB39]: {
+        [Sprites.Station523]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-9.png",
+          frame: "5-2-3.png",
         },
-        [Sprites.PlayerB310]: {
+        [Sprites.Station524]: {
           assetKey: Assets.MainAtlas,
-          frame: "b3-10.png",
+          frame: "5-2-4.png",
         },
-        [Sprites.PlayerB41]: {
+        [Sprites.Station530]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-1.png",
+          frame: "5-3-0.png",
         },
-        [Sprites.PlayerB42]: {
+        [Sprites.Station531]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-2.png",
+          frame: "5-3-1.png",
         },
-        [Sprites.PlayerB43]: {
+        [Sprites.Station532]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-3.png",
+          frame: "5-3-2.png",
         },
-        [Sprites.PlayerB44]: {
+        [Sprites.Station533]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-4.png",
+          frame: "5-3-3.png",
         },
-        [Sprites.PlayerB45]: {
+        [Sprites.Station534]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-5.png",
+          frame: "5-3-4.png",
         },
-        [Sprites.PlayerB46]: {
+        [Sprites.Station540]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-6.png",
+          frame: "5-4-0.png",
         },
-        [Sprites.PlayerB47]: {
+        [Sprites.Station541]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-7.png",
+          frame: "5-4-1.png",
         },
-        [Sprites.PlayerB48]: {
+        [Sprites.Station542]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-8.png",
+          frame: "5-4-2.png",
         },
-        [Sprites.PlayerB49]: {
+        [Sprites.Station543]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-9.png",
+          frame: "5-4-3.png",
         },
-        [Sprites.PlayerB410]: {
+        [Sprites.Station544]: {
           assetKey: Assets.MainAtlas,
-          frame: "b4-10.png",
+          frame: "5-4-4.png",
         },
-        [Sprites.PlayerB51]: {
+        [Sprites.Station550]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-1.png",
+          frame: "5-5-0.png",
         },
-        [Sprites.PlayerB52]: {
+        [Sprites.Station551]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-2.png",
+          frame: "5-5-1.png",
         },
-        [Sprites.PlayerB53]: {
+        [Sprites.Station552]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-3.png",
+          frame: "5-5-2.png",
         },
-        [Sprites.PlayerB54]: {
+        [Sprites.Station553]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-4.png",
+          frame: "5-5-3.png",
         },
-        [Sprites.PlayerB55]: {
+        [Sprites.Station554]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-5.png",
+          frame: "5-5-4.png",
         },
-        [Sprites.PlayerB56]: {
+        [Sprites.Station560]: {
           assetKey: Assets.MainAtlas,
-          frame: "5-6.png",
+          frame: "5-6-0.png",
         },
-        [Sprites.PlayerB57]: {
+        [Sprites.Station561]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-7.png",
+          frame: "5-6-1.png",
         },
-        [Sprites.PlayerB58]: {
+        [Sprites.Station562]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-8.png",
+          frame: "5-6-2.png",
         },
-        [Sprites.PlayerB59]: {
+        [Sprites.Station563]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-9.png",
+          frame: "5-6-3.png",
         },
-        [Sprites.PlayerB510]: {
+        [Sprites.Station564]: {
           assetKey: Assets.MainAtlas,
-          frame: "b5-10.png",
+          frame: "5-6-4.png",
         },
-        [Sprites.PlayerB61]: {
+        [Sprites.Station570]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-1.png",
+          frame: "5-7-0.png",
         },
-        [Sprites.PlayerB62]: {
+        [Sprites.Station571]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-2.png",
+          frame: "5-7-1.png",
         },
-        [Sprites.PlayerB63]: {
+        [Sprites.Station572]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-3.png",
+          frame: "5-7-2.png",
         },
-        [Sprites.PlayerB64]: {
+        [Sprites.Station573]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-4.png",
+          frame: "5-7-3.png",
         },
-        [Sprites.PlayerB65]: {
+        [Sprites.Station574]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-5.png",
+          frame: "5-7-4.png",
         },
-        [Sprites.PlayerB66]: {
+        [Sprites.Station580]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-6.png",
+          frame: "5-8-0.png",
         },
-        [Sprites.PlayerB67]: {
+        [Sprites.Station581]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-7.png",
+          frame: "5-8-1.png",
         },
-        [Sprites.PlayerB68]: {
+        [Sprites.Station582]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-8.png",
+          frame: "5-8-2.png",
         },
-        [Sprites.PlayerB69]: {
+        [Sprites.Station583]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-9.png",
+          frame: "5-8-3.png",
         },
-        [Sprites.PlayerB610]: {
+        [Sprites.Station584]: {
           assetKey: Assets.MainAtlas,
-          frame: "b6-10.png",
+          frame: "5-8-4.png",
         },
-        [Sprites.CentreSun]: {
+        [Sprites.Station610]: {
           assetKey: Assets.MainAtlas,
-          frame: "centre-sun.png",
+          frame: "6-1-0.png",
         },
-        [Sprites.Cargo]: {
+        [Sprites.Station611]: {
           assetKey: Assets.MainAtlas,
-          frame: "cargo-1.png",
+          frame: "6-1-1.png",
+        },
+        [Sprites.Station612]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-1-2.png",
+        },
+        [Sprites.Station613]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-1-3.png",
+        },
+        [Sprites.Station614]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-1-4.png",
+        },
+        [Sprites.Station615]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-1-5.png",
+        },
+        [Sprites.Station620]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-0.png",
+        },
+        [Sprites.Station621]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-1.png",
+        },
+        [Sprites.Station622]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-2.png",
+        },
+        [Sprites.Station623]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-3.png",
+        },
+        [Sprites.Station624]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-4.png",
+        },
+        [Sprites.Station625]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-2-5.png",
+        },
+        [Sprites.Station630]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-0.png",
+        },
+        [Sprites.Station631]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-1.png",
+        },
+        [Sprites.Station632]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-2.png",
+        },
+        [Sprites.Station633]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-3.png",
+        },
+        [Sprites.Station634]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-4.png",
+        },
+        [Sprites.Station635]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-3-5.png",
+        },
+        [Sprites.Station640]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-0.png",
+        },
+        [Sprites.Station641]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-1.png",
+        },
+        [Sprites.Station642]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-2.png",
+        },
+        [Sprites.Station643]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-3.png",
+        },
+        [Sprites.Station644]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-4.png",
+        },
+        [Sprites.Station645]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-4-5.png",
+        },
+        [Sprites.Station650]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-0.png",
+        },
+        [Sprites.Station651]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-1.png",
+        },
+        [Sprites.Station652]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-2.png",
+        },
+        [Sprites.Station653]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-3.png",
+        },
+        [Sprites.Station654]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-4.png",
+        },
+        [Sprites.Station655]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-5-5.png",
+        },
+        [Sprites.Station660]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-0.png",
+        },
+        [Sprites.Station661]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-1.png",
+        },
+        [Sprites.Station662]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-2.png",
+        },
+        [Sprites.Station663]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-3.png",
+        },
+        [Sprites.Station664]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-4.png",
+        },
+        [Sprites.Station665]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-6-5.png",
+        },
+        [Sprites.Station670]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-0.png",
+        },
+        [Sprites.Station671]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-1.png",
+        },
+        [Sprites.Station672]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-2.png",
+        },
+        [Sprites.Station673]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-3.png",
+        },
+        [Sprites.Station674]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-4.png",
+        },
+        [Sprites.Station675]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-7-5.png",
+        },
+        [Sprites.Station680]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-8-0.png",
+        },
+        [Sprites.Station681]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-8-1.png",
+        },
+        [Sprites.Station682]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-8-2.png",
+        },
+        [Sprites.Station683]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-8-3.png",
+        },
+        [Sprites.Station684]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-8-4.png",
         },
         [Sprites.Missile]: {
           assetKey: Assets.MainAtlas,
-          frame: "missile-2.png",
+          frame: "missile-32px.png",
         },
       },
       animations: [],
