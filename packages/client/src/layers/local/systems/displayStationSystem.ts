@@ -57,7 +57,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 75);
+              gameObject.setPosition(x - 24 + i * 25, y + 100);
+              gameObject.setAngle(-90);
               gameObject.depth = 4;
             },
           });
@@ -70,7 +71,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 100);
+              gameObject.setPosition(x - 24 + i * 25, y + 150);
+              gameObject.setAngle(-90);
               gameObject.depth = 4;
             },
           });

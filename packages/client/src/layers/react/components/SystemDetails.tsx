@@ -5,6 +5,7 @@ import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 
 import styled from "styled-components";
+import { convertPrice } from "../utils/priceConverter";
 const images = ["/ui/1-1.png", "/ui/2-1.png", "/ui/3-1.png", "/ui/4-1.png", "/ui/5-1.png", "/ui/6-1.png"];
 
 const SystemDetails = ({ layers }: { layers: Layers }) => {
@@ -83,8 +84,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            <p style={{ color: "#e4e76a", fontSize: "12px" }}>${buyPrice.toFixed(2)} P/MT</p>
-            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>${sellPrice.toFixed(2)} P/MT</p>
+            <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>
+            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>{convertPrice(sellPrice)} P/MT</p>
             {userEntityId === ownedBy && (
               <>
                 <S.InlinePointer

@@ -35,7 +35,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const transportDetails = getComponentValue(Transport, modalIndex);
       if (
-        sourcePosition?.x &&
+        typeof sourcePosition?.x === "number" &&
         transportDetails?.showLine &&
         !transportDetails?.showModal &&
         !transportDetails.showAnimation
