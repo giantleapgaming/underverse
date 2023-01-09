@@ -78,7 +78,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
               {defence && +defence}
             </S.Center>
             <S.Center>
-              OFFENCE
+              MISSILES
               <br />
               {offence && +offence}
             </S.Center>

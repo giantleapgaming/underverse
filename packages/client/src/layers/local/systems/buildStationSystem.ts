@@ -105,15 +105,14 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.visible = !!(cursorIcon && showOnHover);
           },
         });
-        const distance =
-          xCoord && typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
+        const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
         const price = 1_000_000 / distance;
         const buildPrice = convertPrice(price);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "white-build-text",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x - 24, textPosition.y - 28);
+            gameObject.setPosition(textPosition.x - 8, textPosition.y - 34);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
             gameObject.setText(`BUILD ${buildPrice}`);
@@ -128,7 +127,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
-            gameObject.setText(`BUILD ${buildPrice}`);
+            gameObject.setText(`COST ${buildPrice}`);
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
