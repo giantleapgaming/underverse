@@ -72,7 +72,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (transportDetails?.showLine && !transportDetails?.showModal && sourceEntityId && stationEntity) {
       const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
       const userEntityId = connectedAddress.get();
-      if (userEntityId === ownedBy) {
+      if (userEntityId === ownedBy && stationEntity !== sourceEntityId) {
         setTransportCords(x, y);
         shouldTransport(true, false, false, stationEntity);
       }
@@ -106,7 +106,6 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const transportCord = getComponentValue(TransportCords, modalIndex);
-      console.log("outside final", sourceEntityId, destinationEntityId, sourcePosition?.x, transportCord?.y);
       if (typeof sourcePosition?.x === "number" && typeof transportCord?.y === "number") {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
