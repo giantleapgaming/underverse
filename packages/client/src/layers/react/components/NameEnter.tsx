@@ -40,7 +40,6 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
             value={name}
           />
         </div>
-
         <Button type="submit" disabled={loading}>
           {loading ? "Loading..." : "GO"}
         </Button>
@@ -81,6 +80,7 @@ const Button = styled.button`
   font-weight: 800;
   border-radius: 50%;
   background: transparent;
+  margin-top: 29px;
 `;
 
 const Input = styled.input`
