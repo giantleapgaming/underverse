@@ -16,7 +16,6 @@ export enum Assets {
   OverworldTileset = "OverworldTileset",
   MountainTileset = "MountainTileset",
   MainAtlas = "MainAtlas",
-  ExplosionAtlas = "ExplosionAtlas",
   Tile = "Tile",
   Center = "Center",
   Station1 = "Station1",

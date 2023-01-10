@@ -44,7 +44,8 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x, y), gameObject.setVisible(!!showOpenEye);
+            gameObject.setPosition(x, y);
+            gameObject.setVisible(!!showOpenEye);
             gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
           },
         });

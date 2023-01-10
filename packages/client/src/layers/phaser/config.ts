@@ -29,14 +29,6 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
-        [Assets.ExplosionAtlas]: {
-          type: AssetType.MultiAtlas,
-          key: Assets.ExplosionAtlas,
-          path: "/atlases/sprites/explosion-atlas.json",
-          options: {
-            imagePath: "/atlases/sprites/",
-          },
-        },
         [Assets.Station1]: {
           type: AssetType.Image,
           key: Assets.Station1,
@@ -865,51 +857,51 @@ export const phaserConfig = {
         },
         [Sprites.Build1]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-1.png",
+          frame: "build-1.png",
         },
         [Sprites.Build2]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-2.png",
+          frame: "build-2.png",
         },
         [Sprites.Build3]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-3.png",
+          frame: "build-3.png",
         },
         [Sprites.Build4]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-4.png",
+          frame: "build-4.png",
         },
         [Sprites.Build5]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-5.png",
+          frame: "build-5.png",
         },
         [Sprites.Build6]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-6.png",
+          frame: "build-6.png",
         },
         [Sprites.View1]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-1.png",
+          frame: "view-1.png",
         },
         [Sprites.View2]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-2.png",
+          frame: "view-2.png",
         },
         [Sprites.View3]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-3.png",
+          frame: "view-3.png",
         },
         [Sprites.View4]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-4.png",
+          frame: "view-4.png",
         },
         [Sprites.View5]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-5.png",
+          frame: "view-5.png",
         },
         [Sprites.View6]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-6.png",
+          frame: "view-6.png",
         },
         [Sprites.Sun]: {
           assetKey: Assets.MainAtlas,
@@ -932,7 +924,7 @@ export const phaserConfig = {
     pinchSpeed: 1,
     wheelSpeed: 1,
     maxZoom: 2,
-    minZoom: 0.1,
+    minZoom: 0.4,
   }),
   cullingChunkSize: TILE_HEIGHT * 64,
 };
