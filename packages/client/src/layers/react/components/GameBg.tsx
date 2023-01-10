@@ -20,7 +20,7 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   z-index: -100;
-  opacity: 0.4;
+  opacity: 0.3;
 `;
 
 export const registerBgScreen = () => {

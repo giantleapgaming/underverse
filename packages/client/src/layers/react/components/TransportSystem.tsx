@@ -8,7 +8,7 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Balance },
+      components: { Position, Balance, Level },
       api: { transportSystem },
     },
     phaser: {
@@ -25,10 +25,17 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
   if (selectedEntity && transport?.showModal && transport?.entityId) {
     const position = getComponentValue(Position, selectedEntity);
     const balance = getComponentValue(Balance, selectedEntity)?.value;
+    const destinationId = transport.entityId as EntityIndex;
+
+    const destinationLevel = getComponentValue(Level, destinationId)?.value;
+    const destinationPosition = getComponentValue(Position, destinationId);
+    const destinationBalance = getComponentValue(Balance, destinationId)?.value;
 
     const distance =
-      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const sellPrice = (100_000 / distance) * 0.9;
+      typeof position?.x === "number" && typeof destinationPosition?.x === "number"
+        ? Math.sqrt(Math.pow(position?.x - destinationPosition.x, 2) + Math.pow(position?.y - destinationPosition.y, 2))
+        : 1;
+    const transportPrice = distance;
     const closeModal = () => {
       shouldTransport(false, false, false);
       input.enabled.current = true;
@@ -42,7 +49,19 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
         showProgress();
       }
     };
-    return <TransportModal startTransport={startTransport} close={closeModal} stock={balance && +balance} />;
+    return (
+      <TransportModal
+        startTransport={startTransport}
+        close={closeModal}
+        stock={
+          destinationLevel &&
+          balance &&
+          destinationBalance &&
+          (+balance > +destinationLevel - +destinationBalance ? +destinationLevel - +destinationBalance : +balance)
+        }
+        transportPrice={transportPrice}
+      />
+    );
   } else {
     return null;
   }

@@ -6,10 +6,12 @@ export const TransportModal = ({
   startTransport,
   close,
   stock,
+  transportPrice,
 }: {
   startTransport: (kgs: number) => void;
   close: () => void;
   stock?: number;
+  transportPrice: number;
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
@@ -34,7 +36,7 @@ export const TransportModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a" }}>Transport</p>
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#ffffff", fontWeight: "bold" }}>Transport</p>
             {typeof stock === "number" && (
               <div
                 style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
@@ -54,11 +56,12 @@ export const TransportModal = ({
                 })}
               </div>
             )}
-            {+selected > 0 && (
+            {+selected > 0 ? (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                Transport Total
-                {/* {convertPrice(+selected * sellPrice)} */}
+                TRANSPORT COST {convertPrice(Math.pow(+selected * transportPrice, 2))}
               </p>
+            ) : (
+              <p style={{ textAlign: "center", marginBottom: "20px" }}>TRANSPORT COST -:-</p>
             )}
             <S.InlinePointer
               onClick={() => {
@@ -112,7 +115,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#e4e76a"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#ffffff"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);

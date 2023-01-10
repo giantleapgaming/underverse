@@ -16,8 +16,6 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   } = layers;
   return (
     <Container>
-      <AnimatedGradientText>Underverse</AnimatedGradientText>
-      <P>Write your story in the stars</P>
       <Form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -33,33 +31,30 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           }
         }}
       >
-        <Input
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-          value={name}
-        />
+        <div>
+          <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
+          <Input
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+            value={name}
+          />
+        </div>
         <Button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "Enter"}
+          {loading ? "Loading..." : "GO"}
         </Button>
       </Form>
     </Container>
   );
 };
 
-const hue = keyframes`
- from {
-   -webkit-filter: hue-rotate(0deg);
- }
- to {
-   -webkit-filter: hue-rotate(-360deg);
- }
-`;
 const Form = styled.form`
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 7px;
+  position: absolute;
+  bottom: 20px;
 `;
 const Container = styled.div`
   width: 100%;
@@ -70,53 +65,34 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(/img/bg.png);
+  background-image: url(/img/bgUnderverse.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
 `;
-export const AnimatedGradientText = styled.h1`
-  color: #33aadd;
-  background-image: -webkit-linear-gradient(92deg, #fbd811, #0feb1a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-animation: ${hue} 10s infinite linear;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
-  font-feature-settings: "kern";
-  font-size: 58px;
-  font-weight: 700;
-  line-height: 48px;
-  overflow-wrap: break-word;
-  text-align: center;
-  text-rendering: optimizelegibility;
-  -moz-osx-font-smoothing: grayscale;
-`;
-
-const P = styled.p`
-  color: #ffe100;
-  font-size: 30;
-  margin-top: 10px;
-`;
 
 const Button = styled.button`
-  background: rgba(149, 200, 30, 0.4);
-  font-size: 30px;
-  color: wheat;
-  border-radius: 10px;
+  border: 2px #05f4f9 solid;
+  font-size: 20px;
+  color: #05f4f9;
   padding: 10px 20px;
   font-weight: 800;
-  margin-top: 10px;
-  box-shadow: rgba(149, 200, 30, 0.4) 5px 5px, rgba(185, 196, 29, 0.3) 10px 10px, rgba(95, 133, 42, 0.2) 15px 15px;
+  border-radius: 50%;
+  background: transparent;
+  margin-top: 29px;
 `;
 
 const Input = styled.input`
-  background: rgba(255, 158, 23, 0.4);
+  background: url("/img/nameInput.png");
   font-size: 30px;
   padding: 5px 20px;
-  color: wheat;
+  color: white;
   font-weight: 900;
+  background-repeat: no-repeat;
+  border: none;
+  outline: none;
+  width: 160px;
 `;
 
 export const registerNameScreen = () => {

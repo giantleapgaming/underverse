@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { registerUIComponent } from "../engine";
 import { EntityID, EntityIndex, getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 
 import styled from "styled-components";
+import { convertPrice } from "../utils/priceConverter";
+import { walletAddress } from "../utils/walletAddress";
 const images = ["/ui/1-1.png", "/ui/2-1.png", "/ui/3-1.png", "/ui/4-1.png", "/ui/5-1.png", "/ui/6-1.png"];
 
 const SystemDetails = ({ layers }: { layers: Layers }) => {
@@ -35,6 +37,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
   };
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
+    const [copy, setCopy] = useState(false);
     const defence = getComponentValue(Defence, selectedEntity)?.value;
     const offence = getComponentValue(Offence, selectedEntity)?.value;
     const position = getComponentValue(Position, selectedEntity);
@@ -47,8 +50,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const allImg = {} as { [key: string]: string };
     [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
-    const distance =
-      position?.x && typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;
     return (
@@ -63,6 +65,18 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 POSITION: {position?.x}/{position?.y}
               </p>
               <p>OWNED: {name}</p>
+              <p
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setCopy(true);
+                  navigator.clipboard.writeText(`${ownedBy}`);
+                  setTimeout(() => {
+                    setCopy(false);
+                  }, 1000);
+                }}
+              >
+                Wallet: {copy ? "Copy" : walletAddress(`${ownedBy}`)}
+              </p>
             </div>
             <div>
               <img src={userStation} />
@@ -78,14 +92,14 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
               {defence && +defence}
             </S.Center>
             <S.Center>
-              OFFENCE
+              MISSILES
               <br />
               {offence && +offence}
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            <p style={{ color: "#e4e76a", fontSize: "12px" }}>${buyPrice.toFixed(2)} P/MT</p>
-            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>${sellPrice.toFixed(2)} P/MT</p>
+            <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>
+            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>{convertPrice(sellPrice)} P/MT</p>
             {userEntityId === ownedBy && (
               <>
                 <S.InlinePointer
@@ -214,7 +228,7 @@ const S = {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 5px;
     gap: 30px;
   `,
   InlineSB: styled.div`
@@ -223,7 +237,7 @@ const S = {
     justify-content: center;
     gap: 30px;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 30px;
   `,
 
@@ -235,7 +249,6 @@ const S = {
     left: 20px;
     font-size: 15px;
     cursor: pointer;
-    z-index: 4;
   `,
 };
 export function registerSystemDetailsComponent() {

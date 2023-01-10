@@ -10,6 +10,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     scenes: {
       Main: {
         objectPool,
+        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -35,47 +36,28 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
     const owndBy = getComponentValue(OwnedBy, entity)?.value;
     if (owndBy) {
-      const sprit = config.sprites[Sprites.Player12];
-      const cargo = config.sprites[Sprites.Cargo];
+      const sprit = config.sprites[Sprites.Station110];
       const missile = config.sprites[Sprites.Missile];
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}.png`);
+          gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
           gameObject.setPosition(x, y);
           gameObject.depth = 2;
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.x += gameObject.width / 2;
+          gameObject.y += gameObject.height / 2;
+          phaserScene.add.tween({
+            targets: gameObject,
+            angle: 360, // rotate the sprite by 360 degrees
+            duration: 1240000, // over 72 second
+            ease: "circular", // use a circular easing function
+            repeat: -1, // repeat the tween indefinitely
+            yoyo: false, // don't yoyo the tween
+            rotation: 360, // rotate the sprite around its own axis
+          });
         },
       });
-      new Array(10).fill(0).forEach((_, i) => {
-        objectPool.remove(`c${entity}${i}${i}`);
-        objectPool.remove(`c${entity}${i}`);
-      });
-
-      balance &&
-        new Array(+balance >= 5 ? 5 : +balance).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`c${entity}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
-            once: (gameObject) => {
-              gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition(x - 24 + i * 25, y - 50);
-              gameObject.depth = 4;
-            },
-          });
-        });
-      balance &&
-        +balance >= 5 &&
-        new Array(+balance === 10 ? 5 : +balance % 5).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`c${entity}${i}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
-            once: (gameObject) => {
-              gameObject.setTexture(cargo.assetKey, `cargo-1.png`);
-              gameObject.setPosition(x - 24 + i * 25, y - 25);
-              gameObject.depth = 4;
-            },
-          });
-        });
       new Array(10).fill(0).forEach((_, i) => {
         objectPool.remove(`m${entity}${i}${i}`);
         objectPool.remove(`m${entity}${i}`);
@@ -88,7 +70,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 75);
+              gameObject.setPosition(x - 24 + i * 25, y + 100);
+              gameObject.setAngle(-90);
               gameObject.depth = 4;
             },
           });
@@ -101,7 +84,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             id: `coc ${i}`,
             once: (gameObject) => {
               gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 100);
+              gameObject.setPosition(x - 24 + i * 25, y + 150);
+              gameObject.setAngle(-90);
               gameObject.depth = 4;
             },
           });
