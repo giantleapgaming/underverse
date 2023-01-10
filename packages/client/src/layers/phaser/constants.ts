@@ -16,6 +16,7 @@ export enum Assets {
   OverworldTileset = "OverworldTileset",
   MountainTileset = "MountainTileset",
   MainAtlas = "MainAtlas",
+  ExplosionAtlas = "ExplosionAtlas",
   Tile = "Tile",
   Center = "Center",
   Station1 = "Station1",
@@ -42,6 +43,7 @@ export enum Assets {
   Product8 = "Product8",
   Product9 = "Product9",
   Product10 = "Product10",
+  Missile = "Missile",
   ShowOwnedStationBackground = "ShowOwnedStationBackground",
 }
 
@@ -215,6 +217,13 @@ export enum Sprites {
   Station684,
   Station685,
   Missile,
+  Explosion1,
+  Explosion2,
+  Explosion3,
+  Explosion4,
+  Explosion5,
+  Explosion6,
+  Explosion7,
 }
 
 export enum Animations {}

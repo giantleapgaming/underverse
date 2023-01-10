@@ -29,6 +29,14 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
+        [Assets.ExplosionAtlas]: {
+          type: AssetType.MultiAtlas,
+          key: Assets.ExplosionAtlas,
+          path: "/atlases/sprites/explosion-atlas.json",
+          options: {
+            imagePath: "/atlases/sprites/",
+          },
+        },
         [Assets.Station1]: {
           type: AssetType.Image,
           key: Assets.Station1,
@@ -158,6 +166,11 @@ export const phaserConfig = {
           type: AssetType.Image,
           key: Assets.Product10,
           path: "/product/10.png",
+        },
+        [Assets.Missile]: {
+          type: AssetType.Image,
+          key: Assets.Missile,
+          path: "/missile/main.png",
         },
       },
       maps: {
@@ -849,6 +862,34 @@ export const phaserConfig = {
         [Sprites.Missile]: {
           assetKey: Assets.MainAtlas,
           frame: "missile-32px.png",
+        },
+        [Sprites.Explosion1]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "1.png",
+        },
+        [Sprites.Explosion2]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "2.png",
+        },
+        [Sprites.Explosion3]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "3.png",
+        },
+        [Sprites.Explosion4]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "4.png",
+        },
+        [Sprites.Explosion5]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "5.png",
+        },
+        [Sprites.Explosion6]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "6.png",
+        },
+        [Sprites.Explosion7]: {
+          assetKey: Assets.ExplosionAtlas,
+          frame: "7.png",
         },
       },
       animations: [],

@@ -1,4 +1,4 @@
-import { Sprites } from "../../phaser/constants";
+import { Assets } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -94,15 +94,46 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const attackCord = getComponentValue(AttackCords, modalIndex);
-      if (sourcePosition?.x && attackCord?.y) {
+      if (typeof sourcePosition?.x == "number" && typeof attackCord?.y == "number") {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: attackCord.x, y: attackCord.y }, tileWidth, tileHeight);
         graphics.clear();
-        graphics.lineStyle(1, 0xffffff);
-        graphics.moveTo(source.x + 32, source.y + 32);
-        graphics.lineTo(distraction.x + 32, distraction.y + 32);
-        graphics.strokePath();
-        const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI) + 90;
+        // graphics.lineStyle(1, 0xffffff);
+        // graphics.moveTo(source.x + 32, source.y + 32);
+        // graphics.lineTo(distraction.x + 32, distraction.y + 32);
+        // graphics.strokePath();
+        const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI);
+
+        // const object = objectPool.get("missile", "Sprite");
+        // const missileSprite = config.sprites[Sprites.Missile];
+        // object.setComponent({
+        //   id: "missileRelease",
+        //   once: (gameObject) => {
+        //     gameObject.setTexture(missileSprite.assetKey, missileSprite.frame);
+        //     gameObject.setAngle(angle);
+        //     phaserScene.add.tween({
+        //       targets: gameObject,
+        //       x: {
+        //         from: source.x,
+        //         to: distraction.x + 32,
+        //       },
+        //       y: {
+        //         from: source.y,
+        //         to: distraction.y + 32,
+        //       },
+        //       repeat: 0,
+        //       yoyo: false,
+        //       duration: 10_000,
+        //       onStart: () => {
+        //         graphics.clear();
+        //       },
+        //       onComplete: () => {
+        //         shouldAttack(false, false, false);
+        //         input.enabled.current = true;
+        //       },
+        //     });
+        //   },
+        // });
 
         if (
           destinationEntityId &&
@@ -111,34 +142,30 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           destinationDetails.showLine &&
           destinationDetails?.amount
         ) {
-          const object = objectPool.get("missile", "Sprite");
-          const missileSprite = config.sprites[Sprites.Missile];
-          object.setComponent({
-            id: "missileRelease",
-            once: (gameObject) => {
-              gameObject.setTexture(missileSprite.assetKey, missileSprite.frame);
-              gameObject.setAngle(angle);
-              phaserScene.add.tween({
-                targets: gameObject,
-                x: {
-                  from: source.x,
-                  to: distraction.x + 32,
-                },
-                y: {
-                  from: source.y,
-                  to: distraction.y + 32,
-                },
-                repeat: 0,
-                yoyo: false,
-                duration: 10_000,
-                onStart: () => {
-                  graphics.clear();
-                },
-                onComplete: () => {
-                  shouldAttack(false, false, false);
-                  input.enabled.current = true;
-                },
-              });
+          const missileImage = phaserScene.add.image(source.x + 32, source.y + 32, Assets.Missile, 0);
+          missileImage.setVisible(true);
+          missileImage.setAngle(angle);
+          phaserScene.add.tween({
+            targets: missileImage,
+            x: {
+              from: missileImage.x,
+              to: distraction.x + 32,
+            },
+            y: {
+              from: missileImage.y,
+              to: distraction.y + 32,
+            },
+            repeat: destinationDetails.amount - 1,
+            yoyo: false,
+            duration: 10_000 / destinationDetails.amount,
+            onStart: () => {
+              graphics.clear();
+              missileImage.setVisible(true);
+            },
+            onComplete: () => {
+              missileImage.setVisible(false);
+              shouldAttack(false, false, false);
+              input.enabled.current = true;
             },
           });
         }

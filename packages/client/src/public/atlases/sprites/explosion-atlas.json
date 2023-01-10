@@ -1,0 +1,251 @@
+{
+	"textures": [
+		{
+			"image": "explosion.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 485,
+				"h": 479
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "9.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 21,
+						"w": 191,
+						"h": 176
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 191,
+						"h": 176
+					}
+				},
+				{
+					"filename": "10.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 15,
+						"w": 198,
+						"h": 159
+					},
+					"frame": {
+						"x": 194,
+						"y": 1,
+						"w": 198,
+						"h": 159
+					}
+				},
+				{
+					"filename": "3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 53,
+						"y": 70,
+						"w": 85,
+						"h": 78
+					},
+					"frame": {
+						"x": 394,
+						"y": 1,
+						"w": 85,
+						"h": 78
+					}
+				},
+				{
+					"filename": "2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 62,
+						"y": 81,
+						"w": 59,
+						"h": 62
+					},
+					"frame": {
+						"x": 394,
+						"y": 81,
+						"w": 59,
+						"h": 62
+					}
+				},
+				{
+					"filename": "1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 73,
+						"y": 89,
+						"w": 41,
+						"h": 50
+					},
+					"frame": {
+						"x": 394,
+						"y": 145,
+						"w": 41,
+						"h": 50
+					}
+				},
+				{
+					"filename": "8.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 15,
+						"y": 28,
+						"w": 175,
+						"h": 168
+					},
+					"frame": {
+						"x": 194,
+						"y": 162,
+						"w": 175,
+						"h": 168
+					}
+				},
+				{
+					"filename": "4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 47,
+						"y": 55,
+						"w": 113,
+						"h": 105
+					},
+					"frame": {
+						"x": 371,
+						"y": 197,
+						"w": 113,
+						"h": 105
+					}
+				},
+				{
+					"filename": "11.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 47,
+						"w": 184,
+						"h": 130
+					},
+					"frame": {
+						"x": 1,
+						"y": 179,
+						"w": 184,
+						"h": 130
+					}
+				},
+				{
+					"filename": "7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 22,
+						"y": 37,
+						"w": 162,
+						"h": 146
+					},
+					"frame": {
+						"x": 1,
+						"y": 311,
+						"w": 162,
+						"h": 146
+					}
+				},
+				{
+					"filename": "6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 26,
+						"y": 37,
+						"w": 150,
+						"h": 146
+					},
+					"frame": {
+						"x": 165,
+						"y": 332,
+						"w": 150,
+						"h": 146
+					}
+				},
+				{
+					"filename": "5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 200,
+						"h": 200
+					},
+					"spriteSourceSize": {
+						"x": 33,
+						"y": 42,
+						"w": 140,
+						"h": 134
+					},
+					"frame": {
+						"x": 317,
+						"y": 332,
+						"w": 140,
+						"h": 134
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:c7582cb2b7aa19de23bd24b84f1621cb:0ae54f749b9ad62dab09be25c0b9b615:900e1fb3093a9a6ecb2b2b49071c44f7$"
+	}
+}

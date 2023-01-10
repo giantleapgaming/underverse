@@ -10,6 +10,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     scenes: {
       Main: {
         objectPool,
+        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -40,9 +41,22 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
+          console.log("asad");
           gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
           gameObject.setPosition(x, y);
           gameObject.depth = 2;
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.x += gameObject.width / 2;
+          gameObject.y += gameObject.height / 2;
+          phaserScene.add.tween({
+            targets: gameObject,
+            angle: 360, // rotate the sprite by 360 degrees
+            duration: 1240000, // over 72 second
+            ease: "circular", // use a circular easing function
+            repeat: -1, // repeat the tween indefinitely
+            yoyo: false, // don't yoyo the tween
+            rotation: 360, // rotate the sprite around its own axis
+          });
         },
       });
       new Array(10).fill(0).forEach((_, i) => {
@@ -56,6 +70,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
+              console.log("sta1");
               gameObject.setTexture(missile.assetKey, missile.frame);
               gameObject.setPosition(x - 24 + i * 25, y + 100);
               gameObject.setAngle(-90);
@@ -70,6 +85,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
+              console.log("sta2");
               gameObject.setTexture(missile.assetKey, missile.frame);
               gameObject.setPosition(x - 24 + i * 25, y + 150);
               gameObject.setAngle(-90);

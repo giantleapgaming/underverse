@@ -37,7 +37,7 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
       if (selectedEntity) {
         const sourceEntityId = world.entities[selectedEntity];
         const destinationEntityId = world.entities[attack.entityId as EntityIndex];
-        shouldAttack(false, false, true, attack.entityId, kgs);
+        shouldAttack(false, true, true, attack.entityId, kgs);
         await attackSystem(sourceEntityId, destinationEntityId, kgs);
         showProgress();
       }
