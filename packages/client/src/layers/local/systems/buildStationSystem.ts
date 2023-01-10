@@ -127,7 +127,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
             gameObject.depth = 4;
             gameObject.visible = !!(cursorIcon && showOnHover);
-            gameObject.setText(`COST ${buildPrice}`);
+            gameObject.setText(`Price ${buildPrice}`);
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");

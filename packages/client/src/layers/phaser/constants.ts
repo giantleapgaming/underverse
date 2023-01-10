@@ -224,6 +224,19 @@ export enum Sprites {
   Explosion5,
   Explosion6,
   Explosion7,
+  View1,
+  View2,
+  View3,
+  View4,
+  View5,
+  View6,
+  Build1,
+  Build2,
+  Build3,
+  Build4,
+  Build5,
+  Build6,
+  Sun,
 }
 
 export enum Animations {}

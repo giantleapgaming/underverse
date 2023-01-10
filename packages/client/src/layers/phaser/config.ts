@@ -863,33 +863,57 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "missile-32px.png",
         },
-        [Sprites.Explosion1]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "1.png",
+        [Sprites.Build1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-1.png",
         },
-        [Sprites.Explosion2]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "2.png",
+        [Sprites.Build2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-2.png",
         },
-        [Sprites.Explosion3]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "3.png",
+        [Sprites.Build3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-3.png",
         },
-        [Sprites.Explosion4]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "4.png",
+        [Sprites.Build4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-4.png",
         },
-        [Sprites.Explosion5]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "5.png",
+        [Sprites.Build5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-5.png",
         },
-        [Sprites.Explosion6]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "6.png",
+        [Sprites.Build6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "b-6.png",
         },
-        [Sprites.Explosion7]: {
-          assetKey: Assets.ExplosionAtlas,
-          frame: "7.png",
+        [Sprites.View1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-1.png",
+        },
+        [Sprites.View2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-2.png",
+        },
+        [Sprites.View3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-3.png",
+        },
+        [Sprites.View4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-4.png",
+        },
+        [Sprites.View5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-5.png",
+        },
+        [Sprites.View6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "v-6.png",
+        },
+        [Sprites.Sun]: {
+          assetKey: Assets.MainAtlas,
+          frame: "sun.png",
         },
       },
       animations: [],

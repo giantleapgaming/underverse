@@ -41,7 +41,6 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
-          console.log("asad");
           gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
           gameObject.setPosition(x, y);
           gameObject.depth = 2;
@@ -70,7 +69,6 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              console.log("sta1");
               gameObject.setTexture(missile.assetKey, missile.frame);
               gameObject.setPosition(x - 24 + i * 25, y + 100);
               gameObject.setAngle(-90);
@@ -85,7 +83,6 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           cocainObject.setComponent({
             id: `coc ${i}`,
             once: (gameObject) => {
-              console.log("sta2");
               gameObject.setTexture(missile.assetKey, missile.frame);
               gameObject.setPosition(x - 24 + i * 25, y + 150);
               gameObject.setAngle(-90);
