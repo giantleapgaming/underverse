@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { registerUIComponent } from "../engine";
 import { EntityID, EntityIndex, getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { Layers } from "../../../types";
@@ -37,6 +37,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
   };
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
+    const [copy, setCopy] = useState(false);
     const defence = getComponentValue(Defence, selectedEntity)?.value;
     const offence = getComponentValue(Offence, selectedEntity)?.value;
     const position = getComponentValue(Position, selectedEntity);
@@ -52,7 +53,6 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;
-
     return (
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
@@ -65,7 +65,18 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 POSITION: {position?.x}/{position?.y}
               </p>
               <p>OWNED: {name}</p>
-              <p>Wallet: {walletAddress(`${ownedBy}`)}</p>
+              <p
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  setCopy(true);
+                  navigator.clipboard.writeText(`${ownedBy}`);
+                  setTimeout(() => {
+                    setCopy(false);
+                  }, 1000);
+                }}
+              >
+                Wallet: {copy ? "Copy" : walletAddress(`${ownedBy}`)}
+              </p>
             </div>
             <div>
               <img src={userStation} />
@@ -217,7 +228,7 @@ const S = {
     justify-content: center;
     align-items: center;
     width: 100%;
-    margin-top: 15px;
+    margin-top: 5px;
     gap: 30px;
   `,
   InlineSB: styled.div`
@@ -226,7 +237,7 @@ const S = {
     justify-content: center;
     gap: 30px;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     margin-top: 30px;
   `,
 

@@ -28,9 +28,13 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
     const destinationId = transport.entityId as EntityIndex;
 
     const destinationLevel = getComponentValue(Level, destinationId)?.value;
+    const destinationPosition = getComponentValue(Position, destinationId);
     const destinationBalance = getComponentValue(Balance, destinationId)?.value;
 
-    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const distance =
+      typeof position?.x === "number" && typeof destinationPosition?.x === "number"
+        ? Math.sqrt(Math.pow(position?.x - destinationPosition.x, 2) + Math.pow(position?.y - destinationPosition.y, 2))
+        : 1;
     const transportPrice = distance;
     const closeModal = () => {
       shouldTransport(false, false, false);
