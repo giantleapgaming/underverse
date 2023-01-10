@@ -64,30 +64,32 @@ contract AttackSystem is System {
     );
 
     // distanceBetweenGodowns is 25806 for (15,9) and (30,30)
-    uint256 totalDamage = (amount * 200 * MULTIPLIER2) / distanceBetweenGodowns;
+    // uint256 totalDamage = (amount * 200 * MULTIPLIER2) / distanceBetweenGodowns;
+    uint256 totalDamage = amount * ((200 * MULTIPLIER2) / distanceBetweenGodowns);
     // uint256 totalDamage = 101;
 
-    // reduce balance of torpedos of source godown by the amount used up,
+    // reduce balance of weapons of source godown by the amount used up,
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(
       sourceGodownEntity,
       sourceGodownEntityOffenceAmount - amount
+    );
+    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
+      sourceGodownEntity,
+      block.timestamp
     );
 
     uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
       destinationGodownEntity
     );
 
-    // reduce the defense, levels of the impacted station by the damage caused.
-    if (totalDamage > destinationDefenceAmount) {
+    if (totalDamage >= destinationDefenceAmount) {
       // deleteGodown(destinationGodownEntity, components);
-      // if above is failing, unlock below
       LevelComponent(getAddressById(components, LevelComponentID)).set(destinationGodownEntity, 0);
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationGodownEntity, 0);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
         destinationGodownEntity,
         destinationDefenceAmount - totalDamage
-        // totalDamage
-        // distanceBetweenGodowns
       );
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
         destinationGodownEntity,
@@ -98,12 +100,6 @@ contract AttackSystem is System {
     // update player data
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
-      block.timestamp
-    );
-
-    // update source godown data
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
       block.timestamp
     );
   }
