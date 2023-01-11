@@ -4,29 +4,34 @@ import { getComponentEntities, getComponentValue, setComponent } from "@latticex
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 
-const OpenEye = ({ name, layers }: { name?: string, layers: Layers }) => {
+const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const {
     phaser: {
       localIds: { showCircleForOwnedByIndex },
       localApi: { shouldShowCircleForOwnedBy },
       components: { ShowCircleForOwnedBy },
+      sounds,
     },
   } = layers;
-  const showOpenEye = getComponentValue(ShowCircleForOwnedBy, showCircleForOwnedByIndex)?.value
+  const showOpenEye = getComponentValue(ShowCircleForOwnedBy, showCircleForOwnedByIndex)?.value;
   return (
     <div>
-      <S.Img src={showOpenEye ? "/ui/OpenEye.png" : "/ui/CloseEye.png"} onClick={() => {
-        shouldShowCircleForOwnedBy(!showOpenEye)
-      }} />
+      <S.Img
+        src={showOpenEye ? "/ui/OpenEye.png" : "/ui/CloseEye.png"}
+        onClick={() => {
+          shouldShowCircleForOwnedBy(!showOpenEye);
+          sounds["click"].play();
+        }}
+      />
     </div>
   );
 };
 
 const S = {
   Img: styled.img`
-  pointer-events: fill;
-  `
-}
+    pointer-events: fill;
+  `,
+};
 
 export const registerOpenEyeDetails = () => {
   registerUIComponent(

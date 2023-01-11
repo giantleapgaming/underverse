@@ -24,6 +24,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Progress, Build },
     localApi: { setBuild, showProgress },
     localIds: { buildId, progressId },
+    sounds,
   } = phaser;
   const {
     api: { buildSystem },
@@ -61,6 +62,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const canWePlaceNextMove = getComponentValue(Progress, progressId)?.value;
 
     if (build && build?.show && !canWePlaceNextMove) {
+      sounds["click"].play();
       setBuild(0, 0, false, false);
       await buildSystem(x, y);
       showProgress();

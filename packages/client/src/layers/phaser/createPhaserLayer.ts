@@ -110,6 +110,21 @@ export async function createPhaserLayer(network: NetworkLayer) {
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
+  const soundKeys = ["click", "confirm", "explosion", "missile-launch", "ship-launching"];
+  const sounds: Record<string, Phaser.Sound.BaseSound> = {};
+
+  const asyncFileLoader = (loaderPlugin: Phaser.Loader.LoaderPlugin) => {
+    return new Promise<void>((resolve) => {
+      loaderPlugin.on("filecomplete", () => resolve()).on("loaderror", () => resolve());
+      loaderPlugin.start();
+    });
+  };
+
+  for (const soundKey of soundKeys) {
+    const loader = scenes.Main.phaserScene.load.audio(soundKey, `/sounds/${soundKey}.m4a`);
+    await asyncFileLoader(loader);
+    sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: false, volume: 0.12 });
+  }
 
   // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
@@ -133,6 +148,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldAttack,
       setAttackCords,
     },
+    sounds,
   };
 
   // --- SYSTEMS --------------------------------------------------------------------

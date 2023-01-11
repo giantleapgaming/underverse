@@ -7,11 +7,13 @@ export const AttackModal = ({
   stock,
   attackPrice,
   close,
+  clickSound,
 }: {
   attackPrice: number;
   startAttack: (kgs: number) => void;
   stock?: number;
   close: () => void;
+  clickSound: () => void;
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
@@ -47,6 +49,7 @@ export const AttackModal = ({
                       key={`red${i}`}
                       selected={+selected > i}
                       onClick={() => {
+                        clickSound();
                         setSelected((i + 1).toString());
                       }}
                     >

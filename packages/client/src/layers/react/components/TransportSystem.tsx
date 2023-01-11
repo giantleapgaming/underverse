@@ -18,6 +18,7 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: { input },
       },
+      sounds,
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
@@ -37,11 +38,13 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
         : 1;
     const transportPrice = distance;
     const closeModal = () => {
+      sounds["click"].play();
       shouldTransport(false, false, false);
       input.enabled.current = true;
     };
     const startTransport = async (kgs: number) => {
       if (selectedEntity) {
+        sounds["ship-launching"].play();
         const sourceEntityId = world.entities[selectedEntity];
         const destinationEntityId = world.entities[transport.entityId as EntityIndex];
         shouldTransport(false, true, true, transport.entityId, kgs);
@@ -60,6 +63,9 @@ const TransportSystem = ({ layers }: { layers: Layers }) => {
           (+balance > +destinationLevel - +destinationBalance ? +destinationLevel - +destinationBalance : +balance)
         }
         transportPrice={transportPrice}
+        clickSound={() => {
+          sounds["click"].play();
+        }}
       />
     );
   } else {

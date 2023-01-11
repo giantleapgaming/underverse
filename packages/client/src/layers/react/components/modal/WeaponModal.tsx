@@ -7,11 +7,13 @@ export const WeaponModal = ({
   buySystem,
   stock,
   close,
+  clickSound,
 }: {
   buyPrice: number;
   buySystem: (kgs: number) => void;
   stock?: number | false;
   close: () => void;
+  clickSound: () => void;
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
@@ -48,6 +50,7 @@ export const WeaponModal = ({
                       selected={+selected > i}
                       onClick={() => {
                         setSelected((i + 1).toString());
+                        clickSound();
                       }}
                     >
                       {i + 1}

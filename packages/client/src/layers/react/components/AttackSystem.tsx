@@ -18,6 +18,7 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: { input },
       },
+      sounds,
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
@@ -30,11 +31,13 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const attackPrice = (100_000 / distance) * 1.1;
     const closeModal = () => {
+      sounds["click"].play();
       shouldAttack(false, false, false);
       input.enabled.current = true;
     };
     const startAttack = async (kgs: number) => {
       if (selectedEntity) {
+        sounds["missile-launch"].play();
         const sourceEntityId = world.entities[selectedEntity];
         const destinationEntityId = world.entities[attack.entityId as EntityIndex];
         shouldAttack(false, true, true, attack.entityId, kgs);
@@ -43,7 +46,15 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
       }
     };
     return (
-      <AttackModal startAttack={startAttack} stock={offence && +offence} attackPrice={attackPrice} close={closeModal} />
+      <AttackModal
+        startAttack={startAttack}
+        stock={offence && +offence}
+        attackPrice={attackPrice}
+        close={closeModal}
+        clickSound={() => {
+          sounds["click"].play();
+        }}
+      />
     );
   } else {
     return null;

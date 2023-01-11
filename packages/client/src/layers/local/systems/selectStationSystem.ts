@@ -1,6 +1,5 @@
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, EntityIndex, getComponentValue, setComponent } from "@latticexyz/recs";
-import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Sprites } from "../../phaser/constants";
@@ -18,6 +17,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
+    sounds,
     localIds: { stationDetailsEntityIndex, modalIndex },
   } = phaser;
   const {
@@ -33,6 +33,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const attack = getComponentValue(Attack, modalIndex);
     if (stationEntity && !line?.showModal && !line?.showLine && !attack?.showLine && !attack?.showModal) {
       setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+      sounds["click"].play();
     } else {
       // input.enabled.current = true
       // setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });

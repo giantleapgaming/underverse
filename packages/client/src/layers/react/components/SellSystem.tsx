@@ -18,6 +18,7 @@ const SellSystem = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: { input },
       },
+      sounds,
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
@@ -28,17 +29,30 @@ const SellSystem = ({ layers }: { layers: Layers }) => {
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const sellPrice = (100_000 / distance) * 0.9;
     const closeModal = () => {
+      sounds["click"].play();
       shouldSellModal(false);
       input.enabled.current = true;
     };
     const sell = async (kgs: number) => {
       if (selectedEntity) {
+        sounds["confirm"].play();
         await sellSystem(world.entities[selectedEntity], kgs);
-        closeModal();
+        shouldSellModal(false);
+        input.enabled.current = true;
         showProgress();
       }
     };
-    return <SellModal sellPrice={sellPrice} sellSystem={sell} stock={balance && +balance} close={closeModal} />;
+    return (
+      <SellModal
+        clickSound={() => {
+          sounds["click"].play();
+        }}
+        sellPrice={sellPrice}
+        sellSystem={sell}
+        stock={balance && +balance}
+        close={closeModal}
+      />
+    );
   } else {
     return null;
   }

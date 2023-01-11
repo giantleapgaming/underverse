@@ -27,6 +27,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
         shouldShowWeaponModal,
         shouldAttack,
       },
+      sounds,
       scenes: {
         Main: { input },
       },
@@ -106,6 +107,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   onClick={() => {
                     shouldBuyModal(true);
                     input.enabled.current = false;
+                    sounds["click"].play();
                   }}
                 >
                   <img src="/button/yellow-b.png" />
@@ -115,6 +117,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   onClick={() => {
                     shouldSellModal(true);
                     input.enabled.current = false;
+                    sounds["click"].play();
                   }}
                 >
                   <img src="/button/pink-b.png" />
@@ -123,7 +126,10 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 <S.InlinePointer
                   isDisabled={!(balance && +balance > 0)}
                   onClick={() => {
-                    if (balance && +balance > 0) shouldTransport(false, true, false);
+                    if (balance && +balance > 0) {
+                      shouldTransport(false, true, false);
+                      sounds["click"].play();
+                    }
                   }}
                 >
                   <img src="/button/white-b.png" />
@@ -134,6 +140,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     onClick={() => {
                       shouldUpgradeModal(true);
                       input.enabled.current = false;
+                      sounds["click"].play();
                     }}
                   >
                     <img src="/button/orange-b.png" />
@@ -152,6 +159,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   isDisabled={!(offence && +offence > 0)}
                   onClick={() => {
                     if (offence && +offence > 0) shouldAttack(false, true, false);
+                    sounds["click"].play();
                   }}
                 >
                   <img src="/button/red-b.png" />
