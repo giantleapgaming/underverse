@@ -129,7 +129,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/white-b.png" />
                   <S.DeployText>TRANSPORT</S.DeployText>
                 </S.InlinePointer>
-                {level && +level < 10 && (
+                {level && +level < 8 && (
                   <S.InlinePointer
                     onClick={() => {
                       shouldUpgradeModal(true);

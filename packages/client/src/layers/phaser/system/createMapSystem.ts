@@ -96,7 +96,8 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     id: `centerSun-sprite`,
     once: (gameObject) => {
       gameObject.setTexture(centerSun.assetKey, centerSun.frame);
-      gameObject.setPosition(x, y);
+      gameObject.setPosition(32, 32);
+      gameObject.setOrigin(0.5, 0.5);
       gameObject.setDepth(10);
     },
   });

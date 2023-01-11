@@ -60,7 +60,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         missileObject.setComponent({
           id: `group-missile-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(sprit.assetKey, `group-missile-${+offence}.png`);
+            gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-group-missile-${+offence}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.depth = 2;
             gameObject.setOrigin(0.5, 0.5);

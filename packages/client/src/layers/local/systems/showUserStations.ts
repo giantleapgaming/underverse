@@ -37,15 +37,16 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
         (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
       );
       if (position && ownedBy && walletAddress === ownedBy) {
-        const { x, y } = tileCoordToPixelCoord({ x: position.x - 1, y: position.y - 1 }, tileWidth, tileHeight);
+        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const Sprite = (walletAddress ? userHoverStation[walletAddress] : Sprites.View1) as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x, y);
+            gameObject.setPosition(x + 32, y + 32);
             gameObject.setVisible(!!showOpenEye);
+            gameObject.setOrigin(0.5, 0.5);
             gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
           },
         });
