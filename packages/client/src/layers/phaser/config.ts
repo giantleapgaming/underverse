@@ -5,7 +5,7 @@ import {
   defineMapConfig,
   defineCameraConfig,
 } from "@latticexyz/phaserx";
-import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH } from "./constants";
+import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH, Animations } from "./constants";
 import {
   Tileset as OverworldTileset,
   TileAnimations as OverworldTileAnimations,
@@ -1032,7 +1032,18 @@ export const phaserConfig = {
           frame: "6-GroupMissile-8.png",
         },
       },
-      animations: [],
+      animations: [
+        {
+          key: Animations.Explosion,
+          assetKey: Assets.MainAtlas,
+          startFrame: 1,
+          endFrame: 11,
+          frameRate: 4,
+          repeat: 0,
+          prefix: "explosion-",
+          suffix: ".png",
+        },
+      ],
       tilesets: {
         Default: { assetKey: Assets.OverworldTileset, tileWidth: TILE_WIDTH, tileHeight: TILE_HEIGHT },
       },

@@ -2,7 +2,7 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Sprites } from "../../phaser/constants";
+import { Sprites, Animations } from "../../phaser/constants";
 
 export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -37,6 +37,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     const owndBy = getComponentValue(OwnedBy, entity)?.value;
     if (owndBy) {
       const sprit = config.sprites[Sprites.Station110];
+      const missile = config.sprites[Sprites.Missile];
+      // const childObjects = phaserScene.children;
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
@@ -44,10 +46,14 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setPosition(x + 32, y + 32);
           gameObject.depth = 2;
           gameObject.setOrigin(0.5, 0.5);
+          gameObject.x += gameObject.width / 2;
+          gameObject.y += gameObject.height / 2;
+          // gameObject.play(Animations.Explosion);
+          // console.log("child pbjects", childObjects);
           phaserScene.add.tween({
             targets: gameObject,
             angle: 360, // rotate the sprite by 360 degrees
-            duration: 1240000, // over 72 second
+            duration: 1500000, // over 150 second
             ease: "circular", // use a circular easing function
             repeat: -1, // repeat the tween indefinitely
             yoyo: false, // don't yoyo the tween
