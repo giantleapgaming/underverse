@@ -3,9 +3,15 @@ import { registerUIComponent } from "../engine";
 import { getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
+import { ShowStationDetails } from "../../local/components";
+import { useState } from "react";
 
 const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
+  const [showDetails, setShowDetails] = useState(false);
   const {
+    network: {
+      components: { Name },
+    },
     phaser: {
       localIds: { showCircleForOwnedByIndex },
       localApi: { shouldShowCircleForOwnedBy },
@@ -14,22 +20,88 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
     },
   } = layers;
   const showOpenEye = getComponentValue(ShowCircleForOwnedBy, showCircleForOwnedByIndex)?.value;
+  const allname = [...getComponentEntities(Name)];
   return (
-    <div>
-      <S.Img
-        src={showOpenEye ? "/ui/OpenEye.png" : "/ui/CloseEye.png"}
+    <S.Container>
+      <img
+        src={showOpenEye ? "/ui/Cog.png" : "/ui/Cog.png"}
         onClick={() => {
           shouldShowCircleForOwnedBy(!showOpenEye);
           sounds["click"].play();
+          setShowDetails(!showOpenEye);
         }}
       />
-    </div>
+      {showDetails && (
+        <S.DetailsContainer>
+          <img src="/ui/ShowAllUsersMenu.png" />
+          <S.HighLight>HIGHLIGHT</S.HighLight>
+          <S.List>
+            <S.Player>
+              <S.CheckBox type="checkbox" checked></S.CheckBox>
+              <S.PLayerName>Owned</S.PLayerName>
+            </S.Player>
+            {allname.map((nameEntity) => {
+              const name = getComponentValue(Name, nameEntity);
+              return (
+                <S.Player>
+                  <S.CheckBox type="checkbox"></S.CheckBox>
+                  <S.PLayerName>{name?.value} </S.PLayerName>
+                </S.Player>
+              );
+            })}
+          </S.List>
+        </S.DetailsContainer>
+      )}
+    </S.Container>
   );
 };
 
 const S = {
-  Img: styled.img`
+  Container: styled.div`
     pointer-events: fill;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding-right: 15px;
+  `,
+
+  HighLight: styled.h2`
+    color: white;
+    position: absolute;
+    top: 30px;
+    left: 50px;
+  `,
+
+  DetailsContainer: styled.div`
+    position: relative;
+    margin-top: -30px;
+  `,
+
+  List: styled.div`
+    position: absolute;
+    top: 100px;
+    left: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  `,
+  Player: styled.div`
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: flex-start;
+  `,
+  CheckBox: styled.input`
+    background-color: black;
+    border: 1px solid #00fae3;
+    width: 30px;
+    height: 30px;
+  `,
+
+  PLayerName: styled.p`
+    color: white;
+    font-size: large;
   `,
 };
 
@@ -37,10 +109,10 @@ export const registerOpenEyeDetails = () => {
   registerUIComponent(
     "OpenEye",
     {
-      colStart: 12,
+      colStart: 10,
       colEnd: 13,
       rowStart: 2,
-      rowEnd: 3,
+      rowEnd: 12,
     },
     (layers) => {
       const {
