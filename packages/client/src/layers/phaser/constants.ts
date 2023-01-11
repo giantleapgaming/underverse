@@ -236,6 +236,15 @@ export enum Sprites {
   Build5,
   Build6,
   Sun,
+  Select,
+  GroupMissile1,
+  GroupMissile2,
+  GroupMissile3,
+  GroupMissile4,
+  GroupMissile5,
+  GroupMissile6,
+  GroupMissile7,
+  GroupMissile8,
 }
 
 export enum Animations {}

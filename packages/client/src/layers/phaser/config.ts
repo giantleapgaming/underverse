@@ -29,86 +29,6 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
-        [Assets.Station1]: {
-          type: AssetType.Image,
-          key: Assets.Station1,
-          path: "/station/1-1.png",
-        },
-        [Assets.Select]: {
-          type: AssetType.Image,
-          key: Assets.Select,
-          path: "/tile/select-box.png",
-        },
-        [Assets.Center]: {
-          type: AssetType.Image,
-          key: Assets.Center,
-          path: "/station/center.png",
-        },
-        [Assets.ShowOwnedStationBackground]: {
-          type: AssetType.Image,
-          key: Assets.ShowOwnedStationBackground,
-          path: "/station/ShowOwnedStationsYellowBG.png",
-        },
-        [Assets.Station2]: {
-          type: AssetType.Image,
-          key: Assets.Station2,
-          path: "/station/2-1.png",
-        },
-        [Assets.Station3]: {
-          type: AssetType.Image,
-          key: Assets.Station3,
-          path: "/station/3-1.png",
-        },
-        [Assets.Cargo]: {
-          type: AssetType.Image,
-          key: Assets.Cargo,
-          path: "/station/cargo.png",
-        },
-        [Assets.Station4]: {
-          type: AssetType.Image,
-          key: Assets.Station4,
-          path: "/station/4-1.png",
-        },
-        [Assets.Station5]: {
-          type: AssetType.Image,
-          key: Assets.Station5,
-          path: "/station/5-1.png",
-        },
-        [Assets.Station6]: {
-          type: AssetType.Image,
-          key: Assets.Station6,
-          path: "/station/6-1.png",
-        },
-        [Assets.HoverStation1]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation1,
-          path: "/station/coloredCircle/1.png",
-        },
-        [Assets.HoverStation2]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation2,
-          path: "/station/coloredCircle/2.png",
-        },
-        [Assets.HoverStation3]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation3,
-          path: "/station/coloredCircle/3.png",
-        },
-        [Assets.HoverStation4]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation4,
-          path: "/station/coloredCircle/4.png",
-        },
-        [Assets.HoverStation5]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation5,
-          path: "/station/coloredCircle/5.png",
-        },
-        [Assets.HoverStation6]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation6,
-          path: "/station/coloredCircle/6.png",
-        },
         [Assets.Product1]: {
           type: AssetType.Image,
           key: Assets.Product1,
@@ -906,6 +826,50 @@ export const phaserConfig = {
         [Sprites.Sun]: {
           assetKey: Assets.MainAtlas,
           frame: "sun.png",
+        },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.GroupMissile1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-1",
+        },
+        [Sprites.GroupMissile2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-2",
+        },
+        [Sprites.GroupMissile3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-3",
+        },
+        [Sprites.GroupMissile4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-4",
+        },
+        [Sprites.GroupMissile5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-5",
+        },
+        [Sprites.GroupMissile6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-6",
+        },
+        [Sprites.GroupMissile7]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-7",
+        },
+        [Sprites.GroupMissile8]: {
+          assetKey: Assets.MainAtlas,
+          frame: "group-missile-8",
         },
       },
       animations: [],

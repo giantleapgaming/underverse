@@ -37,16 +37,13 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     const owndBy = getComponentValue(OwnedBy, entity)?.value;
     if (owndBy) {
       const sprit = config.sprites[Sprites.Station110];
-      const missile = config.sprites[Sprites.Missile];
       object.setComponent({
         id: `${entity}`,
         once: (gameObject) => {
           gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
-          gameObject.setPosition(x, y);
+          gameObject.setPosition(x + 32, y + 32);
           gameObject.depth = 2;
           gameObject.setOrigin(0.5, 0.5);
-          gameObject.x += gameObject.width / 2;
-          gameObject.y += gameObject.height / 2;
           phaserScene.add.tween({
             targets: gameObject,
             angle: 360, // rotate the sprite by 360 degrees
@@ -58,38 +55,27 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           });
         },
       });
-      new Array(10).fill(0).forEach((_, i) => {
-        objectPool.remove(`m${entity}${i}${i}`);
-        objectPool.remove(`m${entity}${i}`);
-      });
-
-      offence &&
-        new Array(+offence >= 5 ? 5 : +offence).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`m${entity}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
-            once: (gameObject) => {
-              gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 100);
-              gameObject.setAngle(-90);
-              gameObject.depth = 4;
-            },
-          });
+      if (offence && +offence) {
+        const missileObject = objectPool.get(`group-missile-${entity}`, "Sprite");
+        missileObject.setComponent({
+          id: `group-missile-${entity}`,
+          once: (gameObject) => {
+            gameObject.setTexture(sprit.assetKey, `group-missile-${+offence}.png`);
+            gameObject.setPosition(x + 32, y + 32);
+            gameObject.depth = 2;
+            gameObject.setOrigin(0.5, 0.5);
+            phaserScene.add.tween({
+              targets: gameObject,
+              angle: 360, // rotate the sprite by 360 degrees
+              duration: 1240000, // over 72 second
+              ease: "circular", // use a circular easing function
+              repeat: -1, // repeat the tween indefinitely
+              yoyo: false, // don't yoyo the tween
+              rotation: 360, // rotate the sprite around its own axis
+            });
+          },
         });
-      offence &&
-        +offence >= 5 &&
-        new Array(+offence === 10 ? 5 : +offence % 5).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`m${entity}${i}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
-            once: (gameObject) => {
-              gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 150);
-              gameObject.setAngle(-90);
-              gameObject.depth = 4;
-            },
-          });
-        });
+      }
     }
   });
 }

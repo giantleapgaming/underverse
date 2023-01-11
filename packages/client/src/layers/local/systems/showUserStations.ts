@@ -38,8 +38,8 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
       );
       if (position && ownedBy && walletAddress === ownedBy) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x - 1, y: position.y - 1 }, tileWidth, tileHeight);
-        const Asset = (walletAddress ? userHoverStation[walletAddress] : Sprites.View1) as Sprites.View1;
-        const stationBackground = config.sprites[Asset];
+        const Sprite = (walletAddress ? userHoverStation[walletAddress] : Sprites.View1) as Sprites.View1;
+        const stationBackground = config.sprites[Sprite];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
         circle.setComponent({
           id: `circle-${entity}`,

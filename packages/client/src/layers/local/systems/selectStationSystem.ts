@@ -3,7 +3,7 @@ import { defineComponentSystem, EntityIndex, getComponentValue, setComponent } f
 import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Assets } from "../../phaser/constants";
+import { Sprites } from "../../phaser/constants";
 export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -52,11 +52,11 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const grid3X3 = get3x3Grid(position.x, position.y);
       const [iX, iY] = grid3X3[0][0];
       const { x, y } = tileCoordToPixelCoord({ x: iX, y: iY }, tileWidth, tileHeight);
-      const select = config.assets[Assets.Select];
+      const select = config.sprites[Sprites.Select];
       object.setComponent({
         id: "select-box-ui",
         once: (gameObject) => {
-          gameObject.setTexture(select.key, select.path);
+          gameObject.setTexture(select.assetKey, select.frame);
           gameObject.setPosition(x, y);
           gameObject.depth = 2;
           gameObject.setVisible(true);
