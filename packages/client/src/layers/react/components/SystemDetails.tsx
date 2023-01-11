@@ -104,20 +104,27 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             {userEntityId === ownedBy && (
               <>
                 <S.InlinePointer
+                  isDisabled={!(balance && +balance < 8)}
                   onClick={() => {
-                    shouldBuyModal(true);
-                    input.enabled.current = false;
-                    sounds["click"].play();
+                    if (balance && +balance < 8) {
+                      shouldBuyModal(true);
+                      input.enabled.current = false;
+                      sounds["click"].play();
+                    }
                   }}
                 >
                   <img src="/button/yellow-b.png" />
                   <S.DeployText>BUY</S.DeployText>
                 </S.InlinePointer>
+
                 <S.InlinePointer
+                  isDisabled={!(balance && +balance > 0)}
                   onClick={() => {
-                    shouldSellModal(true);
-                    input.enabled.current = false;
-                    sounds["click"].play();
+                    if (balance && +balance > 0) {
+                      shouldSellModal(true);
+                      input.enabled.current = false;
+                      sounds["click"].play();
+                    }
                   }}
                 >
                   <img src="/button/pink-b.png" />
@@ -135,18 +142,21 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/white-b.png" />
                   <S.DeployText>TRANSPORT</S.DeployText>
                 </S.InlinePointer>
-                {level && +level < 8 && (
-                  <S.InlinePointer
-                    onClick={() => {
+
+                <S.InlinePointer
+                  isDisabled={!(level && +level < 8)}
+                  onClick={() => {
+                    if (level && +level < 8) {
                       shouldUpgradeModal(true);
                       input.enabled.current = false;
                       sounds["click"].play();
-                    }}
-                  >
-                    <img src="/button/orange-b.png" />
-                    <S.DeployText>UPGRADE</S.DeployText>
-                  </S.InlinePointer>
-                )}
+                    }
+                  }}
+                >
+                  <img src="/button/orange-b.png" />
+                  <S.DeployText>Upgrade</S.DeployText>
+                </S.InlinePointer>
+
                 <S.InlinePointer
                   onClick={() => {
                     shouldShowWeaponModal(true);
@@ -155,6 +165,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/blue-b.png" />
                   <S.DeployText>WEAPONS</S.DeployText>
                 </S.InlinePointer>
+
                 <S.InlinePointer
                   isDisabled={!(offence && +offence > 0)}
                   onClick={() => {

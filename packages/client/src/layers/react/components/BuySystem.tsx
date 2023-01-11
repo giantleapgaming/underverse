@@ -37,9 +37,9 @@ const BuySystem = ({ layers }: { layers: Layers }) => {
     const buy = async (kgs: number) => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        await buySystem(world.entities[selectedEntity], kgs);
         shouldBuyModal(false);
         input.enabled.current = true;
+        await buySystem(world.entities[selectedEntity], kgs);
         showProgress();
       }
     };

@@ -37,9 +37,9 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
     const buy = async (kgs: number) => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        await buyWeaponSystem(world.entities[selectedEntity], kgs);
         shouldShowWeaponModal(false);
         input.enabled.current = true;
+        await buyWeaponSystem(world.entities[selectedEntity], kgs);
         showProgress();
       }
     };

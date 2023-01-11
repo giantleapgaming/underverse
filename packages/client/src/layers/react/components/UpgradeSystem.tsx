@@ -32,10 +32,10 @@ const UpgradeSystem = ({ layers }: { layers: Layers }) => {
     const upgrade = async () => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        await upgradeSystem(world.entities[selectedEntity]);
         shouldUpgradeModal(false);
         input.enabled.current = true;
         showProgress();
+        await upgradeSystem(world.entities[selectedEntity]);
       }
     };
     return <UpgradeModal upgradeSystem={upgrade} level={level && +level} close={closeModal} />;

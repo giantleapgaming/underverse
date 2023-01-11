@@ -36,10 +36,10 @@ const SellSystem = ({ layers }: { layers: Layers }) => {
     const sell = async (kgs: number) => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        await sellSystem(world.entities[selectedEntity], kgs);
         shouldSellModal(false);
         input.enabled.current = true;
         showProgress();
+        await sellSystem(world.entities[selectedEntity], kgs);
       }
     };
     return (

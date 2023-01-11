@@ -22,7 +22,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
-    components: { Position, OwnedBy },
+    components: { Position, OwnedBy, Defence },
   } = network;
 
   const click = input.click$.subscribe((p) => {
@@ -32,8 +32,11 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const line = getComponentValue(Transport, modalIndex);
     const attack = getComponentValue(Attack, modalIndex);
     if (stationEntity && !line?.showModal && !line?.showLine && !attack?.showLine && !attack?.showModal) {
-      setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
-      sounds["click"].play();
+      const defence = getComponentValue(Defence, stationEntity);
+      if (defence?.value && +defence.value > 0) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+      }
     } else {
       // input.enabled.current = true
       // setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
@@ -56,7 +59,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         id: "select-box-ui",
         once: (gameObject) => {
           gameObject.setTexture(select.assetKey, select.frame);
-          gameObject.setPosition(x + 64, y + 64);
+          gameObject.setPosition(x + 32, y + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
         },
