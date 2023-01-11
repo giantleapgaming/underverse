@@ -56,7 +56,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         id: "select-box-ui",
         once: (gameObject) => {
           gameObject.setTexture(select.assetKey, select.frame);
-          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setPosition(x + 64, y + 64);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
         },
