@@ -1,15 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
 
 export const AttackModal = ({
   startAttack,
   stock,
-  attackPrice,
+  distance,
   close,
   clickSound,
 }: {
-  attackPrice: number;
+  distance: number;
   startAttack: (kgs: number) => void;
   stock?: number;
   close: () => void;
@@ -61,7 +60,7 @@ export const AttackModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                select Total {convertPrice(+selected * attackPrice)}
+                Total Damage {((+selected * 200) / distance).toFixed(0)}
               </p>
             )}
             <S.InlinePointer

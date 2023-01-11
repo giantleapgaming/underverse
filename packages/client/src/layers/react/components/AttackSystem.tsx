@@ -25,11 +25,15 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
   const attack = getComponentValue(Attack, modalIndex);
   if (selectedEntity && attack?.showModal && attack.entityId) {
     const position = getComponentValue(Position, selectedEntity);
+    const designationIndex = attack.entityId as EntityIndex;
+    const destination = getComponentValue(Position, designationIndex);
 
     const offence = getComponentValue(Offence, selectedEntity)?.value;
 
-    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const attackPrice = (100_000 / distance) * 1.1;
+    const distance =
+      typeof position?.x === "number" && destination?.x
+        ? Math.sqrt(Math.pow(destination.x - position.x, 2) + Math.pow(destination.y - position.y, 2))
+        : 1;
     const closeModal = () => {
       sounds["click"].play();
       shouldAttack(false, false, false);
@@ -49,7 +53,7 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
       <AttackModal
         startAttack={startAttack}
         stock={offence && +offence}
-        attackPrice={attackPrice}
+        distance={distance}
         close={closeModal}
         clickSound={() => {
           sounds["click"].play();
