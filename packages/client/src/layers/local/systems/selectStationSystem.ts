@@ -62,6 +62,7 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setPosition(x + 32, y + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
+          gameObject.setAngle(0);
         },
       });
     } else {

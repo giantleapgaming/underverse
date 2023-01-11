@@ -22,13 +22,14 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
   const {
     network: { connectedAddress },
-    components: { OwnedBy, Position, Name },
+    components: { OwnedBy, Position, Name, Defence },
   } = network;
 
   defineComponentSystem(world, ShowCircleForOwnedBy, () => {
     const showOpenEye = getComponentValue(ShowCircleForOwnedBy, showCircleForOwnedByIndex)?.value;
     const allPositionEntity = [...getComponentEntities(Position)];
     allPositionEntity.forEach((entity) => {
+      const defence = getComponentValue(Defence, entity);
       const position = getComponentValue(Position, entity);
       const ownedBy = getComponentValue(OwnedBy, entity)?.value;
       const walletAddress = connectedAddress.get();
@@ -36,7 +37,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
       [...getComponentEntities(Name)].map(
         (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
       );
-      if (position && ownedBy && walletAddress === ownedBy) {
+      if (position && ownedBy && walletAddress === ownedBy && defence?.value && +defence.value > 0) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const Sprite = (walletAddress ? userHoverStation[walletAddress] : Sprites.View1) as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
@@ -44,7 +45,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x + 64, y + 64);
+            gameObject.setPosition(x + 32, y + 32);
             gameObject.setVisible(!!showOpenEye);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);

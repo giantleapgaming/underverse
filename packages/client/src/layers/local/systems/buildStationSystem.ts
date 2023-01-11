@@ -104,6 +104,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;
+            gameObject.setAngle(0);
           },
         });
         const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
