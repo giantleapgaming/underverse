@@ -49,27 +49,19 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const position = getComponentValue(Position, entityId);
 
     if (systemExist && typeof position?.x === "number" && entityId) {
-      const grid3X3 = get3x3Grid(position.x, position.y);
-      const [iX, iY] = grid3X3[0][0];
-      const { x, y } = tileCoordToPixelCoord({ x: iX, y: iY }, tileWidth, tileHeight);
+      const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const select = config.sprites[Sprites.Select];
       object.setComponent({
         id: "select-box-ui",
         once: (gameObject) => {
           gameObject.setTexture(select.assetKey, select.frame);
-          gameObject.setPosition(x, y);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
-          gameObject.setVisible(true);
         },
       });
     } else {
-      object.setComponent({
-        id: "select-box-ui",
-        once: (gameObject) => {
-          gameObject.depth = 2;
-          gameObject.setVisible(false);
-        },
-      });
+      objectPool.remove("select-box");
     }
   });
 }
