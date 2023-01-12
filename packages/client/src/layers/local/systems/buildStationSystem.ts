@@ -59,9 +59,8 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const build = getComponentValue(Build, buildId);
-    const canWePlaceNextMove = getComponentValue(Progress, progressId)?.value;
 
-    if (build && build?.show && !canWePlaceNextMove) {
+    if (build && build?.show) {
       sounds["click"].play();
       setBuild(0, 0, false, false);
       await buildSystem(x, y);

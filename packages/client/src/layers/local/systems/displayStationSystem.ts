@@ -80,6 +80,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
                 });
               },
             });
+          } else {
+            objectPool.remove(`group-missile-${entity}`);
           }
         }
       }
