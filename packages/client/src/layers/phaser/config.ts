@@ -5,7 +5,7 @@ import {
   defineMapConfig,
   defineCameraConfig,
 } from "@latticexyz/phaserx";
-import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH } from "./constants";
+import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH, Animations } from "./constants";
 import {
   Tileset as OverworldTileset,
   TileAnimations as OverworldTileAnimations,
@@ -28,94 +28,6 @@ export const phaserConfig = {
           options: {
             imagePath: "/atlases/sprites/",
           },
-        },
-        [Assets.ExplosionAtlas]: {
-          type: AssetType.MultiAtlas,
-          key: Assets.ExplosionAtlas,
-          path: "/atlases/sprites/explosion-atlas.json",
-          options: {
-            imagePath: "/atlases/sprites/",
-          },
-        },
-        [Assets.Station1]: {
-          type: AssetType.Image,
-          key: Assets.Station1,
-          path: "/station/1-1.png",
-        },
-        [Assets.Select]: {
-          type: AssetType.Image,
-          key: Assets.Select,
-          path: "/tile/select-box.png",
-        },
-        [Assets.Center]: {
-          type: AssetType.Image,
-          key: Assets.Center,
-          path: "/station/center.png",
-        },
-        [Assets.ShowOwnedStationBackground]: {
-          type: AssetType.Image,
-          key: Assets.ShowOwnedStationBackground,
-          path: "/station/ShowOwnedStationsYellowBG.png",
-        },
-        [Assets.Station2]: {
-          type: AssetType.Image,
-          key: Assets.Station2,
-          path: "/station/2-1.png",
-        },
-        [Assets.Station3]: {
-          type: AssetType.Image,
-          key: Assets.Station3,
-          path: "/station/3-1.png",
-        },
-        [Assets.Cargo]: {
-          type: AssetType.Image,
-          key: Assets.Cargo,
-          path: "/station/cargo.png",
-        },
-        [Assets.Station4]: {
-          type: AssetType.Image,
-          key: Assets.Station4,
-          path: "/station/4-1.png",
-        },
-        [Assets.Station5]: {
-          type: AssetType.Image,
-          key: Assets.Station5,
-          path: "/station/5-1.png",
-        },
-        [Assets.Station6]: {
-          type: AssetType.Image,
-          key: Assets.Station6,
-          path: "/station/6-1.png",
-        },
-        [Assets.HoverStation1]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation1,
-          path: "/station/coloredCircle/1.png",
-        },
-        [Assets.HoverStation2]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation2,
-          path: "/station/coloredCircle/2.png",
-        },
-        [Assets.HoverStation3]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation3,
-          path: "/station/coloredCircle/3.png",
-        },
-        [Assets.HoverStation4]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation4,
-          path: "/station/coloredCircle/4.png",
-        },
-        [Assets.HoverStation5]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation5,
-          path: "/station/coloredCircle/5.png",
-        },
-        [Assets.HoverStation6]: {
-          type: AssetType.Image,
-          key: Assets.HoverStation6,
-          path: "/station/coloredCircle/6.png",
         },
         [Assets.Product1]: {
           type: AssetType.Image,
@@ -859,64 +771,303 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "6-8-4.png",
         },
-        [Sprites.Missile]: {
-          assetKey: Assets.MainAtlas,
-          frame: "missile-32px.png",
-        },
         [Sprites.Build1]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-1.png",
+          frame: "build-1.png",
         },
         [Sprites.Build2]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-2.png",
+          frame: "build-2.png",
         },
         [Sprites.Build3]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-3.png",
+          frame: "build-3.png",
         },
         [Sprites.Build4]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-4.png",
+          frame: "build-4.png",
         },
         [Sprites.Build5]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-5.png",
+          frame: "build-5.png",
         },
         [Sprites.Build6]: {
           assetKey: Assets.MainAtlas,
-          frame: "b-6.png",
+          frame: "build-6.png",
         },
         [Sprites.View1]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-1.png",
+          frame: "view-1.png",
         },
         [Sprites.View2]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-2.png",
+          frame: "view-2.png",
         },
         [Sprites.View3]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-3.png",
+          frame: "view-3.png",
         },
         [Sprites.View4]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-4.png",
+          frame: "view-4.png",
         },
         [Sprites.View5]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-5.png",
+          frame: "view-5.png",
         },
         [Sprites.View6]: {
           assetKey: Assets.MainAtlas,
-          frame: "v-6.png",
+          frame: "view-6.png",
         },
         [Sprites.Sun]: {
           assetKey: Assets.MainAtlas,
           frame: "sun.png",
         },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.Select]: {
+          assetKey: Assets.MainAtlas,
+          frame: "select.png",
+        },
+        [Sprites.GroupMissile11]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile12]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile13]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile14]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile15]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile16]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile17]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile18]: {
+          assetKey: Assets.MainAtlas,
+          frame: "1-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile21]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile22]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile23]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile24]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile25]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile26]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile27]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile28]: {
+          assetKey: Assets.MainAtlas,
+          frame: "2-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile31]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile32]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile33]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile34]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile35]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile36]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile37]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile38]: {
+          assetKey: Assets.MainAtlas,
+          frame: "3-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile41]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile42]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile43]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile44]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile45]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile46]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile47]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile48]: {
+          assetKey: Assets.MainAtlas,
+          frame: "4-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile51]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile52]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile53]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile54]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile55]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile56]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile57]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile58]: {
+          assetKey: Assets.MainAtlas,
+          frame: "5-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile61]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-1.png",
+        },
+        [Sprites.GroupMissile62]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-2.png",
+        },
+        [Sprites.GroupMissile63]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-3.png",
+        },
+        [Sprites.GroupMissile64]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-4.png",
+        },
+        [Sprites.GroupMissile65]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-5.png",
+        },
+        [Sprites.GroupMissile66]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-6.png",
+        },
+        [Sprites.GroupMissile67]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-7.png",
+        },
+        [Sprites.GroupMissile68]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile68]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-8.png",
+        },
+        [Sprites.Missile1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-1.png",
+        },
+        [Sprites.Missile2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-2.png",
+        },
+        [Sprites.Missile3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-3.png",
+        },
+        [Sprites.Missile4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-4.png",
+        },
+        [Sprites.Missile5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-5.png",
+        },
+        [Sprites.Missile6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-6.png",
+        },
       },
-      animations: [],
+      animations: [
+        {
+          key: Animations.Explosion,
+          assetKey: Assets.MainAtlas,
+          startFrame: 1,
+          endFrame: 11,
+          frameRate: 4,
+          repeat: 0,
+          prefix: "explosion-",
+          suffix: ".png",
+        },
+      ],
       tilesets: {
         Default: { assetKey: Assets.OverworldTileset, tileWidth: TILE_WIDTH, tileHeight: TILE_HEIGHT },
       },
@@ -932,7 +1083,7 @@ export const phaserConfig = {
     pinchSpeed: 1,
     wheelSpeed: 1,
     maxZoom: 2,
-    minZoom: 0.1,
+    minZoom: 0.4,
   }),
   cullingChunkSize: TILE_HEIGHT * 64,
 };

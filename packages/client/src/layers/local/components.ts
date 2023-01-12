@@ -61,8 +61,14 @@ export const TransportCords = (world: World) => {
     { id: "TransportCords" }
   );
 };
-export const ShowCircleForOwnedBy = (world: World) => {
-  return defineBoolComponent(world, { id: "ShowCircleForOwnedBy" });
+export const ShowCircle = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      selectedEntities: Type.NumberArray,
+    },
+    { id: "ShowCircle" }
+  );
 };
 
 export const ShowWeaponModal = (world: World) => {

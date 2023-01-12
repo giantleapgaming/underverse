@@ -119,22 +119,22 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
           destinationDetails.showLine &&
           destinationDetails?.amount
         ) {
-          const cloudImage = phaserScene.add.image(
+          const spaceShipImage = phaserScene.add.image(
             source.x + 32,
             source.y + 32,
             product[destinationDetails.amount - 1],
             0
           );
-          cloudImage.setVisible(true);
-          cloudImage.setAngle(angle);
+          spaceShipImage.setVisible(true);
+          spaceShipImage.setAngle(angle);
           phaserScene.add.tween({
-            targets: cloudImage,
+            targets: spaceShipImage,
             x: {
-              from: cloudImage.x,
+              from: spaceShipImage.x,
               to: distraction.x + 32,
             },
             y: {
-              from: cloudImage.y,
+              from: spaceShipImage.y,
               to: distraction.y + 32,
             },
             repeat: 0,
@@ -142,10 +142,10 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 10_000,
             onStart: () => {
               graphics.clear();
-              cloudImage.setVisible(true);
+              spaceShipImage.setVisible(true);
             },
             onComplete: () => {
-              cloudImage.setVisible(false);
+              spaceShipImage.setVisible(false);
               shouldTransport(false, false, false);
               input.enabled.current = true;
             },

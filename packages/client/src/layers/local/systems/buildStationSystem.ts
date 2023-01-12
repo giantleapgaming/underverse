@@ -1,18 +1,13 @@
-import { Assets } from "./../../phaser/constants";
+import { Sprites } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { convertPrice } from "../../react/utils/priceConverter";
-const stationColor = [
-  Assets.Station1,
-  Assets.Station2,
-  Assets.Station3,
-  Assets.Station4,
-  Assets.Station5,
-  Assets.Station6,
-];
+
+const stationColor = [Sprites.Build1, Sprites.Build2, Sprites.Build3, Sprites.Build4, Sprites.Build5, Sprites.Build6];
+
 export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -29,6 +24,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Progress, Build },
     localApi: { setBuild, showProgress },
     localIds: { buildId, progressId },
+    sounds,
   } = phaser;
   const {
     api: { buildSystem },
@@ -66,6 +62,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const canWePlaceNextMove = getComponentValue(Progress, progressId)?.value;
 
     if (build && build?.show && !canWePlaceNextMove) {
+      sounds["click"].play();
       setBuild(0, 0, false, false);
       await buildSystem(x, y);
       showProgress();
@@ -81,40 +78,45 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const xCoord = build?.x;
     const yCoord = build?.y;
     const showOnHover = build?.show;
-    if (typeof xCoord === "number" && typeof yCoord === "number") {
-      const hoverStation = objectPool.get("build", "Sprite");
+    if (
+      typeof xCoord === "number" &&
+      typeof yCoord == "number" &&
+      showOnHover &&
+      cursorIcon &&
+      !(xCoord === 0 && yCoord === 0)
+    ) {
       const textWhite = objectPool.get("build-text-white", "Text");
-      const textYellow = objectPool.get("build-text-yell", "Text");
-      const userHoverStation = {} as { [key: string]: Assets };
+      const textYellow = objectPool.get("build-text-yellow", "Text");
+      const userHoverStation = {} as { [key: string]: Sprites };
       [...getComponentEntities(Name)].map(
         (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
       );
       const address = connectedAddress.get();
       if (address) {
-        const Asset = (address ? userHoverStation[address] : Assets.Station1) as Assets.Station1;
-        const HoverAsset = config.assets[Asset];
-        const grid3X3 = get3x3Grid(xCoord, yCoord);
-        const [iX, iY] = grid3X3[0][0];
-        const { x, y } = tileCoordToPixelCoord({ x: iX, y: iY }, tileWidth, tileHeight);
+        const sprite = (address ? userHoverStation[address] : Sprites.Build1) as Sprites.Build1;
+        const HoverSprite = config.sprites[sprite];
+        const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+        const hoverStation = objectPool.get("build-station", "Sprite");
         hoverStation.setComponent({
           id: `hoverStation`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverAsset.key, HoverAsset.path);
-            gameObject.setPosition(x, y);
+            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
+            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;
-            gameObject.visible = !!(cursorIcon && showOnHover);
+            gameObject.setAngle(0);
           },
         });
         const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
-        const price = 1_000_000 / distance;
-        const buildPrice = convertPrice(price);
+        const build = 1_000_000 / distance;
+        const price = convertPrice(100_000 / distance);
+        const buildPrice = convertPrice(build);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "white-build-text",
           once: (gameObject) => {
             gameObject.setPosition(textPosition.x - 8, textPosition.y - 34);
             gameObject.depth = 4;
-            gameObject.visible = !!(cursorIcon && showOnHover);
             gameObject.setText(`BUILD ${buildPrice}`);
             gameObject.setFontSize(12);
             gameObject.setFontStyle("bold");
@@ -126,14 +128,17 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
             gameObject.depth = 4;
-            gameObject.visible = !!(cursorIcon && showOnHover);
-            gameObject.setText(`Price ${buildPrice}`);
+            gameObject.setText(`Price ${price}`);
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
           },
         });
       }
+    } else {
+      objectPool.remove("build-station");
+      objectPool.remove("build-text-yellow");
+      objectPool.remove("build-text-white");
     }
   });
 

@@ -10,6 +10,7 @@ const PlayerDetails = ({ cash, layers }: { name?: string; cash?: number; total?:
       localIds: { buildId },
       localApi: { setBuild },
       components: { Build },
+      sounds,
     },
   } = layers;
   const showBuildButton = getComponentValue(Build, buildId)?.show;
@@ -36,6 +37,7 @@ const PlayerDetails = ({ cash, layers }: { name?: string; cash?: number; total?:
         <S.InlinePointer
           onClick={() => {
             setBuild(0, 0, true, false);
+            sounds["click"].play();
           }}
         >
           <S.Img src="/ui/yellow.png" />

@@ -1,4 +1,4 @@
-import { createEntity, namespaceWorld, setComponent } from "@latticexyz/recs";
+import { createEntity, EntityID, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
@@ -11,7 +11,7 @@ import {
   ShowSellModal,
   Build,
   Transport,
-  ShowCircleForOwnedBy,
+  ShowCircle,
   TransportCords,
   ShowWeaponModal,
   Attack,
@@ -38,14 +38,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const buildId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
   const modalIndex = createEntity(world);
-  const showCircleForOwnedByIndex = createEntity(world);
+  const showCircleIndex = createEntity(world);
 
   const localIds = {
     buildId,
     progressId,
     stationDetailsEntityIndex,
     modalIndex,
-    showCircleForOwnedByIndex,
+    showCircleIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -57,7 +57,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
     Build: Build(world),
-    ShowCircleForOwnedBy: ShowCircleForOwnedBy(world),
+    ShowCircle: ShowCircle(world),
     TransportCords: TransportCords(world),
     AttackCords: AttackCords(world),
     showWeaponModal: ShowWeaponModal(world),
@@ -85,8 +85,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
-  const shouldShowCircleForOwnedBy = (open: boolean) =>
-    setComponent(components.ShowCircleForOwnedBy, showCircleForOwnedByIndex, { value: open });
+  const shouldShowCircle = (selectedEntities: number[]) =>
+    setComponent(components.ShowCircle, showCircleIndex, { selectedEntities });
 
   const shouldTransport = (
     showModal: boolean,
@@ -110,7 +110,29 @@ export async function createPhaserLayer(network: NetworkLayer) {
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
+  const soundKeys = ["click", "confirm", "explosion", "missile-launch", "ship-launching"];
+  const soundKeysMp3 = ["bg"];
+  const sounds: Record<string, Phaser.Sound.BaseSound> = {};
 
+  const asyncFileLoader = (loaderPlugin: Phaser.Loader.LoaderPlugin) => {
+    return new Promise<void>((resolve) => {
+      loaderPlugin.on("filecomplete", () => resolve()).on("loaderror", () => resolve());
+      loaderPlugin.start();
+    });
+  };
+
+  for (const soundKey of soundKeys) {
+    const loader = scenes.Main.phaserScene.load.audio(soundKey, `/sounds/${soundKey}.m4a`);
+    await asyncFileLoader(loader);
+    sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: false, volume: 0.12 });
+  }
+
+  for (const soundKey of soundKeysMp3) {
+    const loader = scenes.Main.phaserScene.load.audio(soundKey, `/sounds/${soundKey}.mp3`);
+    await asyncFileLoader(loader);
+    sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: true, volume: 0.12 });
+  }
+  sounds["bg"].play();
   // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
     world,
@@ -126,13 +148,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldBuyModal,
       shouldUpgradeModal,
       shouldSellModal,
-      shouldShowCircleForOwnedBy,
+      shouldShowCircle,
       shouldTransport,
       setTransportCords,
       shouldShowWeaponModal,
       shouldAttack,
       setAttackCords,
     },
+    sounds,
   };
 
   // --- SYSTEMS --------------------------------------------------------------------

@@ -18,6 +18,7 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: { input },
       },
+      sounds,
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
@@ -26,16 +27,19 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
     const offence = getComponentValue(Offence, selectedEntity)?.value;
     const level = getComponentValue(Level, selectedEntity)?.value;
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const buyPrice = 100_000 / distance;
+    const buyPrice = distance;
 
     const closeModal = () => {
+      sounds["click"].play();
       shouldShowWeaponModal(false);
       input.enabled.current = true;
     };
     const buy = async (kgs: number) => {
       if (selectedEntity) {
+        sounds["confirm"].play();
+        shouldShowWeaponModal(false);
+        input.enabled.current = true;
         await buyWeaponSystem(world.entities[selectedEntity], kgs);
-        closeModal();
         showProgress();
       }
     };
@@ -45,6 +49,9 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
         buySystem={buy}
         stock={offence && level && +level - +offence}
         close={closeModal}
+        clickSound={() => {
+          sounds["click"].play();
+        }}
       />
     );
   } else {

@@ -16,6 +16,9 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   } = layers;
   return (
     <Container>
+      <Gif>
+        <img src="/img/name.gif" />
+      </Gif>
       <Form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -55,7 +58,20 @@ const Form = styled.form`
   gap: 7px;
   position: absolute;
   bottom: 20px;
+  z-index: 200;
 `;
+
+const Gif = styled.div`
+  z-index: 100;
+  width: 400px;
+  height: 100%;
+  display: flex;
+  margin: 100px auto 0px;
+  position: absolute;
+  align-items: flex-end;
+  justify-content: center;
+`;
+
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -65,11 +81,12 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(/img/bgUnderverse.png);
+  background-image: url(/img/bgUv.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
+  overflow: hidden;
 `;
 
 const Button = styled.button`

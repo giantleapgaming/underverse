@@ -1,6 +1,12 @@
-import { Assets } from "../../phaser/constants";
+import { Assets, Sprites, Animations } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import {
+  defineComponentSystem,
+  EntityID,
+  EntityIndex,
+  getComponentEntities,
+  getComponentValue,
+} from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 
@@ -21,11 +27,12 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Attack, ShowStationDetails, AttackCords },
     localApi: { shouldAttack, setAttackCords },
     localIds: { modalIndex, stationDetailsEntityIndex },
+    sounds,
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy },
+    components: { Position, OwnedBy, Name },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -98,74 +105,80 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
         const distraction = tileCoordToPixelCoord({ x: attackCord.x, y: attackCord.y }, tileWidth, tileHeight);
         graphics.clear();
-        // graphics.lineStyle(1, 0xffffff);
-        // graphics.moveTo(source.x + 32, source.y + 32);
-        // graphics.lineTo(distraction.x + 32, distraction.y + 32);
-        // graphics.strokePath();
         const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI);
-
-        // const object = objectPool.get("missile", "Sprite");
-        // const missileSprite = config.sprites[Sprites.Missile];
-        // object.setComponent({
-        //   id: "missileRelease",
-        //   once: (gameObject) => {
-        //     gameObject.setTexture(missileSprite.assetKey, missileSprite.frame);
-        //     gameObject.setAngle(angle);
-        //     phaserScene.add.tween({
-        //       targets: gameObject,
-        //       x: {
-        //         from: source.x,
-        //         to: distraction.x + 32,
-        //       },
-        //       y: {
-        //         from: source.y,
-        //         to: distraction.y + 32,
-        //       },
-        //       repeat: 0,
-        //       yoyo: false,
-        //       duration: 10_000,
-        //       onStart: () => {
-        //         graphics.clear();
-        //       },
-        //       onComplete: () => {
-        //         shouldAttack(false, false, false);
-        //         input.enabled.current = true;
-        //       },
-        //     });
-        //   },
-        // });
-
         if (
           destinationEntityId &&
           destinationDetails?.showAnimation &&
           !destinationDetails?.showModal &&
-          destinationDetails.showLine &&
+          destinationDetails?.showLine &&
           destinationDetails?.amount
         ) {
-          const missileImage = phaserScene.add.image(source.x + 32, source.y + 32, Assets.Missile, 0);
-          missileImage.setVisible(true);
-          missileImage.setAngle(angle);
-          phaserScene.add.tween({
-            targets: missileImage,
-            x: {
-              from: missileImage.x,
-              to: distraction.x + 32,
-            },
-            y: {
-              from: missileImage.y,
-              to: distraction.y + 32,
-            },
-            repeat: destinationDetails.amount - 1,
-            yoyo: false,
-            duration: 10_000 / destinationDetails.amount,
-            onStart: () => {
-              graphics.clear();
-              missileImage.setVisible(true);
-            },
-            onComplete: () => {
-              missileImage.setVisible(false);
-              shouldAttack(false, false, false);
-              input.enabled.current = true;
+          const object = objectPool.get("missile", "Sprite");
+          const missileSprite = config.sprites[Sprites.Missile2];
+          const repeatLoop = destinationDetails.amount - 1;
+          const images = ["1", "2", "3", "4", "5", "6"];
+          const allImg = {} as { [key: string]: string };
+          [...getComponentEntities(Name)].forEach(
+            (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
+          );
+          const owndBy = connectedAddress.get() || "";
+
+          object.setComponent({
+            id: "missileRelease",
+            once: (gameObject) => {
+              gameObject.setTexture(missileSprite.assetKey, `missile-${allImg[owndBy]}.png`);
+              gameObject.setPosition(source.x + 32, source.y + 32);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
+              phaserScene.add.tween({
+                targets: gameObject,
+                x: {
+                  from: gameObject.x,
+                  to: distraction.x + 32,
+                },
+                y: {
+                  from: gameObject.y,
+                  to: distraction.y + 32,
+                },
+                repeat: repeatLoop,
+                yoyo: false,
+                duration: 2_000,
+                onStart: () => {
+                  graphics.clear();
+                },
+                onRepeat: () => {
+                  sounds["missile-launch"].play();
+                  const blastObject = objectPool.get("explosion", "Sprite");
+                  blastObject.setComponent({
+                    id: "explosionRelease",
+                    once: (explosionObject) => {
+                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setOrigin(0.5, 0.5);
+                      explosionObject.play(Animations.Explosion);
+                      sounds["explosion"].play();
+                    },
+                  });
+                },
+                onComplete: () => {
+                  const blastObject = objectPool.get("explosion-end", "Sprite");
+                  blastObject.setComponent({
+                    id: "explosionRelease",
+                    once: (explosionObject) => {
+                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setOrigin(0.5, 0.5);
+                      explosionObject.play(Animations.Explosion);
+                      sounds["explosion"].play();
+                      explosionObject.on(`animationcomplete-${Animations.Explosion}`, () => {
+                        objectPool.remove("explosion");
+                        objectPool.remove("explosion-end");
+                      });
+                    },
+                  });
+                  objectPool.remove("missile");
+                  shouldAttack(false, false, false);
+                  input.enabled.current = true;
+                },
+              });
             },
           });
         }

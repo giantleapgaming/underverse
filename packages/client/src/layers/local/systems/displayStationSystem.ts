@@ -19,77 +19,70 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     },
   } = phaser;
   const {
-    components: { OwnedBy, Position, Name, Level, Balance, Offence },
+    components: { OwnedBy, Position, Name, Level, Balance, Offence, Defence },
   } = network;
 
-  defineSystem(world, [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence)], ({ entity }) => {
-    const images = ["1", "2", "3", "4", "5", "6"];
-    const allImg = {} as { [key: string]: string };
-    [...getComponentEntities(Name)].forEach(
-      (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
-    );
-    const object = objectPool.get(entity, "Sprite");
-    const position = getComponentValue(Position, entity);
-    const level = getComponentValue(Level, entity)?.value;
-    const balance = getComponentValue(Balance, entity)?.value;
-    const offence = getComponentValue(Offence, entity)?.value;
-    const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
-    const owndBy = getComponentValue(OwnedBy, entity)?.value;
-    if (owndBy) {
-      const sprit = config.sprites[Sprites.Station110];
-      const missile = config.sprites[Sprites.Missile];
-      object.setComponent({
-        id: `${entity}`,
-        once: (gameObject) => {
-          gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
-          gameObject.setPosition(x, y);
-          gameObject.depth = 2;
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.x += gameObject.width / 2;
-          gameObject.y += gameObject.height / 2;
-          phaserScene.add.tween({
-            targets: gameObject,
-            angle: 360, // rotate the sprite by 360 degrees
-            duration: 1240000, // over 72 second
-            ease: "circular", // use a circular easing function
-            repeat: -1, // repeat the tween indefinitely
-            yoyo: false, // don't yoyo the tween
-            rotation: 360, // rotate the sprite around its own axis
-          });
-        },
-      });
-      new Array(10).fill(0).forEach((_, i) => {
-        objectPool.remove(`m${entity}${i}${i}`);
-        objectPool.remove(`m${entity}${i}`);
-      });
-
-      offence &&
-        new Array(+offence >= 5 ? 5 : +offence).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`m${entity}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
+  defineSystem(
+    world,
+    [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence), Has(Defence)],
+    ({ entity }) => {
+      const images = ["1", "2", "3", "4", "5", "6"];
+      const allImg = {} as { [key: string]: string };
+      [...getComponentEntities(Name)].forEach(
+        (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
+      );
+      const defence = getComponentValue(Defence, entity);
+      const position = getComponentValue(Position, entity);
+      const level = getComponentValue(Level, entity)?.value;
+      const balance = getComponentValue(Balance, entity)?.value;
+      const offence = getComponentValue(Offence, entity)?.value;
+      const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
+      if (defence?.value && +defence.value > 0) {
+        const object = objectPool.get(entity, "Sprite");
+        const owndBy = getComponentValue(OwnedBy, entity)?.value;
+        if (owndBy) {
+          const sprit = config.sprites[Sprites.Station110];
+          object.setComponent({
+            id: `${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 100);
-              gameObject.setAngle(-90);
-              gameObject.depth = 4;
+              gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.depth = 2;
+              gameObject.setOrigin(0.5, 0.5);
+              phaserScene.add.tween({
+                targets: gameObject,
+                angle: 360,
+                duration: 1500000,
+                ease: "circular",
+                repeat: -1,
+                yoyo: false,
+                rotation: 360,
+              });
             },
           });
-        });
-      offence &&
-        +offence >= 5 &&
-        new Array(+offence === 10 ? 5 : +offence % 5).fill(0).forEach((_, i) => {
-          const cocainObject = objectPool.get(`m${entity}${i}${i}`, "Sprite");
-          cocainObject.setComponent({
-            id: `coc ${i}`,
-            once: (gameObject) => {
-              gameObject.setTexture(missile.assetKey, missile.frame);
-              gameObject.setPosition(x - 24 + i * 25, y + 150);
-              gameObject.setAngle(-90);
-              gameObject.depth = 4;
-            },
-          });
-        });
+          if (offence && +offence) {
+            const missileObject = objectPool.get(`group-missile-${entity}`, "Sprite");
+            missileObject.setComponent({
+              id: `group-missile-${entity}`,
+              once: (gameObject) => {
+                gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-group-missile-${+offence}.png`);
+                gameObject.setPosition(x + 32, y + 32);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setDepth(2);
+                phaserScene.add.tween({
+                  targets: gameObject,
+                  angle: 360,
+                  duration: 1240000,
+                  ease: "circular",
+                  repeat: -1,
+                  yoyo: false,
+                  rotation: 360,
+                });
+              },
+            });
+          }
+        }
+      }
     }
-  });
+  );
 }

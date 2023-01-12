@@ -18,20 +18,24 @@ const UpgradeSystem = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: { input },
       },
+      sounds,
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
     const level = getComponentValue(Level, selectedEntity)?.value;
     const closeModal = () => {
+      sounds["click"].play();
       shouldUpgradeModal(false);
       input.enabled.current = true;
     };
     const upgrade = async () => {
       if (selectedEntity) {
-        await upgradeSystem(world.entities[selectedEntity]);
-        closeModal();
+        sounds["confirm"].play();
+        shouldUpgradeModal(false);
+        input.enabled.current = true;
         showProgress();
+        await upgradeSystem(world.entities[selectedEntity]);
       }
     };
     return <UpgradeModal upgradeSystem={upgrade} level={level && +level} close={closeModal} />;

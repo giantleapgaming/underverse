@@ -1,9 +1,8 @@
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, EntityIndex, getComponentValue, setComponent } from "@latticexyz/recs";
-import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Assets } from "../../phaser/constants";
+import { Sprites } from "../../phaser/constants";
 export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -18,11 +17,12 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
+    sounds,
     localIds: { stationDetailsEntityIndex, modalIndex },
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
-    components: { Position, OwnedBy },
+    components: { Position, OwnedBy, Defence },
   } = network;
 
   const click = input.click$.subscribe((p) => {
@@ -32,7 +32,11 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const line = getComponentValue(Transport, modalIndex);
     const attack = getComponentValue(Attack, modalIndex);
     if (stationEntity && !line?.showModal && !line?.showLine && !attack?.showLine && !attack?.showModal) {
-      setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+      const defence = getComponentValue(Defence, stationEntity);
+      if (defence?.value && +defence.value > 0) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+      }
     } else {
       // input.enabled.current = true
       // setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
@@ -49,27 +53,20 @@ export function selectStationSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const position = getComponentValue(Position, entityId);
 
     if (systemExist && typeof position?.x === "number" && entityId) {
-      const grid3X3 = get3x3Grid(position.x, position.y);
-      const [iX, iY] = grid3X3[0][0];
-      const { x, y } = tileCoordToPixelCoord({ x: iX, y: iY }, tileWidth, tileHeight);
-      const select = config.assets[Assets.Select];
+      const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+      const select = config.sprites[Sprites.Select];
       object.setComponent({
         id: "select-box-ui",
         once: (gameObject) => {
-          gameObject.setTexture(select.key, select.path);
-          gameObject.setPosition(x, y);
+          gameObject.setTexture(select.assetKey, select.frame);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
-          gameObject.setVisible(true);
+          gameObject.setAngle(0);
         },
       });
     } else {
-      object.setComponent({
-        id: "select-box-ui",
-        once: (gameObject) => {
-          gameObject.depth = 2;
-          gameObject.setVisible(false);
-        },
-      });
+      objectPool.remove("select-box");
     }
   });
 }
