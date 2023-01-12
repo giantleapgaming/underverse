@@ -16,7 +16,7 @@ import { registerBgScreen } from "./GameBg";
 export function registerUIComponents() {
   registerNameScreen();
   // registerComponentBrowser();
-  registerProgressBar();
+  // registerProgressBar();
   registerPlayerDetails();
   registerLoadingState();
   registerSystemDetailsComponent();
