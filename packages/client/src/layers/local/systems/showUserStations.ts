@@ -61,15 +61,19 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
           }
         });
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
-        circle.setComponent({
-          id: `circle-${entity}`,
-          once: (gameObject) => {
-            gameObject.setPosition(x + 32, y + 32);
-            gameObject.setOrigin(0.5, 0.5);
-            gameObject.setVisible(!!showSelected);
-            gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
-          },
-        });
+        if (showSelected) {
+          circle.setComponent({
+            id: `circle-${entity}`,
+            once: (gameObject) => {
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setVisible(!!showSelected);
+              gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
+            },
+          });
+        } else {
+          objectPool.remove(`circle-${entity}`);
+        }
       }
     });
   });
