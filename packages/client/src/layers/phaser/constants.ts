@@ -215,7 +215,6 @@ export enum Sprites {
   Station683,
   Station684,
   Station685,
-  Missile,
   Explosion1,
   Explosion2,
   Explosion3,
@@ -285,6 +284,12 @@ export enum Sprites {
   GroupMissile66,
   GroupMissile67,
   GroupMissile68,
+  Missile1,
+  Missile2,
+  Missile3,
+  Missile4,
+  Missile5,
+  Missile6,
 }
 
 export enum Animations {

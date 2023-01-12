@@ -40,7 +40,7 @@ export const UpgradeModal = ({
               COST: {level && convertPrice(Math.pow(level + 1, 2) * 1_000)}
             </p>
             <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#fb934e" }}>
-              CARGO HOLD: <span style={{ color: "white" }}>{level}</span> - {level && level + 1}
+              CARGO HOLD: <span style={{ color: "white" }}>{level}</span> &rarr; {level && level + 1}
             </p>
             <S.InlinePointer
               onClick={() => {

@@ -90,7 +90,7 @@ export const phaserConfig = {
           chunkSize: TILE_WIDTH * 64, // tile size * tile amount
           tileWidth: TILE_WIDTH,
           tileHeight: TILE_HEIGHT,
-          backgroundTile: [1],
+          backgroundTile: [OverworldTileset.Tron],
           animationInterval: ANIMATION_INTERVAL,
           tileAnimations: OverworldTileAnimations,
           layers: {
@@ -771,10 +771,6 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "6-8-4.png",
         },
-        [Sprites.Missile]: {
-          assetKey: Assets.MainAtlas,
-          frame: "missile-32px.png",
-        },
         [Sprites.Build1]: {
           assetKey: Assets.MainAtlas,
           frame: "build-1.png",
@@ -1030,6 +1026,34 @@ export const phaserConfig = {
         [Sprites.GroupMissile68]: {
           assetKey: Assets.MainAtlas,
           frame: "6-GroupMissile-8.png",
+        },
+        [Sprites.GroupMissile68]: {
+          assetKey: Assets.MainAtlas,
+          frame: "6-GroupMissile-8.png",
+        },
+        [Sprites.Missile1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-1.png",
+        },
+        [Sprites.Missile2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-2.png",
+        },
+        [Sprites.Missile3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-3.png",
+        },
+        [Sprites.Missile4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-4.png",
+        },
+        [Sprites.Missile5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-5.png",
+        },
+        [Sprites.Missile6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "Missile-6.png",
         },
       },
       animations: [

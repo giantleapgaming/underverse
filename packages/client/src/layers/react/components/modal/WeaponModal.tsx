@@ -61,7 +61,7 @@ export const WeaponModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                BUY Total {convertPrice(+selected * buyPrice)}
+                BUY Total {convertPrice(+selected * 10_000 * buyPrice)}
               </p>
             )}
             <S.InlinePointer

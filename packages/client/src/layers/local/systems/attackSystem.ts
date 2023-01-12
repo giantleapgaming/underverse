@@ -32,7 +32,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy },
+    components: { Position, OwnedBy, Name },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -114,20 +114,21 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           destinationDetails?.amount
         ) {
           const object = objectPool.get("missile", "Sprite");
-          const blastObject = objectPool.get("explosion", "Sprite");
-          const missileSprite = config.sprites[Sprites.Missile];
+          const missileSprite = config.sprites[Sprites.Missile2];
           const repeatLoop = destinationDetails.amount - 1;
           const images = ["1", "2", "3", "4", "5", "6"];
           const allImg = {} as { [key: string]: string };
           [...getComponentEntities(Name)].forEach(
             (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
           );
-          console.log(allImg);
+          const owndBy = connectedAddress.get() || "";
+
           object.setComponent({
             id: "missileRelease",
             once: (gameObject) => {
-              gameObject.setTexture(missileSprite.assetKey, missileSprite.frame);
-              gameObject.setPosition(source.x, source.y);
+              gameObject.setTexture(missileSprite.assetKey, `missile-${allImg[owndBy]}.png`);
+              gameObject.setPosition(source.x + 32, source.y + 32);
+              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
               phaserScene.add.tween({
                 targets: gameObject,
@@ -147,26 +148,29 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
                 },
                 onRepeat: () => {
                   sounds["missile-launch"].play();
+                  const blastObject = objectPool.get("explosion", "Sprite");
                   blastObject.setComponent({
                     id: "explosionRelease",
                     once: (explosionObject) => {
-                      console.log("repeat x");
-                      explosionObject.setPosition(distraction.x, distraction.y);
+                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setOrigin(0.5, 0.5);
                       explosionObject.play(Animations.Explosion);
                       sounds["explosion"].play();
                     },
                   });
                 },
                 onComplete: () => {
+                  const blastObject = objectPool.get("explosion-end", "Sprite");
                   blastObject.setComponent({
                     id: "explosionRelease",
                     once: (explosionObject) => {
-                      console.log("repeat x");
-                      explosionObject.setPosition(distraction.x, distraction.y);
+                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setOrigin(0.5, 0.5);
                       explosionObject.play(Animations.Explosion);
                       sounds["explosion"].play();
                       explosionObject.on(`animationcomplete-${Animations.Explosion}`, () => {
                         objectPool.remove("explosion");
+                        objectPool.remove("explosion-end");
                       });
                     },
                   });
