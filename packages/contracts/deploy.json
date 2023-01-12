@@ -75,7 +75,8 @@
         "PositionComponent",
         "OffenceComponent",
         "DefenceComponent",
-        "LevelComponent"
+        "LevelComponent",
+        "BalanceComponent"
       ]
     }
   ]

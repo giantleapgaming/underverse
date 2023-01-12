@@ -9,6 +9,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
@@ -83,9 +84,16 @@ contract AttackSystem is System {
     );
 
     if (totalDamage >= destinationDefenceAmount) {
-      // deleteGodown(destinationGodownEntity, components);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(destinationGodownEntity, 0);
-      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationGodownEntity, 0);
+      deleteGodown(destinationGodownEntity, components);
+      // LevelComponent(getAddressById(components, LevelComponentID)).set(destinationGodownEntity, 0);
+      // DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationGodownEntity, 0);
+      // PositionComponent(getAddressById(components, PositionComponentID)).remove(destinationGodownEntity);
+      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).remove(destinationGodownEntity);
+      // OwnedByComponent(getAddressById(components, OwnedByComponentID)).remove(destinationGodownEntity);
+      // OffenceComponent(getAddressById(components, OffenceComponentID)).remove(destinationGodownEntity);
+      // DefenceComponent(getAddressById(components, DefenceComponentID)).remove(destinationGodownEntity);
+      // BalanceComponent(getAddressById(components, BalanceComponentID)).remove(destinationGodownEntity);
+      // LevelComponent(getAddressById(components, LevelComponentID)).remove(destinationGodownEntity);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
         destinationGodownEntity,
