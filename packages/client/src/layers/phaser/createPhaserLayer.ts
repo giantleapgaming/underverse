@@ -1,4 +1,4 @@
-import { createEntity, namespaceWorld, setComponent } from "@latticexyz/recs";
+import { createEntity, EntityID, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
@@ -11,7 +11,7 @@ import {
   ShowSellModal,
   Build,
   Transport,
-  ShowCircleForOwnedBy,
+  ShowCircle,
   TransportCords,
   ShowWeaponModal,
   Attack,
@@ -38,14 +38,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const buildId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
   const modalIndex = createEntity(world);
-  const showCircleForOwnedByIndex = createEntity(world);
+  const showCircleIndex = createEntity(world);
 
   const localIds = {
     buildId,
     progressId,
     stationDetailsEntityIndex,
     modalIndex,
-    showCircleForOwnedByIndex,
+    showCircleIndex,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -57,7 +57,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowUpgradeModal: ShowUpgradeModal(world),
     ShowSellModal: ShowSellModal(world),
     Build: Build(world),
-    ShowCircleForOwnedBy: ShowCircleForOwnedBy(world),
+    ShowCircle: ShowCircle(world),
     TransportCords: TransportCords(world),
     AttackCords: AttackCords(world),
     showWeaponModal: ShowWeaponModal(world),
@@ -85,8 +85,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
-  const shouldShowCircleForOwnedBy = (open: boolean) =>
-    setComponent(components.ShowCircleForOwnedBy, showCircleForOwnedByIndex, { value: open });
+  const shouldShowCircle = (selectedEntities: number[]) =>
+    setComponent(components.ShowCircle, showCircleIndex, { selectedEntities });
 
   const shouldTransport = (
     showModal: boolean,
@@ -148,7 +148,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldBuyModal,
       shouldUpgradeModal,
       shouldSellModal,
-      shouldShowCircleForOwnedBy,
+      shouldShowCircle,
       shouldTransport,
       setTransportCords,
       shouldShowWeaponModal,
