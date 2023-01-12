@@ -1,6 +1,12 @@
 import { Assets, Sprites, Animations } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import {
+  defineComponentSystem,
+  EntityID,
+  EntityIndex,
+  getComponentEntities,
+  getComponentValue,
+} from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 
@@ -111,6 +117,12 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           const blastObject = objectPool.get("explosion", "Sprite");
           const missileSprite = config.sprites[Sprites.Missile];
           const repeatLoop = destinationDetails.amount - 1;
+          const images = ["1", "2", "3", "4", "5", "6"];
+          const allImg = {} as { [key: string]: string };
+          [...getComponentEntities(Name)].forEach(
+            (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
+          );
+          console.log(allImg);
           object.setComponent({
             id: "missileRelease",
             once: (gameObject) => {
