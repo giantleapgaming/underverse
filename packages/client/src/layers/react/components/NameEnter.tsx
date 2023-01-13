@@ -11,42 +11,49 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const [loading, setLoading] = useState(false);
   const {
     network: {
+      components: { Name },
       api: { initSystem },
     },
   } = layers;
+  const allPlayersName = [...getComponentEntities(Name)];
   return (
     <Container>
       <Gif>
         <img src="/img/name.gif" />
       </Gif>
-      <Form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          if (name) {
-            try {
-              setLoading(true);
-              await initSystem(name);
-              setLoading(false);
-            } catch (e) {
-              setLoading(false);
-              console.log("Error", e);
+
+      {allPlayersName.length > 6 ? (
+        <Error>Game is Full</Error>
+      ) : (
+        <Form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            if (name) {
+              try {
+                setLoading(true);
+                await initSystem(name);
+                setLoading(false);
+              } catch (e) {
+                setLoading(false);
+                console.log("Error", e);
+              }
             }
-          }
-        }}
-      >
-        <div>
-          <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
-          <Input
-            onChange={(e) => {
-              setName(e.target.value);
-            }}
-            value={name}
-          />
-        </div>
-        <Button type="submit" disabled={loading}>
-          {loading ? "Loading..." : "GO"}
-        </Button>
-      </Form>
+          }}
+        >
+          <div>
+            <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
+            <Input
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              value={name}
+            />
+          </div>
+          <Button type="submit" disabled={loading}>
+            {loading ? "Loading..." : "GO"}
+          </Button>
+        </Form>
+      )}
     </Container>
   );
 };
@@ -70,6 +77,16 @@ const Gif = styled.div`
   position: absolute;
   align-items: flex-end;
   justify-content: center;
+`;
+
+const Error = styled.h1`
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  position: absolute;
+  bottom: 20px;
 `;
 
 const Container = styled.div`
@@ -98,6 +115,7 @@ const Button = styled.button`
   border-radius: 50%;
   background: transparent;
   margin-top: 29px;
+  cursor: pointer;
 `;
 
 const Input = styled.input`
