@@ -1,15 +1,12 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
-import { EntityID, EntityIndex, getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
+import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { ShowStationDetails } from "../../local/components";
 import { useState } from "react";
-import checkIcon from "/ui/check.png";
 
 const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
-  const [isChecked, setIsChecked] = useState(false);
   const {
     network: {
       world,
@@ -40,7 +37,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
         />
         {showDetails && (
           <S.DetailsContainer>
-            <img src="/ui/ShowAllUsersMenu.png" />
+            <img src="/ui/showAllUsersCogMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
               {allUserNameEntityId.map((nameEntity) => {
@@ -103,7 +100,7 @@ const S = {
 
   List: styled.div`
     position: absolute;
-    top: 100px;
+    top: 85px;
     left: 60px;
     display: flex;
     flex-direction: column;
@@ -120,17 +117,20 @@ const S = {
     -webkit-appearance: none;
     appearance: none;
     /* creating a custom design */
-    width: 1.6em;
-    height: 1.6em;
+    width: 1.9em;
+    height: 1.9em;
     border-radius: 0.15em;
     margin-right: 0.5em;
-    border: 0.15em solid #007a7e;
+    border: 0.15em solid #00fde4;
     outline: none;
     cursor: pointer;
 
     :checked {
-      background-color: #007a7e;
+      background-image: url("/ui/check.png");
       position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     :checked::before {
@@ -143,8 +143,8 @@ const S = {
   `,
 
   PLayerName: styled.p`
-    color: white;
-    font-size: large;
+    color: #fff;
+    font-size: 24px;
   `,
 };
 

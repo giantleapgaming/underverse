@@ -154,7 +154,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 >
                   <img src="/button/orange-b.png" />
-                  <S.DeployText>Upgrade</S.DeployText>
+                  <S.DeployText>UPGRADE</S.DeployText>
                 </S.InlinePointer>
 
                 <S.InlinePointer

@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { getComponentEntities } from "@latticexyz/recs";
