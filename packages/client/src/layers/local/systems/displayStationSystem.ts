@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Sprites } from "../../phaser/constants";
+import { Animations, Sprites } from "../../phaser/constants";
 
 export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
+    sounds,
     scenes: {
       Main: {
         objectPool,
@@ -26,7 +28,30 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     world,
     [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence), Has(Defence)],
     ({ entity }) => {
+      // @ts-ignore
+      const updateProgressBarBg = phaserScene.children
+        .getChildren()
+        .find((item) => item.id === `progressBar-${entity}`)
+        ?.clear();
+      // @ts-ignore
+      const updateProgressBar = phaserScene.children
+        .getChildren()
+        .find((item) => item.id === `progressBarBg-${entity}`)
+        ?.clear();
+      const progressBar = updateProgressBar ?? phaserScene.add.graphics();
+      const progressBarBg = updateProgressBarBg ?? phaserScene.add.graphics();
+      !updateProgressBar &&
+        Object.defineProperty(progressBar, "id", {
+          value: `progressBar-${entity}`,
+          writable: true,
+        });
+      !updateProgressBarBg &&
+        Object.defineProperty(progressBarBg, "id", {
+          value: `progressBarBg-${entity}`,
+          writable: true,
+        });
       const images = ["1", "2", "3", "4", "5", "6"];
+      const colors = ["85C1E9", "A569BD", "F4D03F", "229954", "566573", "EC7063"];
       const allImg = {} as { [key: string]: string };
       [...getComponentEntities(Name)].forEach(
         (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
@@ -41,6 +66,20 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         const object = objectPool.get(entity, "Sprite");
         const owndBy = getComponentValue(OwnedBy, entity)?.value;
         if (owndBy) {
+          if (level && defence?.value && +defence.value) {
+            const progress = +defence.value / (+level * 100);
+            const endAngle = Phaser.Math.DegToRad(360 * progress);
+            progressBarBg.lineStyle(6, 0xd3d3d3, 1);
+            progressBarBg.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), 360);
+            progressBarBg.setAlpha(0.1);
+            progressBarBg.setDepth(99);
+            progressBarBg.strokePath();
+            progressBar.setAlpha(0.4);
+            progressBar.lineStyle(6, +`0x${colors[+allImg[owndBy] - 1]}`, 1);
+            progressBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
+            progressBar.strokePath();
+            progressBar.setDepth(100);
+          }
           const sprit = config.sprites[Sprites.Station110];
           object.setComponent({
             id: `${entity}`,
@@ -84,6 +123,9 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             objectPool.remove(`group-missile-${entity}`);
           }
         }
+      } else {
+        updateProgressBarBg.clear();
+        updateProgressBar.clear();
       }
     }
   );
