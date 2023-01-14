@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
+import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
 const WalletLogin = () => {
   const [input, setInput] = useState("");
@@ -39,144 +40,165 @@ const WalletLogin = () => {
           }
         }}
       >
-        <AnimatedGradientText>Welcome to Underverse</AnimatedGradientText>
-        <div>
+        <WalletText>
           {allKeys.length && (
             <div>
-              <P>Existing Account</P>
+              <div>
+                <P style={{ fontWeight: "bold", marginBottom: "25px", fontSize: "18px" }}>
+                  Create a New Account
+                  <br />
+                  or Use Existing
+                </P>
+              </div>
+              <div>
+                <P>
+                  i. Import Wallet <br />
+                  Private Key
+                </P>
+                <P style={{ marginBottom: "25px" }}>
+                  n. Create New
+                  <br /> Wallet
+                </P>
+              </div>
+
+              <P style={{ marginBottom: "10px" }}>Existing Account/s</P>
               {allKeys.map((pk: string, index: number) => {
                 const wallet = new Wallet(pk);
                 const address = wallet.address;
                 return (
                   <P key={pk}>
-                    {index + 1}. {address}
+                    {index + 1}. {walletAddressLoginDisplay(address)}
                   </P>
                 );
               })}
             </div>
           )}
-          <P>
-            i. import wallet private key
-            <br />
-            n. create new wallet
-          </P>
-        </div>
+        </WalletText>
         <TerminalOutput>{output}</TerminalOutput>
-        <div>
-          {!privateKey.show && !playGame && !loading && (
-            <Input
-              ref={inputRef}
-              value={input}
-              onKeyDown={async (e) => {
-                setError("");
-                if (e.key === "Enter") {
-                  switch (input) {
-                    case "i": {
-                      setOutput(`${output} \n $ Enter the private key which as xDAI in it \n `);
-                      setInput("");
-                      setPrivetKey({ show: true, input: "" });
-                      return;
-                    }
-                    case "n": {
-                      const wallet = Wallet.createRandom();
-                      try {
-                        setLoading(true);
-                        setOutput(`${output} \n $ Creating new wallet please wait  \n  Loading... \n`);
-                        const response = await fetch("https://api.paperdao.money/api/drip", {
-                          method: "POST",
-                          body: JSON.stringify({ address: wallet.address }),
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                        });
-                        const data = await response.json();
-                        if (data.status) {
-                          sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                          setOutput(
-                            `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
-                          );
-                          if (!allKeys.includes(wallet.privateKey)) {
-                            const newList = [...allKeys, wallet.privateKey];
-                            localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                          }
-                          setPlayGame(true);
-                          setTimeout(() => {
-                            buttonRef.current?.focus();
+        <InputBox>
+          {!playGame && !loading && <div style={{ marginRight: "10px", fontWeight: "bold" }}>INPUT |</div>}
+          <div>
+            {!privateKey.show && !playGame && !loading && (
+              <Input
+                ref={inputRef}
+                value={input}
+                onKeyDown={async (e) => {
+                  setError("");
+                  if (e.key === "Enter") {
+                    switch (input) {
+                      case "i": {
+                        setOutput(`${output} \n $ Enter the private key which as xDAI in it \n `);
+                        setInput("");
+                        setPrivetKey({ show: true, input: "" });
+                        return;
+                      }
+                      case "n": {
+                        const wallet = Wallet.createRandom();
+                        try {
+                          setLoading(true);
+                          setOutput(`${output} \n $ Creating new wallet please wait  \n  Loading... \n`);
+                          const response = await fetch("https://api.paperdao.money/api/drip", {
+                            method: "POST",
+                            body: JSON.stringify({ address: wallet.address }),
+                            headers: {
+                              "Content-Type": "application/json",
+                            },
                           });
+                          const data = await response.json();
+                          if (data.status) {
+                            sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                            setOutput(
+                              `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
+                            );
+                            if (!allKeys.includes(wallet.privateKey)) {
+                              const newList = [...allKeys, wallet.privateKey];
+                              localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                            }
+                            setPlayGame(true);
+                            setTimeout(() => {
+                              buttonRef.current?.focus();
+                            });
+                          }
+                        } catch (e) {
+                          console.log(e);
+                          setError("unexpected error");
+                          setLoading(false);
                         }
-                      } catch (e) {
-                        console.log(e);
-                        setError("unexpected error");
-                        setLoading(false);
+                        return;
+                      }
+                    }
+                    if (typeof +input === "number") {
+                      const getWalletIndex = +input;
+                      const privateKey = allKeys[getWalletIndex - 1];
+                      if (privateKey) {
+                        const wallet = new Wallet(privateKey);
+                        const address = wallet.address;
+                        sessionStorage.setItem("user-burner-wallet", privateKey);
+                        setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
+                        setPlayGame(true);
+                        setTimeout(() => {
+                          buttonRef.current?.focus();
+                        });
+                      } else {
+                        setError("Please Enter a valid Input");
                       }
                       return;
                     }
                   }
-                  if (typeof +input === "number") {
-                    const getWalletIndex = +input;
-                    const privateKey = allKeys[getWalletIndex - 1];
-                    if (privateKey) {
-                      const wallet = new Wallet(privateKey);
+                }}
+                onChange={(e) => setInput(e.target.value)}
+              />
+            )}
+            {privateKey.show && (
+              <Input
+                ref={pkRef}
+                value={privateKey.input}
+                onKeyDown={(e) => {
+                  setError("");
+
+                  if (e.key === "Enter") {
+                    try {
+                      const wallet = new Wallet(privateKey.input);
                       const address = wallet.address;
-                      sessionStorage.setItem("user-burner-wallet", privateKey);
+                      sessionStorage.setItem("user-burner-wallet", privateKey.input);
                       setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
+                      if (!allKeys.includes(wallet.privateKey)) {
+                        const newList = [...allKeys, privateKey.input];
+                        localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                      }
+                      setPrivetKey({ show: false, input: "" });
                       setPlayGame(true);
                       setTimeout(() => {
                         buttonRef.current?.focus();
                       });
-                    } else {
-                      setError("Please Enter a valid Input");
+                    } catch (e) {
+                      setError("Enter a valid private key");
                     }
-                    return;
                   }
-                }
-              }}
-              onChange={(e) => setInput(e.target.value)}
-            />
-          )}
-          {privateKey.show && (
-            <Input
-              ref={pkRef}
-              value={privateKey.input}
-              onKeyDown={(e) => {
-                setError("");
-
-                if (e.key === "Enter") {
-                  try {
-                    const wallet = new Wallet(privateKey.input);
-                    const address = wallet.address;
-                    sessionStorage.setItem("user-burner-wallet", privateKey.input);
-                    setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                    if (!allKeys.includes(wallet.privateKey)) {
-                      const newList = [...allKeys, privateKey.input];
-                      localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                    }
-                    setPrivetKey({ show: false, input: "" });
-                    setPlayGame(true);
-                    setTimeout(() => {
-                      buttonRef.current?.focus();
-                    });
-                  } catch (e) {
-                    setError("Enter a valid private key");
-                  }
-                }
-              }}
-              onChange={(e) => setPrivetKey({ show: true, input: e.target.value })}
-            />
-          )}
-          {error && <Error>{error}</Error>}
-          <Button ref={buttonRef} hidden={!playGame} type="submit">
-            Enter &crarr;{" "}
-          </Button>
-        </div>
+                }}
+                onChange={(e) => setPrivetKey({ show: true, input: e.target.value })}
+              />
+            )}
+            {error && <Error>{error}</Error>}
+            <Button ref={buttonRef} hidden={!playGame} type="submit">
+              Enter &crarr;{" "}
+            </Button>
+          </div>
+        </InputBox>
       </form>
     </Container>
   );
 };
 const Container = styled.div`
-  height: 100vh;
-  background: black;
-  padding: 100px;
+  width: 100%;
+  height: 100%;
+  z-index: 50;
+  background-image: url("/img/WalletLoginScreenBG.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  pointer-events: all;
+  overflow: hidden;
 `;
 const hue = keyframes`
  from {
@@ -186,28 +208,21 @@ const hue = keyframes`
    -webkit-filter: hue-rotate(-360deg);
  }
 `;
-const AnimatedGradientText = styled.h1`
-  color: #33aadd;
-  background-image: -webkit-linear-gradient(92deg, #fbd811, #0feb1a);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -webkit-animation: ${hue} 10s infinite linear;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol";
-  font-feature-settings: "kern";
-  font-size: 30px;
-  font-weight: 700;
-  line-height: 48px;
-  overflow-wrap: break-word;
-  text-rendering: optimizelegibility;
-  -moz-osx-font-smoothing: grayscale;
+const WalletText = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 60px;
+  margin: 200px auto 0;
+  z-index: 100;
 `;
 const P = styled.p`
-  color: wheat;
+  color: #fffdd5;
   margin-top: 10px;
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
+  font-weight: 300;
+  font-size: 16px;
+  margin-bottom: 10px;
 `;
 const Error = styled.p`
   color: #ef0909;
@@ -217,31 +232,40 @@ const Error = styled.p`
   margin-bottom: 20px;
 `;
 const TerminalOutput = styled.div`
-  color: wheat;
-  font-weight: 600;
-  font-size: 20px;
-  margin-bottom: 20px;
+  color: #fffdd5;
+  font-weight: 300;
+  font-size: 16px;
+  margin-bottom: 10px;
   white-space: pre-line;
+  text-align: center;
+`;
+
+const InputBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: #fffdd5;
 `;
 const Input = styled.input`
   margin-top: 30px;
-  font-size: 30;
+  margin-right: 10px;
+  font-size: 16px;
   border: none;
   outline: none;
   margin: 0;
-  background-color: 0;
-  color: wheat;
-  font-weight: 800;
-  width: 100%;
+  background-color: transparent;
+  color: #fffdd5;
+  font-weight: 600;
+  width: 300px;
 `;
 const Button = styled.button`
-  background: rgba(149, 200, 30, 0.4);
-  font-size: 30px;
-  color: wheat;
-  border-radius: 10px;
-  padding: 10px 20px;
-  font-weight: 800;
-  margin-top: 10px;
-  box-shadow: rgba(149, 200, 30, 0.4) 5px 5px, rgba(185, 196, 29, 0.3) 10px 10px, rgba(95, 133, 42, 0.2) 15px 15px;
+  font-size: 18px;
+  color: #fffdd5;
+  font-weight: bold;
+  background: none;
+  outline: none;
+  border: none;
+  cursor: pointer;
 `;
 export default WalletLogin;
