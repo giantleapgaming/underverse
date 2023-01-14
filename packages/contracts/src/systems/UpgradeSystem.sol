@@ -36,7 +36,7 @@ contract UpgradeSystem is System {
 
     require(selectedEntityLevel >= 1, "Invalid entity");
 
-    require(selectedEntityLevel <= 10, "Maximum level reached");
+    require(selectedEntityLevel < 8, "Maximum level reached");
 
     uint256 nextLevel = selectedEntityLevel + 1;
 

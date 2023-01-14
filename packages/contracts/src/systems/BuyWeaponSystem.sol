@@ -64,7 +64,7 @@ contract BuyWeaponSystem is System {
         (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
       );
 
-    uint256 totalPriceRaw = ((10000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
+    uint256 totalPriceRaw = ((1000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
 
     // uint256 totalPrice = totalPriceRaw * MULTIPLIER2;
 
