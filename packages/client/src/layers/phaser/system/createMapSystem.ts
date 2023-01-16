@@ -99,6 +99,15 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       gameObject.setPosition(32, 32);
       gameObject.setOrigin(0.5, 0.5);
       gameObject.setDepth(10);
+      phaserScene.add.tween({
+        targets: gameObject,
+        angle: 360,
+        duration: 4500000,
+        ease: "circular",
+        repeat: -1,
+        yoyo: false,
+        rotation: 360,
+      });
     },
   });
   camera.phaserCamera.setBounds(-2000, -2000, 4200, 4200, true);
