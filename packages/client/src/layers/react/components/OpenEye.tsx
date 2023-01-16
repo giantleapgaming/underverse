@@ -3,7 +3,8 @@ import { registerUIComponent } from "../engine";
 import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { coordsOf } from "@latticexyz/utils";
 
 const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -28,7 +29,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
     return (
       <S.Container>
         <img
-          style={{ zIndex: 10 }}
+          style={{ zIndex: 10, cursor: "pointer" }}
           src="/ui/Cog.png"
           onClick={() => {
             sounds["click"].play();
@@ -45,12 +46,12 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
                 const owner = world.entities[nameEntity] === userEntityId;
                 const indexOf = selectedEntities.indexOf(nameEntity);
                 const exists = selectedEntities.some((entity) => entity === nameEntity);
-
                 return (
                   <S.Player key={nameEntity}>
                     <S.CheckBox
                       type="checkbox"
                       className={exists ? "checked" : ""}
+                      checked={exists}
                       onChange={() => {
                         if (!exists) {
                           const list = [...selectedEntities, nameEntity];

@@ -47,13 +47,11 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
         const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
         const nameEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-        console.log(nameEntities);
 
         const ownedByEntityId = world.entities.indexOf(ownedBy as EntityID) as EntityIndex;
         const positionName = getComponentValue(Name, ownedByEntityId)?.value;
         const showSelected = nameEntities.some((entity) => {
           const name = getComponentValue(Name, entity as EntityIndex)?.value;
-          console.log({ positionName, name });
           if (positionName == name) {
             return true;
           } else {
