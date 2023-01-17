@@ -120,16 +120,16 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       );
     }
   });
-  if (phaserScene.input.activePointer.pointerId === -1) {
-    phaserScene.input.on("wheel", (event: { deltaY: number }) => {
-      let zoom = camera.phaserCamera.zoom;
-      if (event.deltaY > 0) {
-        zoom -= 0.1;
-      } else {
-        zoom += 0.1;
-      }
-      camera.phaserCamera.setZoom(zoom);
-    });
-  }
+  // if (phaserScene.input.activePointer.pointerId === -1) {
+  //   phaserScene.input.on("wheel", (event: { deltaY: number }) => {
+  //     let zoom = camera.phaserCamera.zoom;
+  //     if (event.deltaY > 0) {
+  //       zoom -= 0.1;
+  //     } else {
+  //       zoom += 0.1;
+  //     }
+  //     camera.phaserCamera.setZoom(zoom);
+  //   });
+  // }
   camera.phaserCamera.setBounds(-2000, -2000, 4200, 4200, true);
 }
