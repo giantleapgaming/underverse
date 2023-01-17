@@ -8,6 +8,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     scenes: {
       Main: {
         camera,
+        input,
         objectPool,
         config,
         phaserScene,
@@ -109,6 +110,15 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         rotation: 360,
       });
     },
+  });
+
+  input.pointermove$.subscribe(({ pointer }) => {
+    if (pointer.isDown) {
+      camera.setScroll(
+        camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,
+        camera.phaserCamera.scrollY - (pointer.y - pointer.prevPosition.y) / camera.phaserCamera.zoom
+      );
+    }
   });
   camera.phaserCamera.setBounds(-2000, -2000, 4200, 4200, true);
 }
