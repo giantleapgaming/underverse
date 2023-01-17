@@ -122,7 +122,8 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
 
   phaserScene.input.on("wheel", (event: { deltaY: number }) => {
-    if (Math.abs(event.deltaY) > 300) {
+    console.log("deltaY: ", event.deltaY);
+    if (Math.abs(event.deltaY) > 250) {
       let zoom = camera.phaserCamera.zoom;
       if (event.deltaY > 0) {
         zoom -= 0.1;
