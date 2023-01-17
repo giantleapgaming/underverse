@@ -8,6 +8,7 @@ import { coordsOf } from "@latticexyz/utils";
 
 const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
+
   const {
     network: {
       world,
@@ -24,6 +25,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
   const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
+  const allColors = ["#85C1E9", "#A569BD", "#F4D03F", "#229954", "#566573", "#EC7063"];
 
   if (userEntityId) {
     return (
@@ -41,7 +43,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
             <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
-              {allUserNameEntityId.map((nameEntity) => {
+              {allUserNameEntityId.map((nameEntity, index) => {
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
                 const owner = world.entities[nameEntity] === userEntityId;
@@ -64,11 +66,10 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
                         }
                       }}
                     ></S.CheckBox>
-                    <S.PLayerName>
+                    <S.PLayerName style={{ color: allColors[index] }}>
                       {owner ? "Owned" : name?.value}
                       <br />
-                      <S.Cash>
-                        (
+                      <S.Cash style={{ color: "white" }}>
                         {cash &&
                           new Intl.NumberFormat("en-US", {
                             style: "currency",
@@ -76,7 +77,6 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 0,
                           }).format(+cash / 1_000_000)}
-                        )
                       </S.Cash>
                     </S.PLayerName>
                   </S.Player>
@@ -133,11 +133,11 @@ const S = {
     -webkit-appearance: none;
     appearance: none;
     /* creating a custom design */
-    width: 1.9em;
-    height: 1.9em;
+    width: 2.8em;
+    height: 2.8em;
     border-radius: 0.15em;
     margin-right: 0.5em;
-    border: 0.15em solid #00fde4;
+    border: 0.4em solid #00fde4;
     outline: none;
     cursor: pointer;
 
@@ -159,12 +159,13 @@ const S = {
   `,
 
   PLayerName: styled.p`
-    color: #fff;
-    font-size: 22px;
+    font-size: 18px;
+    font-weight: 700;
   `,
 
-  Cash: styled.p`
-    font-size: 14px;
+  Cash: styled.span`
+    font-size: 18px;
+    font-weight: bold;
     text-align: center;
   `,
 };
