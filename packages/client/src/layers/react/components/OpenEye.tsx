@@ -11,7 +11,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name },
+      components: { Name, Cash },
       network: { connectedAddress },
     },
     phaser: {
@@ -38,11 +38,12 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
         />
         {showDetails && (
           <S.DetailsContainer>
-            <img src="/ui/showAllUsersCogMenu.png" />
+            <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
               {allUserNameEntityId.map((nameEntity) => {
                 const name = getComponentValue(Name, nameEntity);
+                const cash = getComponentValue(Cash, nameEntity)?.value;
                 const owner = world.entities[nameEntity] === userEntityId;
                 const indexOf = selectedEntities.indexOf(nameEntity);
                 const exists = selectedEntities.some((entity) => entity === nameEntity);
@@ -63,7 +64,21 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
                         }
                       }}
                     ></S.CheckBox>
-                    <S.PLayerName>{owner ? "Owned" : name?.value} </S.PLayerName>
+                    <S.PLayerName>
+                      {owner ? "Owned" : name?.value}
+                      <br />
+                      <S.Cash>
+                        (
+                        {cash &&
+                          new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(+cash / 1_000_000)}
+                        )
+                      </S.Cash>
+                    </S.PLayerName>
                   </S.Player>
                 );
               })}
@@ -84,14 +99,14 @@ const S = {
     flex-direction: column;
     align-items: flex-end;
     justify-content: flex-end;
-    padding-right: 15px;
+    padding-right: 10px;
   `,
 
   HighLight: styled.h2`
     color: white;
     position: absolute;
     top: 30px;
-    left: 50px;
+    left: 60px;
   `,
 
   DetailsContainer: styled.div`
@@ -101,15 +116,15 @@ const S = {
 
   List: styled.div`
     position: absolute;
-    top: 85px;
-    left: 60px;
+    top: 80px;
+    left: 70px;
     display: flex;
     flex-direction: column;
     gap: 20px;
   `,
   Player: styled.div`
     display: flex;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
     justify-content: flex-start;
   `,
@@ -145,7 +160,12 @@ const S = {
 
   PLayerName: styled.p`
     color: #fff;
-    font-size: 24px;
+    font-size: 22px;
+  `,
+
+  Cash: styled.p`
+    font-size: 14px;
+    text-align: center;
   `,
 };
 
