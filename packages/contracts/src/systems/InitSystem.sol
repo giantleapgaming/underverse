@@ -20,7 +20,7 @@ contract InitSystem is System {
     string memory name = abi.decode(arguments, (string));
 
     require(registeredPlayers[msg.sender] == false, "Player already registered");
-    require(playerCount < 6, "Overlimit! Max 6 players allowed");
+    require(playerCount < 7, "Overlimit! Max 6 players allowed");
 
     CashComponent(getAddressById(components, CashComponentID)).set(addressToEntity(msg.sender), playerInitialCash);
 

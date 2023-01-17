@@ -66,7 +66,7 @@ contract AttackSystem is System {
 
     // distanceBetweenGodowns is 25806 for (15,9) and (30,30)
     // uint256 totalDamage = (amount * 500 * MULTIPLIER2) / distanceBetweenGodowns;
-    uint256 totalDamage = amount * ((500 * MULTIPLIER2) / distanceBetweenGodowns);
+    uint256 totalDamage = amount * ((250 * MULTIPLIER2) / distanceBetweenGodowns);
     // uint256 totalDamage = 101;
 
     // reduce balance of weapons of source godown by the amount used up,
