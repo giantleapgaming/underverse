@@ -49,22 +49,24 @@ contract BuyWeaponSystem is System {
       "Provided weapon quantity is more than available godown limit"
     );
 
-    Coord memory godownPosition = getCurrentPosition(
-      PositionComponent(getAddressById(components, PositionComponentID)),
-      godownEntity
-    );
-
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
       addressToEntity(msg.sender)
     );
 
-    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-      uint256(
-        (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
-      );
+    // UNCOMMENT BELOW FOR old formula which was : 1000 / d
+    // Coord memory godownPosition = getCurrentPosition(
+    //   PositionComponent(getAddressById(components, PositionComponentID)),
+    //   godownEntity
+    // );
+    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    //   uint256(
+    //     (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
+    //   );
+    // uint256 totalPriceRaw = ((1000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
 
-    uint256 totalPriceRaw = ((1000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
+    // BUT NOW - its just 1000. Same price at any cell
+    uint256 totalPriceRaw = 1000 * MULTIPLIER;
 
     // uint256 totalPrice = totalPriceRaw * MULTIPLIER2;
 
