@@ -197,14 +197,14 @@ const WalletLogin = () => {
 };
 const Container = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   z-index: 50;
   background-image: url("/img/bgWithoutSkyLines.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
-  overflow-y: auto;
+  overflow-y: hidden;
 `;
 
 const SkyBlueLines = styled.div`
