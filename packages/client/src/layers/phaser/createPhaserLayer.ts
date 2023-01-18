@@ -26,7 +26,7 @@ import {
   showUserStations,
 } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
-import { systemInit } from "../local/stream-system";
+import { systemBuild, systemInit } from "../local/stream-system";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -179,5 +179,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   showUserStations(network, context);
   attackSystem(network, context);
   systemInit(network, context);
+  systemBuild(network, context);
+
   return context;
 }
