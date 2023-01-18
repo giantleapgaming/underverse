@@ -13,8 +13,8 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
     localApi: { setLogs },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Upgrade"], ({ args }) => {
-    const { godownEntity } = args as { godownEntity: BigNumber };
-    const godownEntityIndex = world.entities.findIndex((entity) => entity === godownEntity._hex) as EntityIndex;
+    const { entity } = args as { entity: BigNumber };
+    const godownEntityIndex = world.entities.findIndex((worldEntity) => worldEntity === entity._hex) as EntityIndex;
     const position = getComponentValue(Position, godownEntityIndex);
     const level = getComponentValue(Level, godownEntityIndex)?.value;
     const ownedBy = getComponentValue(OwnedBy, godownEntityIndex)?.value;
