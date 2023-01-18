@@ -120,19 +120,4 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       );
     }
   });
-
-  phaserScene.input.on("wheel", (event: { deltaY: number }) => {
-    console.log("deltaY: ", event.deltaY);
-    if (Math.abs(event.deltaY) > 250) {
-      let zoom = camera.phaserCamera.zoom;
-      if (event.deltaY > 0) {
-        zoom -= 0.1;
-      } else {
-        zoom += 0.1;
-      }
-      camera.phaserCamera.setZoom(zoom);
-    }
-  });
-
-  camera.phaserCamera.setBounds(-2000, -2000, 4200, 4200, true);
 }
