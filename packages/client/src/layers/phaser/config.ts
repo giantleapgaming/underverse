@@ -1079,11 +1079,10 @@ export const phaserConfig = {
     mode: Phaser.Scale.NONE,
   }),
   cameraConfig: defineCameraConfig({
-    phaserSelector: "phaser-game",
     pinchSpeed: 1,
     wheelSpeed: 1,
     maxZoom: 2,
-    minZoom: 0.4,
+    minZoom: 0.1,
   }),
   cullingChunkSize: TILE_HEIGHT * 64,
 };
