@@ -105,3 +105,13 @@ export const AttackCords = (world: World) => {
     { id: "AttackCords" }
   );
 };
+
+export const Logs = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      logStrings: Type.StringArray,
+    },
+    { id: "Logs" }
+  );
+};

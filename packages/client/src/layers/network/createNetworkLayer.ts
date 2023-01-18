@@ -71,7 +71,7 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   // --- SETUP ----------------------------------------------------------------------
-  const { txQueue, systems, txReduced$, network, startSync, encoders, systemCallStreams } = await setupMUDNetwork<
+  const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
     typeof components,
     SystemTypes
   >(getNetworkConfig(config), world, components, SystemAbis, {

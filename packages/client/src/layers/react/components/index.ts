@@ -1,9 +1,6 @@
-import { registerComponentBrowser } from "./ComponentBrowser";
-import { registerActionQueue } from "./ActionQueue";
 import { registerLoadingState } from "./LoadingState";
 import { registerNameScreen } from "./NameEnter";
 import { registerPlayerDetails } from "./PlayerDetails";
-import { registerProgressBar } from "./ProgressBar";
 import { registerSystemDetailsComponent } from "./SystemDetails";
 import { registerBuy } from "./BuySystem";
 import { registerUpgrade } from "./UpgradeSystem";
@@ -13,10 +10,9 @@ import { registerTransport } from "./TransportSystem";
 import { registerWeaponDetails } from "./WeaponSystem";
 import { registerAttackDetails } from "./AttackSystem";
 import { registerBgScreen } from "./GameBg";
+import { registerLogs } from "./LogsSystem";
 export function registerUIComponents() {
   registerNameScreen();
-  // registerComponentBrowser();
-  // registerProgressBar();
   registerPlayerDetails();
   registerLoadingState();
   registerSystemDetailsComponent();
@@ -28,5 +24,5 @@ export function registerUIComponents() {
   registerWeaponDetails();
   registerAttackDetails();
   registerBgScreen();
-  // registerActionQueue();
+  registerLogs();
 }
