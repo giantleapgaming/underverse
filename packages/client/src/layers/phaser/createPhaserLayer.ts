@@ -27,6 +27,7 @@ import {
 } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
 import {
+  systemAttack,
   systemBuild,
   systemBuy,
   systemBuyWeapon,
@@ -193,5 +194,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemBuy(network, context);
   systemSell(network, context);
   systemTransport(network, context);
+  systemAttack(network, context);
   return context;
 }

@@ -13,7 +13,6 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
     localApi: { setLogs },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Transport"], ({ args }) => {
-    console.log(args);
     const { destinationGodownEntity, sourceGodownEntity, kgs } = args as {
       destinationGodownEntity: BigNumber;
       sourceGodownEntity: BigNumber;
