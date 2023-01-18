@@ -147,6 +147,7 @@ const S = {
       display: flex;
       justify-content: center;
       align-items: center;
+      background-repeat: no-repeat;
     }
 
     :checked::before {
