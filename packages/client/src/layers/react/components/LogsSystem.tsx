@@ -10,13 +10,13 @@ const LogBox = ({ layers }: { layers: Layers }) => {
       localIds: { modalIndex },
     },
   } = layers;
-
   const logs = getComponentValue(Logs, modalIndex)?.logStrings ?? [];
   return (
-    <div style={{ zIndex: 10, padding: "10px", width: "100%" }}>
-      <p>Log systems</p>
-      {logs.map((i) => (
-        <p key={i}>{i}</p>
+    <div style={{ zIndex: 10, padding: "10px", width: "100%", overflowY: "auto" }}>
+      {logs.reverse().map((i) => (
+        <p style={{ opacity: 0.7 }} key={i}>
+          {i}
+        </p>
       ))}
     </div>
   );
@@ -27,7 +27,7 @@ export const registerLogs = () => {
     "LogsSystem",
     {
       colStart: 1,
-      colEnd: 4,
+      colEnd: 5,
       rowStart: 10,
       rowEnd: 12,
     },
