@@ -20,7 +20,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
 
   const object = objectPool.get(`centerSun`, "Sprite");
-  const { x, y } = tileCoordToPixelCoord({ x: -1, y: -1 }, tileWidth, tileHeight);
   const circle1 = phaserScene.add.circle(32, 32);
   const label1 = phaserScene.add.text(32, -128, "5", { fontSize: "24px", color: "#c0c0c0" });
   const circle2 = phaserScene.add.circle(32, 32);
@@ -120,4 +119,5 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       );
     }
   });
+  camera.centerOn(0, -1);
 }
