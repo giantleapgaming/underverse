@@ -20,6 +20,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
 
   const object = objectPool.get(`centerSun`, "Sprite");
+
   const circle1 = phaserScene.add.circle(32, 32);
   const label1 = phaserScene.add.text(32, -320, "5", {
     fontSize: "24px",
@@ -67,6 +68,56 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
   const circle10 = phaserScene.add.circle(32, 32);
   const label10 = phaserScene.add.text(32, -3200, "50", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle11 = phaserScene.add.circle(32, 32);
+  const label11 = phaserScene.add.text(32, -3520, "55", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle12 = phaserScene.add.circle(32, 32);
+  const label12 = phaserScene.add.text(32, -3840, "60", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle13 = phaserScene.add.circle(32, 32);
+  const label13 = phaserScene.add.text(32, -4160, "65", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle14 = phaserScene.add.circle(32, 32);
+  const label14 = phaserScene.add.text(32, -4480, "70", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle15 = phaserScene.add.circle(32, 32);
+  const label15 = phaserScene.add.text(32, -4800, "75", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle16 = phaserScene.add.circle(32, 32);
+  const label16 = phaserScene.add.text(32, -5120, "80", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle17 = phaserScene.add.circle(32, 32);
+  const label17 = phaserScene.add.text(32, -5440, "85", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle18 = phaserScene.add.circle(32, 32);
+  const label18 = phaserScene.add.text(32, -5760, "90", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle19 = phaserScene.add.circle(32, 32);
+  const label19 = phaserScene.add.text(32, -6080, "95", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+  const circle20 = phaserScene.add.circle(32, 32);
+  const label20 = phaserScene.add.text(32, -6400, "100", {
     fontSize: "24px",
     color: "#c0c0c0",
   });
@@ -120,6 +171,56 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   circle10.setDisplaySize(6464, 6464);
   label10.setOrigin(0.5, 0.5);
   label10.setDepth(20);
+
+  circle11.setStrokeStyle(0.2, 0x2d2d36);
+  circle11.setDisplaySize(7104, 7104);
+  label11.setOrigin(0.5, 0.5);
+  label11.setDepth(20);
+
+  circle12.setStrokeStyle(0.2, 0x2d2d36);
+  circle12.setDisplaySize(7744, 7744);
+  label12.setOrigin(0.5, 0.5);
+  label12.setDepth(20);
+
+  circle13.setStrokeStyle(0.2, 0x2d2d36);
+  circle13.setDisplaySize(8384, 8384);
+  label13.setOrigin(0.5, 0.5);
+  label13.setDepth(20);
+
+  circle14.setStrokeStyle(0.2, 0x2d2d36);
+  circle14.setDisplaySize(9024, 9024);
+  label14.setOrigin(0.5, 0.5);
+  label14.setDepth(20);
+
+  circle15.setStrokeStyle(0.2, 0x2d2d36);
+  circle15.setDisplaySize(9664, 9664);
+  label15.setOrigin(0.5, 0.5);
+  label15.setDepth(20);
+
+  circle16.setStrokeStyle(0.2, 0x2d2d36);
+  circle16.setDisplaySize(10304, 10304);
+  label16.setOrigin(0.5, 0.5);
+  label16.setDepth(20);
+
+  circle17.setStrokeStyle(0.2, 0x2d2d36);
+  circle17.setDisplaySize(10944, 10944);
+  label17.setOrigin(0.5, 0.5);
+  label17.setDepth(20);
+
+  circle18.setStrokeStyle(0.2, 0x2d2d36);
+  circle18.setDisplaySize(11584, 11584);
+  label18.setOrigin(0.5, 0.5);
+  label18.setDepth(20);
+
+  circle19.setStrokeStyle(0.2, 0x2d2d36);
+  circle19.setDisplaySize(12224, 12224);
+  label19.setOrigin(0.5, 0.5);
+  label19.setDepth(20);
+
+  circle20.setStrokeStyle(0.2, 0x2d2d36);
+  circle20.setDisplaySize(12864, 12864);
+  label20.setOrigin(0.5, 0.5);
+  label20.setDepth(20);
 
   const centerSun = config.sprites[Sprites.Sun];
   object.setComponent({
