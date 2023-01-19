@@ -29,7 +29,7 @@ contract UpgradeSystem is System {
 
     require(
       playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 10 seconds of delay between actions"
+      "Need 0 seconds of delay between actions"
     );
 
     uint256 selectedEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(entity);

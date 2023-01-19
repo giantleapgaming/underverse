@@ -31,8 +31,18 @@ contract AttackSystem is System {
 
     require(
       playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 10 seconds of delay between actions"
+      "Need 0 seconds of delay between actions"
     );
+
+    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+      sourceGodownEntity
+    );
+    require(sourceGodownLevel >= 1, "Invalid Source godown entity");
+
+    uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+      destinationGodownEntity
+    );
+    require(destinationGodownLevel >= 1, "Invalid Destination godown entity");
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
@@ -87,13 +97,11 @@ contract AttackSystem is System {
       deleteGodown(destinationGodownEntity, components);
       // LevelComponent(getAddressById(components, LevelComponentID)).set(destinationGodownEntity, 0);
       // DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationGodownEntity, 0);
+      // OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationGodownEntity, 0);
+      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationGodownEntity, 0);
+      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
+      //   .set(destinationGodownEntity,block.timestamp);
       // PositionComponent(getAddressById(components, PositionComponentID)).remove(destinationGodownEntity);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).remove(destinationGodownEntity);
-      // OwnedByComponent(getAddressById(components, OwnedByComponentID)).remove(destinationGodownEntity);
-      // OffenceComponent(getAddressById(components, OffenceComponentID)).remove(destinationGodownEntity);
-      // DefenceComponent(getAddressById(components, DefenceComponentID)).remove(destinationGodownEntity);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).remove(destinationGodownEntity);
-      // LevelComponent(getAddressById(components, LevelComponentID)).remove(destinationGodownEntity);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
         destinationGodownEntity,

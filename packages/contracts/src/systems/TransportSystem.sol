@@ -43,13 +43,23 @@ contract TransportSystem is System {
 
     require(
       playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 10 seconds of delay between actions"
+      "Need 0 seconds of delay between actions"
     );
 
-    uint256 destinationGodownLevel = getEntityLevel(
-      LevelComponent(getAddressById(components, LevelComponentID)),
+    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+      sourceGodownEntity
+    );
+    require(sourceGodownLevel >= 1, "Invalid source godown entity");
+
+    uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
       destinationGodownEntity
     );
+    require(destinationGodownLevel >= 1, "Invalid destination godown entity");
+
+    // uint256 destinationGodownLevel = getEntityLevel(
+    //   LevelComponent(getAddressById(components, LevelComponentID)),
+    //   destinationGodownEntity
+    // );
 
     uint256 sourceGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       sourceGodownEntity

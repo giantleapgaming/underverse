@@ -78,6 +78,19 @@
         "LevelComponent",
         "BalanceComponent"
       ]
+    },
+    {
+      "name": "ScrapSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent"
+      ]
     }
   ]
 }

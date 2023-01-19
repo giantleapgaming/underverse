@@ -11,7 +11,7 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
 import { LevelComponent } from "./components/LevelComponent.sol";
-import { MULTIPLIER } from "./constants.sol";
+import { MULTIPLIER, MULTIPLIER2 } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 
@@ -40,7 +40,7 @@ function getEntityLevel(LevelComponent levelComponent, uint256 entity) view retu
 
 // Uses distance formula to calculate distance in coordinate geometry
 function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, Coord memory coordinate2)
-  view
+  pure
   returns (uint256)
 {
   int256 x1 = int256(coordinate1.x);
@@ -55,11 +55,45 @@ function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, C
 }
 
 function deleteGodown(uint256 godownEntity, IUint256Component components) {
+  // PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
+  // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).remove(godownEntity);
+  // OwnedByComponent(getAddressById(components, OwnedByComponentID)).remove(godownEntity);
+  // OffenceComponent(getAddressById(components, OffenceComponentID)).remove(godownEntity);
+  // DefenceComponent(getAddressById(components, DefenceComponentID)).remove(godownEntity);
+  // BalanceComponent(getAddressById(components, BalanceComponentID)).remove(godownEntity);
+  // LevelComponent(getAddressById(components, LevelComponentID)).remove(godownEntity);
+  LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, 0);
+  DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, 0);
+  OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
+  BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
+  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
   PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
-  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).remove(godownEntity);
-  OwnedByComponent(getAddressById(components, OwnedByComponentID)).remove(godownEntity);
-  OffenceComponent(getAddressById(components, OffenceComponentID)).remove(godownEntity);
-  DefenceComponent(getAddressById(components, DefenceComponentID)).remove(godownEntity);
-  BalanceComponent(getAddressById(components, BalanceComponentID)).remove(godownEntity);
-  LevelComponent(getAddressById(components, LevelComponentID)).remove(godownEntity);
+}
+
+function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
+  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x)**2) + (int256(y)**2));
+  uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
+  uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
+  return godownCreationCost;
+}
+
+function getCargoSellingPrice(
+  int32 x,
+  int32 y,
+  uint256 kgs
+) pure returns (uint256) {
+  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    uint256((int256(x) * int256(x)) + (int256(y) * int256(y)));
+  uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
+    10);
+  uint256 cargoSellingPrice = totalPriceRaw * MULTIPLIER2; // 10^6
+  return cargoSellingPrice;
+}
+
+function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns (uint256) {
+  uint256 totalCost;
+  for (uint256 i = currentLevel; i > 0; i--) {
+    totalCost += (i**2) * 1000 * MULTIPLIER;
+  }
+  return totalCost;
 }
