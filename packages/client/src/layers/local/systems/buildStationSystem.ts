@@ -21,9 +21,9 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Progress, Build },
+    components: { Build },
     localApi: { setBuild, showProgress },
-    localIds: { buildId, progressId },
+    localIds: { buildId },
     sounds,
   } = phaser;
   const {
@@ -114,7 +114,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         textWhite.setComponent({
           id: "white-build-text",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x - 8, textPosition.y - 34);
+            gameObject.setPosition(textPosition.x - 16, textPosition.y - 20);
             gameObject.depth = 4;
             gameObject.setText(`BUILD ${buildPrice}`);
             gameObject.setFontSize(12);

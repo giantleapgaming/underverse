@@ -6,3 +6,4 @@ export { systemBuy } from "./system.Buy";
 export { systemSell } from "./system.Sell";
 export { systemTransport } from "./system.Transport";
 export { systemAttack } from "./system.Attack";
+export { systemScraped } from "./system.Scrap";

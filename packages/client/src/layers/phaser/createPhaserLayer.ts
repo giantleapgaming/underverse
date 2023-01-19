@@ -33,6 +33,7 @@ import {
   systemBuy,
   systemBuyWeapon,
   systemInit,
+  systemScraped,
   systemSell,
   systemTransport,
   systemUpgrade,
@@ -198,6 +199,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemBuy(network, context);
   systemSell(network, context);
   systemTransport(network, context);
+  systemScraped(network, context);
   systemAttack(network, context);
   return context;
 }
