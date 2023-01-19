@@ -8,7 +8,8 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
+import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getCargoSellingPrice } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -33,8 +34,11 @@ contract SellSystem is System {
 
     require(
       playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 10 seconds of delay between actions"
+      "Need 0 seconds of delay between actions"
     );
+
+    uint256 godownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
+    require(godownLevel >= 1, "Invalid godown entity");
 
     uint256 selectedGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       godownEntity
@@ -51,15 +55,16 @@ contract SellSystem is System {
     //   ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
     //     (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
 
-    uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-      uint256(
-        (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
-      );
+    // BELOW LOGIC IS CORRECT. JUST MOVING INTO UTILS COMMON FUNC.
+    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    //   uint256(
+    //     (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
+    //   );
+    // uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
+    //   10);
+    // uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // 10^6
 
-    uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
-      10);
-
-    uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // 10^6
+    uint256 totalPrice = getCargoSellingPrice(godownPosition.x, godownPosition.y, kgs);
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
