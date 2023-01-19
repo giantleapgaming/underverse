@@ -3,9 +3,13 @@ import { convertPrice } from "../../utils/priceConverter";
 
 export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void; close: () => void }) => {
   return (
-    <ModalContainer>
+    <ModalContainer onClick={close}>
       <ModalContent>
-        <S.ModalContainer>
+        <S.ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <S.Img src="/popup/default-b.png" />
           <p
             onClick={close}

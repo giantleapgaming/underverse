@@ -16,9 +16,13 @@ export const AttackModal = ({
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
-    <ModalContainer>
+    <ModalContainer onClick={close}>
       <ModalContent>
-        <S.ModalContainer>
+        <S.ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <S.Img src="/popup/red-b.png" />
           <p
             onClick={close}
@@ -60,7 +64,7 @@ export const AttackModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                Total Damage {Math.floor(((+selected * 500) / distance))}
+                Total Damage {Math.floor((+selected * 500) / distance)}
               </p>
             )}
             <S.InlinePointer
