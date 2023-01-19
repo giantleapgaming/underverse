@@ -36,10 +36,9 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const { pointer } = p;
     const canBeBuild = getComponentValue(Build, buildId);
     if (canBeBuild && canBeBuild.show) {
-      if (canBeBuild.x === pointer.worldX && canBeBuild.y === pointer.worldY) return;
       const allPositionEntity = [...getComponentEntities(Position)];
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-      const checkIfWeCanMakeAmove = allPositionEntity.find((entity) => {
+      const checkIfWeCanMakeAmove = allPositionEntity.some((entity) => {
         const cord = getComponentValue(Position, entity);
         if (cord) {
           const grid = get3x3Grid(cord.x, cord.y);
@@ -47,7 +46,8 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
           return flatGrid.find(([xCoord, yCoord]) => xCoord === x && yCoord === y) ? true : false;
         }
       });
-      if (checkIfWeCanMakeAmove) {
+      const inside50Grid = x >= -50 && x <= 50 && y >= -50 && y <= 50;
+      if (checkIfWeCanMakeAmove || !inside50Grid) {
         setBuild(x, y, true, false);
       } else {
         setBuild(x, y, true, true);
