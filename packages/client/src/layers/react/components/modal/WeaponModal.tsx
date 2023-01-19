@@ -3,13 +3,11 @@ import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
 export const WeaponModal = ({
-  buyPrice,
   buySystem,
   stock,
   close,
   clickSound,
 }: {
-  buyPrice: number;
   buySystem: (kgs: number) => void;
   stock?: number | false;
   close: () => void;
@@ -60,9 +58,7 @@ export const WeaponModal = ({
               </div>
             )}
             {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                BUY Total {convertPrice(+selected * 1000 * buyPrice)}
-              </p>
+              <p style={{ textAlign: "center", marginBottom: "20px" }}>BUY Total {convertPrice(+selected * 10_000)}</p>
             )}
             <S.InlinePointer
               onClick={() => {

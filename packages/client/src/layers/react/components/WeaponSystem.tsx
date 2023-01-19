@@ -45,7 +45,6 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
     };
     return (
       <WeaponModal
-        buyPrice={buyPrice}
         buySystem={buy}
         stock={offence && level && +level - +offence}
         close={closeModal}
