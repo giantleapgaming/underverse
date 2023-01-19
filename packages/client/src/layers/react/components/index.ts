@@ -11,6 +11,7 @@ import { registerWeaponDetails } from "./WeaponSystem";
 import { registerAttackDetails } from "./AttackSystem";
 import { registerBgScreen } from "./GameBg";
 import { registerLogs } from "./LogsSystem";
+import { registerScrap } from "./ScrapeSystem";
 export function registerUIComponents() {
   registerNameScreen();
   registerPlayerDetails();
@@ -25,4 +26,5 @@ export function registerUIComponents() {
   registerAttackDetails();
   registerBgScreen();
   registerLogs();
+  registerScrap();
 }

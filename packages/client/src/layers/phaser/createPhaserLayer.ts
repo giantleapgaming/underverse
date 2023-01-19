@@ -17,6 +17,7 @@ import {
   Attack,
   AttackCords,
   Logs,
+  ShowScrapeModal,
 } from "../local/components";
 import {
   attackSystem,
@@ -73,6 +74,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     AttackCords: AttackCords(world),
     showWeaponModal: ShowWeaponModal(world),
     Logs: Logs(world),
+    ShowScrapeModal: ShowScrapeModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -95,6 +97,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldUpgradeModal = (open: boolean) => setComponent(components.ShowUpgradeModal, modalIndex, { value: open });
 
+  const shouldScrapeModal = (open: boolean) => setComponent(components.ShowScrapeModal, modalIndex, { value: open });
+
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
   const shouldShowCircle = (selectedEntities: number[]) =>
@@ -103,8 +107,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const setLogs = (string: string) => {
     const existingLogs = getComponentValue(components.Logs, modalIndex)?.logStrings ?? [];
     if (existingLogs.length >= 0) {
-      console.log("MOST RECENT STRING IN ARRAY:", string);
-      setComponent(components.Logs, modalIndex, { logStrings: [...existingLogs, string] });
+      setComponent(components.Logs, modalIndex, { logStrings: [string, ...existingLogs] });
     }
   };
 
@@ -175,6 +178,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldAttack,
       setAttackCords,
       setLogs,
+      shouldScrapeModal,
     },
     sounds,
   };

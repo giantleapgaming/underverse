@@ -13,7 +13,7 @@ const LogBox = ({ layers }: { layers: Layers }) => {
   const logs = getComponentValue(Logs, modalIndex)?.logStrings ?? [];
   return (
     <div style={{ zIndex: 10, padding: "10px", width: "100%", overflowY: "auto" }}>
-      {logs.reverse().map((i) => (
+      {logs.map((i) => (
         <p style={{ opacity: 0.7 }} key={i}>
           {i}
         </p>

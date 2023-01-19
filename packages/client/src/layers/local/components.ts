@@ -32,6 +32,9 @@ export const ShowBuyModal = (world: World) => {
 export const ShowUpgradeModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowUpgradeModal" });
 };
+export const ShowScrapeModal = (world: World) => {
+  return defineBoolComponent(world, { id: "ShowScrapeModal" });
+};
 
 export const ShowSellModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowSellModal" });
