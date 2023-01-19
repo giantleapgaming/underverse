@@ -1,5 +1,4 @@
 import { createWorld, EntityID, EntityIndex, getComponentValue, getEntitiesWithValue } from "@latticexyz/recs";
-import { setupDevSystems } from "./setup";
 import {
   createActionSystem,
   defineCoordComponent,
@@ -72,10 +71,12 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   // --- SETUP ----------------------------------------------------------------------
-  const { txQueue, systems, txReduced$, network, startSync, encoders } = await setupMUDNetwork<
+  const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
     typeof components,
     SystemTypes
-  >(getNetworkConfig(config), world, components, SystemAbis);
+  >(getNetworkConfig(config), world, components, SystemAbis, {
+    fetchSystemCalls: true,
+  });
 
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
@@ -178,6 +179,7 @@ export async function createNetworkLayer(config: GameConfig) {
     txReduced$,
     startSync,
     network,
+    systemCallStreams,
     actions,
     api: {
       initSystem,
@@ -193,7 +195,6 @@ export async function createNetworkLayer(config: GameConfig) {
       getEntityIndexAtPosition,
       getEntityIdAtPosition,
     },
-    dev: setupDevSystems(world, encoders, systems),
   };
 
   return context;

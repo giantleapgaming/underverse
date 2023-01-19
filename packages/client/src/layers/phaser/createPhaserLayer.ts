@@ -1,4 +1,4 @@
-import { createEntity, EntityID, namespaceWorld, setComponent } from "@latticexyz/recs";
+import { createEntity, getComponentValue, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
@@ -16,6 +16,7 @@ import {
   ShowWeaponModal,
   Attack,
   AttackCords,
+  Logs,
 } from "../local/components";
 import {
   attackSystem,
@@ -25,6 +26,16 @@ import {
   showUserStations,
 } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
+import {
+  systemAttack,
+  systemBuild,
+  systemBuy,
+  systemBuyWeapon,
+  systemInit,
+  systemSell,
+  systemTransport,
+  systemUpgrade,
+} from "../local/stream-system";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -61,6 +72,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     TransportCords: TransportCords(world),
     AttackCords: AttackCords(world),
     showWeaponModal: ShowWeaponModal(world),
+    Logs: Logs(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -87,6 +99,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const shouldShowCircle = (selectedEntities: number[]) =>
     setComponent(components.ShowCircle, showCircleIndex, { selectedEntities });
+
+  const setLogs = (string: string) => {
+    const existingLogs = getComponentValue(components.Logs, modalIndex)?.logStrings ?? [];
+    if (existingLogs.length >= 0) {
+      console.log("MOST RECENT STRING IN ARRAY:", string);
+      setComponent(components.Logs, modalIndex, { logStrings: [...existingLogs, string] });
+    }
+  };
 
   const shouldTransport = (
     showModal: boolean,
@@ -154,6 +174,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       shouldShowWeaponModal,
       shouldAttack,
       setAttackCords,
+      setLogs,
     },
     sounds,
   };
@@ -166,5 +187,13 @@ export async function createPhaserLayer(network: NetworkLayer) {
   transportSystem(network, context);
   showUserStations(network, context);
   attackSystem(network, context);
+  systemInit(network, context);
+  systemBuild(network, context);
+  systemBuyWeapon(network, context);
+  systemUpgrade(network, context);
+  systemBuy(network, context);
+  systemSell(network, context);
+  systemTransport(network, context);
+  systemAttack(network, context);
   return context;
 }
