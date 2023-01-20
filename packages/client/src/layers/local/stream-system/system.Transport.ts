@@ -1,9 +1,10 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import { defineRxSystem, EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Assets } from "../../phaser/constants";
+import { playersColor } from "./system.Buy";
 
 const product = [
   Assets.Product1,
@@ -55,10 +56,13 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
+    const allUserNameEntityId = [...getComponentEntities(Name)];
+    const userIndex = allUserNameEntityId.indexOf(ownedByIndex) as EntityIndex;
+
     setLogs(
-      `${name} moved ${BigNumber.from(kgs)} mt from (${srcPosition?.x},${srcPosition?.y}) to (${destPosition?.x},${
-        destPosition?.y
-      })`
+      `<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span> moved ${BigNumber.from(
+        kgs
+      )} mt from (${srcPosition?.x},${srcPosition?.y}) to (${destPosition?.x},${destPosition?.y})</p>`
     );
     const address = connectedAddress.get();
     if (srcPosition && destPosition && ownedBy !== `${address}`) {

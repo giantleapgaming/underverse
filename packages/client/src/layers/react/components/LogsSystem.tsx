@@ -2,6 +2,7 @@ import { registerUIComponent } from "../engine";
 import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
+import styled from "styled-components";
 
 const LogBox = ({ layers }: { layers: Layers }) => {
   const {
@@ -12,23 +13,27 @@ const LogBox = ({ layers }: { layers: Layers }) => {
   } = layers;
   const logs = getComponentValue(Logs, modalIndex)?.logStrings ?? [];
   return (
-    <div
-      style={{
-        zIndex: 10,
-        padding: "10px",
-        width: "100%",
-        overflowY: "auto",
-        maxHeight: "200px",
-        pointerEvents: "all",
-      }}
-    >
+    <S.Container>
       {logs.map((log, index) => (
         <div style={{ opacity: 0.7 }} key={`${log}-log-system, ${index}`} dangerouslySetInnerHTML={{ __html: log }} />
       ))}
-    </div>
+    </S.Container>
   );
 };
-
+const S = {
+  Container: styled.div`
+    z-index: 10;
+    padding: 10px;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 200px;
+    pointer-events: all;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  `,
+};
 export const registerLogs = () => {
   registerUIComponent(
     "LogsSystem",

@@ -1,8 +1,9 @@
-import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import { defineRxSystem, EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { convertPrice } from "../../react/utils/priceConverter";
+import { playersColor } from "./system.Buy";
 
 export function systemSell(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -23,10 +24,12 @@ export function systemSell(network: NetworkLayer, phaser: PhaserLayer) {
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 0.9;
+    const allUserNameEntityId = [...getComponentEntities(Name)];
+    const userIndex = allUserNameEntityId.indexOf(ownedByIndex) as EntityIndex;
     setLogs(
-      `${name} sold ${BigNumber.from(kgs)} mt at (${position?.x},${position?.y}) for ${convertPrice(
-        buyPrice * kgs.toNumber()
-      )}`
+      `<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span> sold ${BigNumber.from(
+        kgs
+      )} mt at (${position?.x},${position?.y}) for ${convertPrice(buyPrice * kgs.toNumber())}</p>`
     );
   });
 }
