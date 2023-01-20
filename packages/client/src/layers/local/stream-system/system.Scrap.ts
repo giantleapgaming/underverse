@@ -20,6 +20,6 @@ export function systemScraped(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedBy = getComponentValue(OwnedBy, godownEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
-    setLogs(`${name} Scraped level ${BigNumber.from(level)} the  station at ${position?.x},${position?.y}`);
+    setLogs(`${name} scrapped the station at (${position?.x},${position?.y})`);
   });
 }

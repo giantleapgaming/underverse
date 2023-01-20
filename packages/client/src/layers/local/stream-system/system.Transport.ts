@@ -56,9 +56,9 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     setLogs(
-      `${name} moved ${BigNumber.from(kgs)} mt from ${srcPosition?.x},${srcPosition?.y} to ${destPosition?.x},${
+      `${name} moved ${BigNumber.from(kgs)} mt from (${srcPosition?.x},${srcPosition?.y}) to (${destPosition?.x},${
         destPosition?.y
-      }`
+      })`
     );
     const address = connectedAddress.get();
     if (srcPosition && destPosition && ownedBy !== `${address}`) {

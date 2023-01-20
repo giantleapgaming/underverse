@@ -29,7 +29,7 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
       shouldScrapeModal(false);
       input.enabled.current = true;
     };
-    const Scrape = async () => {
+    const Scrap = async () => {
       if (selectedEntity) {
         sounds["confirm"].play();
         shouldScrapeModal(false);
@@ -37,7 +37,7 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
         await scrapeSystem(world.entities[selectedEntity]);
       }
     };
-    return <ScrapeModal scrapeSystem={Scrape} close={closeModal} />;
+    return <ScrapeModal scrapeSystem={Scrap} close={closeModal} />;
   } else {
     return null;
   }
