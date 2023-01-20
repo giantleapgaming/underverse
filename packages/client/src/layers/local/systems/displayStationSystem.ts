@@ -30,15 +30,17 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     world,
     [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence), Has(Defence)],
     ({ entity }) => {
-      // @ts-ignore
       const updateProgressBarBg = phaserScene.children
         .getChildren()
+        // @ts-ignore
         .find((item) => item.id === `progressBar-${entity}`)
+        // @ts-ignore
         ?.clear();
-      // @ts-ignore
       const updateProgressBar = phaserScene.children
         .getChildren()
+        // @ts-ignore
         .find((item) => item.id === `progressBarBg-${entity}`)
+        // @ts-ignore
         ?.clear();
       const progressBar = updateProgressBar ?? phaserScene.add.graphics();
       const progressBarBg = updateProgressBarBg ?? phaserScene.add.graphics();
@@ -126,10 +128,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           }
         }
       } else {
-        objectPool.remove(`group-missile-${entity}`);
-        objectPool.remove(entity);
-        updateProgressBarBg.clear();
-        updateProgressBar.clear();
+        objectPool?.remove(`group-missile-${entity}`);
+        objectPool?.remove(entity);
+        updateProgressBarBg?.clear();
+        updateProgressBar?.clear();
         setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
       }
     }

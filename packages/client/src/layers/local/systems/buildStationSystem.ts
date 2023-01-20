@@ -29,7 +29,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     api: { buildSystem },
     network: { connectedAddress },
-    components: { Position, Name },
+    components: { Position, Name, Level },
   } = network;
 
   const hoverSub = input.pointermove$.subscribe((p) => {
@@ -38,14 +38,19 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (canBeBuild && canBeBuild.show) {
       const allPositionEntity = [...getComponentEntities(Position)];
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-      const checkIfWeCanMakeAmove = allPositionEntity.some((entity) => {
-        const cord = getComponentValue(Position, entity);
-        if (cord) {
-          const grid = get3x3Grid(cord.x, cord.y);
-          const flatGrid = grid.flat();
-          return flatGrid.find(([xCoord, yCoord]) => xCoord === x && yCoord === y) ? true : false;
-        }
-      });
+      const checkIfWeCanMakeAmove = allPositionEntity
+        .filter((position) => {
+          const level = getComponentValue(Level, position)?.value;
+          return level && !!+level;
+        })
+        .some((entity) => {
+          const cord = getComponentValue(Position, entity);
+          if (cord) {
+            const grid = get3x3Grid(cord.x, cord.y);
+            const flatGrid = grid.flat();
+            return flatGrid.find(([xCoord, yCoord]) => xCoord === x && yCoord === y) ? true : false;
+          }
+        });
       const inside50Grid = x >= -50 && x <= 50 && y >= -50 && y <= 50;
       if (checkIfWeCanMakeAmove || !inside50Grid) {
         setBuild(x, y, true, false);
