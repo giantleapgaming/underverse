@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 
-export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
+export function systemScraped(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
@@ -12,7 +12,7 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     localApi: { setLogs },
   } = phaser;
-  defineRxSystem(world, systemCallStreams["system.Upgrade"], ({ args }) => {
+  defineRxSystem(world, systemCallStreams["system.Scrap"], ({ args }) => {
     const { entity } = args as { entity: BigNumber };
     const godownEntityIndex = world.entities.findIndex((worldEntity) => worldEntity === entity._hex) as EntityIndex;
     const position = getComponentValue(Position, godownEntityIndex);
@@ -20,6 +20,6 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedBy = getComponentValue(OwnedBy, godownEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
-    setLogs(`${name} upgraded station (${position?.x},${position?.y}) to ${BigNumber.from(level)}`);
+    setLogs(`${name} Scraped level ${BigNumber.from(level)} the  station at ${position?.x},${position?.y}`);
   });
 }

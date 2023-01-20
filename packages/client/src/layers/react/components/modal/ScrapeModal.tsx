@@ -1,19 +1,7 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
-export const WeaponModal = ({
-  buySystem,
-  stock,
-  close,
-  clickSound,
-}: {
-  buySystem: (kgs: number) => void;
-  stock?: number | false;
-  close: () => void;
-  clickSound: () => void;
-}) => {
-  const [selected, setSelected] = useState("-1");
+export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void; close: () => void }) => {
   return (
     <ModalContainer onClick={close}>
       <ModalContent>
@@ -22,7 +10,7 @@ export const WeaponModal = ({
             e.stopPropagation();
           }}
         >
-          <S.Img src="/popup/blue-b.png" />
+          <S.Img src="/popup/default-b.png" />
           <p
             onClick={close}
             style={{
@@ -40,39 +28,18 @@ export const WeaponModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#4057c7" }}>BUY MISSILES</p>
-            {typeof stock === "number" && (
-              <div
-                style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
-              >
-                {new Array(stock).fill(0).map((_, i) => {
-                  return (
-                    <S.Slanted
-                      key={`orange${i}`}
-                      selected={+selected > i}
-                      onClick={() => {
-                        setSelected((i + 1).toString());
-                        clickSound();
-                      }}
-                    >
-                      {i + 1}
-                    </S.Slanted>
-                  );
-                })}
-              </div>
-            )}
-            {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>BUY Total {convertPrice(+selected * 10_000)}</p>
-            )}
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#036e71" }}>SCRAPE STATION</p>
+            <p style={{ width: "100%", marginLeft: "80px", color: "#036e71" }}>Scrape STATION</p>
+            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#036e71" }}>
+              COST: {convertPrice(1_000)}
+            </p>
             <S.InlinePointer
               onClick={() => {
-                if (+selected > 0) {
-                  buySystem(+selected);
-                }
+                scrapeSystem();
               }}
             >
-              <S.Img src="/button/blue-b.png" />
-              <S.DeployText>Buy</S.DeployText>
+              <S.Img src="/button/base-b.png" />
+              <S.DeployText>Scrape</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -110,12 +77,13 @@ const S = {
     text-align: center;
     &::before {
       position: absolute;
+      position: absolute;
       top: 0;
       left: -14%;
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#4057c7"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#036e71"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -134,6 +102,7 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
+    color: #036e71;
   `,
   InlinePointer: styled.div`
     position: relative;
@@ -142,6 +111,7 @@ const S = {
     align-items: center;
     cursor: pointer;
     pointer-events: all;
+    color: "#036e71";
   `,
 };
 const ModalContent = styled.div`

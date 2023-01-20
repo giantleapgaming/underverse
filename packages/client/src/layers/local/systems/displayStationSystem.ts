@@ -3,12 +3,11 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Animations, Sprites } from "../../phaser/constants";
+import { Sprites } from "../../phaser/constants";
 
 export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    sounds,
     scenes: {
       Main: {
         objectPool,

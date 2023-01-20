@@ -22,6 +22,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
       localApi: {
         shouldBuyModal,
         shouldUpgradeModal,
+        shouldScrapeModal,
         shouldSellModal,
         shouldTransport,
         shouldShowWeaponModal,
@@ -176,6 +177,15 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/red-b.png" />
                   <S.DeployText>ATTACK</S.DeployText>
                 </S.InlinePointer>
+                <S.InlinePointer
+                  onClick={() => {
+                    shouldScrapeModal(true);
+                    sounds["click"].play();
+                  }}
+                >
+                  <img src="/button/base-b.png" />
+                  <S.DeployText>SCRAPE</S.DeployText>
+                </S.InlinePointer>
               </>
             )}
           </S.Grid>
@@ -204,6 +214,7 @@ const S = {
   `,
   Cargo: styled.div`
     margin-bottom: 10px;
+    text-align: left;
   `,
   DeployText: styled.p`
     position: absolute;
@@ -215,7 +226,7 @@ const S = {
   `,
   Absolute: styled.div`
     height: 100%;
-    left: 26px;
+    left: 36px;
     position: absolute;
     display: flex;
     align-items: center;
@@ -225,7 +236,7 @@ const S = {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     grid-gap: 10px;
-    margin-top: 35px;
+    margin-top: 25px;
     margin-right: 15px;
   `,
   InlinePointer: styled.div<{ isDisabled?: boolean }>`

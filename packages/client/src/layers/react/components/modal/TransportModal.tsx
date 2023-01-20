@@ -17,9 +17,13 @@ export const TransportModal = ({
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
-    <ModalContainer>
+    <ModalContainer onClick={close}>
       <ModalContent>
-        <S.ModalContainer>
+        <S.ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <S.Img src="/popup/white-b.png" />
           <p
             onClick={close}

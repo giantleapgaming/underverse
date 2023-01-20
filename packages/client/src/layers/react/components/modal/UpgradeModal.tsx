@@ -11,9 +11,13 @@ export const UpgradeModal = ({
   close: () => void;
 }) => {
   return (
-    <ModalContainer>
+    <ModalContainer onClick={close}>
       <ModalContent>
-        <S.ModalContainer>
+        <S.ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <S.Img src="/popup/orange-b.png" />
           <p
             onClick={close}

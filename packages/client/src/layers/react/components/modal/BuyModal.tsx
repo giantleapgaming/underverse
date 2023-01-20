@@ -17,9 +17,13 @@ export const BuyModal = ({
 }) => {
   const [selected, setSelected] = useState("-1");
   return (
-    <ModalContainer>
+    <ModalContainer onClick={close}>
       <ModalContent>
-        <S.ModalContainer>
+        <S.ModalContainer
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           <S.Img src="/popup/yellow-b.png" />
           <p
             onClick={close}

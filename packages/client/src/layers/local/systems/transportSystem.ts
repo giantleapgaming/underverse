@@ -69,7 +69,13 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const transportDetails = getComponentValue(Transport, modalIndex);
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-    if (transportDetails?.showLine && !transportDetails?.showModal && sourceEntityId && stationEntity) {
+    if (
+      transportDetails?.showLine &&
+      !transportDetails?.showModal &&
+      sourceEntityId &&
+      stationEntity &&
+      !transportDetails.showAnimation
+    ) {
       const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
       const userEntityId = connectedAddress.get();
       if (userEntityId === ownedBy && stationEntity !== sourceEntityId) {

@@ -2,19 +2,19 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { WeaponModal } from "./modal/WeaponModal";
+import { ScrapeModal } from "./modal/ScrapeModal";
 
-const WeaponSystem = ({ layers }: { layers: Layers }) => {
+const ScrapeSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Position, Offence, Level },
-      api: { buyWeaponSystem },
+      components: { Level },
+      api: { scrapeSystem },
     },
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldShowWeaponModal, showProgress },
+      localApi: { shouldScrapeModal },
       scenes: {
         Main: { input },
       },
@@ -23,44 +23,29 @@ const WeaponSystem = ({ layers }: { layers: Layers }) => {
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
   if (selectedEntity) {
-    const position = getComponentValue(Position, selectedEntity);
-    const offence = getComponentValue(Offence, selectedEntity)?.value;
     const level = getComponentValue(Level, selectedEntity)?.value;
-    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-    const buyPrice = distance;
-
     const closeModal = () => {
       sounds["click"].play();
-      shouldShowWeaponModal(false);
+      shouldScrapeModal(false);
       input.enabled.current = true;
     };
-    const buy = async (kgs: number) => {
+    const Scrape = async () => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        shouldShowWeaponModal(false);
+        shouldScrapeModal(false);
         input.enabled.current = true;
-        await buyWeaponSystem(world.entities[selectedEntity], kgs);
-        showProgress();
+        await scrapeSystem(world.entities[selectedEntity]);
       }
     };
-    return (
-      <WeaponModal
-        buySystem={buy}
-        stock={offence && level && +level - +offence}
-        close={closeModal}
-        clickSound={() => {
-          sounds["click"].play();
-        }}
-      />
-    );
+    return <ScrapeModal scrapeSystem={Scrape} close={closeModal} />;
   } else {
     return null;
   }
 };
 
-export const registerWeaponDetails = () => {
+export const registerScrap = () => {
   registerUIComponent(
-    "WeaponSystem",
+    "ScrapSystem",
     {
       colStart: 1,
       colEnd: 13,
@@ -75,17 +60,17 @@ export const registerWeaponDetails = () => {
           world,
         },
         phaser: {
-          components: { showWeaponModal },
+          components: { ShowScrapeModal },
           localIds: { modalIndex },
         },
       } = layers;
-      return merge(showWeaponModal.update$).pipe(
+      return merge(ShowScrapeModal.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          const showModal = getComponentValue(showWeaponModal, modalIndex)?.showModal;
-          if (userLinkWithAccount && showModal) {
+          const showModal = getComponentValue(ShowScrapeModal, modalIndex);
+          if (userLinkWithAccount && showModal?.value) {
             return { layers };
           }
           return;
@@ -93,7 +78,7 @@ export const registerWeaponDetails = () => {
       );
     },
     ({ layers }) => {
-      return <WeaponSystem layers={layers} />;
+      return <ScrapeSystem layers={layers} />;
     }
   );
 };
