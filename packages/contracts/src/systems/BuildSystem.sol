@@ -64,10 +64,25 @@ contract BuildSystem is System {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
           .getEntitiesWithValue(Coord({ x: i, y: j }));
-        require(
-          arrayOfGodownsAtThatCoord.length == 0,
-          "A godown has already been built on the position or one of its adjacent cells"
-        );
+        // require(
+        //   arrayOfGodownsAtThatCoord.length == 0,
+        //   "A godown has already been built on the position or one of its adjacent cells"
+        // );
+        // // // //
+        // // // //
+        if (arrayOfGodownsAtThatCoord.length > 0) {
+          for (int32 k = 0; k < int32(int256(arrayOfGodownsAtThatCoord.length)); k++) {
+            uint256 itsGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+              arrayOfGodownsAtThatCoord[uint256(uint32(k))]
+            );
+            require(
+              itsGodownLevel == 0,
+              "A godown has already been placed on this position or in the adjacent 8 cells"
+            );
+          }
+        }
+        // // // //
+        // // // //
       }
     }
     //////////////

@@ -67,7 +67,7 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
   OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
   BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
-  PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
+  // PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
 }
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
@@ -92,7 +92,7 @@ function getCargoSellingPrice(
 
 function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns (uint256) {
   uint256 totalCost;
-  for (uint256 i = currentLevel; i > 0; i--) {
+  for (uint256 i = currentLevel; i > 1; i--) {
     totalCost += (i**2) * 1000 * MULTIPLIER;
   }
   return totalCost;
