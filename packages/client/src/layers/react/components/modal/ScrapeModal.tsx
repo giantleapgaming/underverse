@@ -1,7 +1,15 @@
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 
-export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void; close: () => void }) => {
+export const ScrapeModal = ({
+  close,
+  scrapeSystem,
+  scrapPrice,
+}: {
+  scrapeSystem: () => void;
+  close: () => void;
+  scrapPrice: number;
+}) => {
   return (
     <ModalContainer onClick={close}>
       <ModalContent>
@@ -29,10 +37,11 @@ export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void;
           </p>
           <S.Details>
             <p style={{ textAlign: "center", marginBottom: "20px", color: "#036e71" }}>SCRAP STATION</p>
-            <p style={{ width: "100%", marginLeft: "80px", color: "#036e71" }}>Scrap STATION</p>
-            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#036e71" }}>
-              COST: {convertPrice(1_000)}
+            <p style={{ width: "100%", color: "#036e71", textAlign: "center", marginBottom: "20px" }}>
+              PROCEEDS:
+              {convertPrice(scrapPrice)}
             </p>
+
             <S.InlinePointer
               onClick={() => {
                 scrapeSystem();

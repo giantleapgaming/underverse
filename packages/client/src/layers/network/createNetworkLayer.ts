@@ -131,7 +131,6 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const upgradeSystem = async (godownEntity: EntityID) => {
-    console.log(godownEntity);
     try {
       await systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
     } catch (e) {
@@ -139,7 +138,6 @@ export async function createNetworkLayer(config: GameConfig) {
     }
   };
   const scrapeSystem = async (godownEntity: EntityID) => {
-    console.log(godownEntity);
     try {
       await systems["system.Scrap"].executeTyped(BigNumber.from(godownEntity));
     } catch (e) {

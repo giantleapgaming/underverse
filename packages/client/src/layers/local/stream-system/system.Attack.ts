@@ -27,8 +27,6 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Attack"], ({ args, updates }) => {
-    console.log(updates);
-
     const { destinationGodownEntity, sourceGodownEntity, amount } = args as {
       destinationGodownEntity: BigNumber;
       sourceGodownEntity: BigNumber;

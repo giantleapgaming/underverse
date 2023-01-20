@@ -64,7 +64,7 @@ export const AttackModal = ({
             )}
             {+selected > 0 && (
               <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                Total Damage {Math.floor((+selected * 500) / distance)}
+                Total Damage {Math.floor((+selected * 250) / distance)}
               </p>
             )}
             <S.InlinePointer
