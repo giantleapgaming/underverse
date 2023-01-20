@@ -62,7 +62,7 @@ export const WeaponModal = ({
               </div>
             )}
             {+selected > 0 && (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>BUY Total {convertPrice(+selected * 10_000)}</p>
+              <p style={{ textAlign: "center", marginBottom: "20px" }}>BUY Total {convertPrice(+selected * 1000)}</p>
             )}
             <S.InlinePointer
               onClick={() => {
