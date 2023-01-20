@@ -2,6 +2,7 @@ import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs
 import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
+import { convertPrice } from "../../react/utils/priceConverter";
 
 export function systemBuy(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -23,7 +24,9 @@ export function systemBuy(network: NetworkLayer, phaser: PhaserLayer) {
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     setLogs(
-      `${name} bought ${BigNumber.from(kgs)} mt at (${position?.x},${position?.y}) for ${buyPrice * kgs.toNumber()}`
+      `${name} bought ${BigNumber.from(kgs)} mt at (${position?.x},${position?.y}) for ${convertPrice(
+        buyPrice * kgs.toNumber()
+      )}`
     );
   });
 }

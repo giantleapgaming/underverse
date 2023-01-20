@@ -102,11 +102,11 @@ const S = {
     padding-right: 10px;
   `,
 
-  HighLight: styled.h2`
+  HighLight: styled.h3`
     color: white;
     position: absolute;
     top: 30px;
-    left: 60px;
+    left: 90px;
   `,
 
   DetailsContainer: styled.div`
@@ -120,11 +120,11 @@ const S = {
     left: 70px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
   `,
   Player: styled.div`
     display: flex;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
     justify-content: flex-start;
   `,
@@ -133,9 +133,9 @@ const S = {
     -webkit-appearance: none;
     appearance: none;
     /* creating a custom design */
-    width: 2.8em;
-    height: 2.8em;
-    border-radius: 0.15em;
+    width: 2.3em;
+    height: 2.3em;
+    border-radius: 0.12em;
     margin-right: 0.5em;
     border: 0.4em solid #00fde4;
     outline: none;
@@ -149,23 +149,15 @@ const S = {
       align-items: center;
       background-repeat: no-repeat;
     }
-
-    :checked::before {
-      font-size: 1.5em;
-      color: #fff;
-      position: absolute;
-      right: 1px;
-      top: -5px;
-    }
   `,
 
   PLayerName: styled.p`
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 700;
   `,
 
   Cash: styled.span`
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     text-align: center;
   `,

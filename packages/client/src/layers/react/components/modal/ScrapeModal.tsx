@@ -28,8 +28,8 @@ export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void;
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#036e71" }}>SCRAPE STATION</p>
-            <p style={{ width: "100%", marginLeft: "80px", color: "#036e71" }}>Scrape STATION</p>
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#036e71" }}>SCRAP STATION</p>
+            <p style={{ width: "100%", marginLeft: "80px", color: "#036e71" }}>Scrap STATION</p>
             <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#036e71" }}>
               COST: {convertPrice(1_000)}
             </p>
@@ -39,7 +39,7 @@ export const ScrapeModal = ({ close, scrapeSystem }: { scrapeSystem: () => void;
               }}
             >
               <S.Img src="/button/base-b.png" />
-              <S.DeployText>Scrape</S.DeployText>
+              <S.DeployText>Scrap</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
