@@ -10,7 +10,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, MISSILE_DAMAGE } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuyWeapon"));
@@ -66,15 +66,12 @@ contract BuyWeaponSystem is System {
     //     (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
     //   );
     // uint256 totalPriceRaw = ((1000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
+    // uint256 totalPrice = (totalPriceRaw / MULTIPLIER2) * buyQuantity; // To convert in 10^6 format
+
+    // 174928556845.36 // keep this number for ref. Its price of 1 torpedo at 15,9.
 
     // BUT NOW - its just 1000. Same price at any cell
-    uint256 totalPriceRaw = 1000 * MULTIPLIER;
-
-    // uint256 totalPrice = totalPriceRaw * MULTIPLIER2;
-
-    // 174928556845.36 // keep this number here for ref. Its price of 1 torpedo at 15,9.
-
-    uint256 totalPrice = (totalPriceRaw / MULTIPLIER2) * buyQuantity; // To convert in 10^6 format
+    uint256 totalPrice = MISSILE_DAMAGE * buyQuantity; // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such weapon quantity");
 
