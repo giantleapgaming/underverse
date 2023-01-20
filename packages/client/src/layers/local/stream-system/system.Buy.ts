@@ -3,7 +3,7 @@ import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { convertPrice } from "../../react/utils/priceConverter";
-const allColors = ["#85C1E9", "#A569BD", "#F4D03F", "#229954", "#566573", "#EC7063"];
+export const playersColor = ["#85C1E9", "#A569BD", "#F4D03F", "#229954", "#566573", "#EC7063"];
 
 export function systemBuy(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -26,7 +26,7 @@ export function systemBuy(network: NetworkLayer, phaser: PhaserLayer) {
     const allUserNameEntityId = [...getComponentEntities(Name)];
     const userIndex = allUserNameEntityId.indexOf(ownedByIndex) as EntityIndex;
     setLogs(
-      `<p><span style="color:${allColors[userIndex]};font-weight:bold">${name}</span> bought ${BigNumber.from(
+      `<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span> bought ${BigNumber.from(
         kgs
       )} mt at (${position?.x},${position?.y}) for ${convertPrice(buyPrice * kgs.toNumber())}</p>`
     );

@@ -4,6 +4,7 @@ import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Animations, Sprites } from "../../phaser/constants";
+import { playersColor } from "./system.Buy";
 
 export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -46,14 +47,20 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
 
     const srcOwnedByIndex = world.entities.findIndex((entity) => entity === srcOwnedBy) as EntityIndex;
     const destOwnedByIndex = world.entities.findIndex((entity) => entity === destOwnedBy) as EntityIndex;
-
     const srcName = getComponentValue(Name, srcOwnedByIndex)?.value;
     const destName = getComponentValue(Name, destOwnedByIndex)?.value;
+    const allUserNameEntityId = [...getComponentEntities(Name)];
+    const srcIndexOwnedBy = allUserNameEntityId.indexOf(srcOwnedByIndex) as EntityIndex;
+    const destIndexOwnedBy = allUserNameEntityId.indexOf(destOwnedByIndex) as EntityIndex;
     if (destName) {
       setLogs(
-        `${srcName} station at ${srcPosition?.x},${srcPosition?.y} attacked ${destName} station at ${destPosition?.x},${
-          destPosition?.y
-        } using  ${BigNumber.from(amount)} missiles `
+        `<p><span>${srcName}</span style="color:${playersColor[srcIndexOwnedBy]};font-weight:bold"> station at ${
+          srcPosition?.x
+        },${srcPosition?.y} attacked <span style="color:${
+          playersColor[destIndexOwnedBy]
+        };font-weight:bold">${destName}</span> station at ${destPosition?.x},${destPosition?.y} using  ${BigNumber.from(
+          amount
+        )} missiles</p>`
       );
       const address = connectedAddress.get();
       if (address !== srcOwnedBy && destPosition && srcPosition) {
@@ -125,9 +132,13 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       }
     } else {
       setLogs(
-        `${srcName} station at ${srcPosition?.x},${srcPosition?.y} attacked ${destName} station at ${destPosition?.x},${
-          destPosition?.y
-        } using  ${BigNumber.from(amount)} missiles and destroyed it`
+        `<p><span>${srcName}</span style="color:${playersColor[srcIndexOwnedBy]};font-weight:bold"> station at ${
+          srcPosition?.x
+        },${srcPosition?.y} attacked <span style="color:${
+          playersColor[destIndexOwnedBy]
+        };font-weight:bold">${destName}</span> station at ${destPosition?.x},${destPosition?.y} using  ${BigNumber.from(
+          amount
+        )} missiles</p>`
       );
     }
   });

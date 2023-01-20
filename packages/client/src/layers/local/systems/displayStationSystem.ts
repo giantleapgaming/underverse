@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, getComponentEntities, getComponentValue, Has } from "@latticexyz/recs";
+import { defineSystem, getComponentEntities, getComponentValue, Has, setComponent } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Sprites } from "../../phaser/constants";
@@ -22,7 +22,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
   const {
     components: { OwnedBy, Position, Name, Level, Balance, Offence, Defence },
   } = network;
-
+  const {
+    components: { ShowStationDetails },
+    localIds: { stationDetailsEntityIndex },
+  } = phaser;
   defineSystem(
     world,
     [Has(OwnedBy), Has(Position), Has(Level), Has(Balance), Has(Offence), Has(Defence)],
@@ -61,7 +64,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       const balance = getComponentValue(Balance, entity)?.value;
       const offence = getComponentValue(Offence, entity)?.value;
       const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
-      if (defence?.value && +defence.value > 0) {
+      if (defence?.value && +defence.value > 0 && level && +level > 0) {
         const object = objectPool.get(entity, "Sprite");
         const owndBy = getComponentValue(OwnedBy, entity)?.value;
         if (owndBy) {
@@ -123,8 +126,11 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           }
         }
       } else {
+        objectPool.remove(`group-missile-${entity}`);
+        objectPool.remove(entity);
         updateProgressBarBg.clear();
         updateProgressBar.clear();
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
       }
     }
   );
