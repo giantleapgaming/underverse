@@ -81,11 +81,13 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
-  const initSystem = async (name: string) => {
+  const initSystem = async (name: string, setTrue: () => void, setFalse: () => void) => {
     try {
       await systems["system.Init"].executeTyped(name);
+      setTrue();
     } catch (e) {
       console.log(e);
+      setFalse;
     }
   };
   const buildSystem = async (x: number, y: number) => {

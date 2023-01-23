@@ -30,11 +30,16 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
             e.preventDefault();
             if (name) {
               try {
-                setLoading(true);
-                await initSystem(name);
-                setLoading(false);
+                await initSystem(
+                  name,
+                  () => {
+                    setLoading(true);
+                  },
+                  () => {
+                    setLoading(false);
+                  }
+                );
               } catch (e) {
-                setLoading(false);
                 console.log("Error", e);
               }
             }
@@ -43,6 +48,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           <div>
             <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
             <Input
+              disabled={loading}
               onChange={(e) => {
                 setName(e.target.value);
               }}

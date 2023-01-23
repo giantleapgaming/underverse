@@ -65,7 +65,7 @@ const WalletLogin = () => {
                 </P>
               </div>
 
-              {allKeys.length && (
+              {!!allKeys.length && (
                 <>
                   <P style={{ marginBottom: "10px" }}>Existing Account/s</P>
                   {allKeys.map((pk: string, index: number) => {
