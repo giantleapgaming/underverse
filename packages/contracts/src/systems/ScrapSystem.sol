@@ -53,8 +53,10 @@ contract ScrapSystem is System {
     uint256 cargoSellingPrice = getCargoSellingPrice(godownPosition.x, godownPosition.y, selectedGodownBalance);
     uint256 defenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(godownEntity);
 
-    uint256 totalScrapValue = (((godownCreationCost + totalGodownUpgradeCostUntilLevel + cargoSellingPrice) *
-      defenceAmount) / 100) / 4;
+    uint256 totalScrapValue = (
+      ((godownCreationCost + totalGodownUpgradeCostUntilLevel + cargoSellingPrice) *
+        (defenceAmount / (selectedEntityLevel * 100)))
+    ) / 4;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
