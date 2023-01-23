@@ -131,6 +131,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         objectPool?.remove(`group-missile-${entity}`);
         objectPool?.remove(entity);
         updateProgressBarBg?.clear();
+        objectPool.remove(`circle-${entity}`);
         updateProgressBar?.clear();
         setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
       }
