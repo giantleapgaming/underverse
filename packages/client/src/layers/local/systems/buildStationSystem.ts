@@ -51,7 +51,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             return flatGrid.find(([xCoord, yCoord]) => xCoord === x && yCoord === y) ? true : false;
           }
         });
-      const inside50Grid = x >= -50 && x <= 50 && y >= -50 && y <= 50;
+      const inside50Grid = x >= -25 && x <= 25 && y >= -25 && y <= 25;
       if (checkIfWeCanMakeAmove || !inside50Grid) {
         setBuild(x, y, true, false);
       } else {
