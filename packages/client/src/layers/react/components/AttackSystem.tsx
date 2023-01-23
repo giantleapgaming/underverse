@@ -29,9 +29,8 @@ const AttackSystem = ({ layers }: { layers: Layers }) => {
     const destination = getComponentValue(Position, designationIndex);
 
     const offence = getComponentValue(Offence, selectedEntity)?.value;
-
     const distance =
-      typeof position?.x === "number" && destination?.x
+      typeof position?.x === "number" && typeof destination?.x === "number"
         ? Math.sqrt(Math.pow(destination.x - position.x, 2) + Math.pow(destination.y - position.y, 2))
         : 1;
     const closeModal = () => {

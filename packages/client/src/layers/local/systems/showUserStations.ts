@@ -1,10 +1,12 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import {
-  defineComponentSystem,
+  defineSystem,
   EntityID,
   EntityIndex,
   getComponentEntities,
   getComponentValue,
+  Has,
+  Not,
 } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
@@ -31,7 +33,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
     components: { OwnedBy, Position, Name, Defence },
   } = network;
 
-  defineComponentSystem(world, ShowCircle, () => {
+  defineSystem(world, [Has(ShowCircle), Not(Position)], () => {
     const allPositionEntity = [...getComponentEntities(Position)];
     allPositionEntity.forEach((entity) => {
       const defence = getComponentValue(Defence, entity);
