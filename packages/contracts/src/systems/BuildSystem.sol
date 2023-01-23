@@ -23,8 +23,8 @@ contract BuildSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (int32 x, int32 y) = abi.decode(arguments, (int32, int32));
 
-    require(x >= -50 && x <= 50, "Invalid X co-ordinate");
-    require(y >= -50 && y <= 50, "Invalid Y co-ordinate");
+    require(x >= -25 && x <= 25, "Invalid X co-ordinate");
+    require(y >= -25 && y <= 25, "Invalid Y co-ordinate");
 
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
