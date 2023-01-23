@@ -42,42 +42,44 @@ const WalletLogin = () => {
           }}
         >
           <WalletText>
-            {allKeys.length && (
+            <div>
+              <Title>
+                <P style={{ margin: "0px" }}>WELCOME TO THE</P>
+                <h1 style={{ fontWeight: "bold", fontStyle: "italic", fontSize: "80px" }}>UNDERVERSE</h1>
+              </Title>
               <div>
-                <Title>
-                  <P style={{ margin: "0px" }}>WELCOME TO THE</P>
-                  <h1 style={{ fontWeight: "bold", fontStyle: "italic", fontSize: "80px" }}>UNDERVERSE</h1>
-                </Title>
-                <div>
-                  <P style={{ fontWeight: "bold", marginBottom: "20px", fontSize: "18px" }}>
-                    Create a New Account
-                    <br />
-                    or Use Existing
-                  </P>
-                </div>
-                <div>
-                  <P>
-                    i. Import Wallet <br />
-                    Private Key
-                  </P>
-                  <P style={{ marginBottom: "25px" }}>
-                    n. Create New
-                    <br /> Wallet
-                  </P>
-                </div>
-
-                <P style={{ marginBottom: "10px" }}>Existing Account/s</P>
-                {allKeys.map((pk: string, index: number) => {
-                  const wallet = new Wallet(pk);
-                  const address = wallet.address;
-                  return (
-                    <P key={pk}>
-                      {index + 1}. {walletAddressLoginDisplay(address)}
-                    </P>
-                  );
-                })}
+                <P style={{ fontWeight: "bold", marginBottom: "20px", fontSize: "18px" }}>
+                  Create a New Account
+                  <br />
+                  or Use Existing
+                </P>
               </div>
-            )}
+              <div>
+                <P>
+                  i. Import Wallet <br />
+                  Private Key
+                </P>
+                <P style={{ marginBottom: "25px" }}>
+                  n. Create New
+                  <br /> Wallet
+                </P>
+              </div>
+
+              {allKeys.length && (
+                <>
+                  <P style={{ marginBottom: "10px" }}>Existing Account/s</P>
+                  {allKeys.map((pk: string, index: number) => {
+                    const wallet = new Wallet(pk);
+                    const address = wallet.address;
+                    return (
+                      <P key={pk}>
+                        {index + 1}. {walletAddressLoginDisplay(address)}
+                      </P>
+                    );
+                  })}
+                </>
+              )}
+            </div>
           </WalletText>
           <TerminalOutput>{output}</TerminalOutput>
           <InputBox>
