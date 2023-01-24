@@ -12,8 +12,10 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
 import { LevelComponent } from "./components/LevelComponent.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "./constants.sol";
-import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
+import { SuperMath } from "./libraries/SuperMath.sol";
+import "./libraries/Math.sol";
+import "./libraries/RealMath.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
@@ -97,3 +99,93 @@ function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns 
   }
   return totalCost;
 }
+
+////////////////
+////////////////
+////////////////
+////////////////
+////////////////
+////////////////
+////////////////
+////////////////
+
+function getSector(int32 x, int32 y) pure returns (uint256) {
+  int32 pi = 3141592;
+  // fixed pi = 3.1415926;
+  // Calculate the distance of the point from the center of the circle
+  int256 distance = (x * x) + (y * y);
+  // Check if the point lies within the circle
+  if (distance <= 625) {
+    // Calculate the angle of the point with respect to the positive x-axis
+    int256 angle = int256(SuperMath.atan2(y, x) * (180 / (pi / 1000000)));
+    // Normalize the angle to be between 0 and 360 degrees
+    if (angle < 0) {
+      angle = 360 + angle;
+    }
+    // Divide the circle into 12 sectors and check which sector the point lies in
+    if (angle >= 0 && angle < 30) {
+      return 1;
+    } else if (angle >= 30 && angle < 60) {
+      return 2;
+    } else if (angle >= 60 && angle < 90) {
+      return 3;
+    } else if (angle >= 90 && angle < 120) {
+      return 4;
+    } else if (angle >= 120 && angle < 150) {
+      return 5;
+    } else if (angle >= 150 && angle < 180) {
+      return 6;
+    } else if (angle >= 180 && angle < 210) {
+      return 7;
+    } else if (angle >= 210 && angle < 240) {
+      return 8;
+    } else if (angle >= 240 && angle < 270) {
+      return 9;
+    } else if (angle >= 270 && angle < 300) {
+      return 10;
+    } else if (angle >= 300 && angle < 330) {
+      return 11;
+    } else {
+      return 12;
+    }
+  }
+  // Return 0 if the point does not lie within the circle
+  return 0;
+}
+
+// function getSector2(int32 x, int32 y) pure returns (uint256) {
+//         int32 pi = 3141592;
+//         // check if the point lies within the circle
+//         if (((x * x) + (y * y)) > (25 * 25)) {
+//             return 0;
+//         }
+//         // calculate the angle of the point in radians
+//         // using atan2 function
+//         int32 theta = int32(SuperMath.atan2(y, x));
+//         // if the angle is negative, add 2*pi to make it positive
+//         if (theta < 0) {
+//             theta += int32(2 * (pi/1000000));
+//         }
+//         // convert the angle from radians to degrees
+//         uint256 angle = uint256(int256(int32(theta * 180 / pi)));
+//         // return the sector (1 to 12)
+//         return (angle / 30) + 1;
+// }
+
+// function sector(int x, int y) public view returns (uint) {
+//         // check if the point lies within the circle
+//         if (Math.sqrt(x * x + y * y) > 25) {
+//             return 0;
+//         }
+//         // calculate the angle of the point in radians
+//         // using atan2 function
+//         int theta = int(atan2(y, x));
+//         // if the angle is negative, add 2*pi to make it positive
+//         if (theta < 0) {
+//             theta += int(2 * pi);
+//         }
+//         // convert the angle from radians to degrees
+//         uint angle = uint(theta * 180 / pi);
+//         //return the sector (1 to 12)
+//         return (angle / 30) + 1;
+// }

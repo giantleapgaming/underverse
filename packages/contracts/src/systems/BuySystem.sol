@@ -10,7 +10,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 // import { StorageComponent, ID as StorageComponentID } from "../components/StorageComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getSector } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -59,6 +59,16 @@ contract BuySystem is System {
     Coord memory godownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       godownEntity
+    );
+
+    // //
+    // Lets allow buy in sectors 1 5 and 9 (edited)
+    // //
+    uint256 godownSector = getSector(godownPosition.x, godownPosition.y);
+
+    require(
+      godownSector == 1 || godownSector == 5 || godownSector == 9,
+      "You can only buy product at sectors: 1, 5, 9"
     );
 
     // uint256 sumOfCoordSquares = (godownPosition.x * godownPosition.x)
