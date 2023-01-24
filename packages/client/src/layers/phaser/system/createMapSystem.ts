@@ -27,9 +27,12 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const LineDividers = [
     { x1: -1600, y1: 32, x2: 1600, y2: 32 },
     { x1: 32, y1: -1600, x2: 32, y2: 1600 },
+
     { x1: 1064, y1: -1600, x2: -968, y2: 1600 },
-    // { x1: -736, y1: -1600, x2: 768, y2: 1600 },
-    { x1: 2698, y1: -1600, x2: -2536, y2: 1600 },
+    { x1: -1032, y1: -1600, x2: 1064, y2: 1600 },
+
+    { x1: 2696, y1: -1600, x2: -2536, y2: 1600 },
+    { x1: -2664, y1: -1600, x2: 2632, y2: 1600 },
   ];
 
   for (let i = 0; i < LineDividers.length; i++) {
