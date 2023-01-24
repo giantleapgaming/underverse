@@ -33,7 +33,9 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
     levelCost += Math.pow(i, 2) * 1_000;
   }
   const sellPrice = (100_000 / distance) * (balance || 0) * 0.9;
-  const scrapPrice = (((sellPrice + levelCost + build) * (defence || 0)) / 100) * 0.25;
+  const defencePercentage = defence && level ? +defence / (+level * 100) : 1;
+
+  const scrapPrice = (sellPrice + levelCost + build) * defencePercentage * 0.25;
   if (selectedEntity) {
     const closeModal = () => {
       sounds["click"].play();

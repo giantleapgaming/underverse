@@ -5,6 +5,7 @@ import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { convertPrice } from "../../react/utils/priceConverter";
+import { findSector } from "../../../utils/sector";
 
 const stationColor = [Sprites.Build1, Sprites.Build2, Sprites.Build3, Sprites.Build4, Sprites.Build5, Sprites.Build6];
 
@@ -89,6 +90,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
       cursorIcon &&
       !(xCoord === 0 && yCoord === 0)
     ) {
+      const sector = findSector(xCoord, yCoord);
       const textWhite = objectPool.get("build-text-white", "Text");
       const textYellow = objectPool.get("build-text-yellow", "Text");
       const userHoverStation = {} as { [key: string]: Sprites };
@@ -100,6 +102,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const sprite = (address ? userHoverStation[address] : Sprites.Build1) as Sprites.Build1;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+
         const hoverStation = objectPool.get("build-station", "Sprite");
         hoverStation.setComponent({
           id: `hoverStation`,
@@ -127,6 +130,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setColor("#ffffff");
           },
         });
+        console.log(sector);
         textYellow.setComponent({
           id: "yellow-build-text",
           once: (gameObject) => {
@@ -136,6 +140,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
+            gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
           },
         });
       }
