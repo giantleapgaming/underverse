@@ -130,7 +130,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setColor("#ffffff");
           },
         });
-
+        console.log(sector);
         textYellow.setComponent({
           id: "yellow-build-text",
           once: (gameObject) => {
@@ -140,7 +140,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
-            gameObject.setVisible(sector % 2 === 1);
+            gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
           },
         });
       }

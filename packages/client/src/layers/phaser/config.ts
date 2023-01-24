@@ -827,6 +827,18 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "earth.png",
         },
+        [Sprites.Asteroid1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-1.png",
+        },
+        [Sprites.Asteroid2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-2.png",
+        },
+        [Sprites.Asteroid3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-3.png",
+        },
         [Sprites.Select]: {
           assetKey: Assets.MainAtlas,
           frame: "select.png",

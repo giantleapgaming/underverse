@@ -21,22 +21,20 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   const object = objectPool.get(`centerEarth`, "Sprite");
   // const line = objectPool.get("line", "Line")
+  const centerSun = config.sprites[Sprites.Earth];
 
   const LineDividers = [];
   for (let i = 0; i < 12; i++) {
     const angleq = 360 / 12;
     const x = 30 * Math.cos(Phaser.Math.DegToRad(angleq * i));
     const y = 30 * Math.sin(Phaser.Math.DegToRad(angleq * i));
-    const points = tileCoordToPixelCoord({ x: x, y: y }, tileWidth, tileHeight);
+    const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
     LineDividers.push({ x1: 32, y1: 32, x2: points.x + 32, y2: points.y + 32 });
   }
-
   for (let i = 0; i < LineDividers.length; i++) {
     const { x1, y1, x2, y2 } = LineDividers[i];
     const graphics = phaserScene.add.graphics();
-    graphics.lineStyle(1, 0xc0c0c0, 1);
-    graphics.clear();
-    graphics.lineStyle(2, 0xc0c0c0, 1); // coordinates of the start and end points
+    graphics.lineStyle(1, 0x2d2d36, 1); // coordinates of the start and end points
     const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
     const dotSize = 4;
     const gapSize = 8;
@@ -49,7 +47,87 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     graphics.lineTo(x2, y2);
     graphics.strokePath();
   }
-
+  const astroidCords1 = [
+    { x: 32, y: 1, direction: "-" },
+    { x: 32, y: 8, direction: "+" },
+    { x: 29, y: 16, direction: "-" },
+  ];
+  const astroidCords2 = [
+    { x: -15, y: 28, direction: "+" },
+    { x: -23, y: 22, direction: "-" },
+    { x: -27, y: 16, direction: "+" },
+  ];
+  const astroidCords3 = [
+    { x: -1, y: -32, direction: "-" },
+    { x: -8, y: -30, direction: "+" },
+    { x: -16, y: -28, direction: "-" },
+  ];
+  astroidCords1.map(({ x, y, direction }, i) => {
+    const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
+    const object = objectPool.get(`astroid-${i}`, "Sprite");
+    object.setComponent({
+      id: `astroid-sprite-${i}`,
+      once: (gameObject) => {
+        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setPosition(points.x, points.y);
+        gameObject.setOrigin(0.5, 0.5);
+        gameObject.setDepth(10);
+        phaserScene.add.tween({
+          targets: gameObject,
+          angle: direction === "+" ? 360 : -360,
+          duration: 4500000,
+          ease: "circular",
+          repeat: -1,
+          yoyo: false,
+          rotation: direction === "+" ? 360 : -360,
+        });
+      },
+    });
+  });
+  astroidCords2.map(({ x, y, direction }, i) => {
+    const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
+    const object = objectPool.get(`astroid-${i}-${i}-${i}`, "Sprite");
+    object.setComponent({
+      id: `astroid-sprite-${i}-${i}`,
+      once: (gameObject) => {
+        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setPosition(points.x, points.y);
+        gameObject.setOrigin(0.5, 0.5);
+        gameObject.setDepth(10);
+        phaserScene.add.tween({
+          targets: gameObject,
+          angle: direction === "+" ? 360 : -360,
+          duration: 4500000,
+          ease: "circular",
+          repeat: -1,
+          yoyo: false,
+          rotation: direction === "+" ? 360 : -360,
+        });
+      },
+    });
+  });
+  astroidCords3.map(({ x, y, direction }, i) => {
+    const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
+    const object = objectPool.get(`astroid-${i}-${i}-${i}-${i}`, "Sprite");
+    object.setComponent({
+      id: `astroid-sprite-${i}-${i}-${i}`,
+      once: (gameObject) => {
+        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setPosition(points.x, points.y);
+        gameObject.setOrigin(0.5, 0.5);
+        gameObject.setDepth(10);
+        phaserScene.add.tween({
+          targets: gameObject,
+          angle: direction === "+" ? 360 : -360,
+          duration: 4500000,
+          ease: "circular",
+          repeat: -1,
+          yoyo: false,
+          rotation: direction === "+" ? 360 : -360,
+        });
+      },
+    });
+  });
   const circle1 = phaserScene.add.circle(32, 32);
   const label1 = phaserScene.add.text(32, -320, "5", {
     fontSize: "24px",
@@ -81,7 +159,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     color: "#c0c0c0",
   });
 
-  circle1.setStrokeStyle(1, 0x2d2d36);
+  circle1.setStrokeStyle(0.7, 0x2d2d36);
   circle1.setDisplaySize(704, 704);
   label1.setOrigin(0.5, 0.5);
   label1.setDepth(20);
@@ -111,7 +189,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   label6.setOrigin(0.5, 0.5);
   label6.setDepth(20);
 
-  const centerSun = config.sprites[Sprites.Earth];
   object.setComponent({
     id: `centerEarth-sprite`,
     once: (gameObject) => {

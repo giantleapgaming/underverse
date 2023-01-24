@@ -7,13 +7,10 @@ export function findSector(x: number, y: number) {
   if (!isWithinCircle(x, y)) {
     return 0;
   }
-  //convert x,y to polar coordinates
-  const r = Math.sqrt(x * x + y * y);
   let theta = Math.atan2(y, x);
   if (theta < 0) {
     theta = theta + 2 * Math.PI;
   }
-  // Divide the angle into 12 equal sectors
   const sector = Math.floor(theta / ((2 * Math.PI) / 12)) + 1;
   return sector;
 }
