@@ -823,6 +823,10 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "sun.png",
         },
+        [Sprites.Earth]: {
+          assetKey: Assets.MainAtlas,
+          frame: "earth.png",
+        },
         [Sprites.Select]: {
           assetKey: Assets.MainAtlas,
           frame: "select.png",

@@ -235,6 +235,7 @@ export enum Sprites {
   Build5,
   Build6,
   Sun,
+  Earth,
   Select,
   GroupMissile11,
   GroupMissile12,
