@@ -7,6 +7,7 @@ import { map, merge } from "rxjs";
 import styled from "styled-components";
 import { convertPrice } from "../utils/priceConverter";
 import { walletAddress } from "../utils/walletAddress";
+import { findSector } from "../../../utils/sector";
 const images = ["/ui/1-1.png", "/ui/2-1.png", "/ui/3-1.png", "/ui/4-1.png", "/ui/5-1.png", "/ui/6-1.png"];
 
 const SystemDetails = ({ layers }: { layers: Layers }) => {
@@ -55,6 +56,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;
+    const sector = findSector(position?.x || 0, position?.y || 0) % 2 === 1;
+
     return (
       <S.Container>
         <S.SystemImg src="/ui/details-system.png" />
@@ -100,23 +103,26 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>
+            {sector && <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>}
             <p style={{ color: "#cb6ce6", fontSize: "12px" }}>{convertPrice(sellPrice)} P/MT</p>
+            {!sector && <p />}
             {userEntityId === ownedBy && (
               <>
-                <S.InlinePointer
-                  isDisabled={!(balance && +balance < 8)}
-                  onClick={() => {
-                    if (balance && +balance < 8) {
-                      shouldBuyModal(true);
-                      input.enabled.current = false;
-                      sounds["click"].play();
-                    }
-                  }}
-                >
-                  <img src="/button/yellow-b.png" />
-                  <S.DeployText>BUY</S.DeployText>
-                </S.InlinePointer>
+                {sector && (
+                  <S.InlinePointer
+                    isDisabled={!(balance && +balance < 8)}
+                    onClick={() => {
+                      if (balance && +balance < 8) {
+                        shouldBuyModal(true);
+                        input.enabled.current = false;
+                        sounds["click"].play();
+                      }
+                    }}
+                  >
+                    <img src="/button/yellow-b.png" />
+                    <S.DeployText>BUY</S.DeployText>
+                  </S.InlinePointer>
+                )}
 
                 <S.InlinePointer
                   isDisabled={!(balance && +balance > 0)}
@@ -131,52 +137,56 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/pink-b.png" />
                   <S.DeployText>SELL</S.DeployText>
                 </S.InlinePointer>
-                <S.InlinePointer
-                  isDisabled={!(balance && +balance > 0)}
-                  onClick={() => {
-                    if (balance && +balance > 0) {
-                      shouldTransport(false, true, false);
-                      sounds["click"].play();
-                    }
-                  }}
-                >
-                  <img src="/button/white-b.png" />
-                  <S.DeployText>TRANSPORT</S.DeployText>
-                </S.InlinePointer>
+                {sector && (
+                  <>
+                    <S.InlinePointer
+                      isDisabled={!(balance && +balance > 0)}
+                      onClick={() => {
+                        if (balance && +balance > 0) {
+                          shouldTransport(false, true, false);
+                          sounds["click"].play();
+                        }
+                      }}
+                    >
+                      <img src="/button/white-b.png" />
+                      <S.DeployText>TRANSPORT</S.DeployText>
+                    </S.InlinePointer>
 
-                <S.InlinePointer
-                  isDisabled={!(level && +level < 8)}
-                  onClick={() => {
-                    if (level && +level < 8) {
-                      shouldUpgradeModal(true);
-                      input.enabled.current = false;
-                      sounds["click"].play();
-                    }
-                  }}
-                >
-                  <img src="/button/orange-b.png" />
-                  <S.DeployText>UPGRADE</S.DeployText>
-                </S.InlinePointer>
+                    <S.InlinePointer
+                      isDisabled={!(level && +level < 8)}
+                      onClick={() => {
+                        if (level && +level < 8) {
+                          shouldUpgradeModal(true);
+                          input.enabled.current = false;
+                          sounds["click"].play();
+                        }
+                      }}
+                    >
+                      <img src="/button/orange-b.png" />
+                      <S.DeployText>UPGRADE</S.DeployText>
+                    </S.InlinePointer>
 
-                <S.InlinePointer
-                  onClick={() => {
-                    shouldShowWeaponModal(true);
-                  }}
-                >
-                  <img src="/button/blue-b.png" />
-                  <S.DeployText>WEAPONS</S.DeployText>
-                </S.InlinePointer>
+                    <S.InlinePointer
+                      onClick={() => {
+                        shouldShowWeaponModal(true);
+                      }}
+                    >
+                      <img src="/button/blue-b.png" />
+                      <S.DeployText>WEAPONS</S.DeployText>
+                    </S.InlinePointer>
 
-                <S.InlinePointer
-                  isDisabled={!(offence && +offence > 0)}
-                  onClick={() => {
-                    if (offence && +offence > 0) shouldAttack(false, true, false);
-                    sounds["click"].play();
-                  }}
-                >
-                  <img src="/button/red-b.png" />
-                  <S.DeployText>ATTACK</S.DeployText>
-                </S.InlinePointer>
+                    <S.InlinePointer
+                      isDisabled={!(offence && +offence > 0)}
+                      onClick={() => {
+                        if (offence && +offence > 0) shouldAttack(false, true, false);
+                        sounds["click"].play();
+                      }}
+                    >
+                      <img src="/button/red-b.png" />
+                      <S.DeployText>ATTACK</S.DeployText>
+                    </S.InlinePointer>
+                  </>
+                )}
                 <S.InlinePointer
                   onClick={() => {
                     shouldScrapeModal(true);
