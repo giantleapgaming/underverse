@@ -15,7 +15,6 @@ import { MULTIPLIER, MULTIPLIER2 } from "./constants.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { SuperMath } from "./libraries/SuperMath.sol";
 import "./libraries/Math.sol";
-import "./libraries/RealMath.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
