@@ -48,27 +48,27 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     graphics.strokePath();
   }
   const astroidCords1 = [
-    { x: 32, y: 1, direction: "-" },
-    { x: 32, y: 8, direction: "+" },
-    { x: 29, y: 16, direction: "-" },
+    { x: 32, y: 1, direction: "-", path: "asteroid-2.png" },
+    { x: 32, y: 8, direction: "+", path: "asteroid-3.png" },
+    { x: 29, y: 16, direction: "-", path: "asteroid-2.png" },
   ];
   const astroidCords2 = [
-    { x: -15, y: 28, direction: "+" },
-    { x: -23, y: 22, direction: "-" },
-    { x: -27, y: 16, direction: "+" },
+    { x: -15, y: 28, direction: "+", path: "asteroid-3.png" },
+    { x: -23, y: 22, direction: "-", path: "asteroid-2.png" },
+    { x: -27, y: 16, direction: "+", path: "asteroid-3.png" },
   ];
   const astroidCords3 = [
-    { x: -1, y: -32, direction: "-" },
-    { x: -8, y: -30, direction: "+" },
-    { x: -16, y: -28, direction: "-" },
+    { x: -1, y: -32, direction: "-", path: "asteroid-3.png" },
+    { x: -8, y: -30, direction: "+", path: "asteroid-3.png" },
+    { x: -16, y: -28, direction: "-", path: "asteroid-2.png" },
   ];
-  astroidCords1.map(({ x, y, direction }, i) => {
+  astroidCords1.map(({ x, y, direction, path }, i) => {
     const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
     const object = objectPool.get(`astroid-${i}`, "Sprite");
     object.setComponent({
       id: `astroid-sprite-${i}`,
       once: (gameObject) => {
-        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setTexture(centerSun.assetKey, path);
         gameObject.setPosition(points.x, points.y);
         gameObject.setOrigin(0.5, 0.5);
         gameObject.setDepth(10);
@@ -84,13 +84,13 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       },
     });
   });
-  astroidCords2.map(({ x, y, direction }, i) => {
+  astroidCords2.map(({ x, y, direction, path }, i) => {
     const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
-    const object = objectPool.get(`astroid-${i}-${i}-${i}`, "Sprite");
+    const object = objectPool.get(`astroid-${i}${i}`, "Sprite");
     object.setComponent({
-      id: `astroid-sprite-${i}-${i}`,
+      id: `astroid-sprite-${i}${i}`,
       once: (gameObject) => {
-        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setTexture(centerSun.assetKey, path);
         gameObject.setPosition(points.x, points.y);
         gameObject.setOrigin(0.5, 0.5);
         gameObject.setDepth(10);
@@ -106,13 +106,13 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       },
     });
   });
-  astroidCords3.map(({ x, y, direction }, i) => {
+  astroidCords3.map(({ x, y, direction, path }, i) => {
     const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
-    const object = objectPool.get(`astroid-${i}-${i}-${i}-${i}`, "Sprite");
+    const object = objectPool.get(`astroid-${i}${i}${i}`, "Sprite");
     object.setComponent({
-      id: `astroid-sprite-${i}-${i}-${i}`,
+      id: `astroid-sprite-${i}${i}${i}`,
       once: (gameObject) => {
-        gameObject.setTexture(centerSun.assetKey, `asteroid-${i + 1}.png`);
+        gameObject.setTexture(centerSun.assetKey, path);
         gameObject.setPosition(points.x, points.y);
         gameObject.setOrigin(0.5, 0.5);
         gameObject.setDepth(10);
@@ -159,22 +159,22 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     color: "#c0c0c0",
   });
 
-  circle1.setStrokeStyle(0.7, 0x2d2d36);
+  circle1.setStrokeStyle(0.3, 0x2d2d36);
   circle1.setDisplaySize(704, 704);
   label1.setOrigin(0.5, 0.5);
   label1.setDepth(20);
 
-  circle2.setStrokeStyle(0.6, 0x2d2d36);
+  circle2.setStrokeStyle(0.3, 0x2d2d36);
   circle2.setDisplaySize(1344, 1344);
   label2.setOrigin(0.5, 0.5);
   label2.setDepth(20);
 
-  circle3.setStrokeStyle(0.5, 0x2d2d36);
+  circle3.setStrokeStyle(0.3, 0x2d2d36);
   circle3.setDisplaySize(1984, 1984);
   label3.setOrigin(0.5, 0.5);
   label3.setDepth(20);
 
-  circle4.setStrokeStyle(0.4, 0x2d2d36);
+  circle4.setStrokeStyle(0.3, 0x2d2d36);
   circle4.setDisplaySize(2624, 2624);
   label4.setOrigin(0.5, 0.5);
   label4.setDepth(20);
