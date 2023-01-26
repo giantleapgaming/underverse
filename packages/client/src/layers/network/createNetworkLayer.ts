@@ -153,11 +153,12 @@ export async function createNetworkLayer(config: GameConfig) {
     kgsToTransfer: number
   ) => {
     try {
-      await systems["system.Transport"].executeTyped(
-        BigNumber.from(srcGodownEntity),
-        BigNumber.from(destinationGodownEntity),
-        kgsToTransfer
-      );
+      // await systems["system.Transport"].executeTyped(
+      //   BigNumber.from(srcGodownEntity),
+      //   BigNumber.from(destinationGodownEntity),
+      //   kgsToTransfer
+      // );
+      console.log("transport triggered");
     } catch (e) {
       console.log({ e });
     }

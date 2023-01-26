@@ -3,6 +3,7 @@ import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaser
 import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
+import { intersectingCircles, enclosedPoints, getCoordinatesArray } from "../../../utils/distance";
 
 export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -117,6 +118,32 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
 
         const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI) + 90;
+
+        console.log("Position components", Position);
+
+        const allStationCoordinates = [];
+
+        const valuesX = Position.values.x;
+        const valuesY = Position.values.y;
+        const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+
+        console.log(Position.values.x);
+        console.log("All coord", allCoordinates);
+
+        const possibleBlockingStations = enclosedPoints(allCoordinates, [
+          [sourcePosition.x, sourcePosition.y],
+          [transportCord.x, transportCord.y],
+        ]);
+
+        console.log("possible block", possibleBlockingStations);
+
+        const blockingStations = intersectingCircles(
+          possibleBlockingStations,
+          [sourcePosition.x, sourcePosition.y],
+          [transportCord.x, transportCord.y]
+        );
+
+        console.log("Blocking stations", blockingStations);
 
         if (
           destinationEntityId &&
