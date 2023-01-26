@@ -5,7 +5,7 @@ import { get3x3Grid } from "../../../utils/get3X3Grid";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { convertPrice } from "../../react/utils/priceConverter";
-import { findSector } from "../../../utils/sector";
+import { findSector, findAngle } from "../../../utils/sector";
 
 const stationColor = [Sprites.Build1, Sprites.Build2, Sprites.Build3, Sprites.Build4, Sprites.Build5, Sprites.Build6];
 
@@ -91,6 +91,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
       !(xCoord === 0 && yCoord === 0)
     ) {
       const sector = findSector(xCoord, yCoord);
+      const angle = findAngle(xCoord, yCoord);
       const textWhite = objectPool.get("build-text-white", "Text");
       const textYellow = objectPool.get("build-text-yellow", "Text");
       const userHoverStation = {} as { [key: string]: Sprites };
@@ -130,7 +131,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setColor("#ffffff");
           },
         });
-        console.log(sector);
+        console.log("Sector: ", sector, "Angle: ", angle);
         textYellow.setComponent({
           id: "yellow-build-text",
           once: (gameObject) => {

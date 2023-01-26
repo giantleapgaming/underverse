@@ -14,3 +14,8 @@ export function findSector(x: number, y: number) {
   const sector = Math.floor(theta / ((2 * Math.PI) / 12)) + 1;
   return sector;
 }
+
+export function findAngle(x: number, y: number) {
+  const theta = (Math.atan2(y, x) * 180) / Math.PI;
+  return theta;
+}
