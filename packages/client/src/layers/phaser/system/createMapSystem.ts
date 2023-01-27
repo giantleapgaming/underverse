@@ -1,3 +1,4 @@
+import { getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { Sprites } from "../constants";
 import { PhaserLayer } from "../types";
@@ -17,6 +18,8 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
+    components: { Attack, Transport },
+    localIds: { stationDetailsEntityIndex, modalIndex },
   } = phaser;
 
   const object = objectPool.get(`centerEarth`, "Sprite");
@@ -209,7 +212,9 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
 
   input.pointermove$.subscribe(({ pointer }) => {
-    if (pointer.isDown) {
+    const attack = getComponentValue(Attack, modalIndex)?.entityId;
+    const transport = getComponentValue(Transport, modalIndex)?.entityId;
+    if (pointer.isDown && !attack && !transport) {
       camera.setScroll(
         camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,
         camera.phaserCamera.scrollY - (pointer.y - pointer.prevPosition.y) / camera.phaserCamera.zoom
