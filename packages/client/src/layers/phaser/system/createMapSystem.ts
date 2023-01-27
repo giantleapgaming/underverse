@@ -23,30 +23,30 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   // const line = objectPool.get("line", "Line")
   const centerSun = config.sprites[Sprites.Earth];
 
-  const LineDividers = [];
-  for (let i = 0; i < 12; i++) {
-    const angleq = 360 / 12;
-    const x = 30 * Math.cos(Phaser.Math.DegToRad(angleq * i));
-    const y = 30 * Math.sin(Phaser.Math.DegToRad(angleq * i));
-    const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
-    LineDividers.push({ x1: 32, y1: 32, x2: points.x + 32, y2: points.y + 32 });
-  }
-  for (let i = 0; i < LineDividers.length; i++) {
-    const { x1, y1, x2, y2 } = LineDividers[i];
-    const graphics = phaserScene.add.graphics();
-    graphics.lineStyle(1, 0x2d2d36, 1); // coordinates of the start and end points
-    const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
-    const dotSize = 4;
-    const gapSize = 8;
-    const angle = Math.atan2(y2 - y1, x2 - x1);
-    graphics.moveTo(x1, y1);
-    for (let i = 0; i < lineLength; i += dotSize + gapSize) {
-      graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
-      graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
-    }
-    graphics.lineTo(x2, y2);
-    graphics.strokePath();
-  }
+  // const LineDividers = [];
+  // for (let i = 0; i < 12; i++) {
+  //   const angleq = 360 / 12;
+  //   const x = 30 * Math.cos(Phaser.Math.DegToRad(angleq * i));
+  //   const y = 30 * Math.sin(Phaser.Math.DegToRad(angleq * i));
+  //   const points = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
+  //   LineDividers.push({ x1: 32, y1: 32, x2: points.x + 32, y2: points.y + 32 });
+  // }
+  // for (let i = 0; i < LineDividers.length; i++) {
+  //   const { x1, y1, x2, y2 } = LineDividers[i];
+  //   const graphics = phaserScene.add.graphics();
+  //   graphics.lineStyle(1, 0x2d2d36, 1); // coordinates of the start and end points
+  //   const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
+  //   const dotSize = 4;
+  //   const gapSize = 8;
+  //   const angle = Math.atan2(y2 - y1, x2 - x1);
+  //   graphics.moveTo(x1, y1);
+  //   for (let i = 0; i < lineLength; i += dotSize + gapSize) {
+  //     graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
+  //     graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
+  //   }
+  //   graphics.lineTo(x2, y2);
+  //   graphics.strokePath();
+  // }
   const astroidCords1 = [
     { x: 32, y: 1, direction: "-", path: "asteroid-2.png" },
     { x: 32, y: 8, direction: "+", path: "asteroid-3.png" },
