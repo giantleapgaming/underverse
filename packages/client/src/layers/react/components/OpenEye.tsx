@@ -3,8 +3,7 @@ import { registerUIComponent } from "../engine";
 import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { ChangeEvent, useState } from "react";
-import { coordsOf } from "@latticexyz/utils";
+import { useState } from "react";
 
 const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -19,6 +18,9 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
       localIds: { showCircleIndex },
       localApi: { shouldShowCircle },
       components: { ShowCircle },
+      scenes: {
+        Main: { camera },
+      },
       sounds,
     },
   } = layers;
@@ -30,14 +32,24 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
   if (userEntityId) {
     return (
       <S.Container>
-        <img
-          style={{ zIndex: 10, cursor: "pointer" }}
-          src="/ui/Cog.png"
-          onClick={() => {
-            sounds["click"].play();
-            setShowDetails(!showDetails);
-          }}
-        />
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <img
+            style={{ zIndex: 10, cursor: "pointer" }}
+            src="/ui/Cog.png"
+            onClick={() => {
+              sounds["click"].play();
+              setShowDetails(!showDetails);
+            }}
+          />
+          <img
+            style={{ zIndex: 10, cursor: "pointer" }}
+            src="/ui/recenter.png"
+            onClick={() => {
+              sounds["click"].play();
+              camera.centerOn(0, -1);
+            }}
+          />
+        </div>
         {showDetails && (
           <S.DetailsContainer>
             <img src="/ui/CogButtonMenu.png" />

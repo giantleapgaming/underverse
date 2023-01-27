@@ -1,4 +1,4 @@
-import { Assets } from "./../../phaser/constants";
+import { Assets, Sprites } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
@@ -12,6 +12,8 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
       Main: {
         input,
         phaserScene,
+        objectPool,
+        config,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -24,7 +26,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy },
+    components: { Position, OwnedBy, Level },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(2, 0xeeeeee, 1);
@@ -42,6 +44,51 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         !transportDetails.showAnimation
       ) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
+        const destitution = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+
+        const valuesX = Position.values.x;
+        const valuesY = Position.values.y;
+        const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+
+        const possibleBlockingStations = enclosedPoints(allCoordinates, [
+          [sourcePosition.x, sourcePosition.y],
+          [destitution.x, destitution.y],
+        ]);
+
+        const blockingStations = intersectingCircles(
+          possibleBlockingStations,
+          [sourcePosition.x, sourcePosition.y],
+          [destitution.x, destitution.y]
+        );
+
+        for (let i = 0; i < blockingStations.length; i++) {
+          const blockingStation = blockingStations[i];
+          const blockingStationEntity = getEntityIndexAtPosition(blockingStation[0], blockingStation[1]);
+          const ownedBy = getComponentValue(OwnedBy, blockingStationEntity)?.value as EntityID;
+          const getLevel = getComponentValue(Level, blockingStationEntity)?.value as EntityID;
+          const userEntityId = connectedAddress.get();
+          if (userEntityId !== ownedBy && getLevel > 0) {
+            const showBLockingCord = tileCoordToPixelCoord(
+              { x: blockingStation[0], y: blockingStation[1] },
+              tileWidth,
+              tileHeight
+            );
+            const object = objectPool.get(`blocking-station-${i}`, "Sprite");
+            const select = config.sprites[Sprites.Select];
+            object.setComponent({
+              id: `blocking-station-${i}`,
+              once: (gameObject) => {
+                gameObject.setTexture(select.assetKey, select.frame);
+                gameObject.setPosition(showBLockingCord.x + 32, showBLockingCord.y + 32);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.depth = 2;
+                gameObject.setAngle(0);
+              },
+            });
+          } else {
+            objectPool.remove(`blocking-station-${i}`);
+          }
+        }
         graphics.clear();
         graphics.lineStyle(2, 0xeeeeee, 1);
         const x1 = source.x + 32,
@@ -88,7 +135,29 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   world.registerDisposer(() => click?.unsubscribe());
 
   const rightClick = input.rightClick$.subscribe(() => {
-    shouldTransport(false, false, false);
+    const pointer = phaserScene.input.activePointer;
+    const destitution = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+    const valuesX = Position.values.x;
+    const valuesY = Position.values.y;
+    const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+    const sourcePosition = getComponentValue(Position, sourceEntityId);
+    if (typeof sourcePosition?.x === "number") {
+      const possibleBlockingStations = enclosedPoints(allCoordinates, [
+        [sourcePosition.x, sourcePosition.y],
+        [destitution.x, destitution.y],
+      ]);
+
+      const blockingStations = intersectingCircles(
+        possibleBlockingStations,
+        [sourcePosition.x, sourcePosition.y],
+        [destitution.x, destitution.y]
+      );
+      for (let i = 0; i < blockingStations.length; i++) {
+        objectPool.remove(`blocking-station-${i}`);
+      }
+      shouldTransport(false, false, false);
+    }
   });
 
   world.registerDisposer(() => rightClick?.unsubscribe());
@@ -118,33 +187,6 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const distraction = tileCoordToPixelCoord({ x: transportCord.x, y: transportCord.y }, tileWidth, tileHeight);
 
         const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI) + 90;
-
-        console.log("Position components", Position);
-
-        const allStationCoordinates = [];
-
-        const valuesX = Position.values.x;
-        const valuesY = Position.values.y;
-        const allCoordinates = getCoordinatesArray(valuesX, valuesY);
-
-        console.log(Position.values.x);
-        console.log("All coord", allCoordinates);
-
-        const possibleBlockingStations = enclosedPoints(allCoordinates, [
-          [sourcePosition.x, sourcePosition.y],
-          [transportCord.x, transportCord.y],
-        ]);
-
-        console.log("possible block", possibleBlockingStations);
-
-        const blockingStations = intersectingCircles(
-          possibleBlockingStations,
-          [sourcePosition.x, sourcePosition.y],
-          [transportCord.x, transportCord.y]
-        );
-
-        console.log("Blocking stations", blockingStations);
-
         if (
           destinationEntityId &&
           destinationDetails?.showAnimation &&
