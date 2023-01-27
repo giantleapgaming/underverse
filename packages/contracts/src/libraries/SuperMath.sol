@@ -13,25 +13,50 @@ library SuperMath {
     return result;
   }
 
-  function atan2(int32 x, int32 y) public pure returns (int32) {
-    // fixed pi = 3.1415926;
-    int32 pi = 3141592;
-    if (x > 0) {
-      return int32(arctan(y / x));
-    } else if (x < 0 && y >= 0) {
-      return int32(arctan(y / x) + (pi / 1000000));
-    } else if (x < 0 && y < 0) {
-      return int32(arctan(y / x) - (pi / 1000000));
-    } else if (x == 0 && y > 0) {
-      return int32((pi / 1000000) / 2);
-    } else if (x == 0 && y < 0) {
-      return int32((-pi / 1000000) / 2);
-    } else {
-      // x and y are both 0
-      return 0;
-    }
-  }
+  // function atan2(int32 y, int32 x) public pure returns (int32) {
+  //   // fixed pi = 3.1415926;
+  //   int32 pi = 3141592;
+  //   if (x > 0) {
+  //     return int32(arctan(y / x));
+  //   } else if (x < 0 && y >= 0) {
+  //     return int32(arctan(y / x) + (pi / 1000000));
+  //   } else if (x < 0 && y < 0) {
+  //     return int32(arctan(y / x) - (pi / 1000000));
+  //   } else if (x == 0 && y > 0) {
+  //     return int32((pi / 1000000) / 2);
+  //   } else if (x == 0 && y < 0) {
+  //     return int32((-pi / 1000000) / 2);
+  //   } else {
+  //     // x and y are both 0
+  //     return 0;
+  //   }
+  // }
 
   // pi constant
   // int private constant pi = 3.14159265358979323846;
+
+  /////////////////
+  ///////////////////
+  /////////////////////
+
+  function atan(int32 x) internal pure returns (int32) {
+    return (x / (1 + x * x));
+  }
+
+  function atan2(int32 y, int32 x) internal pure returns (int32) {
+    int32 pi = 3141592;
+    if (x > 0) {
+      return atan(y / x);
+    } else if (x < 0 && y >= 0) {
+      return atan(y / x) + (pi / 1000000);
+    } else if (x < 0 && y < 0) {
+      return atan(y / x) - (pi / 1000000);
+    } else if (x == 0 && y > 0) {
+      return (pi / 1000000) / 2;
+    } else if (x == 0 && y < 0) {
+      return -(pi / 1000000) / 2;
+    } else {
+      return 0;
+    }
+  }
 }

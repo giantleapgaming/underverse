@@ -8,7 +8,8 @@
     "OffenceComponent",
     "DefenceComponent",
     "LevelComponent",
-    "BalanceComponent"
+    "BalanceComponent",
+    "AngleComponent"
   ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
@@ -23,7 +24,8 @@
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
-        "BalanceComponent"
+        "BalanceComponent",
+        "AngleComponent"
       ]
     },
     {
@@ -33,7 +35,8 @@
         "LastUpdatedTimeComponent",
         "OwnedByComponent",
         "PositionComponent",
-        "BalanceComponent"
+        "BalanceComponent",
+        "AngleComponent"
       ]
     },
     {

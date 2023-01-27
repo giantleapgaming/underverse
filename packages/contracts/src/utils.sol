@@ -108,6 +108,24 @@ function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns 
 ////////////////
 ////////////////
 
+function getAngle(int32 x, int32 y) pure returns (uint256) {
+  int32 pi = 3141592;
+  // fixed pi = 3.1415926;
+  // Calculate the distance of the point from the center of the circle
+  int256 distance = (x * x) + (y * y);
+  // Check if the point lies within the circle
+  if (distance <= 625) {
+    // Calculate the angle of the point with respect to the positive x-axis
+    int256 angle = int256(SuperMath.atan2(y, x) * (180 / (pi / 1000000)));
+    // Normalize the angle to be between 0 and 360 degrees
+    if (angle < 0) {
+      angle = 360 + angle;
+    }
+    return uint256(angle);
+  }
+  return uint256(5000);
+}
+
 function getSector(int32 x, int32 y) pure returns (uint256) {
   int32 pi = 3141592;
   // fixed pi = 3.1415926;
@@ -188,3 +206,127 @@ function getSector(int32 x, int32 y) pure returns (uint256) {
 //         //return the sector (1 to 12)
 //         return (angle / 30) + 1;
 // }
+
+function getSector2(int32 x, int32 y) pure returns (uint256) {
+  int32 pi = 3141592;
+  // calculate distance of point from center of circle
+  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    uint256((int256(x) * int256(x)) + (int256(y) * int256(y)));
+
+  // check if point is outside of circle
+  if ((sumOfSquaresOfCoordsIntoMultiConstant / MULTIPLIER) > 25) {
+    return 0;
+  }
+  // calculate angle of point from the positive x-axis
+  int32 angle = SuperMath.atan2(y, x);
+  // convert angle to range of 0 to 360 degrees
+  if (angle < 0) {
+    angle += 2 * (pi / 1000000);
+  }
+  // convert angle to range of 0 to 30 degrees
+  angle = (angle * 180) / (pi / 1000000);
+  // calculate sector number
+  uint256 sector = uint256(int256(angle / 30));
+  // return sector number
+  return sector + 1;
+}
+
+function getAngle2(int32 x, int32 y) pure returns (int32) {
+  int32 pi = 3141592;
+  // calculate distance of point from center of circle
+  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
+    uint256((int256(x) * int256(x)) + (int256(y) * int256(y)));
+
+  // check if point is outside of circle
+  if ((sumOfSquaresOfCoordsIntoMultiConstant / MULTIPLIER) > 25) {
+    return 0;
+  }
+  // calculate angle of point from the positive x-axis
+  int32 angle = SuperMath.atan2(y, x);
+  // convert angle to range of 0 to 360 degrees
+  if (angle < 0) {
+    angle += 2 * (pi / 1000000);
+  }
+  // convert angle to range of 0 to 30 degrees
+  angle = (angle * 180) / (pi / 1000000);
+  return angle;
+  // convert angle to range of 0 to 360 degrees
+  // return uint256(int256(angle));
+}
+
+function getAngle3(int32 x, int32 y) pure returns (int32) {
+  // Check if the point is within the circle
+  // if (!isWithinCircle(x, y)) {
+  //   return 0;
+  // }
+  int32 pi = 3141592;
+  int32 theta = SuperMath.atan2(y, x);
+  if (theta < 0) {
+    theta = theta + 2 * (pi / 1000000);
+  }
+  return theta;
+  // uint256 sector = Math.floor(theta / ((2 * (pi/1000000)) / 12)) + 1;
+  // return sector;
+}
+
+//
+//
+//
+//
+
+//
+
+function abs(int32 value) pure returns (int32) {
+  return value < 0 ? -value : value;
+}
+
+/**
+ * @dev function to determine angle of a point on 2D graph in degrees using atan2 function
+ * @param x point x-coordinate
+ * @param y point y-coordinate
+ * @return int angle of point in degrees
+ */
+function atan2(int32 y, int32 x) pure returns (int32) {
+  //
+  int32 pi = 3141592;
+  //
+  // Edge cases for x = 0
+  if (x == 0) {
+    if (y > 0) {
+      return (pi / 1000000) / 2;
+    } else if (y < 0) {
+      return (-pi / 1000000) / 2;
+    } else {
+      return 0;
+    }
+  }
+  // Edge cases for y = 0
+  if (y == 0) {
+    if (x > 0) {
+      return 0;
+    } else {
+      return (pi / 1000000);
+    }
+  }
+  // General case
+  int32 abs_y = abs(y);
+  int32 angle;
+  if (x > 0) {
+    angle = int32((pi / 1000000) / 4) - int32(abs_y / (x + abs_y));
+  } else {
+    angle = (pi / 1000000) - int32((pi / 1000000) / 4) - int32(abs_y / (-x + abs_y));
+  }
+  if (y < 0) {
+    angle = -angle;
+  }
+  return angle;
+}
+
+function getAngleDegrees(int32 x, int32 y) pure returns (int32) {
+  int32 pi = 3141592;
+  // calculate angle of point from the positive x-axis in radians
+  int32 angleRad = atan2(y, x);
+  // convert angle to degrees
+  int32 angleDeg = int32((angleRad * 180) / (pi / 1000000));
+  return angleDeg;
+}

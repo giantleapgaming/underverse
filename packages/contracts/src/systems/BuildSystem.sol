@@ -11,7 +11,8 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost } from "../utils.sol";
+import { AngleComponent, ID as AngleComponentID } from "../components/AngleComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getSector, getAngle, getAngle2, getAngle3, getAngleDegrees } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -126,6 +127,15 @@ contract BuildSystem is System {
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     // StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
+
+    // int32 godownAngle = getAngle2(coord.x, coord.y);
+    // int32 godownAngle = getAngle3(coord.x, coord.y);
+
+    int32 godownAngle = getAngleDegrees(coord.x, coord.y);
+
+    Coord memory angSector = Coord({ x: godownAngle, y: 1 });
+
+    AngleComponent(getAddressById(components, AngleComponentID)).set(godownEntity, angSector);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(

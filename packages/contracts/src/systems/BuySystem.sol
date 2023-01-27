@@ -67,7 +67,7 @@ contract BuySystem is System {
     uint256 godownSector = getSector(godownPosition.x, godownPosition.y);
 
     require(
-      godownSector == 1 || godownSector == 5 || godownSector == 9,
+      godownSector == 1, // || godownSector == 3,
       "You can only buy product at sectors: 1, 5, 9"
     );
 
