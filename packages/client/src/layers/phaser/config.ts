@@ -1096,7 +1096,7 @@ export const phaserConfig = {
   }),
   cameraConfig: defineCameraConfig({
     pinchSpeed: 1,
-    wheelSpeed: 1,
+    wheelSpeed: 0.05,
     maxZoom: 2,
     minZoom: 0.1,
   }),
