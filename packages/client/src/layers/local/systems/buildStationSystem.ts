@@ -122,9 +122,9 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         textWhite.setComponent({
           id: "white-build-text",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x - 16, textPosition.y - 20);
+            gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
             gameObject.depth = 4;
-            gameObject.setText(`BUILD ${buildPrice}`);
+            gameObject.setText(`${buildPrice}`);
             gameObject.setFontSize(12);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
@@ -134,9 +134,9 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
         textYellow.setComponent({
           id: "yellow-build-text",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x - 24, textPosition.y + 70);
+            gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
             gameObject.depth = 4;
-            gameObject.setText(`Price ${price}`);
+            gameObject.setText(`${price}`);
             gameObject.setFontSize(14);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#e4e76a");
