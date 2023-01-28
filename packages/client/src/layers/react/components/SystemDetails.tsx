@@ -295,7 +295,7 @@ const S = {
     width: 100%;
     position: absolute;
     top: -5px;
-    left: 20px;
+    left: 30px;
     font-size: 15px;
     cursor: pointer;
   `,
