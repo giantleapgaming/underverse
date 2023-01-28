@@ -71,7 +71,7 @@ uint256 repairCash = (godownCreationCost + totalGodownUpgradeCostUntilLevel) * d
 
     // Updating defence value
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(
-      addressToEntity(msg.sender),
+      godownEntity,
       selectedEntityLevel*100
     );
 
