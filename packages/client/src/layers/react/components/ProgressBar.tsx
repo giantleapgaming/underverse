@@ -24,7 +24,7 @@ const ProgressBarCmp = ({ layers }: { layers: Layers }) => {
 };
 const ProgressBarWrapper = styled.div`
   margin: 30px;
-  height: 30px;
+  height: 20px;
   width: 100%;
   background: gray;
   border-radius: 100px;
@@ -36,7 +36,7 @@ const fill = keyframes`
 
 const ProgressBar = styled.div`
   border-radius: 100px;
-  background: lightblue;
+  background: #036e71;
   height: 100%;
   animation: ${fill} 10s linear 10;
 `;
@@ -71,13 +71,7 @@ export const registerProgressBar = () => {
           );
           const showProgressBar = getComponentValue(Progress, progressId)?.value;
           if (userLinkWithAccount && showProgressBar) {
-            // const lastUpdatedTime = getComponentValue(LastUpdatedTime, userLinkWithAccount)?.value;
-            // if (lastUpdatedTime) {
-            //   const currentTime = Math.floor(Date.now() / 1000);
-            //   if (currentTime - lastUpdatedTime > 10) {
             return { layers };
-            //   }
-            // }
           }
           return;
         })

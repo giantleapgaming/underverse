@@ -13,6 +13,7 @@ import { registerBgScreen } from "./GameBg";
 import { registerLogs } from "./LogsSystem";
 import { registerScrap } from "./ScrapeSystem";
 import { registerRepair } from "./RepairSystem";
+import { registerProgressBar } from "./ProgressBar";
 export function registerUIComponents() {
   registerNameScreen();
   registerPlayerDetails();
@@ -29,4 +30,5 @@ export function registerUIComponents() {
   registerLogs();
   registerScrap();
   registerRepair();
+  registerProgressBar();
 }
