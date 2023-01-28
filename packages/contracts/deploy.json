@@ -91,6 +91,10 @@
         "LevelComponent",
         "BalanceComponent"
       ]
+    },
+    {
+      "name": "RepairSystem",
+      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "DefenceComponent"]
     }
   ]
 }
