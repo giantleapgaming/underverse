@@ -130,7 +130,6 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setColor("#ffffff");
           },
         });
-        console.log(sector);
         textYellow.setComponent({
           id: "yellow-build-text",
           once: (gameObject) => {

@@ -34,6 +34,7 @@ import {
   systemBuy,
   systemBuyWeapon,
   systemInit,
+  systemRepaired,
   systemScraped,
   systemSell,
   systemTransport,
@@ -206,5 +207,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemTransport(network, context);
   systemScraped(network, context);
   systemAttack(network, context);
+  systemRepaired(network, context);
   return context;
 }

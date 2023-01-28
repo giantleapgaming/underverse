@@ -9,6 +9,9 @@ import {
 } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
+import { enclosedPoints, getCoordinatesArray, intersectingCircles } from "../../../utils/distance";
+
+const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 
 export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -32,7 +35,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Name },
+    components: { Position, OwnedBy, Name, Level },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -50,12 +53,62 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         !attackDetails.showAnimation
       ) {
         const source = tileCoordToPixelCoord({ x: sourcePosition.x, y: sourcePosition.y }, tileWidth, tileHeight);
+        const destitution = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
         graphics.clear();
         graphics.lineStyle(2, 0xeeeeee, 1);
         const x1 = source.x + 32,
           y1 = source.y + 32,
           x2 = pointer.worldX,
           y2 = pointer.worldY; // coordinates of the start and end points
+        const valuesX = Position.values.x;
+        const valuesY = Position.values.y;
+        const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+
+        const possibleBlockingStations = enclosedPoints(allCoordinates, [
+          [sourcePosition.x, sourcePosition.y],
+          [destitution.x, destitution.y],
+        ]);
+
+        const blockingStations = intersectingCircles(
+          possibleBlockingStations,
+          [sourcePosition.x, sourcePosition.y],
+          [destitution.x, destitution.y]
+        );
+
+        for (let i = 0; i < blockingStations.length; i++) {
+          const blockingStation = blockingStations[i];
+          const blockingStationEntity = getEntityIndexAtPosition(blockingStation[0], blockingStation[1]);
+          const ownedBy = getComponentValue(OwnedBy, blockingStationEntity)?.value as EntityID;
+          const getLevel = getComponentValue(Level, blockingStationEntity)?.value as EntityID;
+          const userEntityId = connectedAddress.get();
+          if (userEntityId !== ownedBy && getLevel > 0) {
+            const showBLockingCord = tileCoordToPixelCoord(
+              { x: blockingStation[0], y: blockingStation[1] },
+              tileWidth,
+              tileHeight
+            );
+            const object = objectPool.get(`blocking-station-attack-${i}`, "Sprite");
+            const walletAddress = connectedAddress.get();
+            const userHoverStation = {} as { [key: string]: Sprites };
+            [...getComponentEntities(Name)].map(
+              (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
+            );
+            const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+            const stationBackground = config.sprites[Sprite];
+            object.setComponent({
+              id: `blocking-station-attack-${i}`,
+              once: (gameObject) => {
+                gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
+                gameObject.setPosition(showBLockingCord.x + 32, showBLockingCord.y + 32);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.depth = 2;
+                gameObject.setAngle(0);
+              },
+            });
+          } else {
+            objectPool.remove(`blocking-station-attack-${i}`);
+          }
+        }
         const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
         const dotSize = 4; // size of the dots in pixels
         const gapSize = 8; // size of the gaps between dots in pixels
@@ -90,6 +143,28 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   world.registerDisposer(() => click?.unsubscribe());
   const rightClick = input.rightClick$.subscribe(() => {
+    const pointer = phaserScene.input.activePointer;
+    const destitution = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+    const valuesX = Position.values.x;
+    const valuesY = Position.values.y;
+    const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+    const sourcePosition = getComponentValue(Position, sourceEntityId);
+    if (typeof sourcePosition?.x === "number") {
+      const possibleBlockingStations = enclosedPoints(allCoordinates, [
+        [sourcePosition.x, sourcePosition.y],
+        [destitution.x, destitution.y],
+      ]);
+
+      const blockingStations = intersectingCircles(
+        possibleBlockingStations,
+        [sourcePosition.x, sourcePosition.y],
+        [destitution.x, destitution.y]
+      );
+      for (let i = 0; i < blockingStations.length; i++) {
+        objectPool.remove(`blocking-station-attack-${i}`);
+      }
+    }
     shouldAttack(false, false, false);
   });
 

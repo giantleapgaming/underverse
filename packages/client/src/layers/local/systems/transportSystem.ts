@@ -1,9 +1,17 @@
 import { Assets, Sprites } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import {
+  defineComponentSystem,
+  EntityID,
+  EntityIndex,
+  getComponentEntities,
+  getComponentValue,
+} from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { intersectingCircles, enclosedPoints, getCoordinatesArray } from "../../../utils/distance";
+
+const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 
 export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -26,7 +34,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Level },
+    components: { Position, OwnedBy, Level, Name },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(2, 0xeeeeee, 1);
@@ -74,11 +82,17 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
               tileHeight
             );
             const object = objectPool.get(`blocking-station-${i}`, "Sprite");
-            const select = config.sprites[Sprites.Select];
+            const walletAddress = connectedAddress.get();
+            const userHoverStation = {} as { [key: string]: Sprites };
+            [...getComponentEntities(Name)].map(
+              (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
+            );
+            const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+            const stationBackground = config.sprites[Sprite];
             object.setComponent({
               id: `blocking-station-${i}`,
               once: (gameObject) => {
-                gameObject.setTexture(select.assetKey, select.frame);
+                gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
                 gameObject.setPosition(showBLockingCord.x + 32, showBLockingCord.y + 32);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.depth = 2;

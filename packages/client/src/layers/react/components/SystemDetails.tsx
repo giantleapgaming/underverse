@@ -194,15 +194,17 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                   <img src="/button/base-b.png" />
                   <S.DeployText>SCRAP</S.DeployText>
                 </S.InlinePointer>
-                <S.InlinePointer
-                  onClick={() => {
-                    shouldRepairModal(true);
-                    sounds["click"].play();
-                  }}
-                >
-                  <img src="/button/white-b.png" />
-                  <S.DeployText>Repair</S.DeployText>
-                </S.InlinePointer>
+                {!((level && +level * 100) === (defence && +defence)) && (
+                  <S.InlinePointer
+                    onClick={() => {
+                      shouldRepairModal(true);
+                      sounds["click"].play();
+                    }}
+                  >
+                    <img src="/button/white-b.png" />
+                    <S.DeployText>Repair</S.DeployText>
+                  </S.InlinePointer>
+                )}
               </>
             )}
           </S.Grid>

@@ -8,7 +8,7 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Level, Position, Balance, Defence },
+      components: { Level, Position, Defence },
       api: { repairSystem },
     },
     phaser: {
