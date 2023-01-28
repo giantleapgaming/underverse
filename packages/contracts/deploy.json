@@ -12,7 +12,7 @@
   ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent"] },
+    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "FactionComponent"] },
     {
       "name": "BuildSystem",
       "writeAccess": [
