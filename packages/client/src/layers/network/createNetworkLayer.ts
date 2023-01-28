@@ -146,6 +146,13 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log({ e });
     }
   };
+  const repairSystem = async (godownEntity: EntityID) => {
+    try {
+      await systems["system.Repair"].executeTyped(BigNumber.from(godownEntity));
+    } catch (e) {
+      console.log({ e });
+    }
+  };
 
   const transportSystem = async (
     srcGodownEntity: EntityID,
@@ -202,6 +209,7 @@ export async function createNetworkLayer(config: GameConfig) {
       buyWeaponSystem,
       attackSystem,
       scrapeSystem,
+      repairSystem,
     },
     utils: {
       getEntityIndexAtPosition,

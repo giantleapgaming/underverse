@@ -24,6 +24,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
         shouldBuyModal,
         shouldUpgradeModal,
         shouldScrapeModal,
+        shouldRepairModal,
         shouldSellModal,
         shouldTransport,
         shouldShowWeaponModal,
@@ -192,6 +193,15 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 >
                   <img src="/button/base-b.png" />
                   <S.DeployText>SCRAP</S.DeployText>
+                </S.InlinePointer>
+                <S.InlinePointer
+                  onClick={() => {
+                    shouldRepairModal(true);
+                    sounds["click"].play();
+                  }}
+                >
+                  <img src="/button/white-b.png" />
+                  <S.DeployText>Repair</S.DeployText>
                 </S.InlinePointer>
               </>
             )}
