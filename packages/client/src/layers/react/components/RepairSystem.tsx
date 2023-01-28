@@ -14,7 +14,7 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldRepairModal },
+      localApi: { shouldRepairModal, showProgress },
       scenes: {
         Main: { input },
       },
@@ -41,15 +41,16 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
       shouldRepairModal(false);
       input.enabled.current = true;
     };
-    const Scrap = async () => {
+    const repair = async () => {
       if (selectedEntity) {
         sounds["confirm"].play();
         shouldRepairModal(false);
         input.enabled.current = true;
+        showProgress();
         await repairSystem(world.entities[selectedEntity]);
       }
     };
-    return <RepairModal repairSystem={Scrap} close={closeModal} repairPrice={repairPrice} />;
+    return <RepairModal repairSystem={repair} close={closeModal} repairPrice={repairPrice} />;
   } else {
     return null;
   }

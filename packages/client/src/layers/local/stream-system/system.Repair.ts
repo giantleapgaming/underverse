@@ -13,7 +13,7 @@ export function systemRepaired(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     localApi: { setLogs },
   } = phaser;
-  defineRxSystem(world, systemCallStreams["system.Scrap"], ({ args }) => {
+  defineRxSystem(world, systemCallStreams["system.Repair"], ({ args }) => {
     const { entity } = args as { entity: BigNumber };
     const godownEntityIndex = world.entities.findIndex((worldEntity) => worldEntity === entity._hex) as EntityIndex;
     const position = getComponentValue(Position, godownEntityIndex);

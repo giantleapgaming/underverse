@@ -202,7 +202,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     }}
                   >
                     <img src="/button/white-b.png" />
-                    <S.DeployText>Repair</S.DeployText>
+                    <S.DeployText>REPAIR</S.DeployText>
                   </S.InlinePointer>
                 )}
               </>
