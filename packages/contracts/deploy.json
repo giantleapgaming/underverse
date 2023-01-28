@@ -8,11 +8,12 @@
     "OffenceComponent",
     "DefenceComponent",
     "LevelComponent",
-    "BalanceComponent"
+    "BalanceComponent",
+    "TypeComponent"
   ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent"] },
+    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "TypeComponent"] },
     {
       "name": "BuildSystem",
       "writeAccess": [
@@ -23,7 +24,8 @@
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
-        "BalanceComponent"
+        "BalanceComponent",
+        "TypeComponent"
       ]
     },
     {
