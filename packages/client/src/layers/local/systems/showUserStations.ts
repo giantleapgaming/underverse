@@ -1,13 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineSystem,
-  EntityID,
-  EntityIndex,
-  getComponentEntities,
-  getComponentValue,
-  Has,
-  Not,
-} from "@latticexyz/recs";
+import { defineSystem, EntityID, getComponentEntities, getComponentValue, Has, Not } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Sprites } from "../../phaser/constants";
@@ -29,8 +21,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    network: { connectedAddress },
-    components: { OwnedBy, Position, Name, Defence },
+    components: { OwnedBy, Position, Defence, Faction },
   } = network;
 
   defineSystem(world, [Has(ShowCircle), Not(Position)], () => {
@@ -38,28 +29,15 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
     allPositionEntity.forEach((entity) => {
       const defence = getComponentValue(Defence, entity);
       const position = getComponentValue(Position, entity);
-      const ownedBy = getComponentValue(OwnedBy, entity)?.value;
-      const walletAddress = connectedAddress.get();
-      const userHoverStation = {} as { [key: string]: Sprites };
-      [...getComponentEntities(Name)].map(
-        (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
-      );
-      if (position && defence?.value && ownedBy && +defence.value > 0) {
+      const ownedBy = getComponentValue(OwnedBy, entity)?.value as EntityID;
+      const factionIndex = world.entities.indexOf(ownedBy);
+      const factionNumber = getComponentValue(Faction, factionIndex)?.value;
+      if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+        const Sprite = stationColor[+factionNumber - 1] as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
-        const nameEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-
-        const ownedByEntityId = world.entities.indexOf(ownedBy as EntityID) as EntityIndex;
-        const positionName = getComponentValue(Name, ownedByEntityId)?.value;
-        const showSelected = nameEntities.some((entity) => {
-          const name = getComponentValue(Name, entity as EntityIndex)?.value;
-          if (positionName == name) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+        const factionEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
+        const showSelected = factionEntities.includes(+factionNumber);
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
         if (showSelected) {
           circle.setComponent({
