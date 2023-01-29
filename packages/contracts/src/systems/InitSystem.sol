@@ -27,7 +27,8 @@ contract InitSystem is System {
 
 
     require(registeredPlayers[msg.sender] == false, "Player already registered");
-    require(playerCount < 7, "Overlimit! Max 6 players allowed");
+   // Moresh: Removed 6 player limit 
+   // require(playerCount < 7, "Overlimit! Max 6 players allowed");
 
     CashComponent(getAddressById(components, CashComponentID)).set(addressToEntity(msg.sender), playerInitialCash);
 
