@@ -30,7 +30,7 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     api: { buildSystem },
     network: { connectedAddress },
-    components: { Position, Name, Level },
+    components: { Position, Level, Faction },
   } = network;
 
   const hoverSub = input.pointermove$.subscribe((p) => {
@@ -93,13 +93,11 @@ export function buildStationSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const sector = findSector(xCoord, yCoord);
       const textWhite = objectPool.get("build-text-white", "Text");
       const textYellow = objectPool.get("build-text-yellow", "Text");
-      const userHoverStation = {} as { [key: string]: Sprites };
-      [...getComponentEntities(Name)].map(
-        (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
-      );
       const address = connectedAddress.get();
-      if (address) {
-        const sprite = (address ? userHoverStation[address] : Sprites.Build1) as Sprites.Build1;
+      const userEntityIndex = world.entities.indexOf(address);
+      const faction = getComponentValue(Faction, userEntityIndex)?.value;
+      if (faction) {
+        const sprite = stationColor[+faction - 1] as Sprites.Build1;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
 

@@ -88,7 +88,10 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
                             const cash = getComponentValue(Cash, nameEntity)?.value;
                             const owner = world.entities[nameEntity] === userEntityId;
                             return (
-                              <S.PLayerName style={{ color: data.color }}>
+                              <S.PLayerName
+                                style={{ color: data.color }}
+                                key={`${data.factionNumber} ${data.factionNumber}`}
+                              >
                                 {i + 1}. {owner ? "Owned" : name?.value} (
                                 {cash &&
                                   new Intl.NumberFormat("en-US", {

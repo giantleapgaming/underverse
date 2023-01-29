@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, getComponentEntities, getComponentValue, Has, setComponent } from "@latticexyz/recs";
+import { defineSystem, EntityID, getComponentValue, Has, setComponent } from "@latticexyz/recs";
+import { factionData } from "../../../utils/constants";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Sprites } from "../../phaser/constants";
@@ -20,7 +21,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
     },
   } = phaser;
   const {
-    components: { OwnedBy, Position, Name, Level, Balance, Offence, Defence },
+    components: { OwnedBy, Position, Level, Balance, Offence, Defence, Faction },
   } = network;
   const {
     components: { ShowStationDetails },
@@ -54,12 +55,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           value: `progressBarBg-${entity}`,
           writable: true,
         });
-      const images = ["1", "2", "3", "4", "5", "6"];
-      const colors = ["85C1E9", "A569BD", "F4D03F", "229954", "566573", "EC7063"];
-      const allImg = {} as { [key: string]: string };
-      [...getComponentEntities(Name)].forEach(
-        (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
-      );
+      const ownedBy = getComponentValue(OwnedBy, entity)?.value as EntityID;
+      const factionIndex = world.entities.indexOf(ownedBy);
+      const factionNumber = getComponentValue(Faction, factionIndex)?.value;
+
       const defence = getComponentValue(Defence, entity);
       const position = getComponentValue(Position, entity);
       const level = getComponentValue(Level, entity)?.value;
@@ -79,7 +78,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             progressBarBg.setDepth(99);
             progressBarBg.strokePath();
             progressBar.setAlpha(0.4);
-            progressBar.lineStyle(6, +`0x${colors[+allImg[owndBy] - 1]}`, 1);
+            progressBar.lineStyle(6, +`0x${+factionData[factionNumber ? +factionNumber : 0].color}`, 1);
             progressBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
             progressBar.strokePath();
             progressBar.setDepth(100);
@@ -88,7 +87,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
           object.setComponent({
             id: `${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-${level && +level}-${balance && +balance}.png`);
+              gameObject.setTexture(
+                sprit.assetKey,
+                `${factionNumber && +factionNumber}-${level && +level}-${balance && +balance}.png`
+              );
               gameObject.setPosition(x + 32, y + 32);
               gameObject.depth = 2;
               gameObject.setOrigin(0.5, 0.5);
@@ -108,7 +110,10 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             missileObject.setComponent({
               id: `group-missile-${entity}`,
               once: (gameObject) => {
-                gameObject.setTexture(sprit.assetKey, `${allImg[owndBy]}-group-missile-${+offence}.png`);
+                gameObject.setTexture(
+                  sprit.assetKey,
+                  `${factionNumber && +factionNumber}-group-missile-${+offence}.png`
+                );
                 gameObject.setPosition(x + 32, y + 32);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setDepth(2);
