@@ -21,6 +21,23 @@ library Math {
     }
   }
 
+  function sqrtInt(int256 y) internal pure returns (int256 z) {
+    if (y > 3) {
+      z = y;
+      int256 x = y / 2 + 1;
+      while (x < z) {
+        z = x;
+        x = (y / x + x) / 2;
+      }
+    } else if (y != 0) {
+      z = 1;
+    }
+  }
+
+  function abs(int256 x) internal pure returns (int256) {
+    return x >= 0 ? x : -x;
+  }
+
   // /// @notice Calculates the square root of x, rounding down.
   // /// @dev Uses the Babylonian method https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method.
   // /// @param x The uint256 number for which to calculate the square root.

@@ -97,3 +97,114 @@ function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns 
   }
   return totalCost;
 }
+
+// The main function that takes in the array of circles, and the two points to connect by a line segment
+function checkIntersections(
+  Coord[] memory circles,
+  int256 x1,
+  int256 y1,
+  int256 x2,
+  int256 y2
+) pure returns (Coord[] memory) {
+  // An array to store the intersecting circles
+  Coord[] memory intersections = new Coord[](circles.length);
+  // A variable to keep track of the number of intersections
+  uint256 intersectionCount = 0;
+  // Iterate over each circle
+  for (uint256 i = 0; i < circles.length; i++) {
+    // The coordinates of the current circle
+    int256 cx = circles[i].x;
+    int256 cy = circles[i].y;
+    // The distance of the center of the current circle to the line connecting the two points
+    int256 d = (Math.abs((y2 - y1) * cx - (x2 - x1) * cy + x2 * y1 - y2 * x1)) /
+      (Math.sqrtInt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1)));
+    // If the distance is less than or equal to the radius of the circle, it means the circle intersects the line segment
+    if (d <= 1) {
+      intersections[intersectionCount] = circles[i];
+      intersectionCount++;
+    }
+  }
+  // If there are no intersections, return an empty array
+  if (intersectionCount == 0) {
+    return new Coord[](0);
+  }
+  // Otherwise, return the array of intersections
+  return intersections;
+}
+
+function findEnclosedPoints(
+  Coord memory coord1,
+  Coord memory coord2,
+  Coord[] memory otherPoints
+) pure returns (Coord[] memory) {
+  Coord[] memory enclosedPoints = new Coord[](0);
+  int256 x1 = coord1.x;
+  int256 y1 = coord1.y;
+  int256 x2 = coord2.x;
+  int256 y2 = coord2.y;
+  for (uint256 i = 0; i < otherPoints.length; i++) {
+    int256 x = otherPoints[i].x;
+    int256 y = otherPoints[i].y;
+    if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+      Coord[] memory newEnclosedPoints = new Coord[](enclosedPoints.length + 1);
+      for (uint256 j = 0; j < enclosedPoints.length; j++) {
+        newEnclosedPoints[j] = enclosedPoints[j];
+      }
+      newEnclosedPoints[enclosedPoints.length] = otherPoints[i];
+      enclosedPoints = newEnclosedPoints;
+    }
+  }
+  return enclosedPoints;
+}
+
+// Takes array of entities and returns their coordinates in a coord array ( Coord[] )
+function getCoords(uint256[] memory entities) internal returns (Coord[] memory) {
+  Coord[] memory coords = new Coord[](entities.length);
+  for (uint256 i = 0; i < entities.length; i++) {
+    Coord memory position = this.getCurrentPosition(
+      PositionComponent(getAddressById(components, PositionComponentID)),
+      entities[i]
+    );
+    coords[i] = position;
+  }
+  return coords;
+}
+
+// function checkIntersection(Coord[] memory circles, uint x1, uint y1, uint x2, uint y2) public constant returns (Coord[] memory) {
+//     Coord[] memory intersectingCircles = new Coord[](circles.length);
+//     uint count = 0;
+//     // Iterate through all circles
+//     for (uint i = 0; i < circles.length; i++) {
+//         // Calculate the distance between the center of the circle and the line segment
+//         uint dist = distanceToSegment(circles[i].x, circles[i].y, x1, y1, x2, y2);
+//         // If the distance is less than the radius of the circle, it means the circle intersects the line segment
+//         if (dist < 1) { // Coord radius = 1
+//             intersectingCircles[count] = circles[i];
+//             count++;
+//         }
+//     }
+//     // Return the array of intersecting circles
+//     return intersectingCircles;
+// }
+// Helper function to calculate the distance between a point and a line segment
+// function distanceToSegment(uint px, uint py, uint x1, uint y1, uint x2, uint y2) internal pure returns (uint) {
+//     // Calculate the length of the line segment
+//     uint l2 = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+//     // Check for degenerate line segment
+//     if (l2 == 0) {
+//         return (px - x1) * (px - x1) + (py - y1) * (py - y1);
+//     }
+//     // Calculate the parameter for the closest point on the line segment
+//     uint t = ((px - x1) * (x2 - x1) + (py - y1) * (y2 - y1)) / l2;
+//     // Check if the closest point is outside of the line segment
+//     if (t < 0) {
+//         return (px - x1) * (px - x1) + (py - y1) * (py - y1);
+//     } else if (t > 1) {
+//         return (px - x2) * (px - x2) + (py - y2) * (py - y2);
+//     } else {
+//         // If the closest point is on the line segment, calculate the distance
+//         uint x = x1 + t * (x2 - x1);
+//         uint y = y1 + t * (y2 - y1);
+//         return (px - x) * (px - x) + (py - y) * (py - y);
+//     }
+// }
