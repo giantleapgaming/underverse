@@ -27,6 +27,12 @@ export async function createNetworkLayer(config: GameConfig) {
 
     Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
 
+    Faction: defineNumberComponent(world, {
+      id: "Faction",
+      indexed: true,
+      metadata: { contractId: "component.Faction" },
+    }),
+
     Balance: defineNumberComponent(world, {
       id: "Balance",
       indexed: true,
@@ -69,7 +75,6 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Position" },
     }),
   };
-
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
     typeof components,
@@ -81,13 +86,13 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
-  const initSystem = async (name: string, setTrue: () => void, setFalse: () => void) => {
+  const initSystem = async (name: string, faction: number, setTrue: () => void, setFalse: () => void) => {
     try {
-      await systems["system.Init"].executeTyped(name);
+      await systems["system.Init"].executeTyped(name, faction);
       setTrue();
     } catch (e) {
       console.log(e);
-      setFalse;
+      setFalse();
     }
   };
   const buildSystem = async (x: number, y: number) => {
