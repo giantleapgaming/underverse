@@ -5,6 +5,7 @@ export const factionData = [
     description1: "Cheaper upgrades, buildings and weapons. Deal more damage.",
     description2: "Lower income generation.",
     color: "#85C1E9",
+    factionNumber: 1,
   },
 
   {
@@ -13,6 +14,7 @@ export const factionData = [
     description1: "Lower cost for mining, transport, building & weapons",
     description2: "Lower income generation & damage.",
     color: "#A569BD",
+    factionNumber: 2,
   },
 
   {
@@ -21,6 +23,7 @@ export const factionData = [
     description1: "Lower costs for mining, transport, buildings & weapons.",
     description2: "Lower income generation & damage.",
     color: "#F4D03F",
+    factionNumber: 3,
   },
 
   {
@@ -29,6 +32,7 @@ export const factionData = [
     description1: "Lower costs fro mining, transport, buildings & weapons",
     description2: "Lower income generation & damage",
     color: "#229954",
+    factionNumber: 4,
   },
 
   {
@@ -37,6 +41,7 @@ export const factionData = [
     description1: "Generates most income",
     description2: "Buildings & repairs cost the cost",
     color: "#566573",
+    factionNumber: 5,
   },
 
   {
@@ -45,5 +50,6 @@ export const factionData = [
     description1: "Higher income generation. Deal more damage",
     description2: "Buildings & weapons cost more",
     color: "#EC7063",
+    factionNumber: 6,
   },
 ];

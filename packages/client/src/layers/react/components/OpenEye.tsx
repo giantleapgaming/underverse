@@ -4,14 +4,15 @@ import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/r
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 import { useState } from "react";
+import { factionData } from "../../../utils/constants";
 
-const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
+const OpenEye = ({ layers }: { layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const {
     network: {
       world,
-      components: { Name, Cash },
+      components: { Name, Cash, Faction },
       network: { connectedAddress },
     },
     phaser: {
@@ -25,9 +26,7 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-  const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
-  const allColors = ["#85C1E9", "#A569BD", "#F4D03F", "#229954", "#566573", "#EC7063"];
 
   if (userEntityId) {
     return (
@@ -55,21 +54,23 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
             <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
-              {allUserNameEntityId.map((nameEntity, index) => {
-                const name = getComponentValue(Name, nameEntity);
-                const cash = getComponentValue(Cash, nameEntity)?.value;
-                const owner = world.entities[nameEntity] === userEntityId;
-                const indexOf = selectedEntities.indexOf(nameEntity);
-                const exists = selectedEntities.some((entity) => entity === nameEntity);
+              {factionData.map((data) => {
+                const userList = [...getComponentEntities(Name)].filter((entity) => {
+                  const faction = getComponentValue(Faction, entity)?.value;
+                  return faction && +faction === data.factionNumber;
+                });
+                const indexOf = selectedEntities.indexOf(data.factionNumber);
+                const exists = selectedEntities.some((entity) => entity === data.factionNumber);
+
                 return (
-                  <S.Player key={nameEntity}>
+                  <S.Player key={data.factionNumber}>
                     <S.CheckBox
                       type="checkbox"
                       className={exists ? "checked" : ""}
                       checked={exists}
                       onChange={() => {
                         if (!exists) {
-                          const list = [...selectedEntities, nameEntity];
+                          const list = [...selectedEntities, data.factionNumber];
                           shouldShowCircle(list);
                         } else {
                           const newList = [...selectedEntities];
@@ -78,19 +79,33 @@ const OpenEye = ({ name, layers }: { name?: string; layers: Layers }) => {
                         }
                       }}
                     ></S.CheckBox>
-                    <S.PLayerName style={{ color: allColors[index] }}>
-                      {owner ? "Owned" : name?.value}
-                      <br />
-                      <S.Cash style={{ color: "white" }}>
-                        {cash &&
-                          new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          }).format(+cash / 1_000_000)}
-                      </S.Cash>
-                    </S.PLayerName>
+                    <div>
+                      <S.Cash style={{ color: data.color }}>{data.name}</S.Cash>
+                      <div style={{ marginLeft: "10px" }}>
+                        {userList.length ? (
+                          userList.map((nameEntity, i) => {
+                            const name = getComponentValue(Name, nameEntity);
+                            const cash = getComponentValue(Cash, nameEntity)?.value;
+                            const owner = world.entities[nameEntity] === userEntityId;
+                            return (
+                              <S.PLayerName style={{ color: data.color }}>
+                                {i + 1}. {owner ? "Owned" : name?.value} (
+                                {cash &&
+                                  new Intl.NumberFormat("en-US", {
+                                    style: "currency",
+                                    currency: "USD",
+                                    minimumFractionDigits: 0,
+                                    maximumFractionDigits: 0,
+                                  }).format(+cash / 1_000_000)}
+                                )
+                              </S.PLayerName>
+                            );
+                          })
+                        ) : (
+                          <p>-:-</p>
+                        )}
+                      </div>
+                    </div>
                   </S.Player>
                 );
               })}
@@ -137,7 +152,6 @@ const S = {
   Player: styled.div`
     display: flex;
     gap: 6px;
-    align-items: center;
     justify-content: flex-start;
   `,
   CheckBox: styled.input`
@@ -164,7 +178,7 @@ const S = {
   `,
 
   PLayerName: styled.p`
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
   `,
 
@@ -213,7 +227,7 @@ export const registerOpenEyeDetails = () => {
       );
     },
     ({ name, layers }) => {
-      return <OpenEye name={name} layers={layers} />;
+      return <OpenEye layers={layers} />;
     }
   );
 };
