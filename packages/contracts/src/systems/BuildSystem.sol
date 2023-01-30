@@ -13,9 +13,8 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 //Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, godownType } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -128,10 +127,10 @@ contract BuildSystem is System {
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, offenceInitialAmount);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
+    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, godownType);
     // StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
     //Moresh: Assign Entity type
-    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
