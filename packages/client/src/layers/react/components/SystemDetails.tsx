@@ -74,7 +74,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const isInSector = sector === 1 || sector === 5 || sector === 9;
     return (
       <S.Container>
-        <S.SystemImg src="/ui/details-system.png" />
+        <S.SystemImg src="/ui/SystemDetailsMenu.png" />
         <S.Absolute>
           <S.Close onClick={close}>X</S.Close>
           <S.InlineSB>
@@ -118,8 +118,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            {isInSector && <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>}
-            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>{convertPrice(sellPrice)} P/MT</p>
+            {isInSector && <p style={{ color: "#e4e76a", fontSize: "10px" }}>{convertPrice(buyPrice)} P/MT</p>}
+            <p style={{ color: "#cb6ce6", fontSize: "10px" }}>{convertPrice(sellPrice)} P/MT</p>
             {!isInSector && <p />}
             {userEntityId === ownedBy && (
               <>
@@ -236,21 +236,18 @@ const S = {
     justify-content: space-between;
     align-items: center;
     pointer-events: all;
+    font-size: 12;
   `,
   SystemImg: styled.img`
     background: black;
-  `,
-  CashText: styled.p`
-    position: absolute;
-    font-size: 12;
-    margin-top: -9px;
   `,
   ImgContainer: styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 6px;
+    gap: 3px;
+    margin-top: 8px;
   `,
   Img: styled.img`
     width: 70px;
@@ -262,12 +259,12 @@ const S = {
   `,
 
   Cargo: styled.div`
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     text-align: left;
   `,
   DeployText: styled.p`
     position: absolute;
-    font-size: 12;
+    font-size: 10;
     font-weight: bold;
   `,
   Center: styled.p`
@@ -275,7 +272,7 @@ const S = {
   `,
   Absolute: styled.div`
     height: 100%;
-    left: 36px;
+    left: 28px;
     position: absolute;
     display: flex;
     align-items: center;
@@ -284,8 +281,9 @@ const S = {
   Grid: styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-    margin-top: 25px;
+    grid-gap: 5px;
+    margin-top: 8px;
+    margin-left: 5px;
     margin-right: 15px;
   `,
   InlinePointer: styled.div<{ isDisabled?: boolean }>`
@@ -308,16 +306,16 @@ const S = {
     align-items: center;
     width: 100%;
     margin-top: 5px;
-    gap: 30px;
+    gap: 10px;
   `,
   InlineSB: styled.div`
     position: relative;
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 20px;
-    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-top: 13px;
   `,
 
   Close: styled.p`
@@ -325,7 +323,7 @@ const S = {
     width: 100%;
     position: absolute;
     top: -5px;
-    left: 45px;
+    left: 30px;
     font-size: 15px;
     cursor: pointer;
   `,
