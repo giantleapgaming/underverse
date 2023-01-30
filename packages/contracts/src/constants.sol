@@ -11,3 +11,11 @@ uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
 uint256 constant godownInitialStorage = 1000;
 uint256 constant godownInitialBalance = 0;
+
+// Types : Can use these or create enum to store types.
+uint256 constant godownType = 1;
+uint256 constant asteroidType = 2;
+uint256 constant residentialType = 3;
+uint256 constant attackType = 4;
+uint256 constant harvesterType = 5;
+uint256 constant planetType = 6;
