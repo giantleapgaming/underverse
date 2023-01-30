@@ -15,6 +15,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
     network: {
       api: { initSystem },
     },
+    phaser: { sounds },
   } = layers;
   return (
     <Container faction={!!selectFaction}>
@@ -26,6 +27,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           <Form
             onSubmit={async (e) => {
               e.preventDefault();
+              sounds["click"].play();
               if (name) {
                 try {
                   await initSystem(
@@ -60,7 +62,12 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           </Form>
         </>
       ) : (
-        <Faction setSelectFaction={setSelectFaction} />
+        <Faction
+          setSelectFaction={setSelectFaction}
+          clickSound={() => {
+            sounds["click"].play();
+          }}
+        />
       )}
     </Container>
   );

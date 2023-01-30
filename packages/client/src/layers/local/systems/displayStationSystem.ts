@@ -67,6 +67,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
       if (defence?.value && +defence.value > 0 && level && +level > 0) {
         const object = objectPool.get(entity, "Sprite");
+        const factionObject = objectPool.get(`Faction${entity}`, "Sprite");
         const owndBy = getComponentValue(OwnedBy, entity)?.value;
         if (owndBy) {
           if (level && defence?.value && +defence.value) {
@@ -95,6 +96,24 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
                 sprit.assetKey,
                 `${factionNumber && +factionNumber}-${level && +level}-${balance && +balance}.png`
               );
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.depth = 2;
+              gameObject.setOrigin(0.5, 0.5);
+              phaserScene.add.tween({
+                targets: gameObject,
+                angle: 360,
+                duration: 1500000,
+                ease: "circular",
+                repeat: -1,
+                yoyo: false,
+                rotation: 360,
+              });
+            },
+          });
+          factionObject.setComponent({
+            id: `faction-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(sprit.assetKey, `faction-${factionNumber && +factionNumber}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.depth = 2;
               gameObject.setOrigin(0.5, 0.5);
@@ -138,6 +157,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
         }
       } else {
         objectPool?.remove(`group-missile-${entity}`);
+        objectPool?.remove(`Faction${entity}`);
         objectPool?.remove(entity);
         updateProgressBarBg?.clear();
         objectPool.remove(`circle-${entity}`);

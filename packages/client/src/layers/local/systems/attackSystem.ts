@@ -1,12 +1,6 @@
-import { Assets, Sprites, Animations } from "../../phaser/constants";
+import { Sprites, Animations } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineComponentSystem,
-  EntityID,
-  EntityIndex,
-  getComponentEntities,
-  getComponentValue,
-} from "@latticexyz/recs";
+import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { enclosedPoints, getCoordinatesArray, intersectingCircles } from "../../../utils/distance";
@@ -35,7 +29,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Name, Level },
+    components: { Position, OwnedBy, Level, Faction },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -88,12 +82,9 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
               tileHeight
             );
             const object = objectPool.get(`blocking-station-attack-${i}`, "Sprite");
-            const walletAddress = connectedAddress.get();
-            const userHoverStation = {} as { [key: string]: Sprites };
-            [...getComponentEntities(Name)].map(
-              (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
-            );
-            const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+            const factionIndex = world.entities.indexOf(ownedBy);
+            const faction = getComponentValue(Faction, factionIndex)?.value;
+            const Sprite = stationColor[faction ? +faction - 1 : 1] as Sprites.View1;
             const stationBackground = config.sprites[Sprite];
             object.setComponent({
               id: `blocking-station-attack-${i}`,
@@ -173,6 +164,9 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const destinationDetails = getComponentValue(Attack, modalIndex);
     const destinationEntityId = destinationDetails?.entityId as EntityIndex;
+    const wallet = connectedAddress.get();
+    const factionIndex = world.entities.indexOf(wallet);
+    const faction = getComponentValue(Faction, factionIndex)?.value;
     if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const attackCord = getComponentValue(AttackCords, modalIndex);
@@ -191,17 +185,10 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           const object = objectPool.get("missile", "Sprite");
           const missileSprite = config.sprites[Sprites.Missile2];
           const repeatLoop = destinationDetails.amount - 1;
-          const images = ["1", "2", "3", "4", "5", "6"];
-          const allImg = {} as { [key: string]: string };
-          [...getComponentEntities(Name)].forEach(
-            (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
-          );
-          const owndBy = connectedAddress.get() || "";
-
           object.setComponent({
             id: "missileRelease",
             once: (gameObject) => {
-              gameObject.setTexture(missileSprite.assetKey, `missile-${allImg[owndBy]}.png`);
+              gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
               gameObject.setPosition(source.x + 32, source.y + 32);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);

@@ -19,3 +19,4 @@ uint256 constant residentialType = 3;
 uint256 constant attackType = 4;
 uint256 constant harvesterType = 5;
 uint256 constant planetType = 6;
+uint256 constant shipyardType = 7;

@@ -1,5 +1,13 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, EntityID, getComponentEntities, getComponentValue, Has, Not } from "@latticexyz/recs";
+import {
+  defineSystem,
+  EntityID,
+  getComponentEntities,
+  getComponentValue,
+  getComponentValueStrict,
+  Has,
+  Not,
+} from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { Sprites } from "../../phaser/constants";
@@ -26,6 +34,7 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
 
   defineSystem(world, [Has(ShowCircle), Not(Position)], () => {
     const allPositionEntity = [...getComponentEntities(Position)];
+    const allShowCircleEntity = getComponentValueStrict(ShowCircle, showCircleIndex).selectedEntities;
     allPositionEntity.forEach((entity) => {
       const defence = getComponentValue(Defence, entity);
       const position = getComponentValue(Position, entity);
@@ -36,16 +45,15 @@ export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const Sprite = stationColor[+factionNumber - 1] as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
-        const factionEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-        const showSelected = factionEntities.includes(+factionNumber);
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
+        const showSelected = allShowCircleEntity.includes(factionIndex);
         if (showSelected) {
           circle.setComponent({
             id: `circle-${entity}`,
             once: (gameObject) => {
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setOrigin(0.5, 0.5);
-              gameObject.setVisible(!!showSelected);
+              gameObject.setVisible(showSelected);
               gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
             },
           });

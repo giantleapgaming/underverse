@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { factionData } from "../../../utils/constants";
 
-export const Faction = ({ setSelectFaction }: { setSelectFaction: (index: number) => void }) => {
+export const Faction = ({
+  setSelectFaction,
+  clickSound,
+}: {
+  setSelectFaction: (index: number) => void;
+  clickSound: () => void;
+}) => {
   return (
     <S.Container>
       <p>Select Faction</p>
@@ -13,12 +19,13 @@ export const Faction = ({ setSelectFaction }: { setSelectFaction: (index: number
             key={`index-${index}`}
             onClick={() => {
               setSelectFaction(index + 1);
+              clickSound();
             }}
           >
-            <p>{data.name}</p>
+            <p style={{ fontSize: "26px", fontWeight: 700 }}>{data.name}</p>
             <S.Img src={data.img} />
-            <p>{data.description1}</p>
-            <p>{data.description1}</p>
+            <p style={{ textAlign: "center", maxWidth: "400px" }}>{data.description1}</p>
+            <p style={{ textAlign: "center", maxWidth: "400px" }}>{data.description2}</p>
           </S.FactionSelect>
         ))}
       </S.FactionSelectionContainer>
@@ -32,6 +39,7 @@ const S = {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-y: auto;
   `,
   Faction: styled.div`
     font-size: 50px;
@@ -40,8 +48,8 @@ const S = {
     margin-bottom: 40px;
   `,
   Img: styled.img`
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     border-radius: 100%;
   `,
   FactionSelect: styled.div`
@@ -51,11 +59,19 @@ const S = {
     justify-content: center;
     align-items: center;
     gap: 20px;
+    padding: 20px;
+    &:hover {
+      background-color: #eeeeee11;
+      border-radius: 10%;
+      scale: 1.1;
+    }
   `,
   FactionSelectionContainer: styled.div`
     display: flex;
     gap: 20px;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    padding: 50px;
   `,
 };

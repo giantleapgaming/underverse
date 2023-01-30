@@ -26,6 +26,7 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
+  const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
 
   if (userEntityId) {
@@ -54,23 +55,23 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
             <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
-              {factionData.map((data) => {
-                const userList = [...getComponentEntities(Name)].filter((entity) => {
-                  const faction = getComponentValue(Faction, entity)?.value;
-                  return faction && +faction === data.factionNumber;
-                });
-                const indexOf = selectedEntities.indexOf(data.factionNumber);
-                const exists = selectedEntities.some((entity) => entity === data.factionNumber);
-
+              {allUserNameEntityId.map((nameEntity, index) => {
+                const name = getComponentValue(Name, nameEntity);
+                const cash = getComponentValue(Cash, nameEntity)?.value;
+                const owner = world.entities[nameEntity] === userEntityId;
+                const indexOf = selectedEntities.indexOf(nameEntity);
+                const exists = selectedEntities.some((entity) => entity === nameEntity);
+                const factionNumber = getComponentValue(Faction, nameEntity)?.value;
+                const faction = factionData.find((f) => f.factionNumber === (factionNumber && +factionNumber));
                 return (
-                  <S.Player key={data.factionNumber}>
+                  <S.Player key={nameEntity}>
                     <S.CheckBox
                       type="checkbox"
                       className={exists ? "checked" : ""}
                       checked={exists}
                       onChange={() => {
                         if (!exists) {
-                          const list = [...selectedEntities, data.factionNumber];
+                          const list = [...selectedEntities, nameEntity];
                           shouldShowCircle(list);
                         } else {
                           const newList = [...selectedEntities];
@@ -79,36 +80,20 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
                         }
                       }}
                     ></S.CheckBox>
-                    <div>
-                      <S.Cash style={{ color: data.color }}>{data.name}</S.Cash>
-                      <div style={{ marginLeft: "10px" }}>
-                        {userList.length ? (
-                          userList.map((nameEntity, i) => {
-                            const name = getComponentValue(Name, nameEntity);
-                            const cash = getComponentValue(Cash, nameEntity)?.value;
-                            const owner = world.entities[nameEntity] === userEntityId;
-                            return (
-                              <S.PLayerName
-                                style={{ color: data.color }}
-                                key={`${data.factionNumber} ${data.factionNumber}`}
-                              >
-                                {i + 1}. {owner ? "Owned" : name?.value} (
-                                {cash &&
-                                  new Intl.NumberFormat("en-US", {
-                                    style: "currency",
-                                    currency: "USD",
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 0,
-                                  }).format(+cash / 1_000_000)}
-                                )
-                              </S.PLayerName>
-                            );
-                          })
-                        ) : (
-                          <p>-:-</p>
-                        )}
-                      </div>
-                    </div>
+                    <S.PLayerName style={{ color: faction?.color }}>
+                      {owner ? "Owned" : name?.value}
+                      <br />
+                      <S.Cash style={{ color: "white" }}>
+                        {cash &&
+                          new Intl.NumberFormat("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                          }).format(+cash / 1_000_000)}
+                        <span style={{ color: faction?.color }}>({faction?.name})</span>
+                      </S.Cash>
+                    </S.PLayerName>
                   </S.Player>
                 );
               })}
@@ -151,10 +136,16 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    max-height: 440px;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
   `,
   Player: styled.div`
     display: flex;
     gap: 6px;
+    align-items: center;
     justify-content: flex-start;
   `,
   CheckBox: styled.input`
@@ -181,7 +172,7 @@ const S = {
   `,
 
   PLayerName: styled.p`
-    font-size: 14px;
+    font-size: 16px;
     font-weight: 700;
   `,
 
@@ -229,7 +220,7 @@ export const registerOpenEyeDetails = () => {
         })
       );
     },
-    ({ name, layers }) => {
+    ({ layers }) => {
       return <OpenEye layers={layers} />;
     }
   );

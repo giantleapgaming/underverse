@@ -11,7 +11,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
     world,
     systemCallStreams,
     network: { connectedAddress },
-    components: { OwnedBy, Position, Name },
+    components: { OwnedBy, Position, Name, Faction },
   } = network;
   const {
     localApi: { setLogs },
@@ -68,16 +68,12 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       const object = objectPool.get("missile", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const repeatLoop = +BigNumber.from(amount) - 1;
-      const images = ["1", "2", "3", "4", "5", "6"];
-      const allImg = {} as { [key: string]: string };
-      [...getComponentEntities(Name)].forEach(
-        (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
-      );
-      const owndBy = connectedAddress.get() || "";
+      const factionIndex = world.entities.indexOf(srcOwnedBy);
+      const faction = getComponentValue(Faction, factionIndex)?.value;
       object.setComponent({
         id: "missileRelease",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `missile-${allImg[owndBy]}.png`);
+          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
           gameObject.setPosition(source.x + 32, source.y + 32);
           gameObject.setOrigin(0.5, 0.5);
           const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI);

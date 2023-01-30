@@ -11,6 +11,9 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
+//Moresh
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
@@ -20,8 +23,9 @@ uint256 constant ID = uint256(keccak256("system.Build"));
 contract BuildSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
+  //Moresh: Updated to support entity_type
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (int32 x, int32 y) = abi.decode(arguments, (int32, int32));
+    (int32 x, int32 y, int32 entity_type) = abi.decode(arguments, (int32, int32, int32));
 
     require(x >= -25 && x <= 25, "Invalid X co-ordinate");
     require(y >= -25 && y <= 25, "Invalid Y co-ordinate");
@@ -35,11 +39,11 @@ contract BuildSystem is System {
 
     uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
       .getValue(addressToEntity(msg.sender));
-
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 10 seconds of delay between actions"
-    );
+    //Moresh: Removed this
+    //require(
+    //  playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
+    //  "Need 10 seconds of delay between actions"
+    //);
 
     Coord memory coord = Coord({ x: x, y: y });
 
@@ -126,6 +130,8 @@ contract BuildSystem is System {
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     // StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
+    //Moresh: Assign Entity type
+    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
@@ -138,7 +144,11 @@ contract BuildSystem is System {
     );
   }
 
-  function executeTyped(int32 x, int32 y) public returns (bytes memory) {
-    return execute(abi.encode(x, y));
+  function executeTyped(
+    int32 x,
+    int32 y,
+    int32 entity_type
+  ) public returns (bytes memory) {
+    return execute(abi.encode(x, y, entity_type));
   }
 }
