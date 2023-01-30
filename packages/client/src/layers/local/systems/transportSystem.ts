@@ -34,7 +34,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Level, Name },
+    components: { Position, OwnedBy, Level, Faction },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(2, 0xeeeeee, 1);
@@ -82,12 +82,9 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
               tileHeight
             );
             const object = objectPool.get(`blocking-station-${i}`, "Sprite");
-            const walletAddress = connectedAddress.get();
-            const userHoverStation = {} as { [key: string]: Sprites };
-            [...getComponentEntities(Name)].map(
-              (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
-            );
-            const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+            const factionIndex = world.entities.indexOf(ownedBy);
+            const faction = getComponentValue(Faction, factionIndex)?.value;
+            const Sprite = stationColor[faction ? +faction - 1 : 1] as Sprites.View1;
             const stationBackground = config.sprites[Sprite];
             object.setComponent({
               id: `blocking-station-${i}`,

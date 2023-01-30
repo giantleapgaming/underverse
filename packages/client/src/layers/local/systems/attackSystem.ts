@@ -1,4 +1,4 @@
-import { Assets, Sprites, Animations } from "../../phaser/constants";
+import { Sprites, Animations } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import {
   defineComponentSystem,
@@ -35,7 +35,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Name, Level },
+    components: { Position, OwnedBy, Name, Level, Faction },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -88,12 +88,9 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
               tileHeight
             );
             const object = objectPool.get(`blocking-station-attack-${i}`, "Sprite");
-            const walletAddress = connectedAddress.get();
-            const userHoverStation = {} as { [key: string]: Sprites };
-            [...getComponentEntities(Name)].map(
-              (nameEntity, index) => (userHoverStation[world.entities[nameEntity]] = stationColor[index])
-            );
-            const Sprite = (walletAddress ? userHoverStation[ownedBy] : Sprites.View1) as Sprites.View1;
+            const factionIndex = world.entities.indexOf(ownedBy);
+            const faction = getComponentValue(Faction, factionIndex)?.value;
+            const Sprite = stationColor[faction ? +faction - 1 : 1] as Sprites.View1;
             const stationBackground = config.sprites[Sprite];
             object.setComponent({
               id: `blocking-station-attack-${i}`,
