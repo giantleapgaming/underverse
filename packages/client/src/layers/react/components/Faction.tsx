@@ -15,10 +15,10 @@ export const Faction = ({ setSelectFaction }: { setSelectFaction: (index: number
               setSelectFaction(index + 1);
             }}
           >
-            <p>{data.name}</p>
+            <p style={{ fontSize: "26px", fontWeight: 700 }}>{data.name}</p>
             <S.Img src={data.img} />
-            <p>{data.description1}</p>
-            <p>{data.description1}</p>
+            <p style={{ textAlign: "center", maxWidth: "400px" }}>{data.description1}</p>
+            <p style={{ textAlign: "center", maxWidth: "400px" }}>{data.description1}</p>
           </S.FactionSelect>
         ))}
       </S.FactionSelectionContainer>
@@ -32,6 +32,7 @@ const S = {
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    overflow-y: auto;
   `,
   Faction: styled.div`
     font-size: 50px;
@@ -40,8 +41,8 @@ const S = {
     margin-bottom: 40px;
   `,
   Img: styled.img`
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
     border-radius: 100%;
   `,
   FactionSelect: styled.div`
@@ -57,5 +58,7 @@ const S = {
     gap: 20px;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    padding: 50px;
   `,
 };

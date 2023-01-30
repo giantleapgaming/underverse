@@ -12,7 +12,7 @@ const ProgressBarCmp = ({ layers }: { layers: Layers }) => {
   } = layers;
   setTimeout(() => {
     hideProgress();
-  }, 10000);
+  }, 4000);
 
   return (
     <div>
@@ -38,14 +38,14 @@ const ProgressBar = styled.div`
   border-radius: 100px;
   background: #036e71;
   height: 100%;
-  animation: ${fill} 10s linear 10;
+  animation: ${fill} 4s linear 4;
 `;
 
 export const registerProgressBar = () => {
   registerUIComponent(
     "registerProgressBar",
     {
-      colStart: 8,
+      colStart: 10,
       colEnd: 12,
       rowStart: 1,
       rowEnd: 1,
