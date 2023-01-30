@@ -12,8 +12,21 @@
     "FactionComponent"
   ],
   "systems": [
-    { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "FactionComponent"] },
+    {
+      "name": "ComponentDevSystem",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
+      "name": "InitSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "FactionComponent"
+      ]
+    },
     {
       "name": "BuildSystem",
       "writeAccess": [
@@ -49,11 +62,21 @@
     },
     {
       "name": "TransportSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "PositionComponent", "BalanceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "PositionComponent",
+        "BalanceComponent"
+      ]
     },
     {
       "name": "UpgradeSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "LevelComponent", "DefenceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "LevelComponent",
+        "DefenceComponent"
+      ]
     },
     {
       "name": "BuyWeaponSystem",
@@ -95,7 +118,20 @@
     },
     {
       "name": "RepairSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "DefenceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "DefenceComponent"
+      ]
+    },
+    {
+      "name": "TransportWithBlockSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "PositionComponent",
+        "BalanceComponent"
+      ]
     }
   ]
 }

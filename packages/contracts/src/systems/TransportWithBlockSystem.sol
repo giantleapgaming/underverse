@@ -38,10 +38,12 @@ contract TransportWithBlockSystem is System {
 
     require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
 
-    // uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-    //   sourceGodownEntity
-    // );
-    // require(sourceGodownLevel >= 1, "Invalid source godown entity");
+    {
+      uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+        sourceGodownEntity
+      );
+      require(sourceGodownLevel >= 1, "Invalid source godown entity");
+    }
 
     uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
       destinationGodownEntity
@@ -73,25 +75,40 @@ contract TransportWithBlockSystem is System {
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationGodownEntity
     );
+    {
+      PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
 
-    PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
+      uint256[] memory allPositionEntities = position.getEntities();
 
-    uint256[] memory allPositionEntities = position.getEntities();
+      Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
 
-    Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
+      // Coord[] memory enclosedPoints = findEnclosedPoints(
+      //   sourceGodownPosition,
+      //   destinationGodownPosition,
+      //   allStationCoords
+      // );
 
-    // Coord[] memory enclosedPoints = findEnclosedPoints(
-    //   sourceGodownPosition,
-    //   destinationGodownPosition,
-    //   allStationCoords
-    // );
+      Coord[] memory blockingCoords = checkIntersections(
+        sourceGodownPosition,
+        destinationGodownPosition,
+        // enclosedPoints
+        allStationCoords
+      );
 
-    Coord[] memory blockingCoords = checkIntersections(
-      sourceGodownPosition,
-      destinationGodownPosition,
-      // enclosedPoints
-      allStationCoords
-    );
+      for (uint256 j = 0; j < blockingCoords.length; j++) {
+        Coord memory checkPos = blockingCoords[j];
+        uint256[] memory entities = PositionComponent(getAddressById(components, PositionComponentID))
+          .getEntitiesWithValue(checkPos);
+        for (uint256 k = 0; k < entities.length; k++) {
+          if (
+            OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(entities[k]) !=
+            addressToEntity(msg.sender)
+          ) {
+            revert("Enemy station blocking transport!");
+          }
+        }
+      }
+    }
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
       sourceGodownPosition,
