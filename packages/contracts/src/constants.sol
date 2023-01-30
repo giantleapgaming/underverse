@@ -11,6 +11,7 @@ uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
 uint256 constant godownInitialStorage = 1000;
 uint256 constant godownInitialBalance = 0;
+uint256 constant earthCenterPlanetDefence = 1000000;
 
 // Types : Can use these or create enum to store types.
 uint256 constant godownType = 1;

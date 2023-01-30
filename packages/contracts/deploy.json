@@ -14,18 +14,33 @@
   ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "FactionComponent","EntityTypeComponent"] },
+    { "name": "InitSystem", "writeAccess": [
+              "LastUpdatedTimeComponent",
+              "NameComponent",
+              "OwnedByComponent",
+              "PositionComponent",
+              "CashComponent",
+              "OffenceComponent",
+              "DefenceComponent",
+              "LevelComponent",
+              "BalanceComponent",
+              "FactionComponent",
+              "EntityTypeComponent"
+            ]
+    },
     {
       "name": "BuildSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
+        "NameComponent",
         "OwnedByComponent",
         "PositionComponent",
+        "CashComponent",
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
         "BalanceComponent",
+        "FactionComponent",
         "EntityTypeComponent"
       ]
     },

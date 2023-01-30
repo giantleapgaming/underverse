@@ -43,19 +43,19 @@ contract RepairSystem is System {
     uint256 godownCreationCost = getGodownCreationCost(godownPosition.x, godownPosition.y);
 
     uint256 totalGodownUpgradeCostUntilLevel = getTotalGodownUpgradeCostUntilLevel(selectedEntityLevel);
-    
+
     uint256 defenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(godownEntity);
 
-// We calculate what is the damage taken by the station so far
-//(((selectedEntityLevel * 100) - defenceAmount)/(selectedEntityLevel * 100)*100;
-// Simplifying it to ((selectedEntityLevel * 100) - defenceAmount)/selectedEntityLevel;
+    // We calculate what is the damage taken by the station so far
+    //(((selectedEntityLevel * 100) - defenceAmount)/(selectedEntityLevel * 100)*100;
+    // Simplifying it to ((selectedEntityLevel * 100) - defenceAmount)/selectedEntityLevel;
 
-    uint256 damagePercent = ((selectedEntityLevel * 100) - defenceAmount)/selectedEntityLevel;
-// Total amount spent on station so far TotalSpent = godownCreationCost + totalGodownUpgradeCostUntilLevel 
-// Amount needed to repair = TotalSpent*damagePercent/100
+    uint256 damagePercent = ((selectedEntityLevel * 100) - defenceAmount) / selectedEntityLevel;
+    // Total amount spent on station so far TotalSpent = godownCreationCost + totalGodownUpgradeCostUntilLevel
+    // Amount needed to repair = TotalSpent*damagePercent/100
 
-uint256 repairCash = (godownCreationCost + totalGodownUpgradeCostUntilLevel) * damagePercent/100;
-   
+    uint256 repairCash = ((godownCreationCost + totalGodownUpgradeCostUntilLevel) * damagePercent) / 100;
+
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
       addressToEntity(msg.sender)
@@ -68,19 +68,14 @@ uint256 repairCash = (godownCreationCost + totalGodownUpgradeCostUntilLevel) * d
       playerCash - repairCash
     );
 
-
     // Updating defence value
-    DefenceComponent(getAddressById(components, DefenceComponentID)).set(
-      godownEntity,
-      selectedEntityLevel*100
-    );
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, selectedEntityLevel * 100);
 
     //Updating timestamp
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
       block.timestamp
     );
-
   }
 
   function executeTyped(uint256 entity) public returns (bytes memory) {
