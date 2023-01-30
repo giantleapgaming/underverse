@@ -3,13 +3,18 @@ import { registerUIComponent } from "../engine";
 import { EntityID, EntityIndex, getComponentEntities, getComponentValue, setComponent } from "@latticexyz/recs";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
-
+import { factionData } from "../../../utils/constants";
 import styled from "styled-components";
 import { convertPrice } from "../utils/priceConverter";
 import { walletAddress } from "../utils/walletAddress";
 import { findSector } from "../../../utils/sector";
 const images = ["/ui/1-1.png", "/ui/2-1.png", "/ui/3-1.png", "/ui/4-1.png", "/ui/5-1.png", "/ui/6-1.png"];
+const factionImg: string[] = [];
+factionData.forEach((data) => {
+  factionImg.push(data.img);
+});
 
+console.log(factionImg);
 const SystemDetails = ({ layers }: { layers: Layers }) => {
   const {
     network: {
@@ -52,8 +57,16 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const name = getComponentValue(Name, nameEntityIndex)?.value;
     const userEntityId = connectedAddress.get();
     const allImg = {} as { [key: string]: string };
+    const allFactionImg = {} as { [key: string]: string };
     [...getComponentEntities(Name)].map((nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index]));
+    [...getComponentEntities(Name)].map(
+      (nameEntity, index) => (allFactionImg[world.entities[nameEntity]] = factionImg[index])
+    );
+
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
+    const userFaction = (ownedBy ? allFactionImg[ownedBy] : allFactionImg[0]) as string;
+
+    console.log("ownedBy " + ownedBy);
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;
@@ -61,7 +74,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const isInSector = sector === 1 || sector === 5 || sector === 9;
     return (
       <S.Container>
-        <S.SystemImg src="/ui/details-system.png" />
+        <S.SystemImg src="/ui/SystemDetailsMenu.png" />
         <S.Absolute>
           <S.Close onClick={close}>X</S.Close>
           <S.InlineSB>
@@ -84,9 +97,10 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                 Wallet: {copy ? "Copy" : walletAddress(`${ownedBy}`)}
               </p>
             </div>
-            <div>
-              <img src={userStation} />
-            </div>
+            <S.ImgContainer>
+              <S.Img src={userStation} />
+              <S.FactionImg src={userFaction} />
+            </S.ImgContainer>
           </S.InlineSB>
           <S.Cargo>
             <p>CARGO: {balance && +balance} METRIC TONNES</p>
@@ -104,8 +118,8 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </S.Center>
           </S.InlineSA>
           <S.Grid>
-            {isInSector && <p style={{ color: "#e4e76a", fontSize: "12px" }}>{convertPrice(buyPrice)} P/MT</p>}
-            <p style={{ color: "#cb6ce6", fontSize: "12px" }}>{convertPrice(sellPrice)} P/MT</p>
+            {isInSector && <p style={{ color: "#e4e76a", fontSize: "10px" }}>{convertPrice(buyPrice)} P/MT</p>}
+            <p style={{ color: "#cb6ce6", fontSize: "10px" }}>{convertPrice(sellPrice)} P/MT</p>
             {!isInSector && <p />}
             {userEntityId === ownedBy && (
               <>
@@ -120,7 +134,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/yellow-b.png" />
+                    <img src="/button/yellowButton.png" />
                     <S.DeployText>BUY</S.DeployText>
                   </S.InlinePointer>
                 )}
@@ -134,7 +148,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     }
                   }}
                 >
-                  <img src="/button/pink-b.png" />
+                  <img src="/button/pinkButton.png" />
                   <S.DeployText>SELL</S.DeployText>
                 </S.InlinePointer>
                 <>
@@ -147,7 +161,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/white-b.png" />
+                    <img src="/button/whiteButton.png" />
                     <S.DeployText>TRANSPORT</S.DeployText>
                   </S.InlinePointer>
 
@@ -161,7 +175,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/orange-b.png" />
+                    <img src="/button/orangeButton.png" />
                     <S.DeployText>UPGRADE</S.DeployText>
                   </S.InlinePointer>
 
@@ -170,7 +184,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       shouldShowWeaponModal(true);
                     }}
                   >
-                    <img src="/button/blue-b.png" />
+                    <img src="/button/blueButton.png" />
                     <S.DeployText>WEAPONS</S.DeployText>
                   </S.InlinePointer>
 
@@ -181,7 +195,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       sounds["click"].play();
                     }}
                   >
-                    <img src="/button/red-b.png" />
+                    <img src="/button/redButton.png" />
                     <S.DeployText>ATTACK</S.DeployText>
                   </S.InlinePointer>
                 </>
@@ -191,7 +205,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     sounds["click"].play();
                   }}
                 >
-                  <img src="/button/base-b.png" />
+                  <img src="/button/greenButton.png" />
                   <S.DeployText>SCRAP</S.DeployText>
                 </S.InlinePointer>
                 {!((level && +level * 100) === (defence && +defence)) && (
@@ -201,7 +215,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       sounds["click"].play();
                     }}
                   >
-                    <img src="/button/white-b.png" />
+                    <img src="/button/whiteButton.png" />
                     <S.DeployText>REPAIR</S.DeployText>
                   </S.InlinePointer>
                 )}
@@ -222,22 +236,35 @@ const S = {
     justify-content: space-between;
     align-items: center;
     pointer-events: all;
+    font-size: 12;
   `,
   SystemImg: styled.img`
     background: black;
   `,
-  CashText: styled.p`
-    position: absolute;
-    font-size: 12;
-    margin-top: -9px;
+  ImgContainer: styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    margin-top: 8px;
   `,
+  Img: styled.img`
+    width: 70px;
+    height: 70px;
+  `,
+  FactionImg: styled.img`
+    width: 40px;
+    height: 40px;
+  `,
+
   Cargo: styled.div`
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     text-align: left;
   `,
   DeployText: styled.p`
     position: absolute;
-    font-size: 12;
+    font-size: 10;
     font-weight: bold;
   `,
   Center: styled.p`
@@ -245,7 +272,7 @@ const S = {
   `,
   Absolute: styled.div`
     height: 100%;
-    left: 36px;
+    left: 28px;
     position: absolute;
     display: flex;
     align-items: center;
@@ -254,8 +281,9 @@ const S = {
   Grid: styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 10px;
-    margin-top: 25px;
+    grid-gap: 5px;
+    margin-top: 8px;
+    margin-left: 5px;
     margin-right: 15px;
   `,
   InlinePointer: styled.div<{ isDisabled?: boolean }>`
@@ -278,16 +306,16 @@ const S = {
     align-items: center;
     width: 100%;
     margin-top: 5px;
-    gap: 30px;
+    gap: 10px;
   `,
   InlineSB: styled.div`
     position: relative;
     display: flex;
     justify-content: center;
-    gap: 30px;
+    gap: 10px;
     align-items: center;
-    margin-bottom: 20px;
-    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-top: 13px;
   `,
 
   Close: styled.p`

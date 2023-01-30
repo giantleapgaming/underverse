@@ -24,7 +24,7 @@ contract BuildSystem is System {
 
   //Moresh: Updated to support entity_type
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (int32 x, int32 y, int32 entity_type) = abi.decode(arguments, (int32, int32, int32));
+    (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
 
     require(x >= -25 && x <= 25, "Invalid X co-ordinate");
     require(y >= -25 && y <= 25, "Invalid Y co-ordinate");
@@ -146,7 +146,7 @@ contract BuildSystem is System {
   function executeTyped(
     int32 x,
     int32 y,
-    int32 entity_type
+    uint256 entity_type
   ) public returns (bytes memory) {
     return execute(abi.encode(x, y, entity_type));
   }

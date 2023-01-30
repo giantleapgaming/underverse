@@ -15,15 +15,15 @@
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
     { "name": "InitSystem", "writeAccess": [
-              "CashComponent",
               "LastUpdatedTimeComponent",
+              "NameComponent",
               "OwnedByComponent",
               "PositionComponent",
+              "CashComponent",
               "OffenceComponent",
               "DefenceComponent",
               "LevelComponent",
               "BalanceComponent",
-              "NameComponent",
               "FactionComponent",
               "EntityTypeComponent"
             ]
