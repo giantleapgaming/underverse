@@ -10,7 +10,7 @@ import { playerInitialCash, earthCenterPlanetDefence, planetType, asteroidType }
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 // Added new by Moresh to support faction
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { hardcodeAsteroidsAndPlantets } from "../utils.sol";
+import { hardcodeAsteroidsAndPlanets } from "../utils.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -55,55 +55,58 @@ contract InitSystem is System {
 
     // Init called for first time.
     if (playerCount == 0) {
+      uint256 earthEntityId = world.getUniqueEntityId();
+      // Coord memory earthCoord = ;
+      PositionComponent(getAddressById(components, PositionComponentID)).set(earthEntityId, Coord({ x: 0, y: 0 }));
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(earthEntityId, earthCenterPlanetDefence);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(earthEntityId, planetType);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
+        earthEntityId,
+        block.timestamp
+      );
+
+      uint256 a1 = world.getUniqueEntityId();
+      // Coord memory a1Coord = ;
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a1, Coord({ x: 16, y: 18 }));
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a1, 10);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a1, asteroidType);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(a1, 1);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a1, block.timestamp);
+
+      uint256 a2 = world.getUniqueEntityId();
+      // Coord memory a2Coord =
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a2, Coord({ x: 19, y: 21 }));
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a2, 25);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a2, asteroidType);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(a2, 1);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a2, block.timestamp);
+
+      uint256 a3 = world.getUniqueEntityId();
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a3, Coord({ x: 22, y: 24 }));
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a3, 35);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a3, asteroidType);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a3, block.timestamp);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(a3, 1);
+
+      uint256 a4 = world.getUniqueEntityId();
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a4, Coord({ x: 23, y: 17 }));
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a4, 70);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a4, asteroidType);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a4, block.timestamp);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(a4, 1);
+
+      uint256 a5 = world.getUniqueEntityId();
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a5, Coord({ x: 20, y: 24 }));
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a5, 90);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a5, asteroidType);
+      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a5, block.timestamp);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(a5, 1);
+
       //
       //
-      hardcodeAsteroidsAndPlantets(world, components);
-      // uint256 earthEntityId = 1234; // world.getUniqueEntityId();
-      // Coord memory earthCoord = Coord({ x: 0, y: 0 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(earthEntityId, earthCoord);
-      // DefenceComponent(getAddressById(components, DefenceComponentID)).set(earthEntityId, earthCenterPlanetDefence);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(earthEntityId, planetType);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(earthEntityId, block.timestamp);
-
-      // uint256 a1 = 12345; // world.getUniqueEntityId();
-      // Coord memory a1Coord = Coord({ x: 16, y: 18 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(a1, a1Coord);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(a1, 10);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a1, asteroidType);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(a1, 1);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a1, block.timestamp);
-
-      // uint256 a2 = 121;// world.getUniqueEntityId();
-      // Coord memory a2Coord = Coord({ x: 19, y: 21 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(a2, a2Coord);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(a2, 25);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a2, asteroidType);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(a2, 1);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a2, block.timestamp);
-
-      // uint256 a3 = 123444; // world.getUniqueEntityId();
-      // Coord memory a3Coord = Coord({ x: 22, y: 24 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(a3, a3Coord);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(a3, 35);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a3, asteroidType);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a3, block.timestamp);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(a3, 1);
-
-      // uint256 a4 = 23432; //world.getUniqueEntityId();
-      // Coord memory a4Coord = Coord({ x: 23, y: 17 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(a4, a4Coord);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(a4, 70);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a4, asteroidType);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a4, block.timestamp);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(a4, 1);
-
-      // uint256 a5 = 4565; // world.getUniqueEntityId();
-      // Coord memory a5Coord = Coord({ x: 20, y: 24 });
-      // PositionComponent(getAddressById(components, PositionComponentID)).set(a5, a5Coord);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(a5, 90);
-      // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a5, asteroidType);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a5, block.timestamp);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(a5, 1);
+      hardcodeAsteroidsAndPlanets(world, components);
+      //
+      //
 
       ////////////////////////
       ////////////////////////
