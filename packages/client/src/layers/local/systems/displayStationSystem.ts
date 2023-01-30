@@ -67,7 +67,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
       const { x, y } = tileCoordToPixelCoord({ x: position?.x || 0, y: position?.y || 0 }, tileWidth, tileHeight);
       if (defence?.value && +defence.value > 0 && level && +level > 0) {
         const object = objectPool.get(entity, "Sprite");
-        const faction = objectPool.get(`Faction${entity}`, "Sprite");
+        const factionObject = objectPool.get(`Faction${entity}`, "Sprite");
         const owndBy = getComponentValue(OwnedBy, entity)?.value;
         if (owndBy) {
           if (level && defence?.value && +defence.value) {
@@ -110,8 +110,8 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
               });
             },
           });
-          object.setComponent({
-            id: `${entity}`,
+          factionObject.setComponent({
+            id: `faction-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(sprit.assetKey, `faction-${factionNumber && +factionNumber}.png`);
               gameObject.setPosition(x + 32, y + 32);
