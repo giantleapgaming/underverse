@@ -117,15 +117,6 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
               gameObject.setPosition(x + 32, y + 32);
               gameObject.depth = 2;
               gameObject.setOrigin(0.5, 0.5);
-              phaserScene.add.tween({
-                targets: gameObject,
-                angle: 360,
-                duration: 1500000,
-                ease: "circular",
-                repeat: -1,
-                yoyo: false,
-                rotation: 360,
-              });
             },
           });
           if (offence && +offence) {
