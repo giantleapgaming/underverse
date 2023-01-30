@@ -69,6 +69,10 @@
       "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "PositionComponent", "BalanceComponent"]
     },
     {
+      "name": "HarvestSystem",
+      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "BalanceComponent"]
+    },
+    {
       "name": "UpgradeSystem",
       "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "LevelComponent", "DefenceComponent"]
     },
