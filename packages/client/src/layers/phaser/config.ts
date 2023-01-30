@@ -1071,6 +1071,30 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "Missile-6.png",
         },
+        [Sprites.Faction1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-1.png",
+        },
+        [Sprites.Faction2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-2.png",
+        },
+        [Sprites.Faction3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-3.png",
+        },
+        [Sprites.Faction4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-4.png",
+        },
+        [Sprites.Faction5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-5.png",
+        },
+        [Sprites.Faction6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-6.png",
+        },
       },
       animations: [
         {
