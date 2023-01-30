@@ -73,7 +73,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       object.setComponent({
         id: "missileRelease",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction - 1}.png`);
+          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
           gameObject.setPosition(source.x + 32, source.y + 32);
           gameObject.setOrigin(0.5, 0.5);
           const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI);

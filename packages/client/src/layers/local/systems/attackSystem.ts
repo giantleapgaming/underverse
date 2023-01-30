@@ -1,12 +1,6 @@
 import { Sprites, Animations } from "../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineComponentSystem,
-  EntityID,
-  EntityIndex,
-  getComponentEntities,
-  getComponentValue,
-} from "@latticexyz/recs";
+import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { enclosedPoints, getCoordinatesArray, intersectingCircles } from "../../../utils/distance";
@@ -35,7 +29,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
-    components: { Position, OwnedBy, Name, Level, Faction },
+    components: { Position, OwnedBy, Level, Faction },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -170,6 +164,9 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const destinationDetails = getComponentValue(Attack, modalIndex);
     const destinationEntityId = destinationDetails?.entityId as EntityIndex;
+    const wallet = connectedAddress.get();
+    const factionIndex = world.entities.indexOf(wallet);
+    const faction = getComponentValue(Faction, factionIndex)?.value;
     if (sourceEntityId && destinationEntityId && destinationEntityId !== sourceEntityId) {
       const sourcePosition = getComponentValue(Position, sourceEntityId);
       const attackCord = getComponentValue(AttackCords, modalIndex);
@@ -188,17 +185,10 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           const object = objectPool.get("missile", "Sprite");
           const missileSprite = config.sprites[Sprites.Missile2];
           const repeatLoop = destinationDetails.amount - 1;
-          const images = ["1", "2", "3", "4", "5", "6"];
-          const allImg = {} as { [key: string]: string };
-          [...getComponentEntities(Name)].forEach(
-            (nameEntity, index) => (allImg[world.entities[nameEntity]] = images[index])
-          );
-          const owndBy = connectedAddress.get() || "";
-
           object.setComponent({
             id: "missileRelease",
             once: (gameObject) => {
-              gameObject.setTexture(missileSprite.assetKey, `missile-${allImg[owndBy]}.png`);
+              gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
               gameObject.setPosition(source.x + 32, source.y + 32);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);

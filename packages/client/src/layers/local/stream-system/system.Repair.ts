@@ -24,7 +24,7 @@ export function systemRepaired(network: NetworkLayer, phaser: PhaserLayer) {
     const userIndex = allUserNameEntityId.indexOf(ownedByIndex) as EntityIndex;
 
     setLogs(
-      `<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span>  Repaired the station at (${position?.x},${position?.y})</p>`
+      `<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span>  repaired the station at (${position?.x},${position?.y})</p>`
     );
   });
 }
