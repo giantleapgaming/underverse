@@ -99,7 +99,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
             </div>
             <S.ImgContainer>
               <S.Img src={userStation} />
-              <S.Img src={userFaction} />
+              <S.FactionImg src={userFaction} />
             </S.ImgContainer>
           </S.InlineSB>
           <S.Cargo>
@@ -134,7 +134,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/yellow-b.png" />
+                    <img src="/button/yellowButton.png" />
                     <S.DeployText>BUY</S.DeployText>
                   </S.InlinePointer>
                 )}
@@ -148,7 +148,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     }
                   }}
                 >
-                  <img src="/button/pink-b.png" />
+                  <img src="/button/pinkButton.png" />
                   <S.DeployText>SELL</S.DeployText>
                 </S.InlinePointer>
                 <>
@@ -161,7 +161,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/white-b.png" />
+                    <img src="/button/whiteButton.png" />
                     <S.DeployText>TRANSPORT</S.DeployText>
                   </S.InlinePointer>
 
@@ -175,7 +175,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       }
                     }}
                   >
-                    <img src="/button/orange-b.png" />
+                    <img src="/button/orangeButton.png" />
                     <S.DeployText>UPGRADE</S.DeployText>
                   </S.InlinePointer>
 
@@ -184,7 +184,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       shouldShowWeaponModal(true);
                     }}
                   >
-                    <img src="/button/blue-b.png" />
+                    <img src="/button/blueButton.png" />
                     <S.DeployText>WEAPONS</S.DeployText>
                   </S.InlinePointer>
 
@@ -195,7 +195,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       sounds["click"].play();
                     }}
                   >
-                    <img src="/button/red-b.png" />
+                    <img src="/button/redButton.png" />
                     <S.DeployText>ATTACK</S.DeployText>
                   </S.InlinePointer>
                 </>
@@ -205,7 +205,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                     sounds["click"].play();
                   }}
                 >
-                  <img src="/button/base-b.png" />
+                  <img src="/button/greenButton.png" />
                   <S.DeployText>SCRAP</S.DeployText>
                 </S.InlinePointer>
                 {!((level && +level * 100) === (defence && +defence)) && (
@@ -215,7 +215,7 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
                       sounds["click"].play();
                     }}
                   >
-                    <img src="/button/white-b.png" />
+                    <img src="/button/whiteButton.png" />
                     <S.DeployText>REPAIR</S.DeployText>
                   </S.InlinePointer>
                 )}
@@ -250,11 +250,17 @@ const S = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 6px;
   `,
   Img: styled.img`
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
   `,
+  FactionImg: styled.img`
+    width: 40px;
+    height: 40px;
+  `,
+
   Cargo: styled.div`
     margin-bottom: 10px;
     text-align: left;
