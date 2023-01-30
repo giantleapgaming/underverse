@@ -294,6 +294,12 @@ export enum Sprites {
   Missile4,
   Missile5,
   Missile6,
+  Faction1,
+  Faction2,
+  Faction3,
+  Faction4,
+  Faction5,
+  Faction6,
 }
 
 export enum Animations {
