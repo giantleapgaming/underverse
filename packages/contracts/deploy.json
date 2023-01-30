@@ -9,11 +9,12 @@
     "DefenceComponent",
     "LevelComponent",
     "BalanceComponent",
+    "FactionComponent",
     "TypeComponent"
   ],
   "systems": [
     { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "TypeComponent"] },
+    { "name": "InitSystem", "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "NameComponent", "FactionComponent", "TypeComponent"] },
     {
       "name": "BuildSystem",
       "writeAccess": [
@@ -25,7 +26,8 @@
         "DefenceComponent",
         "LevelComponent",
         "BalanceComponent",
-        "TypeComponent"
+        "TypeComponent",
+        "FactionComponent"
       ]
     },
     {
@@ -93,6 +95,10 @@
         "LevelComponent",
         "BalanceComponent"
       ]
+    },
+    {
+      "name": "RepairSystem",
+      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "DefenceComponent"]
     }
   ]
 }

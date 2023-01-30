@@ -7,3 +7,4 @@ export { systemSell } from "./system.Sell";
 export { systemTransport } from "./system.Transport";
 export { systemAttack } from "./system.Attack";
 export { systemScraped } from "./system.Scrap";
+export { systemRepaired } from "./system.Repair";

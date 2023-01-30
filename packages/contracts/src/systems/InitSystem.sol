@@ -8,6 +8,8 @@ import { NameComponent, ID as NameComponentID } from "../components/NameComponen
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { playerInitialCash } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
+// Added new by Moresh to support faction
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
 
@@ -22,11 +24,16 @@ contract InitSystem is System {
 
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
+  //function execute(bytes memory arguments) public returns (bytes memory) {
+  //  string memory name = abi.decode(arguments, (string));
+  // Moresh : Added to accept faction as an input numeric value while loading the game
+
   function execute(bytes memory arguments) public returns (bytes memory) {
-    string memory name = abi.decode(arguments, (string));
+    (string memory name, uint256 faction) = abi.decode(arguments, (string, uint256));
 
     require(registeredPlayers[msg.sender] == false, "Player already registered");
-    require(playerCount < 7, "Overlimit! Max 6 players allowed");
+    // Moresh: Removed 6 player limit
+    // require(playerCount < 7, "Overlimit! Max 6 players allowed");
 
     CashComponent(getAddressById(components, CashComponentID)).set(addressToEntity(msg.sender), playerInitialCash);
 
@@ -34,6 +41,8 @@ contract InitSystem is System {
       addressToEntity(msg.sender),
       block.timestamp
     );
+    // Added new by Moresh to support faction
+    FactionComponent(getAddressById(components, FactionComponentID)).set(addressToEntity(msg.sender), faction);
 
     NameComponent(getAddressById(components, NameComponentID)).set(addressToEntity(msg.sender), name);
 
@@ -74,8 +83,14 @@ contract InitSystem is System {
     playerCount += 1;
   }
 
-  function executeTyped(string calldata name) public returns (bytes memory) {
-    return execute(abi.encode(name));
+  //function executeTyped(string calldata name) public returns (bytes memory) {
+  //  return execute(abi.encode(name));
+  //}
+
+  //Moresh: Updated to accept faction as input from UI
+
+  function executeTyped(string calldata name, uint256 faction) public returns (bytes memory) {
+    return execute(abi.encode(name, faction));
   }
 
   // Temporary function to check if storage array elements are truly random

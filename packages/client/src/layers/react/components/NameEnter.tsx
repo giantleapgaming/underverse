@@ -5,60 +5,62 @@ import { getComponentEntities } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { useState } from "react";
 import { computedToStream } from "@latticexyz/utils";
+import { Faction } from "./Faction";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
+  const [selectFaction, setSelectFaction] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
   const {
     network: {
-      components: { Name },
       api: { initSystem },
     },
   } = layers;
-  const allPlayersName = [...getComponentEntities(Name)];
   return (
-    <Container>
-      <Gif>
-        <img src="/img/name.gif" />
-      </Gif>
-
-      {allPlayersName.length > 6 ? (
-        <Error>Game is Full</Error>
-      ) : (
-        <Form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            if (name) {
-              try {
-                await initSystem(
-                  name,
-                  () => {
-                    setLoading(true);
-                  },
-                  () => {
-                    setLoading(false);
-                  }
-                );
-              } catch (e) {
-                console.log("Error", e);
+    <Container faction={!!selectFaction}>
+      {selectFaction ? (
+        <>
+          <Gif>
+            <img src="/img/name.gif" />
+          </Gif>
+          <Form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              if (name) {
+                try {
+                  await initSystem(
+                    name,
+                    selectFaction,
+                    () => {
+                      setLoading(true);
+                    },
+                    () => {
+                      setLoading(false);
+                    }
+                  );
+                } catch (e) {
+                  console.log("Error", e);
+                }
               }
-            }
-          }}
-        >
-          <div>
-            <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
-            <Input
-              disabled={loading}
-              onChange={(e) => {
-                setName(e.target.value);
-              }}
-              value={name}
-            />
-          </div>
-          <Button type="submit" disabled={loading}>
-            {loading ? "Loading..." : "GO"}
-          </Button>
-        </Form>
+            }}
+          >
+            <div>
+              <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
+              <Input
+                disabled={loading}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                value={name}
+              />
+            </div>
+            <Button type="submit" disabled={loading}>
+              {loading ? "Loading..." : "GO"}
+            </Button>
+          </Form>
+        </>
+      ) : (
+        <Faction setSelectFaction={setSelectFaction} />
       )}
     </Container>
   );
@@ -85,17 +87,7 @@ const Gif = styled.div`
   justify-content: center;
 `;
 
-const Error = styled.h1`
-  z-index: 500;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  position: absolute;
-  bottom: 20px;
-`;
-
-const Container = styled.div`
+const Container = styled.div<{ faction: boolean }>`
   width: 100%;
   height: 100%;
   z-index: 50;
@@ -104,7 +96,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(/img/bgUv.png);
+  background-image: ${({ faction }) => (faction ? "url(/img/bgUv.png)" : "url(/img/bgWithoutSkyLines.png)")};
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

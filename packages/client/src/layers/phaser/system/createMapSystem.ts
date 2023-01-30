@@ -1,4 +1,3 @@
-import { getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { Sprites } from "../constants";
 import { PhaserLayer } from "../types";
@@ -18,8 +17,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Attack, Transport },
-    localIds: { stationDetailsEntityIndex, modalIndex },
   } = phaser;
 
   const object = objectPool.get(`centerEarth`, "Sprite");

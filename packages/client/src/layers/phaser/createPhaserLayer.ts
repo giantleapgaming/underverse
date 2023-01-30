@@ -18,6 +18,7 @@ import {
   AttackCords,
   Logs,
   ShowScrapeModal,
+  ShowRepairModal,
 } from "../local/components";
 import {
   attackSystem,
@@ -33,6 +34,7 @@ import {
   systemBuy,
   systemBuyWeapon,
   systemInit,
+  systemRepaired,
   systemScraped,
   systemSell,
   systemTransport,
@@ -76,6 +78,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     showWeaponModal: ShowWeaponModal(world),
     Logs: Logs(world),
     ShowScrapeModal: ShowScrapeModal(world),
+    ShowRepairModal: ShowRepairModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -99,6 +102,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const shouldUpgradeModal = (open: boolean) => setComponent(components.ShowUpgradeModal, modalIndex, { value: open });
 
   const shouldScrapeModal = (open: boolean) => setComponent(components.ShowScrapeModal, modalIndex, { value: open });
+
+  const shouldRepairModal = (open: boolean) => setComponent(components.ShowRepairModal, modalIndex, { value: open });
 
   const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
@@ -180,6 +185,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setAttackCords,
       setLogs,
       shouldScrapeModal,
+      shouldRepairModal,
     },
     sounds,
   };
@@ -201,5 +207,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemTransport(network, context);
   systemScraped(network, context);
   systemAttack(network, context);
+  systemRepaired(network, context);
   return context;
 }
