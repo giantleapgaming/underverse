@@ -98,13 +98,10 @@ function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns 
   return totalCost;
 }
 
-// The main function that takes in the array of circles, and the two points to connect by a line segment
 function checkIntersections(
-  Coord[] memory circles,
-  int256 x1,
-  int256 y1,
-  int256 x2,
-  int256 y2
+  Coord memory a,
+  Coord memory b,
+  Coord[] memory circles
 ) pure returns (Coord[] memory) {
   // An array to store the intersecting circles
   Coord[] memory intersections = new Coord[](circles.length);
@@ -116,8 +113,8 @@ function checkIntersections(
     int256 cx = circles[i].x;
     int256 cy = circles[i].y;
     // The distance of the center of the current circle to the line connecting the two points
-    int256 d = (Math.abs((y2 - y1) * cx - (x2 - x1) * cy + x2 * y1 - y2 * x1)) /
-      (Math.sqrtInt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1)));
+    int256 d = (Math.abs((b.y - a.y) * cx - (b.x - a.x) * cy + b.x * a.y - b.y * a.x)) /
+      (Math.sqrtInt((b.y - a.y) * (b.y - a.y) + (b.x - a.x) * (b.x - a.x)));
     // If the distance is less than or equal to the radius of the circle, it means the circle intersects the line segment
     if (d <= 1) {
       intersections[intersectionCount] = circles[i];
@@ -131,6 +128,67 @@ function checkIntersections(
   // Otherwise, return the array of intersections
   return intersections;
 }
+
+// function checkIntersections(Coord memory start, Coord memory end, Coord[] memory circles) pure returns (Coord[] memory) {
+//   // An array to store the intersecting circles
+//   Coord[] memory intersections = new Coord;
+//   // A variable to keep track of the number of intersections
+//   uint256 intersectionCount = 0;
+//   // Iterate over each circle
+//   for (uint256 i = 0; i < circles.length; i++) {
+//     // The coordinates of the current circle
+//     int256 cx = circles[i].x;
+//     int256 cy = circles[i].y;
+//     // The distance of the center of the current circle to the line connecting the two points
+//     int256 d = (Math.abs((end.y - start.y) * cx - (end.x - start.x) * cy + end.x * start.y - end.y * start.x)) /
+//     (Math.sqrtInt((end.y - start.y) * (end.y - start.y) + (end.x - start.x) * (end.x - start.x)));
+//     // If the distance is less than or equal to the radius of the circle, it means the circle intersects the line segment
+//     if (d <= 1) {
+//       intersections[intersectionCount] = circles[i];
+//       intersectionCount++;
+//     }
+//   }
+//   // If there are no intersections, return an empty array
+//   if (intersectionCount == 0) {
+//     return new Coord;
+//   }
+//   // Otherwise, return the array of intersections
+//   return intersections;
+// }
+
+// The main function that takes in the array of circles, and the two points to connect by a line segment
+// function checkIntersections(
+//   Coord[] memory circles,
+//   int256 x1,
+//   int256 y1,
+//   int256 x2,
+//   int256 y2
+// ) pure returns (Coord[] memory) {
+//   // An array to store the intersecting circles
+//   Coord[] memory intersections = new Coord[](circles.length);
+//   // A variable to keep track of the number of intersections
+//   uint256 intersectionCount = 0;
+//   // Iterate over each circle
+//   for (uint256 i = 0; i < circles.length; i++) {
+//     // The coordinates of the current circle
+//     int256 cx = circles[i].x;
+//     int256 cy = circles[i].y;
+//     // The distance of the center of the current circle to the line connecting the two points
+//     int256 d = (Math.abs((y2 - y1) * cx - (x2 - x1) * cy + x2 * y1 - y2 * x1)) /
+//       (Math.sqrtInt((y2 - y1) * (y2 - y1) + (x2 - x1) * (x2 - x1)));
+//     // If the distance is less than or equal to the radius of the circle, it means the circle intersects the line segment
+//     if (d <= 1) {
+//       intersections[intersectionCount] = circles[i];
+//       intersectionCount++;
+//     }
+//   }
+//   // If there are no intersections, return an empty array
+//   if (intersectionCount == 0) {
+//     return new Coord[](0);
+//   }
+//   // Otherwise, return the array of intersections
+//   return intersections;
+// }
 
 function findEnclosedPoints(
   Coord memory coord1,
@@ -158,10 +216,10 @@ function findEnclosedPoints(
 }
 
 // Takes array of entities and returns their coordinates in a coord array ( Coord[] )
-function getCoords(uint256[] memory entities) internal returns (Coord[] memory) {
+function getCoords(uint256[] memory entities, IUint256Component components) returns (Coord[] memory) {
   Coord[] memory coords = new Coord[](entities.length);
   for (uint256 i = 0; i < entities.length; i++) {
-    Coord memory position = this.getCurrentPosition(
+    Coord memory position = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       entities[i]
     );

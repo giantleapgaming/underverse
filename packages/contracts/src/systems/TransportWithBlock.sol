@@ -9,8 +9,8 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
+import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.TransportWithBlock"));
@@ -38,28 +38,15 @@ contract TransportWithBlockSystem is System {
 
     require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
-    );
-
-    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      sourceGodownEntity
-    );
-    require(sourceGodownLevel >= 1, "Invalid source godown entity");
+    // uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+    //   sourceGodownEntity
+    // );
+    // require(sourceGodownLevel >= 1, "Invalid source godown entity");
 
     uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
       destinationGodownEntity
     );
     require(destinationGodownLevel >= 1, "Invalid destination godown entity");
-
-    // uint256 destinationGodownLevel = getEntityLevel(
-    //   LevelComponent(getAddressById(components, LevelComponentID)),
-    //   destinationGodownEntity
-    // );
 
     uint256 sourceGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
       sourceGodownEntity
@@ -73,6 +60,7 @@ contract TransportWithBlockSystem is System {
 
     require(
       destinationGodownBalance + kgs <= destinationGodownLevel,
+      // destinationGodownBalance + kgs <= 8,
       "Provided transport quantity is more than godown storage capacity"
     );
 
@@ -88,11 +76,22 @@ contract TransportWithBlockSystem is System {
 
     PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
 
-    uint256[] allPositionEntities = position.getEntities();
+    uint256[] memory allPositionEntities = position.getEntities();
 
-    Coord[] allStationCoords = getCoords(allPositionEntities);
+    Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
 
-    Coord[] enclosedPoints = findEnclosedPoints(sourceGodownPosition, destinationGodownPosition, allStationCoords);
+    // Coord[] memory enclosedPoints = findEnclosedPoints(
+    //   sourceGodownPosition,
+    //   destinationGodownPosition,
+    //   allStationCoords
+    // );
+
+    Coord[] memory blockingCoords = checkIntersections(
+      sourceGodownPosition,
+      destinationGodownPosition,
+      // enclosedPoints
+      allStationCoords
+    );
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
       sourceGodownPosition,
@@ -123,14 +122,6 @@ contract TransportWithBlockSystem is System {
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(
       destinationGodownEntity,
       destinationGodownBalance + kgs
-    );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
-      block.timestamp
-    );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationGodownEntity,
-      block.timestamp
     );
   }
 
