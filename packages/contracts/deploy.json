@@ -159,6 +159,19 @@
         "LastUpdatedTimeComponent",
         "PopulationComponent"
       ]
+    },
+    {
+      "name": "AttackWithBlockSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent"
+      ]
     }
   ]
 }
