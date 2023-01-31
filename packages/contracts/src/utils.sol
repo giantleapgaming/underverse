@@ -240,3 +240,72 @@ function hardcodeAsteroidsAndPlanets(IWorld world, IUint256Component components)
   // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a18, block.timestamp);
   // LevelComponent(getAddressById(components, LevelComponentID)).set(a18, 1);
 }
+
+function checkIntersections(
+  Coord memory a,
+  Coord memory b,
+  Coord[] memory circles
+) pure returns (Coord[] memory) {
+  // An array to store the intersecting circles
+  Coord[] memory intersections = new Coord[](circles.length);
+  // A variable to keep track of the number of intersections
+  uint256 intersectionCount = 0;
+  // Iterate over each circle
+  for (uint256 i = 0; i < circles.length; i++) {
+    // The coordinates of the current circle
+    int256 cx = circles[i].x;
+    int256 cy = circles[i].y;
+    // The distance of the center of the current circle to the line connecting the two points
+    int256 d = (Math.abs((b.y - a.y) * cx - (b.x - a.x) * cy + b.x * a.y - b.y * a.x)) /
+      (Math.sqrtInt((b.y - a.y) * (b.y - a.y) + (b.x - a.x) * (b.x - a.x)));
+    // If the distance is less than or equal to the radius of the circle, it means the circle intersects the line segment
+    if (d <= 1) {
+      intersections[intersectionCount] = circles[i];
+      intersectionCount++;
+    }
+  }
+  // If there are no intersections, return an empty array
+  if (intersectionCount == 0) {
+    return new Coord[](0);
+  }
+  // Otherwise, return the array of intersections
+  return intersections;
+}
+
+function findEnclosedPoints(
+  Coord memory coord1,
+  Coord memory coord2,
+  Coord[] memory otherPoints
+) pure returns (Coord[] memory) {
+  Coord[] memory enclosedPoints = new Coord[](0);
+  int256 x1 = coord1.x;
+  int256 y1 = coord1.y;
+  int256 x2 = coord2.x;
+  int256 y2 = coord2.y;
+  for (uint256 i = 0; i < otherPoints.length; i++) {
+    int256 x = otherPoints[i].x;
+    int256 y = otherPoints[i].y;
+    if (x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+      Coord[] memory newEnclosedPoints = new Coord[](enclosedPoints.length + 1);
+      for (uint256 j = 0; j < enclosedPoints.length; j++) {
+        newEnclosedPoints[j] = enclosedPoints[j];
+      }
+      newEnclosedPoints[enclosedPoints.length] = otherPoints[i];
+      enclosedPoints = newEnclosedPoints;
+    }
+  }
+  return enclosedPoints;
+}
+
+// Takes array of entities and returns their coordinates in a coord array ( Coord[] )
+function getCoords(uint256[] memory entities, IUint256Component components) returns (Coord[] memory) {
+  Coord[] memory coords = new Coord[](entities.length);
+  for (uint256 i = 0; i < entities.length; i++) {
+    Coord memory position = getCurrentPosition(
+      PositionComponent(getAddressById(components, PositionComponentID)),
+      entities[i]
+    );
+    coords[i] = position;
+  }
+  return coords;
+}

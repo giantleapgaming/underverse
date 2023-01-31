@@ -13,20 +13,20 @@
     "EntityTypeComponent"
   ],
   "systems": [
-    { "name": "ComponentDevSystem", "writeAccess": ["*"] },
-    { "name": "InitSystem", "writeAccess": [
-              "LastUpdatedTimeComponent",
-              "NameComponent",
-              "OwnedByComponent",
-              "PositionComponent",
-              "CashComponent",
-              "OffenceComponent",
-              "DefenceComponent",
-              "LevelComponent",
-              "BalanceComponent",
-              "FactionComponent",
-              "EntityTypeComponent"
-            ]
+    {
+      "name": "ComponentDevSystem",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
+      "name": "InitSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "FactionComponent"
+      ]
     },
     {
       "name": "BuildSystem",
@@ -66,15 +66,28 @@
     },
     {
       "name": "TransportSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "PositionComponent", "BalanceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "BalanceComponent"
+      ]
     },
     {
       "name": "HarvestSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "BalanceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "BalanceComponent"
+      ]
     },
     {
       "name": "UpgradeSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "LevelComponent", "DefenceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "LevelComponent",
+        "DefenceComponent"
+      ]
     },
     {
       "name": "BuyWeaponSystem",
@@ -116,7 +129,19 @@
     },
     {
       "name": "RepairSystem",
-      "writeAccess": ["CashComponent", "LastUpdatedTimeComponent", "DefenceComponent"]
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "DefenceComponent"
+      ]
+    },
+    {
+      "name": "TransportWithBlockSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "BalanceComponent"
+      ]
     }
   ]
 }
