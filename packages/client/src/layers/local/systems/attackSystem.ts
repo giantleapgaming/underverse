@@ -120,14 +120,36 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const pointer = p;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const stationEntity = getEntityIndexAtPosition(x, y);
+    const valuesX = Position.values.x;
+    const valuesY = Position.values.y;
     const attackDetails = getComponentValue(Attack, modalIndex);
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-    if (attackDetails?.showLine && !attackDetails?.showModal && sourceEntityId && stationEntity) {
-      const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
-      const walletAddress = connectedAddress.get();
-      if (walletAddress !== ownedBy) {
-        setAttackCords(x, y);
-        shouldAttack(true, false, false, stationEntity);
+    const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+    const sourcePosition = getComponentValue(Position, sourceEntityId);
+    if (typeof sourcePosition?.x === "number") {
+      const possibleBlockingStations = enclosedPoints(allCoordinates, [
+        [sourcePosition.x, sourcePosition.y],
+        [x, y],
+      ]);
+
+      const blockingStations = intersectingCircles(
+        possibleBlockingStations,
+        [sourcePosition.x, sourcePosition.y],
+        [x, y]
+      );
+      if (
+        attackDetails?.showLine &&
+        !attackDetails?.showModal &&
+        sourceEntityId &&
+        stationEntity &&
+        blockingStations.length <= 2
+      ) {
+        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
+        const walletAddress = connectedAddress.get();
+        if (walletAddress !== ownedBy) {
+          setAttackCords(x, y);
+          shouldAttack(true, false, false, stationEntity);
+        }
       }
     }
   });

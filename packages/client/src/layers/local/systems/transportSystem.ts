@@ -128,18 +128,35 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const transportDetails = getComponentValue(Transport, modalIndex);
     const sourceEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-    if (
-      transportDetails?.showLine &&
-      !transportDetails?.showModal &&
-      sourceEntityId &&
-      stationEntity &&
-      !transportDetails.showAnimation
-    ) {
-      const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
-      const userEntityId = connectedAddress.get();
-      if (userEntityId === ownedBy && stationEntity !== sourceEntityId) {
-        setTransportCords(x, y);
-        shouldTransport(true, false, false, stationEntity);
+    const valuesX = Position.values.x;
+    const valuesY = Position.values.y;
+    const allCoordinates = getCoordinatesArray(valuesX, valuesY);
+    const sourcePosition = getComponentValue(Position, sourceEntityId);
+    if (typeof sourcePosition?.x === "number") {
+      const possibleBlockingStations = enclosedPoints(allCoordinates, [
+        [sourcePosition.x, sourcePosition.y],
+        [x, y],
+      ]);
+
+      const blockingStations = intersectingCircles(
+        possibleBlockingStations,
+        [sourcePosition.x, sourcePosition.y],
+        [x, y]
+      );
+      if (
+        transportDetails?.showLine &&
+        !transportDetails?.showModal &&
+        sourceEntityId &&
+        stationEntity &&
+        !transportDetails.showAnimation &&
+        blockingStations.length <= 2
+      ) {
+        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value as EntityID;
+        const userEntityId = connectedAddress.get();
+        if (userEntityId === ownedBy && stationEntity !== sourceEntityId) {
+          setTransportCords(x, y);
+          shouldTransport(true, false, false, stationEntity);
+        }
       }
     }
   });
