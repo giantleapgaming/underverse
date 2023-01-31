@@ -2,7 +2,7 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { RepairModal } from "./modal/RepairModal";
+import { RepairModal } from "../modal/RepairModal";
 
 const ScrapeSystem = ({ layers }: { layers: Layers }) => {
   const {

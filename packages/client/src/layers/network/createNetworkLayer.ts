@@ -33,6 +33,12 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Faction" },
     }),
 
+    EntityType: defineNumberComponent(world, {
+      id: "EntityType",
+      indexed: true,
+      metadata: { contractId: "component.EntityType" },
+    }),
+
     Balance: defineNumberComponent(world, {
       id: "Balance",
       indexed: true,
@@ -95,9 +101,9 @@ export async function createNetworkLayer(config: GameConfig) {
       setFalse();
     }
   };
-  const buildSystem = async (x: number, y: number) => {
+  const buildSystem = async (x: number, y: number, entityType: number) => {
     try {
-      await systems["system.Build"].executeTyped(x, y);
+      await systems["system.Build"].executeTyped(x, y, entityType);
     } catch (e) {
       console.log({ e });
     }

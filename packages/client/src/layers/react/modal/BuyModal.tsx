@@ -1,15 +1,21 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
+import { convertPrice } from "../utils/priceConverter";
 
-export const RepairModal = ({
+export const BuyModal = ({
+  buyPrice,
+  buySystem,
+  stock,
   close,
-  repairSystem,
-  repairPrice,
+  clickSound,
 }: {
-  repairSystem: () => void;
+  buyPrice: number;
+  buySystem: (kgs: number) => void;
+  stock?: number;
   close: () => void;
-  repairPrice: number;
+  clickSound: () => void;
 }) => {
+  const [selected, setSelected] = useState("-1");
   return (
     <ModalContainer onClick={close}>
       <ModalContent>
@@ -18,7 +24,7 @@ export const RepairModal = ({
             e.stopPropagation();
           }}
         >
-          <S.Img src="/popup/white-b.png" />
+          <S.Img src="/popup/yellow-b.png" />
           <p
             onClick={close}
             style={{
@@ -36,19 +42,45 @@ export const RepairModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#ffffff" }}>REPAIR STATION</p>
-            <p style={{ width: "100%", color: "#ffffff", textAlign: "center", marginBottom: "20px" }}>
-              AMOUNT:
-              {convertPrice(repairPrice)}
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a", fontWeight: "bold" }}>
+              BUY {convertPrice(buyPrice)} PER MT
             </p>
-
+            {typeof stock === "number" && (
+              <div
+                style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
+              >
+                {new Array(stock).fill(0).map((_, i) => {
+                  return (
+                    <S.Slanted
+                      key={`yellow${i}`}
+                      selected={+selected > i}
+                      onClick={() => {
+                        setSelected((i + 1).toString());
+                        clickSound();
+                      }}
+                    >
+                      {i + 1}
+                    </S.Slanted>
+                  );
+                })}
+              </div>
+            )}
+            {+selected > 0 ? (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
+                BUY Total {convertPrice(+selected * buyPrice)}
+              </p>
+            ) : (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>BUY Total -:-</p>
+            )}
             <S.InlinePointer
               onClick={() => {
-                repairSystem();
+                if (+selected > 0) {
+                  buySystem(+selected);
+                }
               }}
             >
-              <S.Img src="/button/white-b.png" />
-              <S.DeployText>REPAIR</S.DeployText>
+              <S.Img src="/button/yellow-b.png" />
+              <S.DeployText>BUY</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -92,7 +124,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#ffffff"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#e4e76a"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -111,7 +143,6 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
-    color: #ffffff;
   `,
   InlinePointer: styled.div`
     position: relative;
@@ -120,7 +151,6 @@ const S = {
     align-items: center;
     cursor: pointer;
     pointer-events: all;
-    color: "#ffffff";
   `,
 };
 const ModalContent = styled.div`

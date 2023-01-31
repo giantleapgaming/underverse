@@ -1,15 +1,21 @@
+import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
+import { convertPrice } from "../utils/priceConverter";
 
-export const UpgradeModal = ({
+export const SellModal = ({
+  sellPrice,
+  sellSystem,
+  stock,
   close,
-  upgradeSystem,
-  level,
+  clickSound,
 }: {
-  upgradeSystem: () => void;
-  level?: number;
+  sellPrice: number;
+  sellSystem: (kgs: number) => void;
+  stock?: number;
   close: () => void;
+  clickSound: () => void;
 }) => {
+  const [selected, setSelected] = useState("-1");
   return (
     <ModalContainer onClick={close}>
       <ModalContent>
@@ -18,7 +24,7 @@ export const UpgradeModal = ({
             e.stopPropagation();
           }}
         >
-          <S.Img src="/popup/orange-b.png" />
+          <S.Img src="/popup/pink-b.png" />
           <p
             onClick={close}
             style={{
@@ -36,23 +42,45 @@ export const UpgradeModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#fb934e" }}>UPGRADE STATION</p>
-            <p style={{ width: "100%", marginLeft: "80px", color: "#fb934e" }}>
-              UPGRADE TO LEVEL {level && level + 1} STATION
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#cb6ce6", fontWeight: "bold" }}>
+              Sell {convertPrice(sellPrice)} PER MT
             </p>
-            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#fb934e" }}>
-              COST: {level && convertPrice(Math.pow(level + 1, 2) * 1_000)}
-            </p>
-            <p style={{ marginBottom: "20px", width: "100%", marginLeft: "80px", color: "#fb934e" }}>
-              CARGO HOLD: <span style={{ color: "white" }}>{level}</span> &rarr; {level && level + 1}
-            </p>
+            {typeof stock === "number" && (
+              <div
+                style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
+              >
+                {new Array(stock).fill(0).map((_, i) => {
+                  return (
+                    <S.Slanted
+                      key={`sell${i}`}
+                      selected={+selected > i}
+                      onClick={() => {
+                        setSelected((i + 1).toString());
+                        clickSound();
+                      }}
+                    >
+                      {i + 1}
+                    </S.Slanted>
+                  );
+                })}
+              </div>
+            )}
+            {+selected > 0 ? (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
+                SELL Total {convertPrice(+selected * sellPrice)}
+              </p>
+            ) : (
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>SELL Total -:-</p>
+            )}
             <S.InlinePointer
               onClick={() => {
-                upgradeSystem();
+                if (+selected > 0) {
+                  sellSystem(+selected);
+                }
               }}
             >
-              <S.Img src="/button/orange-b.png" />
-              <S.DeployText>UPGRADE</S.DeployText>
+              <S.Img src="/button/pink-b.png" />
+              <S.DeployText>SELL</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -96,7 +124,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#fb934e"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#cb6ce6"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -115,7 +143,7 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
-    color: #fb934e;
+    color: #cb6ce6;
   `,
   InlinePointer: styled.div`
     position: relative;
@@ -124,7 +152,6 @@ const S = {
     align-items: center;
     cursor: pointer;
     pointer-events: all;
-    color: "#fb934e";
   `,
 };
 const ModalContent = styled.div`

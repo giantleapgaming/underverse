@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
+import { convertPrice } from "../utils/priceConverter";
 
-export const ScrapeModal = ({
+export const RepairModal = ({
   close,
-  scrapeSystem,
-  scrapPrice,
+  repairSystem,
+  repairPrice,
 }: {
-  scrapeSystem: () => void;
+  repairSystem: () => void;
   close: () => void;
-  scrapPrice: number;
+  repairPrice: number;
 }) => {
   return (
     <ModalContainer onClick={close}>
@@ -18,7 +18,7 @@ export const ScrapeModal = ({
             e.stopPropagation();
           }}
         >
-          <S.Img src="/popup/default-b.png" />
+          <S.Img src="/popup/white-b.png" />
           <p
             onClick={close}
             style={{
@@ -36,19 +36,19 @@ export const ScrapeModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#036e71" }}>SCRAP STATION</p>
-            <p style={{ width: "100%", color: "#036e71", textAlign: "center", marginBottom: "20px" }}>
-              PROCEEDS:
-              {convertPrice(scrapPrice)}
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#ffffff" }}>REPAIR STATION</p>
+            <p style={{ width: "100%", color: "#ffffff", textAlign: "center", marginBottom: "20px" }}>
+              AMOUNT:
+              {convertPrice(repairPrice)}
             </p>
 
             <S.InlinePointer
               onClick={() => {
-                scrapeSystem();
+                repairSystem();
               }}
             >
-              <S.Img src="/button/base-b.png" />
-              <S.DeployText>Scrap</S.DeployText>
+              <S.Img src="/button/white-b.png" />
+              <S.DeployText>REPAIR</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -92,7 +92,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#036e71"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#ffffff"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
@@ -111,7 +111,7 @@ const S = {
     position: absolute;
     font-size: 12;
     font-weight: bold;
-    color: #036e71;
+    color: #ffffff;
   `,
   InlinePointer: styled.div`
     position: relative;
@@ -120,7 +120,7 @@ const S = {
     align-items: center;
     cursor: pointer;
     pointer-events: all;
-    color: "#036e71";
+    color: "#ffffff";
   `,
 };
 const ModalContent = styled.div`

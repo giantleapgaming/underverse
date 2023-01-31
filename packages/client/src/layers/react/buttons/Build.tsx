@@ -2,19 +2,19 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { ScrapeModal } from "../modal/ScrapeModal";
+import { BuyModal } from "./../modal/BuildModal";
 
-const ScrapeSystem = ({ layers }: { layers: Layers }) => {
+const BuySystem = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Level, Position, Balance, Defence },
-      api: { scrapeSystem },
+      components: { Position, Balance, Level },
+      api: { buySystem },
     },
     phaser: {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { shouldScrapeModal },
+      localApi: { shouldBuyModal, showProgress },
       scenes: {
         Main: { input },
       },
@@ -22,43 +22,46 @@ const ScrapeSystem = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
-  const defence = getComponentValue(Defence, selectedEntity)?.value;
-  const position = getComponentValue(Position, selectedEntity);
-  const level = getComponentValue(Level, selectedEntity)?.value;
-  const balance = getComponentValue(Balance, selectedEntity)?.value;
-  const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
-  const build = 1_000_000 / distance;
-  let levelCost = 0;
-  for (let i = 2; i <= (level || 1); i++) {
-    levelCost += Math.pow(i, 2) * 1_000;
-  }
-  const sellPrice = (100_000 / distance) * (balance || 0) * 0.9;
-  const defencePercentage = defence && level ? +defence / (+level * 100) : 1;
-
-  const scrapPrice = (sellPrice + levelCost + build) * defencePercentage * 0.25;
   if (selectedEntity) {
+    const position = getComponentValue(Position, selectedEntity);
+    const balance = getComponentValue(Balance, selectedEntity)?.value;
+    const level = getComponentValue(Level, selectedEntity)?.value;
+
+    const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
+    const buyPrice = (100_000 / distance) * 1.1;
     const closeModal = () => {
       sounds["click"].play();
-      shouldScrapeModal(false);
+      shouldBuyModal(false);
       input.enabled.current = true;
     };
-    const Scrap = async () => {
+    const buy = async (kgs: number) => {
       if (selectedEntity) {
         sounds["confirm"].play();
-        shouldScrapeModal(false);
+        shouldBuyModal(false);
         input.enabled.current = true;
-        await scrapeSystem(world.entities[selectedEntity]);
+        await buySystem(world.entities[selectedEntity], kgs);
+        showProgress();
       }
     };
-    return <ScrapeModal scrapeSystem={Scrap} close={closeModal} scrapPrice={scrapPrice} />;
+    return (
+      <BuyModal
+        buyPrice={buyPrice}
+        buySystem={buy}
+        stock={balance && level && +level - +balance}
+        close={closeModal}
+        clickSound={() => {
+          sounds["click"].play();
+        }}
+      />
+    );
   } else {
     return null;
   }
 };
 
-export const registerScrap = () => {
+export const registerBuy = () => {
   registerUIComponent(
-    "ScrapSystem",
+    "BuySystem",
     {
       colStart: 1,
       colEnd: 13,
@@ -73,16 +76,16 @@ export const registerScrap = () => {
           world,
         },
         phaser: {
-          components: { ShowScrapeModal },
+          components: { ShowBuyModal },
           localIds: { modalIndex },
         },
       } = layers;
-      return merge(ShowScrapeModal.update$).pipe(
+      return merge(ShowBuyModal.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
           const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          const showModal = getComponentValue(ShowScrapeModal, modalIndex);
+          const showModal = getComponentValue(ShowBuyModal, modalIndex);
           if (userLinkWithAccount && showModal?.value) {
             return { layers };
           }
@@ -91,7 +94,7 @@ export const registerScrap = () => {
       );
     },
     ({ layers }) => {
-      return <ScrapeSystem layers={layers} />;
+      return <BuySystem layers={layers} />;
     }
   );
 };

@@ -2,7 +2,7 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { UpgradeModal } from "./modal/UpgradeModal";
+import { UpgradeModal } from "../modal/UpgradeModal";
 
 const UpgradeSystem = ({ layers }: { layers: Layers }) => {
   const {

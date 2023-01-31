@@ -2,7 +2,7 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { SellModal } from "./modal/SellModal";
+import { SellModal } from "../modal/SellModal";
 
 const SellSystem = ({ layers }: { layers: Layers }) => {
   const {
