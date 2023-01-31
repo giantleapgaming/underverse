@@ -22,10 +22,18 @@
     {
       "name": "InitSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
         "NameComponent",
-        "FactionComponent"
+        "OwnedByComponent",
+        "PositionComponent",
+        "CashComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "FactionComponent",
+        "EntityTypeComponent"
+
       ]
     },
     {
