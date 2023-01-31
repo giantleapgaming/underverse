@@ -16,6 +16,8 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
+import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
+import { earthInitialPopulation } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
 
@@ -60,6 +62,7 @@ contract InitSystem is System {
       PositionComponent(getAddressById(components, PositionComponentID)).set(earthEntityId, Coord({ x: 0, y: 0 }));
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(earthEntityId, earthCenterPlanetDefence);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(earthEntityId, planetType);
+      PopulationComponent(getAddressById(components, PopulationComponentID)).set(earthEntityId, earthInitialPopulation);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
         earthEntityId,
         block.timestamp
