@@ -70,7 +70,7 @@ contract InitSystem is System {
 
       uint256 a1 = world.getUniqueEntityId();
       // Coord memory a1Coord = ;
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a1, Coord({ x: 16, y: 18 }));
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a1, Coord({ x: 24, y: -15 }));
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(a1, 10);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a1, asteroidType);
       LevelComponent(getAddressById(components, LevelComponentID)).set(a1, 1);
@@ -78,28 +78,28 @@ contract InitSystem is System {
 
       uint256 a2 = world.getUniqueEntityId();
       // Coord memory a2Coord =
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a2, Coord({ x: 19, y: 21 }));
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a2, Coord({ x: 22, y: 20 }));
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(a2, 25);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a2, asteroidType);
       LevelComponent(getAddressById(components, LevelComponentID)).set(a2, 1);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a2, block.timestamp);
 
       uint256 a3 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a3, Coord({ x: 22, y: 24 }));
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a3, Coord({ x: -20, y: 18 }));
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(a3, 35);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a3, asteroidType);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a3, block.timestamp);
       LevelComponent(getAddressById(components, LevelComponentID)).set(a3, 1);
 
       uint256 a4 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a4, Coord({ x: 23, y: 17 }));
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a4, Coord({ x: -24, y: -17 }));
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(a4, 70);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a4, asteroidType);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a4, block.timestamp);
       LevelComponent(getAddressById(components, LevelComponentID)).set(a4, 1);
 
       uint256 a5 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a5, Coord({ x: 20, y: 24 }));
+      PositionComponent(getAddressById(components, PositionComponentID)).set(a5, Coord({ x: 15, y: -25 }));
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(a5, 90);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a5, asteroidType);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a5, block.timestamp);
