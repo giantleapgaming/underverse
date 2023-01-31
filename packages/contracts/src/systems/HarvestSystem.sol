@@ -52,7 +52,7 @@ contract HarvestSystem is System {
       "Destination godown not owned by user"
     );
 
-    require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
+    //require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
 
     // Commenting out time delay requirement 
     //uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
