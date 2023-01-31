@@ -63,10 +63,10 @@ contract HarvestSystem is System {
     //  "Need 0 seconds of delay between actions"
     //);
 
-    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      sourceGodownEntity
-    );
-    require(sourceGodownLevel >= 1, "Invalid source godown entity");
+    //uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+    //  sourceGodownEntity
+    //);
+    //require(sourceGodownLevel >= 1, "Invalid source godown entity");
 
     uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
       destinationGodownEntity
@@ -109,7 +109,7 @@ contract HarvestSystem is System {
     );
 
     //Check to see if Harvester is close enough to Asteroid (<5 units)
-    require(distanceBetweenGodowns <= 5, "Harvester is further than 5 units distance from Asteroid");
+    require(distanceBetweenGodowns <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
     uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2);
 
