@@ -827,18 +827,6 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "earth.png",
         },
-        [Sprites.Asteroid1]: {
-          assetKey: Assets.MainAtlas,
-          frame: "asteroid-1.png",
-        },
-        [Sprites.Asteroid2]: {
-          assetKey: Assets.MainAtlas,
-          frame: "asteroid-2.png",
-        },
-        [Sprites.Asteroid3]: {
-          assetKey: Assets.MainAtlas,
-          frame: "asteroid-3.png",
-        },
         [Sprites.Select]: {
           assetKey: Assets.MainAtlas,
           frame: "select.png",
@@ -1094,6 +1082,450 @@ export const phaserConfig = {
         [Sprites.Faction6]: {
           assetKey: Assets.MainAtlas,
           frame: "faction-6.png",
+        },
+        [Sprites.AttackShip11]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-1.png",
+        },
+        [Sprites.AttackShip12]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-2.png",
+        },
+        [Sprites.AttackShip13]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-3.png",
+        },
+        [Sprites.AttackShip14]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-4.png",
+        },
+        [Sprites.AttackShip15]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-5.png",
+        },
+        [Sprites.AttackShip16]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-6.png",
+        },
+        [Sprites.AttackShip17]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-7.png",
+        },
+        [Sprites.AttackShip18]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-1-8.png",
+        },
+        [Sprites.AttackShip21]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-1.png",
+        },
+        [Sprites.AttackShip22]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-2.png",
+        },
+        [Sprites.AttackShip23]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-3.png",
+        },
+        [Sprites.AttackShip24]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-4.png",
+        },
+        [Sprites.AttackShip25]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-5.png",
+        },
+        [Sprites.AttackShip26]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-6.png",
+        },
+        [Sprites.AttackShip27]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-7.png",
+        },
+        [Sprites.AttackShip28]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-2-8.png",
+        },
+        [Sprites.AttackShip31]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-1.png",
+        },
+        [Sprites.AttackShip32]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-2.png",
+        },
+        [Sprites.AttackShip33]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-3.png",
+        },
+        [Sprites.AttackShip34]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-4.png",
+        },
+        [Sprites.AttackShip35]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-5.png",
+        },
+        [Sprites.AttackShip36]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-6.png",
+        },
+        [Sprites.AttackShip37]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-7.png",
+        },
+        [Sprites.AttackShip38]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-3-8.png",
+        },
+        [Sprites.AttackShip41]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-1.png",
+        },
+        [Sprites.AttackShip42]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-2.png",
+        },
+        [Sprites.AttackShip43]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-3.png",
+        },
+        [Sprites.AttackShip44]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-4.png",
+        },
+        [Sprites.AttackShip45]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-5.png",
+        },
+        [Sprites.AttackShip46]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-6.png",
+        },
+        [Sprites.AttackShip47]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-7.png",
+        },
+        [Sprites.AttackShip48]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-4-8.png",
+        },
+        [Sprites.AttackShip51]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-1.png",
+        },
+        [Sprites.AttackShip52]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-2.png",
+        },
+        [Sprites.AttackShip53]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-3.png",
+        },
+        [Sprites.AttackShip54]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-4.png",
+        },
+        [Sprites.AttackShip55]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-5.png",
+        },
+        [Sprites.AttackShip56]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-6.png",
+        },
+        [Sprites.AttackShip57]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-7.png",
+        },
+        [Sprites.AttackShip58]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-5-8.png",
+        },
+        [Sprites.AttackShip61]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-1.png",
+        },
+        [Sprites.AttackShip62]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-2.png",
+        },
+        [Sprites.AttackShip63]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-3.png",
+        },
+        [Sprites.AttackShip64]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-4.png",
+        },
+        [Sprites.AttackShip65]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-5.png",
+        },
+        [Sprites.AttackShip66]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-6.png",
+        },
+        [Sprites.AttackShip67]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-7.png",
+        },
+        [Sprites.AttackShip68]: {
+          assetKey: Assets.MainAtlas,
+          frame: "attack-6-8.png",
+        },
+        [Sprites.Miner10]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-1-0.png",
+        },
+        [Sprites.Miner11]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-1-1.png",
+        },
+        [Sprites.Miner20]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-2-0.png",
+        },
+        [Sprites.Miner21]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-2-1.png",
+        },
+        [Sprites.Miner22]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-2-2.png",
+        },
+        [Sprites.Miner30]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-3-0.png",
+        },
+        [Sprites.Miner31]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-3-1.png",
+        },
+        [Sprites.Miner32]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-3-2.png",
+        },
+        [Sprites.Miner33]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-3-3.png",
+        },
+        [Sprites.Miner40]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-4-0.png",
+        },
+        [Sprites.Miner41]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-4-1.png",
+        },
+        [Sprites.Miner42]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-4-2.png",
+        },
+        [Sprites.Miner43]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-4-3.png",
+        },
+        [Sprites.Miner44]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-4-4.png",
+        },
+        [Sprites.Miner50]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-0.png",
+        },
+        [Sprites.Miner51]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-1.png",
+        },
+        [Sprites.Miner52]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-2.png",
+        },
+        [Sprites.Miner53]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-3.png",
+        },
+        [Sprites.Miner54]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-4.png",
+        },
+        [Sprites.Miner55]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-5-5.png",
+        },
+        [Sprites.Miner60]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-0.png",
+        },
+        [Sprites.Miner61]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-1.png",
+        },
+        [Sprites.Miner62]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-2.png",
+        },
+        [Sprites.Miner63]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-3.png",
+        },
+        [Sprites.Miner64]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-4.png",
+        },
+        [Sprites.Miner65]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-5.png",
+        },
+        [Sprites.Miner66]: {
+          assetKey: Assets.MainAtlas,
+          frame: "miner-6-6.png",
+        },
+        [Sprites.Cargo10]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-1-0.png",
+        },
+        [Sprites.Cargo11]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-1-1.png",
+        },
+        [Sprites.Cargo20]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-2-0.png",
+        },
+        [Sprites.Cargo21]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-2-1.png",
+        },
+        [Sprites.Cargo22]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-2-2.png",
+        },
+        [Sprites.Cargo30]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-3-0.png",
+        },
+        [Sprites.Cargo31]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-3-1.png",
+        },
+        [Sprites.Cargo32]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-3-2.png",
+        },
+        [Sprites.Cargo33]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-3-3.png",
+        },
+        [Sprites.Cargo40]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-4-0.png",
+        },
+        [Sprites.Cargo41]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-4-1.png",
+        },
+        [Sprites.Cargo42]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-4-2.png",
+        },
+        [Sprites.Cargo43]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-4-3.png",
+        },
+        [Sprites.Cargo44]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-4-4.png",
+        },
+        [Sprites.Cargo50]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-0.png",
+        },
+        [Sprites.Cargo51]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-1.png",
+        },
+        [Sprites.Cargo52]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-2.png",
+        },
+        [Sprites.Cargo53]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-3.png",
+        },
+        [Sprites.Cargo54]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-4.png",
+        },
+        [Sprites.Cargo55]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-5-5.png",
+        },
+        [Sprites.Cargo60]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-0.png",
+        },
+        [Sprites.Cargo61]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-1.png",
+        },
+        [Sprites.Cargo62]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-2.png",
+        },
+        [Sprites.Cargo63]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-3.png",
+        },
+        [Sprites.Cargo64]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-4.png",
+        },
+        [Sprites.Cargo65]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-5.png",
+        },
+        [Sprites.Cargo66]: {
+          assetKey: Assets.MainAtlas,
+          frame: "cargo-6-6.png",
+        },
+        [Sprites.Asteroid11]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-1-1.png",
+        },
+        [Sprites.Asteroid12]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-1-2.png",
+        },
+        [Sprites.Asteroid13]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-1-3.png",
+        },
+        [Sprites.Asteroid21]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-2-1.png",
+        },
+        [Sprites.Asteroid22]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-2-2.png",
+        },
+        [Sprites.Asteroid23]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-2-3.png",
+        },
+        [Sprites.Asteroid31]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-3-1.png",
+        },
+        [Sprites.Asteroid32]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-3-2.png",
+        },
+        [Sprites.Asteroid33]: {
+          assetKey: Assets.MainAtlas,
+          frame: "asteroid-3-3.png",
         },
       },
       animations: [
