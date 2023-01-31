@@ -14,7 +14,6 @@ factionData.forEach((data) => {
   factionImg.push(data.img);
 });
 
-console.log(factionImg);
 const SystemDetails = ({ layers }: { layers: Layers }) => {
   const {
     network: {
@@ -66,7 +65,6 @@ const SystemDetails = ({ layers }: { layers: Layers }) => {
     const userStation = (ownedBy ? allImg[ownedBy] : "/ui/1-1.png") as string;
     const userFaction = (ownedBy ? allFactionImg[ownedBy] : allFactionImg[0]) as string;
 
-    console.log("ownedBy " + ownedBy);
     const distance = typeof position?.x === "number" ? Math.sqrt(Math.pow(position.x, 2) + Math.pow(position.y, 2)) : 1;
     const buyPrice = (100_000 / distance) * 1.1;
     const sellPrice = (100_000 / distance) * 0.9;

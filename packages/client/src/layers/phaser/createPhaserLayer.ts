@@ -40,6 +40,7 @@ import {
   systemTransport,
   systemUpgrade,
 } from "../local/stream-system";
+import { displayAsteroidSystem, displayPlanetSystem } from "../network/systems/view";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -208,5 +209,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemScraped(network, context);
   systemAttack(network, context);
   systemRepaired(network, context);
+  displayAsteroidSystem(network, context);
+  displayPlanetSystem(network, context);
   return context;
 }

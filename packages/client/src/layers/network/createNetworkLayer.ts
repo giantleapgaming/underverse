@@ -93,6 +93,7 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Position" },
     }),
   };
+
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
     typeof components,
