@@ -2,7 +2,7 @@ import { registerUIComponent } from "../engine";
 import { EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
-import { TransportModal } from "./modal/TransportModal";
+import { TransportModal } from "../modal/TransportModal";
 
 const TransportSystem = ({ layers }: { layers: Layers }) => {
   const {

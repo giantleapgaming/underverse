@@ -1,18 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
+import { convertPrice } from "../utils/priceConverter";
 
-export const TransportModal = ({
-  startTransport,
-  close,
+export const BuyModal = ({
+  buyPrice,
+  buySystem,
   stock,
-  transportPrice,
+  close,
   clickSound,
 }: {
-  startTransport: (kgs: number) => void;
-  close: () => void;
+  buyPrice: number;
+  buySystem: (kgs: number) => void;
   stock?: number;
-  transportPrice: number;
+  close: () => void;
   clickSound: () => void;
 }) => {
   const [selected, setSelected] = useState("-1");
@@ -24,7 +24,7 @@ export const TransportModal = ({
             e.stopPropagation();
           }}
         >
-          <S.Img src="/popup/white-b.png" />
+          <S.Img src="/popup/yellow-b.png" />
           <p
             onClick={close}
             style={{
@@ -42,7 +42,9 @@ export const TransportModal = ({
             X
           </p>
           <S.Details>
-            <p style={{ textAlign: "center", marginBottom: "20px", color: "#ffffff", fontWeight: "bold" }}>Transport</p>
+            <p style={{ textAlign: "center", marginBottom: "20px", color: "#e4e76a", fontWeight: "bold" }}>
+              BUY {convertPrice(buyPrice)} PER MT
+            </p>
             {typeof stock === "number" && (
               <div
                 style={{ display: "grid", gap: "20px", gridTemplateColumns: "repeat(5, 1fr)", marginBottom: "40px" }}
@@ -50,7 +52,7 @@ export const TransportModal = ({
                 {new Array(stock).fill(0).map((_, i) => {
                   return (
                     <S.Slanted
-                      key={`white${i}`}
+                      key={`yellow${i}`}
                       selected={+selected > i}
                       onClick={() => {
                         setSelected((i + 1).toString());
@@ -64,21 +66,21 @@ export const TransportModal = ({
               </div>
             )}
             {+selected > 0 ? (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                TRANSPORT COST {convertPrice(Math.pow(+selected * transportPrice, 2))}
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>
+                BUY Total {convertPrice(+selected * buyPrice)}
               </p>
             ) : (
-              <p style={{ textAlign: "center", marginBottom: "20px" }}>TRANSPORT COST -:-</p>
+              <p style={{ textAlign: "center", marginBottom: "20px", fontWeight: "bold" }}>BUY Total -:-</p>
             )}
             <S.InlinePointer
               onClick={() => {
                 if (+selected > 0) {
-                  startTransport(+selected);
+                  buySystem(+selected);
                 }
               }}
             >
-              <S.Img src="/button/white-b.png" />
-              <S.DeployText>Transport</S.DeployText>
+              <S.Img src="/button/yellow-b.png" />
+              <S.DeployText>BUY</S.DeployText>
             </S.InlinePointer>
           </S.Details>
         </S.ModalContainer>
@@ -122,7 +124,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#ffffff"}`};
+      border: ${({ selected }) => `1px solid ${selected ? "#61ffea" : "#e4e76a"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
