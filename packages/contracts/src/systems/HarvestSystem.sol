@@ -29,12 +29,12 @@ contract HarvestSystem is System {
 
     // Check if source and destination are asteroid and harvester respectively
 
-    uint256 sourceEntityType = LevelComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       sourceGodownEntity
     );
     require(sourceEntityType == 2, "Source has to be an Asteroid");
 
-    uint256 destinationEntityType = LevelComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+    uint256 destinationEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       destinationGodownEntity
     );
     require(destinationEntityType == 5, "Destination has to be a Harvester");
