@@ -20,7 +20,7 @@ import {
   ShowScrapeModal,
   ShowRepairModal,
 } from "../local/components";
-import { attackSystem, displayStationSystem, selectStationSystem, showUserStations } from "../local/systems";
+import { attackSystem, selectStationSystem, showUserStations } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
 import {
   systemAttack,
@@ -34,7 +34,12 @@ import {
   systemTransport,
   systemUpgrade,
 } from "../local/stream-system";
-import { displayAsteroidSystem, displayAttackSystem, displayPlanetSystem } from "../network/systems/view";
+import {
+  displayAsteroidSystem,
+  displayAttackSystem,
+  displayPlanetSystem,
+  displayResidentialSystem,
+} from "../network/systems/view";
 import {
   buildAttackSystem,
   buildGodownSystem,
@@ -243,6 +248,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayAttackSystem(network, context);
   displayAsteroidSystem(network, context);
   displayPlanetSystem(network, context);
+  displayResidentialSystem(network, context);
 
   return context;
 }

@@ -32,15 +32,24 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
-      console.log(`attack-${+faction}-${+level}.png`);
+      const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
+      const attack = config.sprites[Sprites.Asteroid12];
       astroidObject.setComponent({
         id: `attack-${entity}`,
         once: (gameObject) => {
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
-          gameObject.setPosition(x, y);
-          const astroid = config.sprites[Sprites.Asteroid12];
-          gameObject.setTexture(astroid.assetKey, `attack-${+faction}-${+level}.png`);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setTexture(attack.assetKey, `attack-${+faction}-${+level}.png`);
+        },
+      });
+      factionObject.setComponent({
+        id: `attack-faction-${entity}`,
+        once: (gameObject) => {
+          gameObject.setTexture(attack.assetKey, `faction-${+faction}.png`);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setDepth(2);
+          gameObject.setOrigin(0.5, 0.5);
         },
       });
     }
