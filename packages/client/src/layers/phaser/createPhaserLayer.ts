@@ -37,6 +37,8 @@ import {
 import {
   displayAsteroidSystem,
   displayAttackSystem,
+  displayGodownSystem,
+  displayHarvesterSystem,
   displayPlanetSystem,
   displayResidentialSystem,
 } from "../network/systems/view";
@@ -249,6 +251,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayAsteroidSystem(network, context);
   displayPlanetSystem(network, context);
   displayResidentialSystem(network, context);
+  displayHarvesterSystem(network, context);
+  displayGodownSystem(network, context);
 
   return context;
 }

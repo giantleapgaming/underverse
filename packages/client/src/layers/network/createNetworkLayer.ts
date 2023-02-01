@@ -100,7 +100,7 @@ export async function createNetworkLayer(config: GameConfig) {
   >(getNetworkConfig(config), world, components, SystemAbis, {
     fetchSystemCalls: true,
   });
-
+  console.log(components);
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
