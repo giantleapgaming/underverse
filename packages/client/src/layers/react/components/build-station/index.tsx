@@ -1,4 +1,3 @@
-import styled from "styled-components";
 import { registerUIComponent } from "../../engine";
 import { getComponentEntities } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
@@ -13,7 +12,7 @@ export const registerBuild = () => {
     {
       colStart: 1,
       colEnd: 13,
-      rowStart: 9,
+      rowStart: 10,
       rowEnd: 12,
     },
     (layers) => {

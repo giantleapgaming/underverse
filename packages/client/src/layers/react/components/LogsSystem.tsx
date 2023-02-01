@@ -40,8 +40,8 @@ export const registerLogs = () => {
     {
       colStart: 1,
       colEnd: 5,
-      rowStart: 9,
-      rowEnd: 12,
+      rowStart: 1,
+      rowEnd: 3,
     },
     (layers) => {
       const {
