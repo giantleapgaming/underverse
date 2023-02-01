@@ -72,9 +72,9 @@ contract MoveShipSystem is System {
       allStationCoords
     );
 
-// 2 entities are always returned as the start and the end points, if there are 3+ returned then that means there is a blocker
+// 1 entity is always returned as the start and the end points, if there are 2+ returned then that means there is a blocker
 
-    require(blockingCoords.length < 3, "Blocker entity in the way");
+    require(blockingCoords.length <= 1, "Blocker entity in the way");
 
     //END: Check if enemy stations are blocking path
     
