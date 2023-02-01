@@ -172,6 +172,14 @@
         "LevelComponent",
         "BalanceComponent"
       ]
+    },
+    {
+      "name": "MoveShipSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "PositionComponent"
+      ]
     }
   ]
 }
