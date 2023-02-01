@@ -309,3 +309,18 @@ function getCoords(uint256[] memory entities, IUint256Component components) retu
   }
   return coords;
 }
+
+function createAsteroids(
+  IWorld world,
+  IUint256Component components,
+  int32 x,
+  int32 y,
+  uint256 balance
+) {
+  uint256 ent = world.getUniqueEntityId();
+  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+  BalanceComponent(getAddressById(components, BalanceComponentID)).set(ent, balance);
+  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
+  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
+  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+}

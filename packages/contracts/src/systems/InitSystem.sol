@@ -10,7 +10,7 @@ import { playerInitialCash, earthCenterPlanetDefence, planetType, asteroidType }
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 // Added new by Moresh to support faction
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { hardcodeAsteroidsAndPlanets } from "../utils.sol";
+import { hardcodeAsteroidsAndPlanets, createAsteroids } from "../utils.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -25,11 +25,46 @@ contract InitSystem is System {
   mapping(address => bool) registeredPlayers;
   uint256 private playerCount;
 
-  // struct AsteroidCoords {
-  //   int32 x;
-  //   int32 y;
-  // }
-  // AsteroidCoords[] private myAsteroidCoordsArray;
+  int32[18] private sinArr = [
+    int32(0),
+    int32(342),
+    int32(642),
+    int32(866),
+    int32(984),
+    int32(984),
+    int32(866),
+    int32(642),
+    int32(342),
+    int32(0),
+    int32(-342),
+    int32(-642),
+    int32(-866),
+    int32(-984),
+    int32(-984),
+    int32(-866),
+    int32(-642),
+    int32(-342)
+  ];
+  int32[18] private cosArr = [
+    int32(1000),
+    int32(939),
+    int32(766),
+    int32(500),
+    int32(173),
+    int32(-173),
+    int32(-500),
+    int32(-766),
+    int32(-939),
+    int32(-1000),
+    int32(-939),
+    int32(-766),
+    int32(-500),
+    int32(-173),
+    int32(173),
+    int32(500),
+    int32(766),
+    int32(939)
+  ];
 
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
@@ -68,79 +103,14 @@ contract InitSystem is System {
         block.timestamp
       );
 
-      uint256 a1 = world.getUniqueEntityId();
-      // Coord memory a1Coord = ;
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a1, Coord({ x: 24, y: -15 }));
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a1, 10);
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a1, asteroidType);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(a1, 1);
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a1, block.timestamp);
-
-      uint256 a2 = world.getUniqueEntityId();
-      // Coord memory a2Coord =
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a2, Coord({ x: 22, y: 20 }));
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a2, 25);
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a2, asteroidType);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(a2, 1);
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a2, block.timestamp);
-
-      uint256 a3 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a3, Coord({ x: -20, y: 18 }));
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a3, 35);
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a3, asteroidType);
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a3, block.timestamp);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(a3, 1);
-
-      uint256 a4 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a4, Coord({ x: -24, y: -17 }));
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a4, 70);
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a4, asteroidType);
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a4, block.timestamp);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(a4, 1);
-
-      uint256 a5 = world.getUniqueEntityId();
-      PositionComponent(getAddressById(components, PositionComponentID)).set(a5, Coord({ x: 15, y: -25 }));
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(a5, 90);
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(a5, asteroidType);
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(a5, block.timestamp);
-      LevelComponent(getAddressById(components, LevelComponentID)).set(a5, 1);
-
-      //
-      //
-      hardcodeAsteroidsAndPlanets(world, components);
-      //
-      //
-
-      ////////////////////////
-      ////////////////////////
-      // Generate 18 random points - Below logic works well.
-      // uint32 count = 0;
-      // int256 failedTries = 0;
-      // while (count < 18) {
-      //   uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, count, failedTries)));
-      //   int32 x = int32(int256(seed) % 41) - 25;
-      //   if (x < 0) {
-      //     x += 40;
-      //   }
-
-      //   uint256 seed2 = uint256(keccak256(abi.encodePacked(msg.sender, block.timestamp, failedTries, count)));
-      //   int32 y = int32((int256(seed2) + int256(x)) % 41) - 25;
-      //   if (y < 0) {
-      //     y += 40;
-      //   }
-
-      //   // Ensure that the coordinates are within the specified range
-      //   if (((x <= -15 && x >= -25) || (x >= 15 && x <= 25)) && ((y <= -15 && y >= -25) || (y >= 15 && y <= 25))) {
-      //     AsteroidCoords memory myAsteroidCoords = AsteroidCoords({ x: x, y: y });
-      //     myAsteroidCoordsArray.push(myAsteroidCoords);
-      //     count++;
-      //     failedTries--;
-      //   } else {
-      //     failedTries++;
-      //   }
-      // }
-      ////////////////////////
-      ////////////////////////
+      for (uint256 i = 0; i < 18; i++) {
+        uint256 angle = i * 20;
+        int256 radius = 15 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 11);
+        int32 x = (int32(radius) * cosArr[i]) / int32(1000);
+        int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * sinArr[i]) / int32(1000);
+        uint256 balance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 91);
+        createAsteroids(world, components, x, y, balance);
+      }
     }
     registeredPlayers[msg.sender] = true;
     playerCount += 1;
