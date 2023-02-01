@@ -34,7 +34,7 @@ import {
   systemTransport,
   systemUpgrade,
 } from "../local/stream-system";
-import { displayAsteroidSystem, displayPlanetSystem } from "../network/systems/view";
+import { displayAsteroidSystem, displayAttackSystem, displayPlanetSystem } from "../network/systems/view";
 import {
   buildAttackSystem,
   buildGodownSystem,
@@ -211,7 +211,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
-  displayStationSystem(network, context);
+  // displayStationSystem(network, context);
   selectStationSystem(network, context);
   // buildStationSystem(network, context);
   transportSystem(network, context);
@@ -227,8 +227,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemScraped(network, context);
   systemAttack(network, context);
   systemRepaired(network, context);
-  displayAsteroidSystem(network, context);
-  displayPlanetSystem(network, context);
 
   // click of the build station
   rightClickBuildSystem(network, context);
@@ -240,5 +238,11 @@ export async function createPhaserLayer(network: NetworkLayer) {
   buildAttackSystem(network, context);
   buildGodownSystem(network, context);
   buildHarvesterSystem(network, context);
+
+  //to display all the station
+  displayAttackSystem(network, context);
+  displayAsteroidSystem(network, context);
+  displayPlanetSystem(network, context);
+
   return context;
 }

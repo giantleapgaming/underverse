@@ -35,7 +35,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
       try {
         setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
         sounds["click"].play();
-        await buildSystem(x, y, buildDetails.entityType);
+        await buildSystem({ x, y, entityType: buildDetails.entityType });
         showProgress();
       } catch (e) {
         console.log({ error: e, system: "build", details: buildDetails });
