@@ -1,12 +1,10 @@
 import styled from "styled-components";
-import { registerUIComponent } from "../engine";
 import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
-import { map, merge } from "rxjs";
-import { Layers } from "../../../types";
+import { Layers } from "../../../../types";
 import { useState } from "react";
-import { factionData } from "../../../utils/constants";
+import { factionData } from "../../../../utils/constants";
 
-const OpenEye = ({ layers }: { layers: Layers }) => {
+export const UserAction = ({ layers }: { layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const {
@@ -28,20 +26,26 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
   const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
-
+  const factionIndex = world.entities.indexOf(userEntityId);
+  const faction = getComponentValue(Faction, factionIndex)?.value;
   if (userEntityId) {
     return (
       <S.Container>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <img src={`/faction/${faction && +faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/Cog.png"
+            width={"20px"}
+            height={"20px"}
             onClick={() => {
               sounds["click"].play();
               setShowDetails(!showDetails);
             }}
           />
           <img
+            width={"20px"}
+            height={"20px"}
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/recenter.png"
             onClick={() => {
@@ -55,7 +59,7 @@ const OpenEye = ({ layers }: { layers: Layers }) => {
             <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
-              {allUserNameEntityId.map((nameEntity, index) => {
+              {allUserNameEntityId.map((nameEntity) => {
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
                 const owner = world.entities[nameEntity] === userEntityId;
@@ -111,10 +115,9 @@ const S = {
   Container: styled.div`
     pointer-events: fill;
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    justify-content: flex-end;
     padding-right: 10px;
+    gap: 10px;
+    margin-top: 10px;
   `,
 
   HighLight: styled.h3`
@@ -181,47 +184,4 @@ const S = {
     font-weight: bold;
     text-align: center;
   `,
-};
-
-export const registerOpenEyeDetails = () => {
-  registerUIComponent(
-    "OpenEye",
-    {
-      colStart: 10,
-      colEnd: 13,
-      rowStart: 2,
-      rowEnd: 12,
-    },
-    (layers) => {
-      const {
-        network: {
-          network: { connectedAddress },
-          components: { Name },
-          world,
-        },
-        phaser: {
-          components: { ShowCircle },
-        },
-      } = layers;
-      return merge(Name.update$, ShowCircle.update$).pipe(
-        map(() => connectedAddress.get()),
-        map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          if (userLinkWithAccount) {
-            const name = getComponentValue(Name, userLinkWithAccount)?.value;
-            return {
-              name,
-              layers,
-            };
-          } else {
-            return;
-          }
-        })
-      );
-    },
-    ({ layers }) => {
-      return <OpenEye layers={layers} />;
-    }
-  );
 };

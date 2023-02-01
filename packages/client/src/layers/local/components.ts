@@ -24,7 +24,13 @@ export const Select = (world: World) => {
 };
 
 export const ShowStationDetails = (world: World) => {
-  return defineComponent(world, { entityId: Type.OptionalNumber }, { id: "ShowStationDetails" });
+  return defineComponent(
+    world,
+    {
+      entityId: Type.OptionalNumber,
+    },
+    { id: "ShowStationDetails" }
+  );
 };
 
 export const ShowBuyModal = (world: World) => {

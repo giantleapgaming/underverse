@@ -2,13 +2,15 @@ import { registerUIComponent } from "../../engine";
 import { getComponentEntities } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../../types";
-import { Layout } from "./layout";
+import { DetailsLayout } from "./layoutDetails";
 
-const Build = ({ layers }: { layers: Layers }) => <Layout layers={layers} />;
+const Details = ({ layers }: { layers: Layers }) => {
+  return <DetailsLayout layers={layers} />;
+};
 
-export const registerBuild = () => {
+export const registerDetails = () => {
   registerUIComponent(
-    "BuildScreen",
+    "DetailsScreen",
     {
       colStart: 1,
       colEnd: 13,
@@ -23,10 +25,10 @@ export const registerBuild = () => {
           world,
         },
         phaser: {
-          components: { Build, ShowStationDetails },
+          components: { ShowStationDetails },
         },
       } = layers;
-      return merge(Name.update$, Cash.update$, Build.update$, ShowStationDetails.update$).pipe(
+      return merge(Name.update$, Cash.update$, ShowStationDetails.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
@@ -42,7 +44,7 @@ export const registerBuild = () => {
       );
     },
     ({ layers }) => {
-      return <Build layers={layers} />;
+      return <Details layers={layers} />;
     }
   );
 };

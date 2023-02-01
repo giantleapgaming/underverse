@@ -12,21 +12,22 @@ export const Layout = ({ layers }: { layers: Layers }) => {
     },
     phaser: {
       sounds,
-      components: { Build },
+      components: { Build, ShowStationDetails },
       localApi: { setBuild },
-      localIds: { buildId },
+      localIds: { buildId, stationDetailsEntityIndex },
     },
   } = layers;
   const entityIndex = world.entities.indexOf(connectedAddress.get());
   const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
   const buildDetails = getComponentValue(Build, buildId)?.isBuilding;
+  const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
 
   const build = (entityType: number) => {
     sounds["click"].play();
     setBuild({ x: 0, y: 0, canPlace: true, entityType, show: false, isBuilding: true });
   };
 
-  if (buildDetails) {
+  if (buildDetails || selectedEntity) {
     return null;
   } else {
     return (
