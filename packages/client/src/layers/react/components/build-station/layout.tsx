@@ -2,6 +2,7 @@ import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { UserDetails } from "./userDetails";
 
 export const Layout = ({ layers }: { layers: Layers }) => {
   const {
@@ -32,6 +33,7 @@ export const Layout = ({ layers }: { layers: Layers }) => {
   } else {
     return (
       <S.Container>
+        <UserDetails layers={layers} />
         <S.Border>
           <S.Flex>
             <S.Button onClick={() => build(Mapping.residential.id)}>
@@ -91,9 +93,8 @@ const S = {
   Container: styled.div`
     display: flex;
     position: relative;
-    align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
   `,
   Border: styled.div`
