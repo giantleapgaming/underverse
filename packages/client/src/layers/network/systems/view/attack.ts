@@ -21,11 +21,13 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = phaser;
   const {
     components: { Position, Level, Defence, Offence, EntityType, Faction },
+    network: { connectedAddress },
   } = network;
   defineSystem(world, [Has(Position), Has(EntityType), Has(Level), Has(Defence), Has(Offence)], ({ entity }) => {
     const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
     if (entityTypeNumber && +entityTypeNumber === Mapping.attack.id) {
-      const faction = getComponentValueStrict(Faction, entity).value;
+      const factionIndex = world.entities.indexOf(connectedAddress.get());
+      const faction = getComponentValueStrict(Faction, factionIndex).value;
       const level = getComponentValueStrict(Level, entity).value;
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
