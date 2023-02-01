@@ -13,6 +13,8 @@ export const Build = (world: World) => {
       y: Type.Number,
       show: Type.Boolean,
       canPlace: Type.Boolean,
+      entityType: Type.Number,
+      isBuilding: Type.Boolean,
     },
     { id: "build" }
   );

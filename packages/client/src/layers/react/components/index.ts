@@ -1,6 +1,5 @@
 import { registerLoadingState } from "./LoadingState";
 import { registerNameScreen } from "./NameEnter";
-import { registerPlayerDetails } from "./PlayerDetails";
 import { registerSystemDetailsComponent } from "./SystemDetails";
 import { registerBuy } from "./BuySystem";
 import { registerUpgrade } from "./UpgradeSystem";
@@ -14,9 +13,10 @@ import { registerLogs } from "./LogsSystem";
 import { registerScrap } from "./ScrapeSystem";
 import { registerRepair } from "./RepairSystem";
 import { registerProgressBar } from "./ProgressBar";
+import { registerBuild } from "./build-station/index";
+
 export function registerUIComponents() {
   registerNameScreen();
-  registerPlayerDetails();
   registerLoadingState();
   registerSystemDetailsComponent();
   registerBuy();
@@ -31,4 +31,5 @@ export function registerUIComponents() {
   registerScrap();
   registerRepair();
   registerProgressBar();
+  registerBuild();
 }

@@ -114,13 +114,11 @@ export async function createNetworkLayer(config: GameConfig) {
       setFalse();
     }
   };
-  const buildSystem = async (x: number, y: number, entityType: number) => {
-    try {
-      await systems["system.Build"].executeTyped(x, y, entityType);
-    } catch (e) {
-      console.log({ e });
-    }
-  };
+
+  async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
+    return systems["system.Build"].executeTyped(x, y, entityType);
+  }
+
   const buySystem = async (godownEntity: EntityID, kgs: number) => {
     try {
       await systems["system.Buy"].executeTyped(BigNumber.from(godownEntity), kgs);

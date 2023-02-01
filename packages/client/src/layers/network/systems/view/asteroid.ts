@@ -35,7 +35,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
           gameObject.setPosition(x, y);
-          const astroid = config.sprites[Sprites.Asteroid1];
+          const astroid = config.sprites[Sprites.Asteroid12];
           gameObject.setTexture(astroid.assetKey, astroid.frame);
           phaserScene.add.tween({
             targets: gameObject,

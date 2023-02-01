@@ -1527,6 +1527,38 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "asteroid-3-3.png",
         },
+        [Sprites.BuildAttack1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-1.png",
+        },
+        [Sprites.BuildAttack2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-2.png",
+        },
+        [Sprites.BuildAttack3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-3.png",
+        },
+        [Sprites.BuildAttack4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-4.png",
+        },
+        [Sprites.BuildAttack5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-5.png",
+        },
+        [Sprites.BuildAttack6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-attack-6.png",
+        },
+        [Sprites.BuildCargo]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-cargo-1.png",
+        },
+        [Sprites.BuildHarvester]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-miner-1.png",
+        },
       },
       animations: [
         {

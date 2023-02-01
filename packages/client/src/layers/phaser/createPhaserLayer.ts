@@ -20,13 +20,7 @@ import {
   ShowScrapeModal,
   ShowRepairModal,
 } from "../local/components";
-import {
-  attackSystem,
-  buildStationSystem,
-  displayStationSystem,
-  selectStationSystem,
-  showUserStations,
-} from "../local/systems";
+import { attackSystem, displayStationSystem, selectStationSystem, showUserStations } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
 import {
   systemAttack,
@@ -41,6 +35,15 @@ import {
   systemUpgrade,
 } from "../local/stream-system";
 import { displayAsteroidSystem, displayPlanetSystem } from "../network/systems/view";
+import {
+  buildAttackSystem,
+  buildGodownSystem,
+  buildHarvesterSystem,
+  buildResidentialSystem,
+  leftClickBuildSystem,
+  mouseHover,
+  rightClickBuildSystem,
+} from "../network/systems/build";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -83,9 +86,24 @@ export async function createPhaserLayer(network: NetworkLayer) {
   };
 
   // --- API ------------------------------------------------------------------------
-  const setBuild = (x: number, y: number, show: boolean, canPlace: boolean) => {
-    setComponent(components.Build, buildId, { x, y, show, canPlace });
+  const setBuild = ({
+    x,
+    y,
+    show,
+    canPlace,
+    entityType,
+    isBuilding,
+  }: {
+    x: number;
+    y: number;
+    show: boolean;
+    canPlace: boolean;
+    entityType: number;
+    isBuilding: boolean;
+  }) => {
+    setComponent(components.Build, buildId, { x, y, show, canPlace, entityType, isBuilding });
   };
+
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
   };
@@ -195,7 +213,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   createMapSystem(network, context);
   displayStationSystem(network, context);
   selectStationSystem(network, context);
-  buildStationSystem(network, context);
+  // buildStationSystem(network, context);
   transportSystem(network, context);
   showUserStations(network, context);
   attackSystem(network, context);
@@ -211,5 +229,16 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemRepaired(network, context);
   displayAsteroidSystem(network, context);
   displayPlanetSystem(network, context);
+
+  // click of the build station
+  rightClickBuildSystem(network, context);
+  leftClickBuildSystem(network, context);
+  mouseHover(network, context);
+
+  //pointer hover display of the build station
+  buildResidentialSystem(network, context);
+  buildAttackSystem(network, context);
+  buildGodownSystem(network, context);
+  buildHarvesterSystem(network, context);
   return context;
 }

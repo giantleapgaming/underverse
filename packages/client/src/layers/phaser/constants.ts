@@ -408,6 +408,14 @@ export enum Sprites {
   Asteroid31,
   Asteroid32,
   Asteroid33,
+  BuildAttack1,
+  BuildAttack2,
+  BuildAttack3,
+  BuildAttack4,
+  BuildAttack5,
+  BuildAttack6,
+  BuildCargo,
+  BuildHarvester,
 }
 
 export enum Animations {
