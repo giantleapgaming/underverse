@@ -20,13 +20,13 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
     },
   } = phaser;
   const {
-    components: { Position, Level, EntityType, Faction, Balance },
-    network: { connectedAddress },
+    components: { Position, Level, EntityType, Faction, Balance, OwnedBy },
   } = network;
-  defineSystem(world, [Has(Position), Has(Balance), Has(EntityType), Has(Level)], ({ entity }) => {
+  defineSystem(world, [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(OwnedBy)], ({ entity }) => {
     const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
     if (entityTypeNumber && +entityTypeNumber === Mapping.godown.id) {
-      const factionIndex = world.entities.indexOf(connectedAddress.get());
+      const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+      const factionIndex = world.entities.indexOf(ownedBy);
       const faction = getComponentValueStrict(Faction, factionIndex).value;
       const level = getComponentValueStrict(Level, entity).value;
       const balance = getComponentValueStrict(Balance, entity).value;
