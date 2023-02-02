@@ -1,6 +1,12 @@
 import { getComponentValue } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import { AsteroidDetails } from "./asteroidDetails";
+import { AttackDetails } from "./AttackDetails";
+import { GodownDetails } from "./godownDetails";
+import { HarvesterDetails } from "./harvesterDetails";
+import { PlanetDetails } from "./planetDetails";
+import { ResidentialDetails } from "./residentialDetails";
 import { UserDetails } from "./userDetails";
 
 export const DetailsLayout = ({ layers }: { layers: Layers }) => {
@@ -17,7 +23,12 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
       <S.Container>
         <UserDetails layers={layers} />
         <S.Border>
-          <p>Show Details </p>
+          <AttackDetails layers={layers} />
+          <GodownDetails layers={layers} />
+          <HarvesterDetails layers={layers} />
+          <ResidentialDetails layers={layers} />
+          <AsteroidDetails layers={layers} />
+          <PlanetDetails layers={layers} />
         </S.Border>
       </S.Container>
     );

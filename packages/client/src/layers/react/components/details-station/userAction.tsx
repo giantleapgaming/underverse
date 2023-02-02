@@ -3,6 +3,7 @@ import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/r
 import { Layers } from "../../../../types";
 import { useState } from "react";
 import { factionData } from "../../../../utils/constants";
+import { FactionImg } from "./FactionImg";
 
 export const UserAction = ({ layers }: { layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -26,12 +27,11 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
   const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
-  const factionIndex = world.entities.indexOf(userEntityId);
-  const faction = getComponentValue(Faction, factionIndex)?.value;
+
   if (userEntityId) {
     return (
       <S.Container>
-        <img src={`/faction/${faction && +faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />
+        <FactionImg layers={layers} />
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}

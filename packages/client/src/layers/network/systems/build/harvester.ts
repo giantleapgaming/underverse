@@ -4,7 +4,6 @@ import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
-import { findSector } from "../../../../utils/sector";
 import { Mapping } from "../../../../utils/mapping";
 
 export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer) {
@@ -44,10 +43,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
       !(xCoord === 0 && yCoord === 0) &&
       buildDetails.entityType === Mapping.harvester.id
     ) {
-      const sector = findSector(xCoord, yCoord);
-
       const textWhite = objectPool.get("build-harvester-station-text-white", "Text");
-      // const textYellow = objectPool.get("build-harvester-station-text-yellow", "Text");
 
       const address = connectedAddress.get();
       const userEntityIndex = world.entities.indexOf(address);
@@ -71,7 +67,6 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
         });
         const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
         const build = 1_000_000 / distance;
-        const price = convertPrice(100_000 / distance);
         const buildPrice = convertPrice(build);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
@@ -85,22 +80,9 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
             gameObject.setColor("#ffffff");
           },
         });
-        // textYellow.setComponent({
-        //   id: "build-harvester-station-text-yellow",
-        //   once: (gameObject) => {
-        //     gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
-        //     gameObject.depth = 4;
-        //     gameObject.setText(`${price}`);
-        //     gameObject.setFontSize(14);
-        //     gameObject.setFontStyle("bold");
-        //     gameObject.setColor("#e4e76a");
-        //     gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
-        //   },
-        // });
       }
     } else {
       objectPool.remove("build-harvester-station");
-      objectPool.remove("build-harvester-station-text-yellow");
       objectPool.remove("build-harvester-station-text-white");
     }
   });
