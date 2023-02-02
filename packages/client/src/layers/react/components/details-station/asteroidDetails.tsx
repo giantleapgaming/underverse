@@ -1,4 +1,5 @@
 import { getComponentValue } from "@latticexyz/recs";
+import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 
@@ -17,11 +18,21 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const entityType = getComponentValue(EntityType, selectedEntity)?.value;
     if (entityType && +entityType === Mapping.astroid.id) {
       return (
-        <div>
+        <S.Container>
           <div>Asteroid Details</div>
-        </div>
+        </S.Container>
       );
     }
   }
   return null;
+};
+
+const S = {
+  Container: styled.div`
+    display: flex;
+    position: relative;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  `,
 };

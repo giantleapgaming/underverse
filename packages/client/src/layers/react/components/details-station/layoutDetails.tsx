@@ -51,11 +51,7 @@ const S = {
     height: 193px;
     background-image: url("/layout/bottom-menu-layout.png");
     background-repeat: no-repeat;
-    display: flex;
-    align-items: center;
-    flex-direction: column;
     pointer-events: fill;
-    padding: 21px 0 0 37px;
   `,
   Flex: styled.div`
     display: flex;
