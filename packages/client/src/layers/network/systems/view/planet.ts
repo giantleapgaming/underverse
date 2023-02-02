@@ -31,11 +31,11 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       astroidObject.setComponent({
         id: `planet-${entity}`,
         once: (gameObject) => {
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setDepth(1);
-          gameObject.setPosition(x + 32, y + 32);
           const planet = config.sprites[Sprites.Earth];
           gameObject.setTexture(planet.assetKey, planet.frame);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.depth = 2;
+          gameObject.setOrigin(0.5, 0.5);
           phaserScene.add.tween({
             targets: gameObject,
             angle: 360,
