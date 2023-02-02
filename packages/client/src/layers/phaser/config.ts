@@ -1061,7 +1061,7 @@ export const phaserConfig = {
         },
         [Sprites.Faction1]: {
           assetKey: Assets.MainAtlas,
-          frame: "faction-1.png",
+          frame: "faction-attack-1.png",
         },
         [Sprites.Faction2]: {
           assetKey: Assets.MainAtlas,
@@ -1082,6 +1082,30 @@ export const phaserConfig = {
         [Sprites.Faction6]: {
           assetKey: Assets.MainAtlas,
           frame: "faction-6.png",
+        },
+        [Sprites.FactionAttack1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-1.png",
+        },
+        [Sprites.FactionAttack2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-2.png",
+        },
+        [Sprites.FactionAttack3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-3.png",
+        },
+        [Sprites.FactionAttack4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-4.png",
+        },
+        [Sprites.FactionAttack5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-5.png",
+        },
+        [Sprites.FactionAttack6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-attack-6.png",
         },
         [Sprites.AttackShip11]: {
           assetKey: Assets.MainAtlas,

@@ -39,17 +39,17 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
       astroidObject.setComponent({
         id: `harvester-${entity}`,
         once: (gameObject) => {
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setDepth(1);
-          gameObject.setPosition(x + 32, y + 32);
           gameObject.setTexture(harvester.assetKey, `miner-${+level}-${+balance}.png`);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setDepth(1);
+          gameObject.setOrigin(0.5, 0.5);
         },
       });
       factionObject.setComponent({
         id: `harvester-faction-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(harvester.assetKey, `faction-${+faction}.png`);
-          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setTexture(harvester.assetKey, `faction-attack-${+faction}.png`);
+          gameObject.setPosition(x + 32, y + 15);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
         },

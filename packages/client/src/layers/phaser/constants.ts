@@ -416,6 +416,12 @@ export enum Sprites {
   BuildAttack6,
   BuildCargo,
   BuildHarvester,
+  FactionAttack1,
+  FactionAttack2,
+  FactionAttack3,
+  FactionAttack4,
+  FactionAttack5,
+  FactionAttack6,
 }
 
 export enum Animations {

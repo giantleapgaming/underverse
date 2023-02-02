@@ -38,16 +38,16 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
       astroidObject.setComponent({
         id: `godown-${entity}`,
         once: (gameObject) => {
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setDepth(1);
-          gameObject.setPosition(x + 32, y + 32);
           gameObject.setTexture(godown.assetKey, `cargo-${+level}-${+balance}.png`);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setDepth(1);
+          gameObject.setOrigin(0.5, 0.5);
         },
       });
       factionObject.setComponent({
         id: `godown-faction-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(godown.assetKey, `faction-${+faction}.png`);
+          gameObject.setTexture(godown.assetKey, `faction-attack-${+faction}.png`);
           gameObject.setPosition(x + 32, y + 32);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);

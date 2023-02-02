@@ -37,16 +37,17 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       astroidObject.setComponent({
         id: `attack-${entity}`,
         once: (gameObject) => {
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setDepth(1);
-          gameObject.setPosition(x + 32, y + 32);
+          console.log(`attack-${+faction}-${+level}.png`);
           gameObject.setTexture(attack.assetKey, `attack-${+faction}-${+level}.png`);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setDepth(1);
+          gameObject.setOrigin(0.5, 0.5);
         },
       });
       factionObject.setComponent({
         id: `attack-faction-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(attack.assetKey, `faction-${+faction}.png`);
+          gameObject.setTexture(attack.assetKey, `faction-attack-${+faction}.png`);
           gameObject.setPosition(x + 32, y + 32);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
