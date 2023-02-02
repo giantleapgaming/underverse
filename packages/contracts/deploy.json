@@ -11,7 +11,8 @@
     "BalanceComponent",
     "FactionComponent",
     "EntityTypeComponent",
-    "PopulationComponent"
+    "PopulationComponent",
+    "FuelComponent"
   ],
   "systems": [
     {
