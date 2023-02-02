@@ -47,7 +47,7 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       const sector = findSector(xCoord, yCoord);
 
       const textWhite = objectPool.get("build-residential-station-text-white", "Text");
-      const textYellow = objectPool.get("build-residential-station-text-yellow", "Text");
+      // const textYellow = objectPool.get("build-residential-station-text-yellow", "Text");
 
       const address = connectedAddress.get();
       const userEntityIndex = world.entities.indexOf(address);
@@ -85,18 +85,18 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
             gameObject.setColor("#ffffff");
           },
         });
-        textYellow.setComponent({
-          id: "build-residential-station-text-yellow",
-          once: (gameObject) => {
-            gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
-            gameObject.depth = 4;
-            gameObject.setText(`${price}`);
-            gameObject.setFontSize(14);
-            gameObject.setFontStyle("bold");
-            gameObject.setColor("#e4e76a");
-            gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
-          },
-        });
+        // textYellow.setComponent({
+        //   id: "build-residential-station-text-yellow",
+        //   once: (gameObject) => {
+        //     gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
+        //     gameObject.depth = 4;
+        //     gameObject.setText(`${price}`);
+        //     gameObject.setFontSize(14);
+        //     gameObject.setFontStyle("bold");
+        //     gameObject.setColor("#e4e76a");
+        //     gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
+        //   },
+        // });
       }
     } else {
       objectPool.remove("build-residential-station");

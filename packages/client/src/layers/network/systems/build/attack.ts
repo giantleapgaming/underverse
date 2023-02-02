@@ -56,7 +56,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const sector = findSector(xCoord, yCoord);
 
       const textWhite = objectPool.get("build-attack-station-text-white", "Text");
-      const textYellow = objectPool.get("build-attack-station-text-yellow", "Text");
+      // const textYellow = objectPool.get("build-attack-station-text-yellow", "Text");
 
       const address = connectedAddress.get();
       const userEntityIndex = world.entities.indexOf(address);
@@ -94,18 +94,18 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setColor("#ffffff");
           },
         });
-        textYellow.setComponent({
-          id: "build-attack-station-text-yellow",
-          once: (gameObject) => {
-            gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
-            gameObject.depth = 4;
-            gameObject.setText(`${price}`);
-            gameObject.setFontSize(14);
-            gameObject.setFontStyle("bold");
-            gameObject.setColor("#e4e76a");
-            gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
-          },
-        });
+        // textYellow.setComponent({
+        //   id: "build-attack-station-text-yellow",
+        //   once: (gameObject) => {
+        //     gameObject.setPosition(textPosition.x + 10, textPosition.y + 78);
+        //     gameObject.depth = 4;
+        //     gameObject.setText(`${price}`);
+        //     gameObject.setFontSize(14);
+        //     gameObject.setFontStyle("bold");
+        //     gameObject.setColor("#e4e76a");
+        //     gameObject.setVisible(sector === 1 || sector === 5 || sector === 9);
+        //   },
+        // });
       }
     } else {
       objectPool.remove("build-attack-station");
