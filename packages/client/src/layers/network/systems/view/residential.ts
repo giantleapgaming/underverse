@@ -12,6 +12,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
     scenes: {
       Main: {
         objectPool,
+        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -41,13 +42,22 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
         astroidObject.setComponent({
           id: `residential-${entity}`,
           once: (gameObject) => {
-            gameObject.setOrigin(0.5, 0.5);
-            gameObject.setDepth(1);
-            gameObject.setPosition(x + 32, y + 32);
             gameObject.setTexture(
               residential.assetKey,
               `${faction && +faction}-${level && +level}-${balance && +balance}.png`
             );
+            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setDepth(2);
+            gameObject.setOrigin(0.5, 0.5);
+            phaserScene.add.tween({
+              targets: gameObject,
+              angle: 360,
+              duration: 1500000,
+              ease: "circular",
+              repeat: -1,
+              yoyo: false,
+              rotation: 360,
+            });
           },
         });
         factionObject.setComponent({
@@ -57,6 +67,15 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setDepth(2);
             gameObject.setOrigin(0.5, 0.5);
+            phaserScene.add.tween({
+              targets: gameObject,
+              angle: 360,
+              duration: 1500000,
+              ease: "circular",
+              repeat: -1,
+              yoyo: false,
+              rotation: 360,
+            });
           },
         });
       }
