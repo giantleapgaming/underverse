@@ -20,7 +20,7 @@ import {
   ShowScrapeModal,
   ShowRepairModal,
 } from "../local/components";
-import { attackSystem, selectStationSystem, showUserStations } from "../local/systems";
+import { attackSystem, showUserStations } from "../local/systems";
 import { transportSystem } from "../local/systems/transportSystem";
 import {
   systemAttack,
@@ -51,6 +51,8 @@ import {
   mouseHover,
   rightClickBuildSystem,
 } from "../network/systems/build";
+import { selectClickSystem } from "../network/systems/select/select-click";
+import { selectSystem } from "../network/systems/select/select";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -218,9 +220,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
-  // displayStationSystem(network, context);
-  selectStationSystem(network, context);
-  // buildStationSystem(network, context);
+
   transportSystem(network, context);
   showUserStations(network, context);
   attackSystem(network, context);
@@ -254,5 +254,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayHarvesterSystem(network, context);
   displayGodownSystem(network, context);
 
+  //Select system for the station
+  selectClickSystem(network, context);
+  selectSystem(network, context);
   return context;
 }

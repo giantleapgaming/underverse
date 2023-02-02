@@ -100,7 +100,6 @@ export async function createNetworkLayer(config: GameConfig) {
   >(getNetworkConfig(config), world, components, SystemAbis, {
     fetchSystemCalls: true,
   });
-  console.log(components);
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
@@ -193,8 +192,8 @@ export async function createNetworkLayer(config: GameConfig) {
 
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
     const entitiesAtPosition = [...getEntitiesWithValue(components.Position, { x, y })].filter((position) => {
-      const level = getComponentValue(components.Level, position)?.value;
-      return level && !!+level;
+      const entity = getComponentValue(components.EntityType, position)?.value;
+      return entity;
     });
     return (
       entitiesAtPosition?.find((b) => {

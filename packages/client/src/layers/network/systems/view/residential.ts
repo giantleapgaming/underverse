@@ -65,17 +65,8 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           once: (gameObject) => {
             gameObject.setTexture(residential.assetKey, `faction-${+faction}.png`);
             gameObject.setPosition(x + 32, y + 32);
-            gameObject.setDepth(2);
+            gameObject.setDepth(3);
             gameObject.setOrigin(0.5, 0.5);
-            phaserScene.add.tween({
-              targets: gameObject,
-              angle: 360,
-              duration: 1500000,
-              ease: "circular",
-              repeat: -1,
-              yoyo: false,
-              rotation: 360,
-            });
           },
         });
       }
