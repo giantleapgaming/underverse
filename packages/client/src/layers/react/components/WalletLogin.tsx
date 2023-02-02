@@ -201,7 +201,7 @@ const Container = styled.div`
   width: 100%;
   height: 100vh;
   z-index: 50;
-  background-image: url("/img/BGWithOUtBlueLines.png");
+  background-image: url("/img/BG.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -213,7 +213,7 @@ const SkyBlueLines = styled.div`
   width: 100%;
   height: 100%;
   z-index: 70;
-  background-image: url("/img/SkyBlueLinesOfBG.png");
+  background-image: url("/img/BGblueLines.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

@@ -22,7 +22,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       {selectFaction ? (
         <>
           <Gif>
-            <img src="/img/name.gif" />
+            <img src="/img/nameSun.gif" />
           </Gif>
           <Form
             onSubmit={async (e) => {
