@@ -28,7 +28,7 @@ const Container = styled.div`
   z-index: 100;
   pointer-events: all;
   background-image: url(/img/sunRotatingBG.gif);
-  background-size: cover;
+  background-size: auto;
   background-repeat: no-repeat;
   background-position: center center;
   div {
