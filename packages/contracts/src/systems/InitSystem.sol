@@ -10,7 +10,7 @@ import { playerInitialCash, earthCenterPlanetDefence, planetType, asteroidType }
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 // Added new by Moresh to support faction
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { hardcodeAsteroidsAndPlanets, createAsteroids } from "../utils.sol";
+import { createAsteroids } from "../utils.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
