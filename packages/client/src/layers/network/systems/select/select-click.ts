@@ -1,5 +1,6 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
-import { setComponent } from "@latticexyz/recs";
+import { getComponentValue, setComponent } from "@latticexyz/recs";
+import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
@@ -19,6 +20,7 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
+    components: { Defence, EntityType },
   } = network;
 
   const click = input.click$.subscribe((p) => {
@@ -27,8 +29,18 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
 
     if (stationEntity) {
-      setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
-      sounds["click"].play();
+      const entityType = getComponentValue(EntityType, stationEntity)?.value;
+      const defence = getComponentValue(Defence, stationEntity)?.value;
+      if (defence && entityType && +entityType === Mapping.attack.id && +defence) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+        return;
+      }
+      if (entityType && +entityType === Mapping.astroid.id) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+        return;
+      }
     }
   });
 

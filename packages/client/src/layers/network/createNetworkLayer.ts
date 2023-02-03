@@ -38,6 +38,11 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Type" },
     }),
+    Fuel: defineNumberComponent(world, {
+      id: "Fuel",
+      indexed: true,
+      metadata: { contractId: "component.Fuel" },
+    }),
 
     Population: defineNumberComponent(world, {
       id: "Population",

@@ -1,4 +1,4 @@
-import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
@@ -24,6 +24,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
       api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
+      network: { connectedAddress },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -36,6 +37,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const offence = getComponentValueStrict(Offence, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
+
     if (entityType && +entityType === Mapping.attack.id) {
       return (
         <div>
@@ -70,77 +72,80 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                   <p>{+level}</p>
                 </S.Weapon>
               </S.Row>
-              <S.Column style={{ width: "100%" }}>
-                {action === "upgrade" && (
-                  <Upgrade
-                    defence={+defence}
-                    level={+level}
-                    upgradeSystem={async () => {
-                      try {
-                        setAction("attack");
-                        sounds["confirm"].play();
-                        await upgradeSystem(world.entities[selectedEntity]);
-                        showProgress();
-                      } catch (e) {
-                        setAction("upgrade");
-                        console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
-                      }
-                    }}
-                  />
-                )}
-                {action === "weapon" && (
-                  <Weapon
-                    offence={+offence}
-                    defence={+defence}
-                    level={+level}
-                    buyWeaponSystem={async (kgs: number) => {
-                      try {
-                        setAction("attack");
-                        sounds["confirm"].play();
-                        await buyWeaponSystem(world.entities[selectedEntity], kgs);
-                        showProgress();
-                      } catch (e) {
-                        setAction("weapon");
-                        console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
-                      }
-                    }}
-                  />
-                )}
-                {action === "repair" && (
-                  <Repair
-                    defence={+defence}
-                    level={+level}
-                    repairCost={repairPrice(position.x, position.y, level, defence)}
-                    repairSystem={async () => {
-                      try {
-                        setAction("attack");
-                        sounds["confirm"].play();
-                        await repairSystem(world.entities[selectedEntity]);
-                        showProgress();
-                      } catch (e) {
-                        setAction("repair");
-                        console.log({ error: e, system: "Repair Attack", details: selectedEntity });
-                      }
-                    }}
-                  />
-                )}
-                {action === "scrap" && (
-                  <Scrap
-                    scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
-                    scrapSystem={async () => {
-                      try {
-                        setAction("scrap");
-                        sounds["confirm"].play();
-                        await scrapeSystem(world.entities[selectedEntity]);
-                        showProgress();
-                      } catch (e) {
-                        setAction("scrap");
-                        console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
-                      }
-                    }}
-                  />
-                )}
-              </S.Column>
+              {ownedBy === connectedAddress.get() && (
+                <S.Column style={{ width: "100%" }}>
+                  {action === "upgrade" && (
+                    <Upgrade
+                      defence={+defence}
+                      level={+level}
+                      upgradeSystem={async () => {
+                        try {
+                          setAction("attack");
+                          sounds["confirm"].play();
+                          await upgradeSystem(world.entities[selectedEntity]);
+                          showProgress();
+                        } catch (e) {
+                          setAction("upgrade");
+                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                  {action === "weapon" && (
+                    <Weapon
+                      offence={+offence}
+                      defence={+defence}
+                      level={+level}
+                      buyWeaponSystem={async (kgs: number) => {
+                        try {
+                          setAction("attack");
+                          sounds["confirm"].play();
+                          await buyWeaponSystem(world.entities[selectedEntity], kgs);
+                          showProgress();
+                        } catch (e) {
+                          setAction("weapon");
+                          console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                  {action === "repair" && (
+                    <Repair
+                      defence={+defence}
+                      level={+level}
+                      repairCost={repairPrice(position.x, position.y, level, defence)}
+                      repairSystem={async () => {
+                        try {
+                          setAction("attack");
+                          sounds["confirm"].play();
+                          await repairSystem(world.entities[selectedEntity]);
+                          showProgress();
+                        } catch (e) {
+                          setAction("repair");
+                          console.log({ error: e, system: "Repair Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                  {action === "scrap" && (
+                    <Scrap
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
+                      scrapSystem={async () => {
+                        try {
+                          setAction("scrap");
+                          sounds["confirm"].play();
+                          await scrapeSystem(world.entities[selectedEntity]);
+                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+                          showProgress();
+                        } catch (e) {
+                          setAction("scrap");
+                          console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                </S.Column>
+              )}
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
               <S.Column>
