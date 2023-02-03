@@ -3,13 +3,13 @@ import { convertPrice } from "../../utils/priceConverter";
 
 export const Repair = ({
   level,
-  upgradeSystem,
+  repairSystem,
   defence,
   repairCost,
 }: {
   level: number;
   defence: number;
-  upgradeSystem: () => void;
+  repairSystem: () => void;
   repairCost: number;
 }) => {
   return (
@@ -23,7 +23,7 @@ export const Repair = ({
               {convertPrice(repairCost)}
             </S.Cost>
           </div>
-          <S.InlinePointer onClick={upgradeSystem}>
+          <S.InlinePointer onClick={repairSystem}>
             <S.Img src="/button/white-b.png" />
             <S.DeployText>REPAIR</S.DeployText>
           </S.InlinePointer>

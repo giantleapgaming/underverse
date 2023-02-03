@@ -4,7 +4,9 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
+import { scrapPrice } from "../../utils/scrapPrice";
 import { Repair } from "../action-system/repair";
+import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
 import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
@@ -21,7 +23,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem },
+      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -109,7 +111,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     defence={+defence}
                     level={+level}
                     repairCost={repairPrice(position.x, position.y, level, defence)}
-                    upgradeSystem={async () => {
+                    repairSystem={async () => {
                       try {
                         setAction("attack");
                         sounds["confirm"].play();
@@ -118,6 +120,22 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       } catch (e) {
                         setAction("repair");
                         console.log({ error: e, system: "Repair Attack", details: selectedEntity });
+                      }
+                    }}
+                  />
+                )}
+                {action === "scrap" && (
+                  <Scrap
+                    scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
+                    scrapSystem={async () => {
+                      try {
+                        setAction("scrap");
+                        sounds["confirm"].play();
+                        await scrapeSystem(world.entities[selectedEntity]);
+                        showProgress();
+                      } catch (e) {
+                        setAction("scrap");
+                        console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
                       }
                     }}
                   />
