@@ -3,6 +3,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { repairPrice } from "../../utils/repairPrice";
+import { Repair } from "../action-system/repair";
 import { Upgrade } from "../action-system/upgrade";
 import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
@@ -19,7 +21,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem },
+      api: { upgradeSystem, buyWeaponSystem, repairSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -98,6 +100,24 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       } catch (e) {
                         setAction("weapon");
                         console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
+                      }
+                    }}
+                  />
+                )}
+                {action === "repair" && (
+                  <Repair
+                    defence={+defence}
+                    level={+level}
+                    repairCost={repairPrice(position.x, position.y, level, defence)}
+                    upgradeSystem={async () => {
+                      try {
+                        setAction("attack");
+                        sounds["confirm"].play();
+                        await repairSystem(world.entities[selectedEntity]);
+                        showProgress();
+                      } catch (e) {
+                        setAction("repair");
+                        console.log({ error: e, system: "Repair Attack", details: selectedEntity });
                       }
                     }}
                   />
