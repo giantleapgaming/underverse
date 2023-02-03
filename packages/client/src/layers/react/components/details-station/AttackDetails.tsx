@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { Upgrade } from "../action-system/upgrade";
+import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const AttackDetails = ({ layers }: { layers: Layers }) => {
@@ -18,7 +19,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
-      api: { upgradeSystem },
+      api: { upgradeSystem, buyWeaponSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -79,6 +80,24 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       } catch (e) {
                         setAction("upgrade");
                         console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                      }
+                    }}
+                  />
+                )}
+                {action === "weapon" && (
+                  <Weapon
+                    offence={+offence}
+                    defence={+defence}
+                    level={+level}
+                    buyWeaponSystem={async (kgs: number) => {
+                      try {
+                        setAction("attack");
+                        sounds["confirm"].play();
+                        await buyWeaponSystem(world.entities[selectedEntity], kgs);
+                        showProgress();
+                      } catch (e) {
+                        setAction("weapon");
+                        console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
                       }
                     }}
                   />
