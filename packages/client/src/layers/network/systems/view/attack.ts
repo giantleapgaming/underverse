@@ -32,29 +32,35 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
         const factionIndex = world.entities.indexOf(ownedBy);
         const faction = getComponentValueStrict(Faction, factionIndex).value;
         const level = getComponentValueStrict(Level, entity).value;
+        const defence = getComponentValueStrict(Defence, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
-        const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
-        const attack = config.sprites[Sprites.Asteroid12];
-        astroidObject.setComponent({
-          id: `attack-${entity}`,
-          once: (gameObject) => {
-            gameObject.setTexture(attack.assetKey, `attack-${+faction}-${+level}.png`);
-            gameObject.setPosition(x + 32, y + 32);
-            gameObject.setDepth(1);
-            gameObject.setOrigin(0.5, 0.5);
-          },
-        });
-        factionObject.setComponent({
-          id: `attack-faction-${entity}`,
-          once: (gameObject) => {
-            gameObject.setTexture(attack.assetKey, `faction-attack-${+faction}.png`);
-            gameObject.setPosition(x + 32, y + 32);
-            gameObject.setDepth(2);
-            gameObject.setOrigin(0.5, 0.5);
-          },
-        });
+        if (+defence > 0) {
+          const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
+          const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
+          const attack = config.sprites[Sprites.Asteroid12];
+          astroidObject.setComponent({
+            id: `attack-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(attack.assetKey, `attack-${+faction}-${+level}.png`);
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setDepth(1);
+              gameObject.setOrigin(0.5, 0.5);
+            },
+          });
+          factionObject.setComponent({
+            id: `attack-faction-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(attack.assetKey, `faction-attack-${+faction}.png`);
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setDepth(2);
+              gameObject.setOrigin(0.5, 0.5);
+            },
+          });
+        } else {
+          objectPool.remove(`attack-${entity}`);
+          objectPool.remove(`attack-faction-${entity}`);
+        }
       }
     }
   );
