@@ -17,6 +17,7 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
+import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { earthInitialPopulation } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
@@ -109,7 +110,8 @@ contract InitSystem is System {
         int32 x = (int32(radius) * cosArr[i]) / int32(1000);
         int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * sinArr[i]) / int32(1000);
         uint256 balance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 91);
-        createAsteroids(world, components, x, y, balance);
+        uint256 fuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 901);
+        createAsteroids(world, components, x, y, balance, fuel);
       }
     }
     registeredPlayers[msg.sender] = true;

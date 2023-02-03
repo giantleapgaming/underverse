@@ -7,6 +7,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "./components/OwnedBy
 import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "./components/DefenceComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "./components/BalanceComponent.sol";
+import { FuelComponent, ID as FuelComponentID} from "./components/FuelComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "./components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
@@ -315,7 +316,8 @@ function createAsteroids(
   IUint256Component components,
   int32 x,
   int32 y,
-  uint256 balance
+  uint256 balance,
+  uint256 fuel
 ) {
   uint256 ent = world.getUniqueEntityId();
   PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
@@ -323,4 +325,5 @@ function createAsteroids(
   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+  FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
 }
