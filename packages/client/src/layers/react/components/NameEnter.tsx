@@ -85,10 +85,11 @@ const Form = styled.form`
 
 const Gif = styled.div`
   z-index: 100;
-  width: 400px;
+  width: 200px;
   height: 100%;
   display: flex;
-  margin: 100px auto 0px;
+  bottom: 200;
+  margin: auto auto;
   position: absolute;
   align-items: flex-end;
   justify-content: center;
