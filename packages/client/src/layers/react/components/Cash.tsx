@@ -20,8 +20,8 @@ const Cash = ({ layers }: { layers: Layers }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", justifyContent: "end", alignItems: "end" }}>
       <p>{cash && convertPrice(+cash)}</p>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "end" }}>
-        <img src="" />
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
+        <img src="/build-stations/users.png" />
         <p>100/{users.length}</p>
       </div>
     </div>
