@@ -3,19 +3,22 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
-import { SlantedFilled } from "../utils/SlantedFilled";
+import { Upgrade } from "../action-system/upgrade";
+import { SelectButton } from "./Button";
 
 export const AttackDetails = ({ layers }: { layers: Layers }) => {
-  const [selected, setSelected] = useState("0");
+  const [action, setAction] = useState("attack");
   const {
     phaser: {
       sounds,
+      localApi: { showProgress },
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Offence },
+      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
+      api: { upgradeSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -25,99 +28,131 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const entityIndex = world.entities.indexOf(ownedBy);
     const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
     const position = getComponentValueStrict(Position, selectedEntity);
-    const offence = getComponentValueStrict(Offence, selectedEntity)?.value;
+    const offence = getComponentValueStrict(Offence, selectedEntity).value;
+    const level = getComponentValueStrict(Level, selectedEntity).value;
+    const defence = getComponentValueStrict(Defence, selectedEntity).value;
     if (entityType && +entityType === Mapping.attack.id) {
       return (
-        <S.Container>
-          <S.Column>
-            <S.Text>ATTACK LVL</S.Text>
-            <img src={`/build-stations/attack-${factionNumber && +factionNumber}-1.png`} width="100px" height="100px" />
-            <S.Text>
-              POSITION {position.x}/{position.x}
-            </S.Text>
-          </S.Column>
-          <S.Column style={{ marginLeft: "-20px" }}>
-            <S.Row style={{ gap: "20px" }}>
-              <S.Weapon>
-                <img src="/build-stations/weapon.png" />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-              </S.Weapon>
-              <S.Weapon>
-                <img src="/build-stations/shied.png" />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-                <SlantedFilled />
-              </S.Weapon>
-            </S.Row>
-            <div
-              style={{
-                display: "grid",
-                gap: "20px",
-                gridTemplateColumns: "repeat(8, 1fr)",
-                marginTop: "15px",
-                marginBottom: "15px",
-              }}
-            >
-              {new Array(8).fill(0).map((_, i) => {
-                return (
-                  <S.Slanted
-                    key={`red${i}`}
-                    selected={+selected > i}
-                    onClick={() => {
-                      sounds["click"].play();
-                      setSelected((i + 1).toString());
+        <div>
+          <S.Container>
+            <S.Column>
+              <S.Text>ATTACK LVL {+level}</S.Text>
+              <img
+                src={`/build-stations/attack-${factionNumber && +factionNumber}-1.png`}
+                width="100px"
+                height="100px"
+              />
+              <S.Text>
+                POSITION {position.x}/{position.x}
+              </S.Text>
+            </S.Column>
+            <S.Column style={{ width: "325px" }}>
+              <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
+                <S.Weapon>
+                  <img src="/build-stations/shied.png" />
+                  <p>
+                    {+defence}/{level && +level * 100}
+                  </p>
+                </S.Weapon>
+                <S.Weapon>
+                  <img src="/build-stations/weapon.png" />
+                  <p>
+                    {+offence}/{+level}
+                  </p>
+                </S.Weapon>
+                <S.Weapon>
+                  <img src="/build-stations/hydrogen.png" />
+                  <p>{+level}</p>
+                </S.Weapon>
+              </S.Row>
+              <S.Column style={{ width: "100%" }}>
+                {action === "upgrade" && (
+                  <Upgrade
+                    defence={+defence}
+                    level={+level}
+                    upgradeSystem={async () => {
+                      try {
+                        setAction("attack");
+                        sounds["confirm"].play();
+                        await upgradeSystem(world.entities[selectedEntity]);
+                        showProgress();
+                      } catch (e) {
+                        setAction("upgrade");
+                        console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                      }
                     }}
-                  >
-                    <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-                  </S.Slanted>
-                );
-              })}
+                  />
+                )}
+              </S.Column>
+            </S.Column>
+            <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
+              <S.Column>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+              </S.Column>
+              <S.Column>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+                <S.Missiles>
+                  <S.Img src="/layout/hex.png" width="40px" />
+                </S.Missiles>
+              </S.Column>
             </div>
-            <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-              <S.Text>TOTAL DAMAGE</S.Text>
-              <S.InlinePointer>
-                <S.ButtonImg src="/button/redButton.png" />
-                <S.DeployText>ATTACK</S.DeployText>
-              </S.InlinePointer>
-            </S.Row>
-          </S.Column>
-          <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
-            <S.Column>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-            </S.Column>
-            <S.Column>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-              <S.Missiles>
-                <S.Img src="/layout/hex.png" width="40px" />
-              </S.Missiles>
-            </S.Column>
-          </div>
-        </S.Container>
+          </S.Container>
+          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+            <SelectButton
+              name="UPGRADE"
+              isActive={action === "upgrade"}
+              onClick={() => {
+                setAction("upgrade");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "attack"}
+              name="ATTACk"
+              onClick={() => {
+                setAction("attack");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "weapon"}
+              name="WEAPON"
+              onClick={() => {
+                setAction("weapon");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "repair"}
+              name="REPAIR"
+              onClick={() => {
+                setAction("repair");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "scrap"}
+              name="SCRAP"
+              onClick={() => {
+                setAction("scrap");
+                sounds["click"].play();
+              }}
+            />
+          </S.Row>
+        </div>
       );
     }
   }
@@ -128,7 +163,6 @@ const S = {
   Container: styled.div`
     display: flex;
     position: relative;
-    gap: 10px;
     width: 100%;
     padding-top: 10px;
     padding-left: 10px;
@@ -168,7 +202,8 @@ const S = {
   Slanted: styled.div<{ selected: boolean }>`
     position: relative;
     display: inline-block;
-    padding: 3px;
+    padding: 1px;
+    width: 20px;
     cursor: pointer;
     font-size: 12px;
     text-align: center;

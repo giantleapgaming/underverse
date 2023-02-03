@@ -116,7 +116,9 @@ export async function createNetworkLayer(config: GameConfig) {
   async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType);
   }
-
+  async function upgradeSystem(godownEntity: EntityID) {
+    return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
+  }
   const buySystem = async (godownEntity: EntityID, kgs: number) => {
     try {
       await systems["system.Buy"].executeTyped(BigNumber.from(godownEntity), kgs);
@@ -152,13 +154,7 @@ export async function createNetworkLayer(config: GameConfig) {
       console.log({ e });
     }
   };
-  const upgradeSystem = async (godownEntity: EntityID) => {
-    try {
-      await systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
-    } catch (e) {
-      console.log({ e });
-    }
-  };
+
   const scrapeSystem = async (godownEntity: EntityID) => {
     try {
       await systems["system.Scrap"].executeTyped(BigNumber.from(godownEntity));
