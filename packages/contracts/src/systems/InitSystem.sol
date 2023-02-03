@@ -18,6 +18,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { earthInitialPopulation } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
@@ -116,6 +117,7 @@ contract InitSystem is System {
     }
     registeredPlayers[msg.sender] = true;
     playerCount += 1;
+    PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).set(addressToEntity(msg.sender), playerCount);
   }
 
   //function executeTyped(string calldata name) public returns (bytes memory) {
