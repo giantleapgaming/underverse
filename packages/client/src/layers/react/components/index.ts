@@ -14,6 +14,7 @@ import { registerRepair } from "./RepairSystem";
 import { registerProgressBar } from "./ProgressBar";
 import { registerBuild } from "./build-station/index";
 import { registerDetails } from "./details-station";
+import { registerCashDetails } from "./Cash";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -32,4 +33,5 @@ export function registerUIComponents() {
   registerProgressBar();
   registerBuild();
   registerDetails();
+  registerCashDetails();
 }
