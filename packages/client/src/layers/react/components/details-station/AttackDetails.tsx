@@ -22,7 +22,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
+      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence, Fuel },
       api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
@@ -37,6 +37,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const offence = getComponentValueStrict(Offence, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
+    // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+    const fuel = 0;
 
     if (entityType && +entityType === Mapping.attack.id) {
       return (
@@ -69,7 +71,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
-                  <p>{+level}</p>
+                  <p>{+fuel}</p>
                 </S.Weapon>
               </S.Row>
               {ownedBy === connectedAddress.get() && (
