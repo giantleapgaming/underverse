@@ -20,20 +20,7 @@ import {
   ShowScrapeModal,
   ShowRepairModal,
 } from "../local/components";
-import { attackSystem, showUserStations } from "../local/systems";
-import { transportSystem } from "../local/systems/transportSystem";
-import {
-  systemAttack,
-  systemBuild,
-  systemBuy,
-  systemBuyWeapon,
-  systemInit,
-  systemRepaired,
-  systemScraped,
-  systemSell,
-  systemTransport,
-  systemUpgrade,
-} from "../local/stream-system";
+
 import {
   displayAsteroidSystem,
   displayAttackSystem,
@@ -220,20 +207,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   // --- SYSTEMS --------------------------------------------------------------------
   createMapSystem(network, context);
-
-  transportSystem(network, context);
-  showUserStations(network, context);
-  attackSystem(network, context);
-  systemInit(network, context);
-  systemBuild(network, context);
-  systemBuyWeapon(network, context);
-  systemUpgrade(network, context);
-  systemBuy(network, context);
-  systemSell(network, context);
-  systemTransport(network, context);
-  systemScraped(network, context);
-  systemAttack(network, context);
-  systemRepaired(network, context);
 
   // click of the build station
   rightClickBuildSystem(network, context);

@@ -41,7 +41,17 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
         sounds["click"].play();
         return;
       }
-      if (entityType && +entityType === Mapping.residential.id) {
+      if (entityType && +entityType === Mapping.residential.id && defence && +defence) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+        return;
+      }
+      if (entityType && +entityType === Mapping.godown.id && defence && +defence) {
+        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        sounds["click"].play();
+        return;
+      }
+      if (entityType && +entityType === Mapping.harvester.id && defence && +defence) {
         setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
         sounds["click"].play();
         return;

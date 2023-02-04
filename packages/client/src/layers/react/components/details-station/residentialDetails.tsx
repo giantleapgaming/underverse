@@ -22,7 +22,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence },
       api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
@@ -45,12 +45,8 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
         <div>
           <S.Container>
             <S.Column>
-              <S.Text>ATTACK LVL {+level}</S.Text>
-              <img
-                src={`/build-stations/attack-${factionNumber && +factionNumber}-1.png`}
-                width="100px"
-                height="100px"
-              />
+              <S.Text>RESIDENTIAL LVL {+level}</S.Text>
+              <img src={`/build-stations/${+factionNumber}-1-0.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.x}
               </S.Text>
