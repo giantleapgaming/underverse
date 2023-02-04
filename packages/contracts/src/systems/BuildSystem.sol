@@ -13,7 +13,8 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 //Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost } from "../utils.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -26,53 +27,32 @@ contract BuildSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
 
-    //require(x >= -25 && x <= 25, "Invalid X co-ordinate");
-    //require(y >= -25 && y <= 25, "Invalid Y co-ordinate");
-
+   
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
       ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
       "Cannot build godown in the center of the grid"
     );
-    // // // //
-
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-    //Moresh: Removed this
-    //require(
-    //  playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-    //  "Need 10 seconds of delay between actions"
-    //);
-
+    
     Coord memory coord = Coord({ x: x, y: y });
+    Coord memory center = Coord({ x: 0, y: 0 });
+   
+    uint256 playerCount = getPlayerCount(
+      PlayerCountComponent(getAddressById(components, PlayerCountComponentID)),
+      addressToEntity(msg.sender)
+    );
 
-    // uint256[] memory arrayOfGodownsAtCoord = PositionComponent(getAddressById(components, PositionComponentID))
-    //   .getEntitiesWithValue(coord);
-
-    // require(arrayOfGodownsAtCoord.length == 0, "A godown has already been placed at this positon");
-
-    // Not allowing to build godown in adjacent 8 cells
-    // For that I'm checking each neighbouring cell
-    // // // // //
-    // // // // //
-    // uint256[] memory arrayOfGodownsAtTopCoord =
-    //   PositionComponent(getAddressById(components, PositionComponentID))
-    //   .getEntitiesWithValue(Coord({ x: coord.x, y: coord.y + 1 }));
-    // require(arrayOfGodownsAtTopCoord.length == 0,
-    //   "A godown has already been placed at this positon");
-
-    //////////////
-    //////////////
+   //We check if the entity being built is built at a distance from the center that is allowed
+   //We steadily expand the buildable area based on the number of players that are in the game
+   //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 1 unit
+   
+    require(getDistanceBetweenCoordinatesWithMultiplier(coord,center) < (30000 + playerCount*1000),"This coordinate is not yet open for building");
+    
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
           .getEntitiesWithValue(Coord({ x: i, y: j }));
-        // require(
-        //   arrayOfGodownsAtThatCoord.length == 0,
-        //   "A godown has already been built on the position or one of its adjacent cells"
-        // );
-        // // // //
-        // // // //
+
         if (arrayOfGodownsAtThatCoord.length > 0) {
           for (int32 k = 0; k < int32(int256(arrayOfGodownsAtThatCoord.length)); k++) {
             uint256 itsGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
@@ -84,31 +64,8 @@ contract BuildSystem is System {
             );
           }
         }
-        // // // //
-        // // // //
       }
     }
-    //////////////
-    //////////////
-    // // // // //
-    // // // // //
-
-    // // // // //
-    // // // // //
-    // GODOWN CREATION COST
-    // uint256 sumOfCoordSquares = (uint256(int256(coord.x)) * uint256(int256(coord.x))) +
-    //   (uint256(int256(coord.y)) * uint256(int256(coord.y)));
-
-    // uint256 godownCreationCost = ((1000000) / (Math.sqrt(sumOfCoordSquares)));
-
-    // GODOWN CREATION COST
-    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(coord.x)**2) + (int256(coord.y)**2));
-
-    // uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
-
-    // uint256 godownCreationCost = getGodownCreationCost()totalPriceRaw * MULTIPLIER2; // 10^6
-    // // // // //
-    // // // // //
 
     uint256 godownCreationCost = getGodownCreationCost(coord.x, coord.y);
 

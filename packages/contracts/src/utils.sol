@@ -16,6 +16,7 @@ import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroid
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
@@ -184,4 +185,9 @@ function createAsteroids(
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
   FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
+}
+
+function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
+  bytes memory playerCountBytes = playerCountComponent.getRawValue(entity);
+  return playerCountBytes.length == 0 ? 0 : abi.decode(playerCountBytes, (uint256));
 }
