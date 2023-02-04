@@ -8,8 +8,9 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
-import { getPlayerCash } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getPlayerCash, getFactionUpgradeCosts } from "../utils.sol";
+import { actionDelayInSeconds, MULTIPLIER, Faction } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Upgrade"));
 
@@ -38,9 +39,15 @@ contract UpgradeSystem is System {
 
     require(selectedEntityLevel < 8, "Maximum level reached");
 
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionUpgradeCosts(Faction(userFaction));
+
     uint256 nextLevel = selectedEntityLevel + 1;
 
-    uint256 upgradeCost = (nextLevel**2) * 1000 * MULTIPLIER;
+    uint256 upgradeCost = ((nextLevel**2) * 1000 * MULTIPLIER * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

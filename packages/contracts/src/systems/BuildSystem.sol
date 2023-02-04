@@ -13,8 +13,9 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 //Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getFactionBuildCosts } from "../utils.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -110,7 +111,13 @@ contract BuildSystem is System {
     // // // // //
     // // // // //
 
-    uint256 godownCreationCost = getGodownCreationCost(coord.x, coord.y);
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
+
+    uint256 godownCreationCost = (getGodownCreationCost(coord.x, coord.y) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

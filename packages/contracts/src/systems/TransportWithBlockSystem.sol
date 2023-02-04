@@ -9,8 +9,9 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
-import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, getFactionTransportCosts } from "../utils.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.TransportWithBlock"));
@@ -115,7 +116,13 @@ contract TransportWithBlockSystem is System {
       destinationGodownPosition
     );
 
-    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2);
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
+
+    uint256 totalTransportCost = (((distanceBetweenGodowns * kgs)**2) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

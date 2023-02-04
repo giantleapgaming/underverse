@@ -9,8 +9,9 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getCargoSellingPrice } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getCargoSellingPrice, getFactionSellCosts } from "../utils.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Sell"));
@@ -64,7 +65,13 @@ contract SellSystem is System {
     //   10);
     // uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // 10^6
 
-    uint256 totalPrice = getCargoSellingPrice(godownPosition.x, godownPosition.y, kgs);
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionSellCosts(Faction(userFaction));
+
+    uint256 totalPrice = (getCargoSellingPrice(godownPosition.x, godownPosition.y, kgs) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

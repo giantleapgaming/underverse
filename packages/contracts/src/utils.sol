@@ -12,7 +12,7 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType } from "./constants.sol";
+import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
@@ -185,3 +185,166 @@ function createAsteroids(
   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
   FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
 }
+
+// function getCostPercentage(Factions faction, Operations operation) returns (uint256) {
+//   return costPercentage[faction][operation];
+// }
+
+function initCostPercentage() pure {
+  // costPercentage[Faction.USA] = OperationCost({ attack: 90, move: 85, transport: 80, repair: 95 });
+  // costPercentage[Faction.EU] = OperationCost({ attack: 95, move: 80, transport: 75, repair: 90 });
+  // costPercentage[Faction.INDIA] = OperationCost({ attack: 100, move: 110, transport: 105, repair: 95 });
+}
+
+// Returns the cost percentage of the operation
+function getCostPercentage(Faction faction, string memory operation) pure returns (uint256) {
+  // OperationCost memory cost = costPercentage[faction];
+  // if (operation == "attack") {
+  //     return cost.attack;
+  // } else if (operation == "move") {
+  //     return cost.move;
+  // } else if (operation == "transport") {
+  //     return cost.transport;
+  // } else if (operation == "repair") {
+  //     return cost.repair;
+  // }
+  // return 0;
+}
+
+// Faction costs percentages
+
+// function getFactionTransportCosts(Faction faction) pure returns (uint) {
+//     if (faction == "attack") {
+//         return cost.attack;
+//     } else if (operation == "move") {
+//         return cost.move;
+//     } else if (operation == "transport") {
+//         return cost.transport;
+//     } else if (operation == "repair") {
+//         return cost.repair;
+//     }
+//     return 0;
+// }
+
+function getFactionUpgradeCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.FREENAVY) {
+    return freenavyUpgrade;
+  }
+  return 100;
+}
+
+function getFactionBuildCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.FREENAVY) {
+    return freenavyBuild;
+  } else if (faction == Faction.RUSSIA) {
+    return russiaBuild;
+  } else if (faction == Faction.CHINA) {
+    return chinaBuild;
+  } else if (faction == Faction.INDIA) {
+    return indiaBuild;
+  } else if (faction == Faction.EU) {
+    return euBuild;
+  } else if (faction == Faction.USA) {
+    return usaBuild;
+  }
+  return 100;
+}
+
+function getFactionWeaponCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.FREENAVY) {
+    return freenavyWeapon;
+  } else if (faction == Faction.RUSSIA) {
+    return russiaWeapon;
+  } else if (faction == Faction.CHINA) {
+    return chinaWeapon;
+  } else if (faction == Faction.INDIA) {
+    return indiaWeapon;
+  } else if (faction == Faction.USA) {
+    return usaWeapon;
+  }
+  return 100;
+}
+
+function getFactionSellCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.CHINA) {
+    return chinaSell;
+  } else if (faction == Faction.INDIA) {
+    return indiaSell;
+  } else if (faction == Faction.EU) {
+    return euSell;
+  } else if (faction == Faction.USA) {
+    return usaSell;
+  }
+  return 100;
+}
+
+function getFactionTransportCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.RUSSIA) {
+    return russiaTransport;
+  } else if (faction == Faction.CHINA) {
+    return chinaTransport;
+  } else if (faction == Faction.INDIA) {
+    return indiaTransport;
+  }
+  return 100;
+}
+
+function getFactionAttackCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.FREENAVY) {
+    return freenavyAttack;
+  } else if (faction == Faction.RUSSIA) {
+    return russiaAttack;
+  } else if (faction == Faction.CHINA) {
+    return chinaAttack;
+  } else if (faction == Faction.INDIA) {
+    return indiaAttack;
+  } else if (faction == Faction.USA) {
+    return usaAttack;
+  }
+  return 100;
+}
+
+function getFactionScrapCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.RUSSIA) {
+    return russiaScrap;
+  } else if (faction == Faction.CHINA) {
+    return chinaScrap;
+  } else if (faction == Faction.INDIA) {
+    return indiaScrap;
+  } else if (faction == Faction.USA) {
+    return usaScrap;
+  }
+  return 100;
+}
+
+function getFactionIncomeCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.CHINA) {
+    return chinaIncome;
+  } else if (faction == Faction.INDIA) {
+    return indiaIncome;
+  } else if (faction == Faction.EU) {
+    return euIncome;
+  } else if (faction == Faction.USA) {
+    return usaIncome;
+  }
+  return 100;
+}
+
+function getFactionRepairCosts(Faction faction) pure returns (uint256) {
+  if (faction == Faction.FREENAVY) {
+    return freenavyRepair;
+  } else if (faction == Faction.RUSSIA) {
+    return russiaRepair;
+  } else if (faction == Faction.CHINA) {
+    return chinaRepair;
+  } else if (faction == Faction.INDIA) {
+    return indiaRepair;
+  } else if (faction == Faction.EU) {
+    return euRepair;
+  } else if (faction == Faction.USA) {
+    return usaRepair;
+  }
+  return 100;
+}
+
+// subtract -1 from faction val

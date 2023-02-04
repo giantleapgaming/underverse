@@ -11,8 +11,9 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getCargoSellingPrice, deleteGodown } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getCargoSellingPrice, deleteGodown, getFactionScrapCosts } from "../utils.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Scrap"));
@@ -53,10 +54,16 @@ contract ScrapSystem is System {
     uint256 cargoSellingPrice = getCargoSellingPrice(godownPosition.x, godownPosition.y, selectedGodownBalance);
     uint256 defenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(godownEntity);
 
-    uint256 totalScrapValue = (
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionScrapCosts(Faction(userFaction));
+
+    uint256 totalScrapValue = (((
       ((godownCreationCost + totalGodownUpgradeCostUntilLevel + cargoSellingPrice) *
         (defenceAmount / (selectedEntityLevel * 100)))
-    ) / 4;
+    ) / 4) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
