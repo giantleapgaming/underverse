@@ -28,7 +28,9 @@ contract BuildSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
 
-   
+    // Shipyards can only be initialized via the init system and cannot be built
+
+    require(entity_type != 7,"Cannot build Shipyard");
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
       ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
