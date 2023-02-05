@@ -11,8 +11,9 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
-import { getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts } from "../utils.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Attack"));
@@ -74,9 +75,15 @@ contract AttackSystem is System {
       destinationGodownPosition
     );
 
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionAttackCosts(Faction(userFaction));
+
     // distanceBetweenGodowns is 25806 for (15,9) and (30,30)
     // uint256 totalDamage = (amount * 500 * MULTIPLIER2) / distanceBetweenGodowns;
-    uint256 totalDamage = amount * ((250 * MULTIPLIER2) / distanceBetweenGodowns);
+    uint256 totalDamage = (amount * ((250 * MULTIPLIER2) / distanceBetweenGodowns) * factionCostPercent) / 100;
     // uint256 totalDamage = 101;
 
     // reduce balance of weapons of source godown by the amount used up,

@@ -14,8 +14,9 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 //Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -44,9 +45,9 @@ contract BuildSystem is System {
 
    //We check if the entity being built is built at a distance from the center that is allowed
    //We steadily expand the buildable area based on the number of players that are in the game
-   //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 1 unit
+   //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 5 units
    
-    require(getDistanceBetweenCoordinatesWithMultiplier(coord,center) < (30000 + playerCount*1000),"This coordinate is not yet open for building");
+    require(getDistanceBetweenCoordinatesWithMultiplier(coord,center) < (30000 + playerCount*5000),"This coordinate is not yet open for building");
     
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
@@ -67,7 +68,13 @@ contract BuildSystem is System {
       }
     }
 
-    uint256 godownCreationCost = getGodownCreationCost(coord.x, coord.y);
+      uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+      addressToEntity(msg.sender)
+    );
+
+    uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
+
+    uint256 godownCreationCost = (getGodownCreationCost(coord.x, coord.y) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
@@ -85,7 +92,6 @@ contract BuildSystem is System {
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
-    // StorageComponent(getAddressById(components, StorageComponentID)).set(godownEntity, godownInitialStorage);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
     //Moresh: Assign Entity type
 
