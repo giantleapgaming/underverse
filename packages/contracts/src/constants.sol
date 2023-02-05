@@ -12,6 +12,7 @@ uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
 uint256 constant godownInitialStorage = 1000;
 uint256 constant godownInitialBalance = 0;
+uint256 constant godownInitialFuel = 100;
 uint256 constant earthCenterPlanetDefence = 1000000;
 uint256 constant earthInitialPopulation = 100000;
 uint256 constant baseInitialBalance = 100;

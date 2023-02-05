@@ -192,6 +192,22 @@
         "PositionComponent",
         "FuelComponent"
       ]
+    },
+    {
+      "name": "BuildFromShipyardSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "FactionComponent",
+        "EntityTypeComponent",
+        "FuelComponent"
+      ]
     }
   ]
 }

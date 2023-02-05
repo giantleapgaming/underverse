@@ -17,6 +17,7 @@ import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
+import { FuelComponent, ID as FuelComponentID } from "./components/FuelComponent.sol";
 
 function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
   view
@@ -314,3 +315,8 @@ function getFactionRepairCosts(Faction faction) pure returns (uint256) {
 }
 
 // subtract -1 from faction val
+
+function getPlayerFuel(FuelComponent fuelComponent, uint256 entity) view returns (uint256) {
+  bytes memory currentFuelBytes = fuelComponent.getRawValue(entity);
+  return currentFuelBytes.length == 0 ? 0 : abi.decode(currentFuelBytes, (uint256));
+}
