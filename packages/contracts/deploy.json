@@ -188,7 +188,6 @@
     {
       "name": "MoveShipSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
         "PositionComponent",
         "FuelComponent"
