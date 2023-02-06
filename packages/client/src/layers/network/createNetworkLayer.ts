@@ -143,15 +143,11 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   const attackSystem = async (srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgsToTransfer: number) => {
-    try {
-      await systems["system.Attack"].executeTyped(
-        BigNumber.from(srcGodownEntity),
-        BigNumber.from(destinationGodownEntity),
-        kgsToTransfer
-      );
-    } catch (e) {
-      console.log({ e });
-    }
+    return systems["system.Attack"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      kgsToTransfer
+    );
   };
 
   const sellSystem = async (godownEntity: EntityID, kgs: number) => {

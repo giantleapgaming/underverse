@@ -1,10 +1,12 @@
-import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
-import { useState } from "react";
+import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { distance } from "../../utils/distance";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
+import { Attack } from "../action-system/attack";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
@@ -12,18 +14,18 @@ import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const AttackDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("attack");
+  const [action, setAction] = useState("upgrade");
   const {
     phaser: {
       sounds,
-      localApi: { showProgress },
-      components: { ShowStationDetails },
+      localApi: { showProgress, setShowStationDetails, setShowLine },
+      components: { ShowStationDetails, ShowLine, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
     },
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence, Fuel },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
+      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, attackSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -38,8 +40,17 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const destinationPosition = getComponentValue(Position, destinationDetails);
     const fuel = 0;
+    const isDestinationSelected =
+      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
 
+    useEffect(() => {
+      if (!isDestinationSelected) {
+        setAction("upgrade");
+      }
+    }, [isDestinationSelected]);
     if (entityType && +entityType === Mapping.attack.id) {
       return (
         <div>
@@ -76,73 +87,99 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               </S.Row>
               {ownedBy === connectedAddress.get() && (
                 <S.Column style={{ width: "100%" }}>
-                  {action === "upgrade" && (
-                    <Upgrade
-                      defence={+defence}
-                      level={+level}
-                      upgradeSystem={async () => {
+                  {!isDestinationSelected && (
+                    <>
+                      {action === "upgrade" && (
+                        <Upgrade
+                          defence={+defence}
+                          level={+level}
+                          upgradeSystem={async () => {
+                            try {
+                              setAction("attack");
+                              sounds["confirm"].play();
+                              await upgradeSystem(world.entities[selectedEntity]);
+                              showProgress();
+                            } catch (e) {
+                              setAction("upgrade");
+                              console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                            }
+                          }}
+                        />
+                      )}
+                      {action === "weapon" && (
+                        <Weapon
+                          offence={+offence}
+                          defence={+defence}
+                          level={+level}
+                          buyWeaponSystem={async (kgs: number) => {
+                            try {
+                              setAction("attack");
+                              sounds["confirm"].play();
+                              await buyWeaponSystem(world.entities[selectedEntity], kgs);
+                              showProgress();
+                            } catch (e) {
+                              setAction("weapon");
+                              console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
+                            }
+                          }}
+                        />
+                      )}
+                      {action === "repair" && (
+                        <Repair
+                          defence={+defence}
+                          level={+level}
+                          repairCost={repairPrice(position.x, position.y, level, defence)}
+                          repairSystem={async () => {
+                            try {
+                              setAction("attack");
+                              sounds["confirm"].play();
+                              await repairSystem(world.entities[selectedEntity]);
+                              showProgress();
+                            } catch (e) {
+                              setAction("repair");
+                              console.log({ error: e, system: "Repair Attack", details: selectedEntity });
+                            }
+                          }}
+                        />
+                      )}
+                      {action === "scrap" && (
+                        <Scrap
+                          scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
+                          scrapSystem={async () => {
+                            try {
+                              sounds["confirm"].play();
+                              await scrapeSystem(world.entities[selectedEntity]);
+                              setShowStationDetails();
+                              showProgress();
+                            } catch (e) {
+                              setAction("scrap");
+                              console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
+                            }
+                          }}
+                        />
+                      )}
+                    </>
+                  )}
+                  {action === "attack" && isDestinationSelected && (
+                    <Attack
+                      onFire={async (weapons) => {
                         try {
-                          setAction("attack");
                           sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity]);
+                          await attackSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons
+                          );
+                          setShowStationDetails();
                           showProgress();
                         } catch (e) {
-                          setAction("upgrade");
-                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                         }
                       }}
-                    />
-                  )}
-                  {action === "weapon" && (
-                    <Weapon
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                       offence={+offence}
-                      defence={+defence}
-                      level={+level}
-                      buyWeaponSystem={async (kgs: number) => {
-                        try {
-                          setAction("attack");
-                          sounds["confirm"].play();
-                          await buyWeaponSystem(world.entities[selectedEntity], kgs);
-                          showProgress();
-                        } catch (e) {
-                          setAction("weapon");
-                          console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )}
-                  {action === "repair" && (
-                    <Repair
-                      defence={+defence}
-                      level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence)}
-                      repairSystem={async () => {
-                        try {
-                          setAction("attack");
-                          sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity]);
-                          showProgress();
-                        } catch (e) {
-                          setAction("repair");
-                          console.log({ error: e, system: "Repair Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )}
-                  {action === "scrap" && (
-                    <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
-                      scrapSystem={async () => {
-                        try {
-                          setAction("scrap");
-                          sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity]);
-                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
-                          showProgress();
-                        } catch (e) {
-                          setAction("scrap");
-                          console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
-                        }
+                      playSound={() => {
+                        sounds["click"].play();
                       }}
                     />
                   )}
@@ -188,6 +225,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               name="ATTACk"
               onClick={() => {
                 setAction("attack");
+                const { x, y } = position;
+                setShowLine(true, x, y);
                 sounds["click"].play();
               }}
             />

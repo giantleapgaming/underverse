@@ -25,10 +25,10 @@ export const registerDetails = () => {
           world,
         },
         phaser: {
-          components: { ShowStationDetails },
+          components: { ShowStationDetails, ShowDestinationDetails },
         },
       } = layers;
-      return merge(Name.update$, Cash.update$, ShowStationDetails.update$).pipe(
+      return merge(Name.update$, Cash.update$, ShowStationDetails.update$, ShowDestinationDetails.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;

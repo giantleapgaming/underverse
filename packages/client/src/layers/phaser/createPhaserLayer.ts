@@ -1,4 +1,4 @@
-import { createEntity, getComponentValue, namespaceWorld, setComponent } from "@latticexyz/recs";
+import { createEntity, EntityIndex, getComponentValue, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
@@ -19,6 +19,8 @@ import {
   Logs,
   ShowScrapeModal,
   ShowRepairModal,
+  ShowLine,
+  ShowDestinationDetails,
 } from "../local/components";
 
 import {
@@ -40,6 +42,7 @@ import {
 } from "../network/systems/build";
 import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
+import { drawLine } from "../network/systems/view/draw-line";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -66,6 +69,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const components = {
     Progress: Progress(world),
     ShowStationDetails: ShowStationDetails(world),
+    ShowDestinationDetails: ShowDestinationDetails(world),
     ShowBuyModal: ShowBuyModal(world),
     Transport: Transport(world),
     Attack: Attack(world),
@@ -79,6 +83,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Logs: Logs(world),
     ShowScrapeModal: ShowScrapeModal(world),
     ShowRepairModal: ShowRepairModal(world),
+    ShowLine: ShowLine(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -100,6 +105,15 @@ export async function createPhaserLayer(network: NetworkLayer) {
     setComponent(components.Build, buildId, { x, y, show, canPlace, entityType, isBuilding });
   };
 
+  const setShowLine = (showLine: boolean, x: number, y: number) => {
+    setComponent(components.ShowLine, stationDetailsEntityIndex, { showLine, x, y });
+  };
+  const setDestinationDetails = (entityId?: EntityIndex) => {
+    setComponent(components.ShowDestinationDetails, stationDetailsEntityIndex, { entityId });
+  };
+  const setShowStationDetails = (entityId?: EntityIndex) => {
+    setComponent(components.ShowStationDetails, stationDetailsEntityIndex, { entityId });
+  };
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
   };
@@ -201,6 +215,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setLogs,
       shouldScrapeModal,
       shouldRepairModal,
+      setShowLine,
+      setShowStationDetails,
+      setDestinationDetails,
     },
     sounds,
   };
@@ -230,5 +247,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);
+
+  drawLine(network, context);
   return context;
 }

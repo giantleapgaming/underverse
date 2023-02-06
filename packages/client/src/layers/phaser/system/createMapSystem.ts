@@ -70,7 +70,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   label6.setDepth(20);
 
   input.pointermove$.subscribe(({ pointer }) => {
-    if (pointer.rightButtonDown()) {
+    if (pointer.isDown) {
       camera.setScroll(
         camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,
         camera.phaserCamera.scrollY - (pointer.y - pointer.prevPosition.y) / camera.phaserCamera.zoom

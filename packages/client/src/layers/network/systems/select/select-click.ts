@@ -1,12 +1,11 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
-import { getComponentValue, setComponent } from "@latticexyz/recs";
+import { getComponentValue } from "@latticexyz/recs";
 import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowStationDetails },
     scenes: {
       Main: {
         input,
@@ -15,8 +14,10 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    sounds,
+    components: { ShowDestinationDetails, ShowLine },
     localIds: { stationDetailsEntityIndex },
+    sounds,
+    localApi: { setShowStationDetails },
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
@@ -27,32 +28,38 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const stationEntity = getEntityIndexAtPosition(x, y);
-
-    if (stationEntity) {
+    const destination = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const showLine = getComponentValue(ShowLine, stationDetailsEntityIndex)?.showLine;
+    if (stationEntity && !destination && !showLine) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
       if (defence && entityType && +entityType === Mapping.attack.id && +defence) {
-        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        setShowStationDetails(stationEntity);
         sounds["click"].play();
         return;
       }
       if (entityType && +entityType === Mapping.astroid.id) {
-        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        setShowStationDetails(stationEntity);
         sounds["click"].play();
         return;
       }
       if (entityType && +entityType === Mapping.residential.id && defence && +defence) {
-        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        setShowStationDetails(stationEntity);
         sounds["click"].play();
         return;
       }
       if (entityType && +entityType === Mapping.godown.id && defence && +defence) {
-        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        setShowStationDetails(stationEntity);
         sounds["click"].play();
         return;
       }
       if (entityType && +entityType === Mapping.harvester.id && defence && +defence) {
-        setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: stationEntity });
+        setShowStationDetails(stationEntity);
+        sounds["click"].play();
+        return;
+      }
+      if (entityType && (+entityType === Mapping.astroid.id || +entityType === Mapping.planet.id)) {
+        setShowStationDetails(stationEntity);
         sounds["click"].play();
         return;
       }

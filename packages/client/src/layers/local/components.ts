@@ -33,6 +33,16 @@ export const ShowStationDetails = (world: World) => {
   );
 };
 
+export const ShowDestinationDetails = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      entityId: Type.OptionalNumber,
+    },
+    { id: "showDestinationDetails" }
+  );
+};
+
 export const ShowBuyModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowBuyModal" });
 };
@@ -127,5 +137,17 @@ export const Logs = (world: World) => {
       logStrings: Type.StringArray,
     },
     { id: "Logs" }
+  );
+};
+
+export const ShowLine = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showLine: Type.Boolean,
+      x: Type.OptionalNumber,
+      y: Type.OptionalNumber,
+    },
+    { id: "ShowLine" }
   );
 };

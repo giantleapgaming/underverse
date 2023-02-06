@@ -6,7 +6,7 @@ import { Sprites } from "../../../phaser/constants";
 export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowStationDetails },
+    components: { ShowStationDetails, ShowDestinationDetails },
     scenes: {
       Main: {
         objectPool,
@@ -42,6 +42,28 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
       });
     } else {
       objectPool.remove("select-box");
+    }
+  });
+  defineComponentSystem(world, ShowDestinationDetails, () => {
+    const object = objectPool.get("destination-select-box", "Sprite");
+    const entityId = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
+    const position = getComponentValue(Position, entityId);
+
+    if (typeof position?.x === "number" && entityId) {
+      const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+      const select = config.sprites[Sprites.Select];
+      object.setComponent({
+        id: "destination-select-box",
+        once: (gameObject) => {
+          gameObject.setTexture(select.assetKey, select.frame);
+          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.depth = 2;
+          gameObject.setAngle(0);
+        },
+      });
+    } else {
+      objectPool.remove("destination-select-box");
     }
   });
 }

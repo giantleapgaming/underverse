@@ -1,7 +1,17 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-export const Attack = ({ offence }) => {
+export const Attack = ({
+  offence,
+  playSound,
+  distance,
+  onFire,
+}: {
+  offence: number;
+  playSound: () => void;
+  distance: number;
+  onFire: (missiles: number) => void;
+}) => {
   const [selected, setSelected] = useState("0");
 
   return (
@@ -21,7 +31,7 @@ export const Attack = ({ offence }) => {
               key={`red${i}`}
               selected={+selected > i}
               onClick={() => {
-                sounds["click"].play();
+                playSound();
                 setSelected((i + 1).toString());
               }}
             >
@@ -32,10 +42,16 @@ export const Attack = ({ offence }) => {
       </div>
       {+offence > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>TOTAL DAMAGE</S.Text>
-          <S.InlinePointer>
+          <S.Text>TOTAL DAMAGE {Math.floor(+selected * (250 / distance))}</S.Text>
+          <S.InlinePointer
+            onClick={() => {
+              if (+selected) {
+                onFire(+selected);
+              }
+            }}
+          >
             <S.ButtonImg src="/button/redButton.png" />
-            <S.DeployText>ATTACK</S.DeployText>
+            <S.DeployText>FIRE</S.DeployText>
           </S.InlinePointer>
         </S.Row>
       )}
