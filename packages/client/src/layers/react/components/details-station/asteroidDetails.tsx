@@ -1,46 +1,111 @@
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { Harvest } from "../action-system/harvest";
 import { SelectButton } from "./Button";
 
 export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("harvest");
+  const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
-      components: { ShowStationDetails },
+      components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      scenes: {
+        Main: {
+          maps: {
+            Main: { tileWidth, tileHeight },
+          },
+        },
+      },
     },
     network: {
-      components: { EntityType, Position },
+      world,
+      components: { EntityType, Position, Balance, Level },
+      api: { harvestSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const position = getComponentValueStrict(Position, selectedEntity);
+    const balance = getComponentValueStrict(Balance, selectedEntity).value;
+    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const level = getComponentValue(Level, destinationDetails)?.value;
+    const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
+    const destinationPosition = getComponentValue(Position, destinationDetails);
+    const isDestinationSelected =
+      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
 
     if (entityType && +entityType === Mapping.astroid.id) {
       return (
         <div>
           <S.Container>
             <S.Column>
-              <S.Text>Earth</S.Text>
+              <S.Text>ASTROID</S.Text>
               <img src={`/build-stations/astroid.png`} width="100px" height="100px" />
               <S.Text>
-                POSITION {position.x}/{position.x}
+                POSITION {position.x}/{position.y}
               </S.Text>
             </S.Column>
             <S.Column style={{ width: "325px" }}>
               <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
                 <S.Weapon>
                   <img src="/build-stations/users.png" />
-                  <p>500</p>
+                  <p>{+balance}</p>
                 </S.Weapon>
               </S.Row>
-              <S.Column style={{ width: "100%" }}>{action === "harvest" && <div>Show Harvest</div>}</S.Column>
+              <S.Column style={{ width: "100%" }}>
+                {action === "harvest" && destinationDetails && isDestinationSelected && (
+                  <div>
+                    <Harvest
+                      space={(destinationBalance && level && +level - +destinationBalance) || 0}
+                      harvest={async (weapons) => {
+                        try {
+                          sounds["confirm"].play();
+                          // await harvestSystem(
+                          //   world.entities[selectedEntity],
+                          //   world.entities[destinationDetails],
+                          //   weapons
+                          // );
+                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                            { x: destinationPosition.x, y: destinationPosition.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            amount: weapons,
+                            destinationX,
+                            destinationY,
+                            sourceX,
+                            sourceY,
+                            type: "harvest",
+                          });
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("upgrade");
+                          showProgress();
+                        } catch (e) {
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                        }
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                    />
+                  </div>
+                )}
+              </S.Column>
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
               <S.Column>
@@ -73,6 +138,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "harvest"}
               onClick={() => {
                 setAction("harvest");
+                setShowLine(true, position.x, position.y, "harvest");
                 sounds["click"].play();
               }}
             />

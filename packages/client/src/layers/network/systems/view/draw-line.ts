@@ -23,6 +23,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     components: { Position, Defence, EntityType, OwnedBy },
     utils: { getEntityIndexAtPosition },
+    network: { connectedAddress },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(1, 0xffffff, 1);
@@ -34,7 +35,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const destination = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     if (lineDetails && lineDetails.showLine && selectedEntity && !destination) {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
-      setShowLine(true, x, y);
+      setShowLine(true, x, y, lineDetails.type);
     }
   });
 
@@ -44,13 +45,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
       if (
         defence &&
         entityType &&
+        lineDetails.type === "attack" &&
         (+entityType === Mapping.attack.id ||
           +entityType === Mapping.godown.id ||
           +entityType === Mapping.harvester.id ||
@@ -60,7 +61,15 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
         if (ownedBy && selectedOwnedBy && ownedBy !== selectedOwnedBy) {
           setDestinationDetails(stationEntity);
-          setShowLine(true, x, y);
+          setShowLine(true, x, y, "attack");
+          return;
+        }
+      }
+      if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
+        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
+        if (connectedAddress.get() === ownedBy) {
+          setDestinationDetails(stationEntity);
+          setShowLine(true, x, y, "harvest");
         }
       }
     }

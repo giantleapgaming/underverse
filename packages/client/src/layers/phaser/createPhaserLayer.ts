@@ -39,6 +39,7 @@ import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
 import { drawLine } from "../network/systems/view/draw-line";
 import { missileAttackSystem } from "../network/systems/action/missile-attack";
+import { harvestTransport } from "../network/systems/action/harvest-transport";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -96,8 +97,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
     setComponent(components.Build, buildId, { x, y, show, canPlace, entityType, isBuilding });
   };
 
-  const setShowLine = (showLine: boolean, x: number, y: number) => {
-    setComponent(components.ShowLine, stationDetailsEntityIndex, { showLine, x, y });
+  const setShowLine = (showLine: boolean, x?: number, y?: number, type?: string) => {
+    setComponent(components.ShowLine, stationDetailsEntityIndex, { showLine, x, y, type });
   };
   const setDestinationDetails = (entityId?: EntityIndex) => {
     setComponent(components.ShowDestinationDetails, stationDetailsEntityIndex, { entityId });
@@ -117,6 +118,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     sourceX,
     sourceY,
     faction,
+    type,
   }: {
     amount?: number;
     destinationX?: number;
@@ -125,6 +127,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     sourceX?: number;
     sourceY?: number;
     faction?: number;
+    type?: string;
   }) => {
     setComponent(components.ShowAnimation, stationDetailsEntityIndex, {
       amount,
@@ -134,6 +137,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       sourceX,
       sourceY,
       faction,
+      type,
     });
   };
 
@@ -253,5 +257,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   drawLine(network, context);
   missileAttackSystem(network, context);
+  harvestTransport(network, context);
+
   return context;
 }

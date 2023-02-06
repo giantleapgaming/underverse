@@ -196,9 +196,10 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             sourceX,
                             sourceY,
                             faction: +factionNumber,
+                            type: "attack",
                           });
                           setDestinationDetails();
-                          setShowLine(false, 0, 0);
+                          setShowLine(false);
                           setAction("upgrade");
                           showProgress();
                         } catch (e) {
@@ -255,7 +256,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               onClick={() => {
                 setAction("attack");
                 const { x, y } = position;
-                setShowLine(true, x, y);
+                setShowLine(true, x, y, "attack");
                 sounds["click"].play();
               }}
             />
@@ -263,7 +264,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "weapon"}
               name="WEAPON"
               onClick={() => {
-                setShowLine(false, 0, 0);
+                setShowLine(false);
                 setAction("weapon");
                 sounds["click"].play();
               }}
@@ -272,7 +273,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "repair"}
               name="REPAIR"
               onClick={() => {
-                setShowLine(false, 0, 0);
+                setShowLine(false);
                 setAction("repair");
                 sounds["click"].play();
               }}
@@ -281,7 +282,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "scrap"}
               name="SCRAP"
               onClick={() => {
-                setShowLine(false, 0, 0);
+                setShowLine(false);
                 setAction("scrap");
                 sounds["click"].play();
               }}

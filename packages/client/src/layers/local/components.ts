@@ -72,6 +72,7 @@ export const ShowAnimation = (world: World) => {
       destinationY: Type.OptionalNumber,
       destinationX: Type.OptionalNumber,
       faction: Type.OptionalNumber,
+      type: Type.OptionalString,
     },
     { id: "ShowAnimation" }
   );
@@ -163,6 +164,7 @@ export const ShowLine = (world: World) => {
       showLine: Type.Boolean,
       x: Type.OptionalNumber,
       y: Type.OptionalNumber,
+      type: Type.OptionalString,
     },
     { id: "ShowLine" }
   );

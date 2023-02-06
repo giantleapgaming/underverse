@@ -23,7 +23,7 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const destinationY = animation && animation?.destinationY;
     const amount = animation && animation?.amount;
     const faction = animation && animation?.faction;
-
+    const type = animation && animation?.type;
     if (
       animation &&
       animation.showAnimation &&
@@ -32,7 +32,8 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       destinationX &&
       destinationY &&
       amount &&
-      faction
+      faction &&
+      type === "attack"
     ) {
       const object = objectPool.get("missile", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];

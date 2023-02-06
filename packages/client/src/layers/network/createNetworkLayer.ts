@@ -124,6 +124,13 @@ export async function createNetworkLayer(config: GameConfig) {
   async function upgradeSystem(godownEntity: EntityID) {
     return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
   }
+  async function harvestSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgsToTransfer: number) {
+    return systems["system.Harvest"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      kgsToTransfer
+    );
+  }
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs);
   }
@@ -214,6 +221,7 @@ export async function createNetworkLayer(config: GameConfig) {
       attackSystem,
       scrapeSystem,
       repairSystem,
+      harvestSystem,
     },
     utils: {
       getEntityIndexAtPosition,
