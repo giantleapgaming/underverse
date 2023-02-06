@@ -13,7 +13,8 @@
     "EntityTypeComponent",
     "PopulationComponent",
     "FuelComponent",
-    "PlayerCountComponent"
+    "PlayerCountComponent",
+    "RankComponent"
   ],
   "systems": [
     {
