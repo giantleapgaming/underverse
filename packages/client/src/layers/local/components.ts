@@ -61,6 +61,22 @@ export const ShowSellModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowSellModal" });
 };
 
+export const ShowAnimation = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showAnimation: Type.Boolean,
+      sourceX: Type.OptionalNumber,
+      sourceY: Type.OptionalNumber,
+      amount: Type.OptionalNumber,
+      destinationY: Type.OptionalNumber,
+      destinationX: Type.OptionalNumber,
+      faction: Type.OptionalNumber,
+    },
+    { id: "ShowAnimation" }
+  );
+};
+
 export const Transport = (world: World) => {
   return defineComponent(
     world,

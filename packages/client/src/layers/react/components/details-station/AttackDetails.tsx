@@ -1,3 +1,4 @@
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -18,13 +19,20 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { showProgress, setShowStationDetails, setShowLine },
-      components: { ShowStationDetails, ShowLine, ShowDestinationDetails },
+      localApi: { showProgress, setShowStationDetails, setShowLine, setShowAnimation, setDestinationDetails },
+      components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
+      scenes: {
+        Main: {
+          maps: {
+            Main: { tileWidth, tileHeight },
+          },
+        },
+      },
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence, Fuel },
+      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
       api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, attackSystem },
       network: { connectedAddress },
     },
@@ -95,7 +103,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           level={+level}
                           upgradeSystem={async () => {
                             try {
-                              setAction("attack");
+                              setAction("repair");
                               sounds["confirm"].play();
                               await upgradeSystem(world.entities[selectedEntity]);
                               showProgress();
@@ -113,7 +121,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           level={+level}
                           buyWeaponSystem={async (kgs: number) => {
                             try {
-                              setAction("attack");
+                              setAction("upgrade");
                               sounds["confirm"].play();
                               await buyWeaponSystem(world.entities[selectedEntity], kgs);
                               showProgress();
@@ -131,7 +139,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           repairCost={repairPrice(position.x, position.y, level, defence)}
                           repairSystem={async () => {
                             try {
-                              setAction("attack");
+                              setAction("upgrade");
                               sounds["confirm"].play();
                               await repairSystem(world.entities[selectedEntity]);
                               showProgress();
@@ -170,7 +178,28 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          setShowStationDetails();
+                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                            { x: destinationPosition.x, y: destinationPosition.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            amount: weapons,
+                            destinationX,
+                            destinationY,
+                            sourceX,
+                            sourceY,
+                            faction: +factionNumber,
+                          });
+                          setDestinationDetails();
+                          setShowLine(false, 0, 0);
+                          setAction("upgrade");
                           showProgress();
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
@@ -183,23 +212,6 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {/* {action === "scrap" && (
-                    <Move
-                      moveCost={scrapPrice(position.x, position.y, level, defence, balance)}
-                      moveSystem={async () => {
-                        try {
-                          setAction("move");
-                          sounds["confirm"].play();
-                          await moveSystem(world.entities[selectedEntity]);
-                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
-                          showProgress();
-                        } catch (e) {
-                          setAction("move");
-                          console.log({ error: e, system: "Move Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )} */}
                 </S.Column>
               )}
             </S.Column>
@@ -251,6 +263,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "weapon"}
               name="WEAPON"
               onClick={() => {
+                setShowLine(false, 0, 0);
                 setAction("weapon");
                 sounds["click"].play();
               }}
@@ -259,6 +272,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "repair"}
               name="REPAIR"
               onClick={() => {
+                setShowLine(false, 0, 0);
                 setAction("repair");
                 sounds["click"].play();
               }}
@@ -267,15 +281,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "scrap"}
               name="SCRAP"
               onClick={() => {
+                setShowLine(false, 0, 0);
                 setAction("scrap");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "move"}
-              name="MOVE"
-              onClick={() => {
-                setAction("move");
                 sounds["click"].play();
               }}
             />

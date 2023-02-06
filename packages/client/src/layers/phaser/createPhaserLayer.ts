@@ -6,21 +6,16 @@ import { createMapSystem } from "./system/createMapSystem";
 import {
   Progress,
   ShowStationDetails,
-  ShowBuyModal,
-  ShowUpgradeModal,
-  ShowSellModal,
   Build,
   Transport,
   ShowCircle,
   TransportCords,
-  ShowWeaponModal,
   Attack,
   AttackCords,
   Logs,
-  ShowScrapeModal,
-  ShowRepairModal,
   ShowLine,
   ShowDestinationDetails,
+  ShowAnimation,
 } from "../local/components";
 
 import {
@@ -43,6 +38,7 @@ import {
 import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
 import { drawLine } from "../network/systems/view/draw-line";
+import { missileAttackSystem } from "../network/systems/action/missile-attack";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -70,20 +66,15 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Progress: Progress(world),
     ShowStationDetails: ShowStationDetails(world),
     ShowDestinationDetails: ShowDestinationDetails(world),
-    ShowBuyModal: ShowBuyModal(world),
     Transport: Transport(world),
     Attack: Attack(world),
-    ShowUpgradeModal: ShowUpgradeModal(world),
-    ShowSellModal: ShowSellModal(world),
     Build: Build(world),
     ShowCircle: ShowCircle(world),
     TransportCords: TransportCords(world),
     AttackCords: AttackCords(world),
-    showWeaponModal: ShowWeaponModal(world),
     Logs: Logs(world),
-    ShowScrapeModal: ShowScrapeModal(world),
-    ShowRepairModal: ShowRepairModal(world),
     ShowLine: ShowLine(world),
+    ShowAnimation: ShowAnimation(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -117,6 +108,35 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
   };
+
+  const setShowAnimation = ({
+    amount,
+    destinationX,
+    destinationY,
+    showAnimation,
+    sourceX,
+    sourceY,
+    faction,
+  }: {
+    amount?: number;
+    destinationX?: number;
+    destinationY?: number;
+    showAnimation: boolean;
+    sourceX?: number;
+    sourceY?: number;
+    faction?: number;
+  }) => {
+    setComponent(components.ShowAnimation, stationDetailsEntityIndex, {
+      amount,
+      destinationX,
+      destinationY,
+      showAnimation,
+      sourceX,
+      sourceY,
+      faction,
+    });
+  };
+
   const setAttackCords = (x: number, y: number) => {
     setComponent(components.AttackCords, modalIndex, { x, y });
   };
@@ -126,15 +146,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const hideProgress = () => {
     setComponent(components.Progress, progressId, { value: false });
   };
-  const shouldBuyModal = (open: boolean) => setComponent(components.ShowBuyModal, modalIndex, { value: open });
-
-  const shouldUpgradeModal = (open: boolean) => setComponent(components.ShowUpgradeModal, modalIndex, { value: open });
-
-  const shouldScrapeModal = (open: boolean) => setComponent(components.ShowScrapeModal, modalIndex, { value: open });
-
-  const shouldRepairModal = (open: boolean) => setComponent(components.ShowRepairModal, modalIndex, { value: open });
-
-  const shouldSellModal = (open: boolean) => setComponent(components.ShowSellModal, modalIndex, { value: open });
 
   const shouldShowCircle = (selectedEntities: number[]) =>
     setComponent(components.ShowCircle, showCircleIndex, { selectedEntities });
@@ -161,9 +172,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
     entityId?: number,
     amount?: number
   ) => setComponent(components.Attack, modalIndex, { showModal, showLine, entityId, showAnimation, amount });
-
-  const shouldShowWeaponModal = (showModal: boolean) =>
-    setComponent(components.showWeaponModal, modalIndex, { showModal });
 
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -203,21 +211,16 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setBuild,
       hideProgress,
       showProgress,
-      shouldBuyModal,
-      shouldUpgradeModal,
-      shouldSellModal,
       shouldShowCircle,
       shouldTransport,
       setTransportCords,
-      shouldShowWeaponModal,
       shouldAttack,
       setAttackCords,
       setLogs,
-      shouldScrapeModal,
-      shouldRepairModal,
       setShowLine,
       setShowStationDetails,
       setDestinationDetails,
+      setShowAnimation,
     },
     sounds,
   };
@@ -249,5 +252,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   selectSystem(network, context);
 
   drawLine(network, context);
+  missileAttackSystem(network, context);
   return context;
 }

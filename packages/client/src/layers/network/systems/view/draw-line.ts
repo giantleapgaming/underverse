@@ -65,7 +65,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
     }
   });
-  const rightClick = input.rightClick$.subscribe((p) => {
+  const rightClick = input.rightClick$.subscribe(() => {
     setDestinationDetails();
     setShowLine(false, 0, 0);
   });
