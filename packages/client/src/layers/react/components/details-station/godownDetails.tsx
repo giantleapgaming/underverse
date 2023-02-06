@@ -89,24 +89,25 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "weapon" && (
-                    <Weapon
-                      offence={+balance}
+
+                  {/* {action === "transport" && (
+                    <Transport
                       defence={+defence}
                       level={+level}
-                      buyWeaponSystem={async (kgs: number) => {
+                      transportCost={transportPrice(position.x, position.y, level, defence)}
+                      transportSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("transport");
                           sounds["confirm"].play();
-                          await buyWeaponSystem(world.entities[selectedEntity], kgs);
+                          await transportSystem(world.entities[selectedEntity]);
                           showProgress();
                         } catch (e) {
-                          setAction("weapon");
-                          console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
+                          setAction("transport");
+                          console.log({ error: e, system: "Transport Attack", details: selectedEntity });
                         }
                       }}
                     />
-                  )}
+                  )} */}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
@@ -172,6 +173,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           <S.Row style={{ gap: "10px", marginTop: "5px" }}>
             <SelectButton
+              name="TRANSPORT"
+              isActive={action === "transport"}
+              onClick={() => {
+                setAction("transport");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
               name="UPGRADE"
               isActive={action === "upgrade"}
               onClick={() => {
@@ -179,22 +188,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                 sounds["click"].play();
               }}
             />
-            <SelectButton
-              isActive={action === "attack"}
-              name="ATTACk"
-              onClick={() => {
-                setAction("attack");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "weapon"}
-              name="WEAPON"
-              onClick={() => {
-                setAction("weapon");
-                sounds["click"].play();
-              }}
-            />
+
             <SelectButton
               isActive={action === "repair"}
               name="REPAIR"

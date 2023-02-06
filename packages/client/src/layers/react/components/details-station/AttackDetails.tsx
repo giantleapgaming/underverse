@@ -183,6 +183,23 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {/* {action === "scrap" && (
+                    <Move
+                      moveCost={scrapPrice(position.x, position.y, level, defence, balance)}
+                      moveSystem={async () => {
+                        try {
+                          setAction("move");
+                          sounds["confirm"].play();
+                          await moveSystem(world.entities[selectedEntity]);
+                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+                          showProgress();
+                        } catch (e) {
+                          setAction("move");
+                          console.log({ error: e, system: "Move Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )} */}
                 </S.Column>
               )}
             </S.Column>
@@ -251,6 +268,14 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               name="SCRAP"
               onClick={() => {
                 setAction("scrap");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "move"}
+              name="MOVE"
+              onClick={() => {
+                setAction("move");
                 sounds["click"].play();
               }}
             />

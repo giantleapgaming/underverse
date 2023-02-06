@@ -105,6 +105,24 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {/* {action === "transport" && (
+                    <Transport
+                      defence={+defence}
+                      level={+level}
+                      transportCost={transportPrice(position.x, position.y, level, defence)}
+                      transportSystem={async () => {
+                        try {
+                          setAction("transport");
+                          sounds["confirm"].play();
+                          await transportSystem(world.entities[selectedEntity]);
+                          showProgress();
+                        } catch (e) {
+                          setAction("transport");
+                          console.log({ error: e, system: "Transport Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )} */}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
@@ -140,6 +158,23 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {/* {action === "scrap" && (
+                    <Move
+                      moveCost={scrapPrice(position.x, position.y, level, defence, balance)}
+                      moveSystem={async () => {
+                        try {
+                          setAction("move");
+                          sounds["confirm"].play();
+                          await moveSystem(world.entities[selectedEntity]);
+                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+                          showProgress();
+                        } catch (e) {
+                          setAction("move");
+                          console.log({ error: e, system: "Move Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )} */}
                 </S.Column>
               )}
             </S.Column>
@@ -170,6 +205,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           <S.Row style={{ gap: "10px", marginTop: "5px" }}>
             <SelectButton
+              name="TRANSPORT"
+              isActive={action === "transport"}
+              onClick={() => {
+                setAction("transport");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
               name="UPGRADE"
               isActive={action === "upgrade"}
               onClick={() => {
@@ -177,22 +220,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 sounds["click"].play();
               }}
             />
-            <SelectButton
-              isActive={action === "attack"}
-              name="ATTACk"
-              onClick={() => {
-                setAction("attack");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "weapon"}
-              name="WEAPON"
-              onClick={() => {
-                setAction("weapon");
-                sounds["click"].play();
-              }}
-            />
+
             <SelectButton
               isActive={action === "repair"}
               name="REPAIR"
@@ -206,6 +234,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
               name="SCRAP"
               onClick={() => {
                 setAction("scrap");
+                sounds["click"].play();
+              }}
+            />
+            <SelectButton
+              isActive={action === "move"}
+              name="MOVE"
+              onClick={() => {
+                setAction("move");
                 sounds["click"].play();
               }}
             />

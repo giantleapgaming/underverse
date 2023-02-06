@@ -6,7 +6,7 @@ import { Mapping } from "../../../../utils/mapping";
 import { SelectButton } from "./Button";
 
 export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("rapture");
+  const [action, setAction] = useState("harvest");
   const {
     phaser: {
       sounds,
@@ -40,7 +40,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   <p>500</p>
                 </S.Weapon>
               </S.Row>
-              <S.Column style={{ width: "100%" }}>{action === "rapture" && <div>Show Repture</div>}</S.Column>
+              <S.Column style={{ width: "100%" }}>{action === "harvest" && <div>Show Harvest</div>}</S.Column>
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
               <S.Column>
@@ -69,10 +69,10 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           <S.Row style={{ gap: "10px", marginTop: "5px" }}>
             <SelectButton
-              name="RAPTURE"
-              isActive={action === "rapture"}
+              name="HARVEST"
+              isActive={action === "harvest"}
               onClick={() => {
-                setAction("rapture");
+                setAction("harvest");
                 sounds["click"].play();
               }}
             />

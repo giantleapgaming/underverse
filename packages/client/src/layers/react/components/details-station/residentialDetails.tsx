@@ -89,24 +89,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "weapon" && (
-                    <Weapon
-                      offence={+balance}
-                      defence={+defence}
-                      level={+level}
-                      buyWeaponSystem={async (kgs: number) => {
-                        try {
-                          setAction("attack");
-                          sounds["confirm"].play();
-                          await buyWeaponSystem(world.entities[selectedEntity], kgs);
-                          showProgress();
-                        } catch (e) {
-                          setAction("weapon");
-                          console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )}
+
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
@@ -179,22 +162,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 sounds["click"].play();
               }}
             />
-            <SelectButton
-              isActive={action === "attack"}
-              name="ATTACk"
-              onClick={() => {
-                setAction("attack");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "weapon"}
-              name="WEAPON"
-              onClick={() => {
-                setAction("weapon");
-                sounds["click"].play();
-              }}
-            />
+
             <SelectButton
               isActive={action === "repair"}
               name="REPAIR"
