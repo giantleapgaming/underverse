@@ -14,7 +14,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
       sounds,
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      localApi: { setShowLine, showProgress, setShowAnimation, setDestinationDetails },
       scenes: {
         Main: {
           maps: {
@@ -64,13 +64,17 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   <div>
                     <Harvest
                       space={(destinationBalance && level && +level - +destinationBalance) || 0}
-                      harvest={async (weapons) => {
+                      harvest={async (amount) => {
                         try {
                           sounds["confirm"].play();
+                          setShowLine(false);
+                          setAction("");
+                          setDestinationDetails();
+                          showProgress();
                           await harvestSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            amount
                           );
                           const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
                             { x: destinationPosition.x, y: destinationPosition.y },
@@ -84,14 +88,13 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                           );
                           setShowAnimation({
                             showAnimation: true,
-                            amount: weapons,
+                            amount,
                             destinationX,
                             destinationY,
                             sourceX,
                             sourceY,
                             type: "harvest",
                           });
-                          setDestinationDetails();
                           setShowLine(false);
                           setAction("upgrade");
                           showProgress();
@@ -132,22 +135,24 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row
-            style={{
-              gap: "10px",
-              marginTop: action === "harvest" && destinationDetails && isDestinationSelected ? "30px" : "32px",
-            }}
-          >
-            <SelectButton
-              name="HARVEST"
-              isActive={action === "harvest"}
-              onClick={() => {
-                setAction("harvest");
-                setShowLine(true, position.x, position.y, "harvest");
-                sounds["click"].play();
+          {!destinationDetails && !isDestinationSelected && (
+            <S.Row
+              style={{
+                gap: "10px",
+                marginTop: action === "harvest" && destinationDetails && isDestinationSelected ? "30px" : "32px",
               }}
-            />
-          </S.Row>
+            >
+              <SelectButton
+                name="HARVEST"
+                isActive={action === "harvest"}
+                onClick={() => {
+                  setAction("harvest");
+                  setShowLine(true, position.x, position.y, "harvest");
+                  sounds["click"].play();
+                }}
+              />
+            </S.Row>
+          )}
         </div>
       );
     }

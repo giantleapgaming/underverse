@@ -21,20 +21,19 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
     const destinationY = animation && animation?.destinationY;
     const amount = animation && animation?.amount;
     const type = animation && animation?.type;
-
     if (
       animation &&
       animation.showAnimation &&
-      sourceX &&
-      sourceY &&
-      destinationX &&
-      destinationY &&
-      amount &&
-      type === "harvest"
+      typeof sourceX === "number" &&
+      typeof sourceY === "number" &&
+      typeof destinationX === "number" &&
+      typeof destinationY === "number" &&
+      typeof amount === "number" &&
+      (type === "harvest" || type === "transport" || type === "residential")
     ) {
       const object = objectPool.get("transport-harvest", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
-      const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (360 / Math.PI);
+      const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (180 / Math.PI) + 90;
       object.setComponent({
         id: "transport-harvest",
         once: (gameObject) => {
@@ -54,7 +53,7 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 10_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove("transport-harvest");
             },

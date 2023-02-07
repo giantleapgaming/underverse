@@ -88,7 +88,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                             destinationY,
                             sourceX,
                             sourceY,
-                            type: "harvest",
+                            type: "residential",
                           });
                           setDestinationDetails();
                           setShowLine(false);
