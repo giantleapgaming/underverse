@@ -49,7 +49,7 @@ export const Rapture = ({
               }
             }}
           >
-            <S.ButtonImg src="/button/base-b.png" />
+            <S.ButtonImg src="/button/greenButton.png" />
             <S.DeployText>RAPTURE</S.DeployText>
           </S.InlinePointer>
         </S.Row>

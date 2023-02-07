@@ -31,23 +31,20 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
       if (entityTypeNumber && +entityTypeNumber === Mapping.residential.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValueStrict(Faction, factionIndex).value;
+        const faction = getComponentValue(Faction, factionIndex)?.value;
         const balance = getComponentValueStrict(Balance, entity).value;
         const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        if (+defence > 0) {
+        if (+defence > 0 && faction && typeof +faction === "number") {
           const factionObject = objectPool.get(`residential-faction-${entity}`, "Sprite");
           const astroidObject = objectPool.get(`residential-${entity}`, "Sprite");
           const residential = config.sprites[Sprites.Asteroid12];
           astroidObject.setComponent({
             id: `residential-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(
-                residential.assetKey,
-                `${faction && +faction}-${level && +level}-${balance && +balance}.png`
-              );
+              gameObject.setTexture(residential.assetKey, `${+faction}-${+level}-${+balance}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(2);
               gameObject.setOrigin(0.5, 0.5);
@@ -65,7 +62,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           factionObject.setComponent({
             id: `residential-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `faction-${+faction}.png`);
+              gameObject.setTexture(residential.assetKey, `faction-${faction && +faction}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(3);
               gameObject.setOrigin(0.5, 0.5);

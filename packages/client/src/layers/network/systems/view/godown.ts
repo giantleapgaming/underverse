@@ -30,13 +30,13 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
       if (entityTypeNumber && +entityTypeNumber === Mapping.godown.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValueStrict(Faction, factionIndex).value;
+        const faction = getComponentValue(Faction, factionIndex)?.value;
         const level = getComponentValueStrict(Level, entity).value;
         const balance = getComponentValueStrict(Balance, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        if (+defence > 0) {
+        if (+defence > 0 && faction && typeof +faction === "number") {
           const astroidObject = objectPool.get(`godown-${entity}`, "Sprite");
           const factionObject = objectPool.get(`godown-faction-${entity}`, "Sprite");
           const godown = config.sprites[Sprites.Asteroid12];

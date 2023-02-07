@@ -1,4 +1,11 @@
-import { createWorld, EntityID, EntityIndex, getComponentValue, getEntitiesWithValue } from "@latticexyz/recs";
+import {
+  createWorld,
+  EntityID,
+  EntityIndex,
+  getComponentValue,
+  getEntitiesWithValue,
+  overridableComponent,
+} from "@latticexyz/recs";
 import {
   createActionSystem,
   defineCoordComponent,
@@ -55,6 +62,17 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.EntityType" },
     }),
+    PlayerCount: defineNumberComponent(world, {
+      id: "PlayerCount",
+      indexed: true,
+      metadata: { contractId: "component.PlayerCount" },
+    }),
+
+    Rank: defineNumberComponent(world, {
+      id: "Rank",
+      indexed: true,
+      metadata: { contractId: "component.Rank" },
+    }),
 
     Balance: defineNumberComponent(world, {
       id: "Balance",
@@ -98,6 +116,25 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Position" },
     }),
   };
+  const componentsWithOverrides = {
+    Position: overridableComponent(components.Position),
+    Level: overridableComponent(components.Level),
+    Balance: overridableComponent(components.Balance),
+    Cash: overridableComponent(components.Cash),
+    Defence: overridableComponent(components.Defence),
+    EntityType: overridableComponent(components.EntityType),
+    Faction: overridableComponent(components.Faction),
+    Fuel: overridableComponent(components.Fuel),
+    LastUpdatedTime: overridableComponent(components.LastUpdatedTime),
+    Name: overridableComponent(components.Name),
+    Offence: overridableComponent(components.Offence),
+    PlayerCount: overridableComponent(components.PlayerCount),
+    Type: overridableComponent(components.Type),
+    Population: overridableComponent(components.Population),
+    Rank: overridableComponent(components.Rank),
+    OwnedBy: overridableComponent(components.OwnedBy),
+  };
+
   // --- SETUP ----------------------------------------------------------------------
   const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
     typeof components,
@@ -200,7 +237,10 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
-    components,
+    components: {
+      ...components,
+      ...componentsWithOverrides,
+    },
     txQueue,
     systems,
     txReduced$,

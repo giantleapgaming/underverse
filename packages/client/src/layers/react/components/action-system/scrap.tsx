@@ -12,7 +12,7 @@ export const Scrap = ({ scrapSystem, scrapCost }: { scrapSystem: () => void; scr
         </S.Cost>
       </div>
       <S.InlinePointer onClick={scrapSystem}>
-        <S.Img src="/button/base-b.png" />
+        <S.Img src="/button/greenButton.png" />
         <S.DeployText>SCRAP</S.DeployText>
       </S.InlinePointer>
     </S.Details>

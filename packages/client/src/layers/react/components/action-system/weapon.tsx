@@ -16,7 +16,7 @@ export const Weapon = ({
 
   return (
     <S.Details>
-      {offence < 8 ? (
+      {offence < level ? (
         <div>
           <div
             style={{

@@ -78,12 +78,21 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       upgradeSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("");
                           sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity]);
+                          Level.addOverride(world.entities[selectedEntity], {
+                            entity: selectedEntity,
+                            value: { value: +level + 1 },
+                          });
                           showProgress();
+                          const tx = await upgradeSystem(world.entities[selectedEntity]);
+                          await tx.wait();
                         } catch (e) {
-                          setAction("upgrade");
+                          setAction("");
+                          Level.addOverride(world.entities[selectedEntity], {
+                            entity: selectedEntity,
+                            value: { value: +level },
+                          });
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}

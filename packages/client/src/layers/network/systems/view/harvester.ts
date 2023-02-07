@@ -30,13 +30,13 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
       if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValueStrict(Faction, factionIndex).value;
+        const faction = getComponentValue(Faction, factionIndex)?.value;
         const level = getComponentValueStrict(Level, entity).value;
         const balance = getComponentValueStrict(Balance, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        if (+defence > 0) {
+        if (+defence > 0 && faction && typeof +faction === "number") {
           const astroidObject = objectPool.get(`harvester-${entity}`, "Sprite");
           const factionObject = objectPool.get(`harvester-faction-${entity}`, "Sprite");
           const harvester = config.sprites[Sprites.Asteroid12];
@@ -53,9 +53,8 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             id: `harvester-faction-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(harvester.assetKey, `faction-attack-${+faction}.png`);
-              gameObject.setPosition(x + 32, y + 15);
+              gameObject.setPosition(x + 36, y + 15);
               gameObject.setDepth(2);
-              gameObject.setOrigin(0.5, 0.5);
             },
           });
         } else {

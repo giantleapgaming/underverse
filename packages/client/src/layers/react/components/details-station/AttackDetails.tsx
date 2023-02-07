@@ -1,6 +1,6 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -15,7 +15,7 @@ import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const AttackDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("upgrade");
+  const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
@@ -47,18 +47,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const offence = getComponentValueStrict(Offence, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const fuel = 0;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
 
-    useEffect(() => {
-      if (!isDestinationSelected) {
-        setAction("upgrade");
-      }
-    }, [isDestinationSelected]);
     if (entityType && +entityType === Mapping.attack.id) {
       return (
         <div>
@@ -103,12 +97,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           level={+level}
                           upgradeSystem={async () => {
                             try {
-                              setAction("repair");
+                              setAction("");
                               sounds["confirm"].play();
                               await upgradeSystem(world.entities[selectedEntity]);
                               showProgress();
                             } catch (e) {
-                              setAction("upgrade");
+                              setAction("");
                               console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                             }
                           }}
@@ -121,12 +115,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           level={+level}
                           buyWeaponSystem={async (kgs: number) => {
                             try {
-                              setAction("upgrade");
+                              setAction("");
                               sounds["confirm"].play();
                               await buyWeaponSystem(world.entities[selectedEntity], kgs);
                               showProgress();
                             } catch (e) {
-                              setAction("weapon");
+                              setAction("");
                               console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
                             }
                           }}
@@ -241,53 +235,56 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-            <SelectButton
-              name="UPGRADE"
-              isActive={action === "upgrade"}
-              onClick={() => {
-                setAction("upgrade");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "attack"}
-              name="ATTACk"
-              onClick={() => {
-                setAction("attack");
-                const { x, y } = position;
-                setShowLine(true, x, y, "attack");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "weapon"}
-              name="WEAPON"
-              onClick={() => {
-                setShowLine(false);
-                setAction("weapon");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "repair"}
-              name="REPAIR"
-              onClick={() => {
-                setShowLine(false);
-                setAction("repair");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "scrap"}
-              name="SCRAP"
-              onClick={() => {
-                setShowLine(false);
-                setAction("scrap");
-                sounds["click"].play();
-              }}
-            />
-          </S.Row>
+          {ownedBy === connectedAddress.get() && (
+            <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+              <SelectButton
+                name="UPGRADE"
+                isActive={action === "upgrade"}
+                onClick={() => {
+                  setAction("upgrade");
+                  setShowLine(false);
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "attack"}
+                name="ATTACk"
+                onClick={() => {
+                  setAction("attack");
+                  const { x, y } = position;
+                  setShowLine(true, x, y, "attack");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "weapon"}
+                name="WEAPON"
+                onClick={() => {
+                  setShowLine(false);
+                  setAction("weapon");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "repair"}
+                name="REPAIR"
+                onClick={() => {
+                  setShowLine(false);
+                  setAction("repair");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "scrap"}
+                name="SCRAP"
+                onClick={() => {
+                  setShowLine(false);
+                  setAction("scrap");
+                  sounds["click"].play();
+                }}
+              />
+            </S.Row>
+          )}
         </div>
       );
     }

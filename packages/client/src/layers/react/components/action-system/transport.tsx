@@ -50,7 +50,7 @@ export const Transport = ({
               }
             }}
           >
-            <S.ButtonImg src="/button/base-b.png" />
+            <S.ButtonImg src="/button/greenButton.png" />
             <S.DeployText>TRANSPORT</S.DeployText>
           </S.InlinePointer>
         </S.Row>

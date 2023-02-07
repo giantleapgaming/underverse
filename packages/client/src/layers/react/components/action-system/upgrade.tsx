@@ -27,7 +27,7 @@ export const Upgrade = ({
             </S.OtherDetails>
           </div>
           <S.InlinePointer onClick={upgradeSystem}>
-            <S.Img src="/button/orange-b.png" />
+            <S.Img src="/button/orangeButton.png" />
             <S.DeployText>UPGRADE</S.DeployText>
           </S.InlinePointer>
         </>

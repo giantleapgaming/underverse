@@ -24,7 +24,7 @@ export const Repair = ({
             </S.Cost>
           </div>
           <S.InlinePointer onClick={repairSystem}>
-            <S.Img src="/button/white-b.png" />
+            <S.Img src="/button/whiteButton.png" />
             <S.DeployText>REPAIR</S.DeployText>
           </S.InlinePointer>
         </>
