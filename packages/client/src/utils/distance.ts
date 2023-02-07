@@ -1,4 +1,6 @@
 import { WorldCoord } from "../types";
+import { NetworkLayer } from "../layers/network";
+import { EntityID, getComponentValue } from "@latticexyz/recs";
 
 /**
  * @param a Coordinate A
@@ -85,4 +87,37 @@ export function getCoordinatesArray(valuesX: Map<number, number>, valuesY: Map<n
     }
   });
   return coordinates;
+}
+
+export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
+  const deltaX = x2 - x1;
+  const deltaY = y2 - y1;
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+  const stepX = (deltaX / distance) * 100;
+  const stepY = (deltaY / distance) * 100;
+  let x = x1 * 100;
+  let y = y1 * 100;
+  const points: any[] = [];
+  let currentPoint: any;
+  for (let i = 1; i <= distance; i++) {
+    x += stepX;
+    y += stepY;
+    currentPoint = { x: (x / 100).toFixed(), y: (y / 100).toFixed() };
+    if (!points.some((p) => p.x === currentPoint.x && p.y === currentPoint.y)) {
+      points.push(currentPoint);
+    }
+  }
+  return points;
+}
+
+export function getObstacleList(blockingStations: any[], network: NetworkLayer) {
+  const obstaclePoints: any[] = [];
+  for (let i = 0; i < blockingStations.length - 1; i += 1) {
+    const entityOnThatPoint = network?.utils?.getEntityIndexAtPosition(blockingStations[i].x, blockingStations[i].y);
+    const getLevel = getComponentValue(network?.components?.Level, entityOnThatPoint)?.value as EntityID;
+    if (getLevel > 0) {
+      obstaclePoints.push(entityOnThatPoint);
+    }
+  }
+  return obstaclePoints;
 }

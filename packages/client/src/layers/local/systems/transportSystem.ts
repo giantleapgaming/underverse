@@ -9,7 +9,13 @@ import {
 } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { intersectingCircles, enclosedPoints, getCoordinatesArray } from "../../../utils/distance";
+import {
+  intersectingCircles,
+  enclosedPoints,
+  getCoordinatesArray,
+  segmentPoints,
+  getObstacleList,
+} from "../../../utils/distance";
 
 const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 
@@ -63,11 +69,9 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
           [destitution.x, destitution.y],
         ]);
 
-        const blockingStations = intersectingCircles(
-          possibleBlockingStations,
-          [sourcePosition.x, sourcePosition.y],
-          [destitution.x, destitution.y]
-        );
+        const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, destitution.x, destitution.y);
+        const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+        console.log("The obstacleEntityIndexList", obstacleEntityIndexList);
 
         for (let i = 0; i < blockingStations.length; i++) {
           const blockingStation = blockingStations[i];
