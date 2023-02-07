@@ -67,11 +67,11 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                       harvest={async (weapons) => {
                         try {
                           sounds["confirm"].play();
-                          // await harvestSystem(
-                          //   world.entities[selectedEntity],
-                          //   world.entities[destinationDetails],
-                          //   weapons
-                          // );
+                          await harvestSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons
+                          );
                           const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
                             { x: destinationPosition.x, y: destinationPosition.y },
                             tileWidth,

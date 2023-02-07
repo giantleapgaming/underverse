@@ -79,6 +79,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           setShowLine(true, x, y, "rapture");
         }
       }
+      if (entityType && +entityType === Mapping.godown.id && lineDetails.type === "transport") {
+        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
+        if (connectedAddress.get() === ownedBy) {
+          setDestinationDetails(stationEntity);
+          setShowLine(true, x, y, "transport");
+        }
+      }
     }
   });
   const rightClick = input.rightClick$.subscribe(() => {

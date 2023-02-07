@@ -138,6 +138,13 @@ export async function createNetworkLayer(config: GameConfig) {
       people
     );
   }
+  async function transportSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgs: number) {
+    return systems["system.Transport"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      kgs
+    );
+  }
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs);
   }
@@ -167,22 +174,6 @@ export async function createNetworkLayer(config: GameConfig) {
   const sellSystem = async (godownEntity: EntityID, kgs: number) => {
     try {
       await systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs);
-    } catch (e) {
-      console.log({ e });
-    }
-  };
-
-  const transportSystem = async (
-    srcGodownEntity: EntityID,
-    destinationGodownEntity: EntityID,
-    kgsToTransfer: number
-  ) => {
-    try {
-      await systems["system.Transport"].executeTyped(
-        BigNumber.from(srcGodownEntity),
-        BigNumber.from(destinationGodownEntity),
-        kgsToTransfer
-      );
     } catch (e) {
       console.log({ e });
     }

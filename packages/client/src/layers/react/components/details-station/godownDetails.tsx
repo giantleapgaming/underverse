@@ -89,25 +89,6 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-
-                  {/* {action === "transport" && (
-                    <Transport
-                      defence={+defence}
-                      level={+level}
-                      transportCost={transportPrice(position.x, position.y, level, defence)}
-                      transportSystem={async () => {
-                        try {
-                          setAction("transport");
-                          sounds["confirm"].play();
-                          await transportSystem(world.entities[selectedEntity]);
-                          showProgress();
-                        } catch (e) {
-                          setAction("transport");
-                          console.log({ error: e, system: "Transport Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )} */}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}

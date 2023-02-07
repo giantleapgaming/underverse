@@ -1,3 +1,4 @@
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
@@ -7,6 +8,7 @@ import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
+import { Transport } from "../action-system/transport";
 import { Upgrade } from "../action-system/upgrade";
 import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
@@ -16,14 +18,21 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { showProgress },
-      components: { ShowStationDetails },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
+      scenes: {
+        Main: {
+          maps: {
+            Main: { tileWidth, tileHeight },
+          },
+        },
+      },
     },
     network: {
       world,
       components: { EntityType, OwnedBy, Position, Balance, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
+      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, transportSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -37,6 +46,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const fuel = 0;
+    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
+    const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
+    const destinationPosition = getComponentValue(Position, destinationDetails);
+    const isDestinationSelected =
+      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
 
     if (entityType && +entityType === Mapping.harvester.id) {
       return (
@@ -105,24 +120,52 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {/* {action === "transport" && (
+                  {action === "transport" && destinationDetails && isDestinationSelected && (
                     <Transport
-                      defence={+defence}
-                      level={+level}
-                      transportCost={transportPrice(position.x, position.y, level, defence)}
-                      transportSystem={async () => {
+                      space={
+                        (destinationBalance && destinationLevel && balance - destinationLevel - +destinationBalance) ||
+                        0
+                      }
+                      transport={async (weapons) => {
                         try {
-                          setAction("transport");
                           sounds["confirm"].play();
-                          await transportSystem(world.entities[selectedEntity]);
+                          await transportSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons
+                          );
+                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                            { x: destinationPosition.x, y: destinationPosition.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            amount: weapons,
+                            destinationX,
+                            destinationY,
+                            sourceX,
+                            sourceY,
+                            type: "harvest",
+                          });
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("upgrade");
                           showProgress();
                         } catch (e) {
-                          setAction("transport");
-                          console.log({ error: e, system: "Transport Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                         }
                       }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
                     />
-                  )} */}
+                  )}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
@@ -158,23 +201,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {/* {action === "scrap" && (
-                    <Move
-                      moveCost={scrapPrice(position.x, position.y, level, defence, balance)}
-                      moveSystem={async () => {
-                        try {
-                          setAction("move");
-                          sounds["confirm"].play();
-                          await moveSystem(world.entities[selectedEntity]);
-                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
-                          showProgress();
-                        } catch (e) {
-                          setAction("move");
-                          console.log({ error: e, system: "Move Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )} */}
                 </S.Column>
               )}
             </S.Column>
@@ -209,6 +235,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
               isActive={action === "transport"}
               onClick={() => {
                 setAction("transport");
+                setShowLine(true, position.x, position.y, "transport");
                 sounds["click"].play();
               }}
             />
