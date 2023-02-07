@@ -60,7 +60,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
                 <S.Weapon>
-                  <img src="/build-stations/weapon.png" />
+                  <img src="/build-stations/box.png" />
                   <p>
                     {+balance}/{+level}
                   </p>

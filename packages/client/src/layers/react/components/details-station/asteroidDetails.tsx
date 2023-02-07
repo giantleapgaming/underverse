@@ -47,7 +47,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>ASTROID</S.Text>
-              <img src={`/build-stations/astroid.png`} width="100px" height="100px" />
+              <img src={`/build-stations/astroid.png`} width="70px" height="70px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -55,7 +55,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
             <S.Column style={{ width: "325px" }}>
               <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
                 <S.Weapon>
-                  <img src="/build-stations/users.png" />
+                  <img src="/build-stations/crystal.png" width="20px" height="20px" />
                   <p>{+balance}</p>
                 </S.Weapon>
               </S.Row>
@@ -132,7 +132,12 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+          <S.Row
+            style={{
+              gap: "10px",
+              marginTop: action === "harvest" && destinationDetails && isDestinationSelected ? "30px" : "32px",
+            }}
+          >
             <SelectButton
               name="HARVEST"
               isActive={action === "harvest"}

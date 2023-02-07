@@ -60,7 +60,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
                 <S.Weapon>
-                  <img src="/build-stations/weapon.png" />
+                  <img src="/build-stations/users.png" />
                   <p>
                     {+balance}/{+level}
                   </p>

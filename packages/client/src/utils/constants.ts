@@ -29,7 +29,7 @@ export const factionData = [
   {
     img: "/faction/4.png",
     name: "INDIA",
-    description1: "Lower costs fro mining, transport, buildings & weapons",
+    description1: "Lower costs from mining, transport, buildings & weapons",
     description2: "Lower income generation & damage",
     color: "#229954",
     factionNumber: 4,
