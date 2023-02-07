@@ -21,6 +21,8 @@ uint256 constant baseInitialfuel = 100 * MULTIPLIER;
 uint256 constant baseInitialWeapons = 8;
 uint256 constant baseInitialHealth = 1000;
 
+int32 constant zeroCoord = 0;
+
 // Types : Can use these or create enum to store types.
 uint256 constant godownType = 1;
 uint256 constant asteroidType = 2;

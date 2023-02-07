@@ -17,7 +17,7 @@ import { PlayerCountComponent, ID as PlayerCountComponentID } from "../component
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -39,7 +39,7 @@ contract BuildSystem is System {
     );
 
     Coord memory coord = Coord({ x: x, y: y });
-    Coord memory center = Coord({ x: 0, y: 0 });
+    Coord memory center = Coord({ x: zeroCoord, y: zeroCoord });
 
     uint256 playerCount = getPlayerCount(
       PlayerCountComponent(getAddressById(components, PlayerCountComponentID)),
@@ -51,7 +51,7 @@ contract BuildSystem is System {
     //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 5 units
 
     require(
-      getDistanceBetweenCoordinatesWithMultiplier(coord, center) < (30000 + playerCount * 5000),
+      getDistanceBetweenCoordinatesWithMultiplier(coord, center) < (30000 + (playerCount * 5000)),
       "This coordinate is not yet open for building"
     );
 
