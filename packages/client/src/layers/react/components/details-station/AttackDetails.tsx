@@ -235,7 +235,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          {ownedBy === connectedAddress.get() && (
+          {ownedBy === connectedAddress.get() && !isDestinationSelected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
               <SelectButton
                 name="UPGRADE"
