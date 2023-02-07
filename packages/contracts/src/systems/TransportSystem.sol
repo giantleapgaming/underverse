@@ -9,7 +9,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
+import { isThereAnyObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
@@ -88,6 +88,88 @@ contract TransportSystem is System {
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationGodownEntity
     );
+
+    require(
+      isThereAnyObstacleOnTheWay(
+        sourceGodownPosition.x,
+        sourceGodownPosition.y,
+        destinationGodownPosition.x,
+        destinationGodownPosition.y,
+        components
+      ) == false,
+      "There is an obstacle along the path"
+    );
+    /////////////////////
+    //////////////////////
+    // // Coord[] memory
+    // pointsArray = isThereAnyObstacleOnTheWay(sourceGodownPosition.x,sourceGodownPosition.y,
+    // //                               destinationGodownPosition.x,destinationGodownPosition.y);
+
+    // Coord[] memory pointsArray; // new Coord[];
+
+    // int32 deltaX = destinationGodownPosition.x - sourceGodownPosition.x;
+    // int32 deltaY = destinationGodownPosition.y - sourceGodownPosition.y;
+    // d =
+    //     int32(
+    //       int256(
+    //         Math.sqrt(
+    //           uint256(
+    //             int256(
+    //               (deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER))
+    //               )
+    //             )
+    //         )
+    //       ) /
+    //       int256(MULTIPLIER2)
+    //     );
+
+    // int32 stepX = (deltaX * 100) / d;
+    // int32 stepY = (deltaY * 100) / d;
+    // int32 x = sourceGodownPosition.x * 100;
+    // int32 y = sourceGodownPosition.y * 100;
+    // for (uint256 i = 0; i <= uint256(int256(d)); i++) {
+    //   // pointsArray.push(Coord({x: x / 100, y: y / 100}));
+    //   pointsArray[i] = Coordd({x: x / 100, y: y / 100});
+    //   x += stepX;
+    //   y += stepY;
+    // }
+    // return pointsArray;
+    // bool doesObstacleExist = isThereAnyObstacle(isThereAnyObstacleOnTheWay(sourceGodownPosition.x,sourceGodownPosition.y,
+    //                               destinationGodownPosition.x,destinationGodownPosition.y), components);
+    // require(
+    //   isThereAnyObstacle(
+    //     isThereAnyObstacleOnTheWay(
+    //                      sourceGodownPosition.x,sourceGodownPosition.y,
+    //                      destinationGodownPosition.x,destinationGodownPosition.y
+    //                     ),
+    //                     components
+    //                     ) == false,
+    //   "There is an obstacle along the path"
+    // );
+    /////////////////////
+    //////////////////////
+
+    ///////////////////////////
+    // uint256[] memory obstaclesArray;
+    // uint256 count;
+    // for (uint256 i = 0; i < pointsArray.length; i++) {
+    //   // getEntityIndexAtPosition(blockingStations[i].x, blockingStations[i].y);
+    //   uint256[] memory arrayOfGodownsAtThatCoord =
+    //       PositionComponent(getAddressById(components, PositionComponentID))
+    //       .getEntitiesWithValue(pointsArray[i]);
+    //   for (uint256 j = 0; i < arrayOfGodownsAtThatCoord.length; j++) {
+    //     // const getLevel = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
+    //     uint256 itsGodownLevel =
+    //           LevelComponent(getAddressById(components, LevelComponentID))
+    //           .getValue(arrayOfGodownsAtThatCoord[uint256(uint32(j))]);
+    //     if (itsGodownLevel > 0) {
+    //       obstaclesArray[count] = arrayOfGodownsAtThatCoord[j];
+    //       count++;
+    //     }
+    //   }
+    // }
+    // console.log("MY obstaclePoints", obstaclePoints);
+    ///////////////////////////
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
       sourceGodownPosition,
