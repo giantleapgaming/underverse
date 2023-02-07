@@ -2,7 +2,6 @@ import { registerLoadingState } from "./LoadingState";
 import { registerNameScreen } from "./NameEnter";
 import { registerBgScreen } from "./GameBg";
 import { registerLogs } from "./LogsSystem";
-import { registerRepair } from "./RepairSystem";
 import { registerProgressBar } from "./ProgressBar";
 import { registerBuild } from "./build-station/index";
 import { registerCashDetails } from "./Cash";

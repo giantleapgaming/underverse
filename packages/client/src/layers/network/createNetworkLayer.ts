@@ -131,6 +131,13 @@ export async function createNetworkLayer(config: GameConfig) {
       kgsToTransfer
     );
   }
+  async function raptureSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, people: number) {
+    return systems["system.Rapture"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      people
+    );
+  }
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs);
   }
@@ -222,6 +229,7 @@ export async function createNetworkLayer(config: GameConfig) {
       scrapeSystem,
       repairSystem,
       harvestSystem,
+      raptureSystem,
     },
     utils: {
       getEntityIndexAtPosition,
