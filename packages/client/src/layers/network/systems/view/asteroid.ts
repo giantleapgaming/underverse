@@ -25,6 +25,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
   } = network;
   defineSystem(world, [Has(Position), Has(EntityType), Has(Balance), Has(Level)], ({ entity }) => {
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
+    const balance = getComponentValueStrict(Balance, entity).value;
     if (+entityTypeNumber === Mapping.astroid.id) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
@@ -36,7 +37,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           gameObject.setDepth(1);
           gameObject.setPosition(x + 32, y + 32);
           const astroid = config.sprites[Sprites.Asteroid12];
-          gameObject.setTexture(astroid.assetKey, astroid.frame);
+          gameObject.setTexture(astroid.assetKey, `asteroid-${sizeCalculate(balance)}-1.png`);
           phaserScene.add.tween({
             targets: gameObject,
             angle: x / 2 === 0 ? 360 : -360,
@@ -50,4 +51,14 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
       });
     }
   });
+}
+
+function sizeCalculate(num: number) {
+  if (num >= 0 && num <= 25) {
+    return 1;
+  } else if (num > 25 && num <= 75) {
+    return 2;
+  } else if (num > 75) {
+    return 3;
+  }
 }
