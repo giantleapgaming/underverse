@@ -12,7 +12,6 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
     scenes: {
       Main: {
         objectPool,
-        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -31,19 +30,15 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       if (entityTypeNumber && +entityTypeNumber === Mapping.attack.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
-
         const faction = getComponentValueStrict(Faction, factionIndex).value;
         const level = getComponentValueStrict(Level, entity).value;
         const defence = getComponentValueStrict(Defence, entity).value;
         const position = getComponentValueStrict(Position, entity);
-        const offence = getComponentValue(Offence, entity)?.value;
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         if (+defence > 0) {
           const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
           const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
           const attack = config.sprites[Sprites.Asteroid12];
-          const sprit = config.sprites[Sprites.Station110];
-
           astroidObject.setComponent({
             id: `attack-${entity}`,
             once: (gameObject) => {
@@ -53,29 +48,6 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setOrigin(0.5, 0.5);
             },
           });
-          if (offence && +offence) {
-            const missileObject = objectPool.get(`group-missile-${entity}`, "Sprite");
-            missileObject.setComponent({
-              id: `group-missile-${entity}`,
-              once: (gameObject) => {
-                gameObject.setTexture(sprit.assetKey, `${faction && +faction}-group-missile-${+offence}.png`);
-                gameObject.setPosition(x + 32, y + 32);
-                gameObject.setOrigin(0.5, 0.5);
-                gameObject.setDepth(2);
-                phaserScene.add.tween({
-                  targets: gameObject,
-                  angle: 360,
-                  duration: 1240000,
-                  ease: "circular",
-                  repeat: -1,
-                  yoyo: false,
-                  rotation: 360,
-                });
-              },
-            });
-          } else {
-            objectPool.remove(`group-missile-${entity}`);
-          }
           factionObject.setComponent({
             id: `attack-faction-${entity}`,
             once: (gameObject) => {
