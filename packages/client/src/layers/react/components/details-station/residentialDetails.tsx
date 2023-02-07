@@ -8,11 +8,10 @@ import { scrapPrice } from "../../utils/scrapPrice";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
-import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("attack");
+  const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
@@ -23,7 +22,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -80,19 +79,11 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          Level.addOverride(world.entities[selectedEntity], {
-                            entity: selectedEntity,
-                            value: { value: +level + 1 },
-                          });
                           showProgress();
                           const tx = await upgradeSystem(world.entities[selectedEntity]);
                           await tx.wait();
                         } catch (e) {
                           setAction("");
-                          Level.addOverride(world.entities[selectedEntity], {
-                            entity: selectedEntity,
-                            value: { value: +level },
-                          });
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}
@@ -162,33 +153,35 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-            <SelectButton
-              name="UPGRADE"
-              isActive={action === "upgrade"}
-              onClick={() => {
-                setAction("upgrade");
-                sounds["click"].play();
-              }}
-            />
+          {ownedBy === connectedAddress.get() && (
+            <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+              <SelectButton
+                name="UPGRADE"
+                isActive={action === "upgrade"}
+                onClick={() => {
+                  setAction("upgrade");
+                  sounds["click"].play();
+                }}
+              />
 
-            <SelectButton
-              isActive={action === "repair"}
-              name="REPAIR"
-              onClick={() => {
-                setAction("repair");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "scrap"}
-              name="SCRAP"
-              onClick={() => {
-                setAction("scrap");
-                sounds["click"].play();
-              }}
-            />
-          </S.Row>
+              <SelectButton
+                isActive={action === "repair"}
+                name="REPAIR"
+                onClick={() => {
+                  setAction("repair");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "scrap"}
+                name="SCRAP"
+                onClick={() => {
+                  setAction("scrap");
+                  sounds["click"].play();
+                }}
+              />
+            </S.Row>
+          )}
         </div>
       );
     }
