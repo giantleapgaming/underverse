@@ -10,11 +10,10 @@ import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
 import { Upgrade } from "../action-system/upgrade";
-import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("attack");
+  const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
@@ -32,7 +31,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Position, Balance, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, transportSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -44,7 +43,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const fuel = 0;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
@@ -52,7 +50,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
-
     if (entityType && +entityType === Mapping.harvester.id) {
       return (
         <div>
@@ -91,31 +88,13 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       upgradeSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("");
                           sounds["confirm"].play();
                           await upgradeSystem(world.entities[selectedEntity]);
                           showProgress();
                         } catch (e) {
-                          setAction("upgrade");
+                          setAction("");
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
-                        }
-                      }}
-                    />
-                  )}
-                  {action === "weapon" && (
-                    <Weapon
-                      offence={+balance}
-                      defence={+defence}
-                      level={+level}
-                      buyWeaponSystem={async (kgs: number) => {
-                        try {
-                          setAction("attack");
-                          sounds["confirm"].play();
-                          await buyWeaponSystem(world.entities[selectedEntity], kgs);
-                          showProgress();
-                        } catch (e) {
-                          setAction("weapon");
-                          console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
                         }
                       }}
                     />
@@ -123,12 +102,17 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   {action === "transport" && destinationDetails && isDestinationSelected && (
                     <Transport
                       space={
-                        (destinationBalance && destinationLevel && balance - destinationLevel - +destinationBalance) ||
-                        0
+                        (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
+                          ? destinationLevel - destinationBalance
+                          : +balance) || 0
                       }
                       transport={async (weapons) => {
                         try {
                           sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
                           await transportSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
@@ -153,10 +137,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             sourceY,
                             type: "harvest",
                           });
-                          setDestinationDetails();
-                          setShowLine(false);
-                          setAction("upgrade");
-                          showProgress();
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                         }
@@ -173,12 +153,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       repairCost={repairPrice(position.x, position.y, level, defence)}
                       repairSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("");
                           sounds["confirm"].play();
                           await repairSystem(world.entities[selectedEntity]);
                           showProgress();
                         } catch (e) {
-                          setAction("repair");
+                          setAction("");
                           console.log({ error: e, system: "Repair Attack", details: selectedEntity });
                         }
                       }}
@@ -189,13 +169,13 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       scrapCost={scrapPrice(position.x, position.y, level, defence, balance)}
                       scrapSystem={async () => {
                         try {
-                          setAction("scrap");
+                          setAction("");
                           sounds["confirm"].play();
                           await scrapeSystem(world.entities[selectedEntity]);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
-                          setAction("scrap");
+                          setAction("");
                           console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
                         }
                       }}
@@ -229,50 +209,55 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-            <SelectButton
-              name="TRANSPORT"
-              isActive={action === "transport"}
-              onClick={() => {
-                setAction("transport");
-                setShowLine(true, position.x, position.y, "transport");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              name="UPGRADE"
-              isActive={action === "upgrade"}
-              onClick={() => {
-                setAction("upgrade");
-                sounds["click"].play();
-              }}
-            />
-
-            <SelectButton
-              isActive={action === "repair"}
-              name="REPAIR"
-              onClick={() => {
-                setAction("repair");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "scrap"}
-              name="SCRAP"
-              onClick={() => {
-                setAction("scrap");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
-              isActive={action === "move"}
-              name="MOVE"
-              onClick={() => {
-                setAction("move");
-                sounds["click"].play();
-              }}
-            />
-          </S.Row>
+          {ownedBy === connectedAddress.get() && !destinationDetails && !isDestinationSelected && (
+            <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+              <SelectButton
+                name="UPGRADE"
+                isActive={action === "upgrade"}
+                onClick={() => {
+                  setAction("upgrade");
+                  setShowLine(false);
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                name="TRANSPORT"
+                isActive={action === "transport"}
+                onClick={() => {
+                  setAction("transport");
+                  setShowLine(true, position.x, position.y, "transport");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "repair"}
+                name="REPAIR"
+                onClick={() => {
+                  setAction("repair");
+                  setShowLine(false);
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "scrap"}
+                name="SCRAP"
+                onClick={() => {
+                  setAction("scrap");
+                  setShowLine(false);
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "move"}
+                name="MOVE"
+                onClick={() => {
+                  setAction("move");
+                  setShowLine(false);
+                  sounds["click"].play();
+                }}
+              />
+            </S.Row>
+          )}
         </div>
       );
     }

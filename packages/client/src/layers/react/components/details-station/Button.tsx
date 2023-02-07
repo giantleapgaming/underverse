@@ -29,13 +29,13 @@ const Button = styled.div<{ isActive?: boolean }>`
   z-index: 10;
   cursor: pointer;
   font-size: 12px;
-  width: 60px;
+  width: 75px;
 
   &:before,
   &:after {
     position: absolute;
     content: "";
-    width: 60px;
+    width: 75px;
     left: 0px;
     height: 9px;
     z-index: -1;

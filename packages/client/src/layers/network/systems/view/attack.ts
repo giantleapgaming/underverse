@@ -98,24 +98,28 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setOrigin(0.5, 0.5);
             },
           });
-          missileObject.setComponent({
-            id: `group-missile-${entity}`,
-            once: (gameObject) => {
-              gameObject.setTexture(attack.assetKey, `${+faction}-group-missile-${+offence}.png`);
-              gameObject.setPosition(x + 32, y + 32);
-              gameObject.setOrigin(0.5, 0.5);
-              gameObject.setDepth(2);
-              phaserScene.add.tween({
-                targets: gameObject,
-                angle: 360,
-                duration: 1240000,
-                ease: "circular",
-                repeat: -1,
-                yoyo: false,
-                rotation: 360,
-              });
-            },
-          });
+          if (offence && offence > 0) {
+            missileObject.setComponent({
+              id: `group-missile-${entity}`,
+              once: (gameObject) => {
+                gameObject.setTexture(attack.assetKey, `${+faction}-group-missile-${+offence}.png`);
+                gameObject.setPosition(x + 32, y + 32);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setDepth(2);
+                phaserScene.add.tween({
+                  targets: gameObject,
+                  angle: 360,
+                  duration: 1240000,
+                  ease: "circular",
+                  repeat: -1,
+                  yoyo: false,
+                  rotation: 360,
+                });
+              },
+            });
+          } else {
+            objectPool.remove(`group-missile-${entity}`);
+          }
         } else {
           objectPool.remove(`attack-${entity}`);
           objectPool.remove(`attack-faction-${entity}`);
