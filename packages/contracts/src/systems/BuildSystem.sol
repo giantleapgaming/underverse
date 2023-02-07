@@ -15,8 +15,9 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
+import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -30,27 +31,30 @@ contract BuildSystem is System {
 
     // Shipyards can only be initialized via the init system and cannot be built
 
-    require(entity_type != 7,"Cannot build Shipyard");
+    require(entity_type != 7, "Cannot build Shipyard");
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
       ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
       "Cannot build godown in the center of the grid"
     );
-    
+
     Coord memory coord = Coord({ x: x, y: y });
     Coord memory center = Coord({ x: 0, y: 0 });
-   
+
     uint256 playerCount = getPlayerCount(
       PlayerCountComponent(getAddressById(components, PlayerCountComponentID)),
       addressToEntity(msg.sender)
     );
 
-   //We check if the entity being built is built at a distance from the center that is allowed
-   //We steadily expand the buildable area based on the number of players that are in the game
-   //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 5 units
-   
-    require(getDistanceBetweenCoordinatesWithMultiplier(coord,center) < (30000 + playerCount*5000),"This coordinate is not yet open for building");
-    
+    //We check if the entity being built is built at a distance from the center that is allowed
+    //We steadily expand the buildable area based on the number of players that are in the game
+    //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 5 units
+
+    require(
+      getDistanceBetweenCoordinatesWithMultiplier(coord, center) < (30000 + playerCount * 5000),
+      "This coordinate is not yet open for building"
+    );
+
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
@@ -70,7 +74,7 @@ contract BuildSystem is System {
       }
     }
 
-      uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
       addressToEntity(msg.sender)
     );
 
@@ -95,6 +99,7 @@ contract BuildSystem is System {
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
+    PopulationComponent(getAddressById(components, PopulationComponentID)).set(godownEntity, initialEntityPopulation);
     //Moresh: Assign Entity type
 
     // update player data
@@ -108,11 +113,7 @@ contract BuildSystem is System {
     );
   }
 
-  function executeTyped(
-    int32 x,
-    int32 y,
-    uint256 entity_type
-  ) public returns (bytes memory) {
+  function executeTyped(int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
     return execute(abi.encode(x, y, entity_type));
   }
 }

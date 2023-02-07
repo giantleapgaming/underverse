@@ -1,5 +1,5 @@
 {
     "chainId": 300,
-    "rpc": "wss://optimism.gnosischain.com/wss",
+    "rpc": "https://optimism.gnosischain.com",
     "wsRpc": "wss://rpc.gnosischain.com/wss"
 }

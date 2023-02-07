@@ -12,7 +12,6 @@ import { CashComponent, ID as CashComponentID } from "../components/CashComponen
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type and Population
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
@@ -63,7 +62,10 @@ contract RaptureSystem is System {
       destinationGodownEntity
     );
 
-    require(peopleTransported <= sourcePopulation, "People being transported is more than available population on the planet");
+    require(
+      peopleTransported <= sourcePopulation,
+      "People being transported is more than available population on the planet"
+    );
 
     require(
       destinationPopulation + peopleTransported <= destinationGodownLevel,
@@ -79,47 +81,47 @@ contract RaptureSystem is System {
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationGodownEntity
     );
-    {
-      PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
+    // {
+    //   PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
 
-      uint256[] memory allPositionEntities = position.getEntities();
+    //   uint256[] memory allPositionEntities = position.getEntities();
 
-      Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
+    //   Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
 
-      // Coord[] memory enclosedPoints = findEnclosedPoints(
-      //   sourceGodownPosition,
-      //   destinationGodownPosition,
-      //   allStationCoords
-      // );
+    //   // Coord[] memory enclosedPoints = findEnclosedPoints(
+    //   //   sourceGodownPosition,
+    //   //   destinationGodownPosition,
+    //   //   allStationCoords
+    //   // );
 
-      Coord[] memory blockingCoords = checkIntersections(
-        sourceGodownPosition,
-        destinationGodownPosition,
-        // enclosedPoints
-        allStationCoords
-      );
+    //   Coord[] memory blockingCoords = checkIntersections(
+    //     sourceGodownPosition,
+    //     destinationGodownPosition,
+    //     // enclosedPoints
+    //     allStationCoords
+    //   );
 
-      for (uint256 j = 0; j < blockingCoords.length; j++) {
-        Coord memory checkPos = blockingCoords[j];
-        uint256[] memory entities = PositionComponent(getAddressById(components, PositionComponentID))
-          .getEntitiesWithValue(checkPos);
-        for (uint256 k = 0; k < entities.length; k++) {
-          if (
-            OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(entities[k]) !=
-            addressToEntity(msg.sender)
-          ) {
-            revert("Enemy station blocking transport!");
-          }
-        }
-      }
-    }
+    //   for (uint256 j = 0; j < blockingCoords.length; j++) {
+    //     Coord memory checkPos = blockingCoords[j];
+    //     uint256[] memory entities = PositionComponent(getAddressById(components, PositionComponentID))
+    //       .getEntitiesWithValue(checkPos);
+    //     for (uint256 k = 0; k < entities.length; k++) {
+    //       if (
+    //         OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(entities[k]) !=
+    //         addressToEntity(msg.sender)
+    //       ) {
+    //         revert("Enemy station blocking transport!");
+    //       }
+    //     }
+    //   }
+    // }
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
       sourceGodownPosition,
       destinationGodownPosition
     );
 
-    uint256 totalTransportCost = ((distanceBetweenGodowns * peopleTransported)**2);
+    uint256 totalTransportCost = ((distanceBetweenGodowns * peopleTransported) ** 2);
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
@@ -139,7 +141,10 @@ contract RaptureSystem is System {
     );
 
     // update godown data
-    PopulationComponent(getAddressById(components, PopulationComponentID)).set(sourceGodownEntity, sourcePopulation - peopleTransported);
+    PopulationComponent(getAddressById(components, PopulationComponentID)).set(
+      sourceGodownEntity,
+      sourcePopulation - peopleTransported
+    );
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(
       destinationGodownEntity,
       destinationPopulation + peopleTransported

@@ -56,7 +56,8 @@
         "BalanceComponent",
         "FactionComponent",
         "EntityTypeComponent",
-        "FuelComponent"
+        "FuelComponent",
+        "PopulationComponent"
       ]
     },
     {
