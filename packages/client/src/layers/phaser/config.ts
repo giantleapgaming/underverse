@@ -1583,6 +1583,30 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "build-miner-1.png",
         },
+        [Sprites.Shipyard1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "shipyard-1.png",
+        },
+        [Sprites.Shipyard2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "shipyard-2.png",
+        },
+        [Sprites.Shipyard3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "shipyard-3.png",
+        },
+        [Sprites.Shipyard4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-miner-4.png",
+        },
+        [Sprites.Shipyard5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-miner-5.png",
+        },
+        [Sprites.Shipyard6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-miner-6.png",
+        },
       },
       animations: [
         {

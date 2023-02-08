@@ -21,7 +21,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Population },
       api: { upgradeSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
@@ -33,7 +33,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     const entityIndex = world.entities.indexOf(ownedBy);
     const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
     const position = getComponentValueStrict(Position, selectedEntity);
-    const balance = getComponentValueStrict(Balance, selectedEntity).value;
+    const population = getComponentValueStrict(Population, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
@@ -61,7 +61,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/users.png" />
                   <p>
-                    {+balance}/{+level}
+                    {+population}/{+level}
                   </p>
                 </S.Weapon>
                 <S.Weapon>
@@ -110,7 +110,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance)}
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, population)}
                       scrapSystem={async () => {
                         try {
                           setAction("scrap");

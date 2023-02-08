@@ -23,11 +23,11 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
     },
   } = phaser;
   const {
-    components: { Position, Level, Defence, Balance, EntityType, Faction, OwnedBy },
+    components: { Position, Level, Defence, Population, EntityType, Faction, OwnedBy },
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(EntityType), Has(Level), Has(Balance), Has(OwnedBy), Has(Defence)],
+    [Has(Position), Has(EntityType), Has(Level), Has(Population), Has(OwnedBy), Has(Defence)],
     ({ entity }) => {
       const healthBg = phaserScene.children
         .getChildren()
@@ -58,7 +58,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
         const faction = getComponentValue(Faction, factionIndex)?.value;
-        const balance = getComponentValueStrict(Balance, entity).value;
+        const population = getComponentValueStrict(Population, entity).value;
         const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
@@ -82,7 +82,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           astroidObject.setComponent({
             id: `residential-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `${+faction}-${+level}-${+balance}.png`);
+              gameObject.setTexture(residential.assetKey, `${+faction}-${+level}-${+population}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(2);
               gameObject.setOrigin(0.5, 0.5);

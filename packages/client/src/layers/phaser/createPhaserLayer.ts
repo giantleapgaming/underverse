@@ -25,6 +25,7 @@ import {
   displayHarvesterSystem,
   displayPlanetSystem,
   displayResidentialSystem,
+  displayShipyardSystem,
 } from "../network/systems/view";
 import {
   buildAttackSystem,
@@ -250,7 +251,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayResidentialSystem(network, context);
   displayHarvesterSystem(network, context);
   displayGodownSystem(network, context);
-
+  displayShipyardSystem(network, context);
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);

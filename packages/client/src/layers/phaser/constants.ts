@@ -422,6 +422,12 @@ export enum Sprites {
   FactionAttack4,
   FactionAttack5,
   FactionAttack6,
+  Shipyard1,
+  Shipyard2,
+  Shipyard3,
+  Shipyard4,
+  Shipyard5,
+  Shipyard6,
 }
 
 export enum Animations {
