@@ -29,61 +29,6 @@ export const phaserConfig = {
             imagePath: "/atlases/sprites/",
           },
         },
-        [Assets.Product1]: {
-          type: AssetType.Image,
-          key: Assets.Product1,
-          path: "/product/1.png",
-        },
-        [Assets.Product2]: {
-          type: AssetType.Image,
-          key: Assets.Product2,
-          path: "/product/2.png",
-        },
-        [Assets.Product3]: {
-          type: AssetType.Image,
-          key: Assets.Product3,
-          path: "/product/3.png",
-        },
-        [Assets.Product4]: {
-          type: AssetType.Image,
-          key: Assets.Product4,
-          path: "/product/4.png",
-        },
-        [Assets.Product5]: {
-          type: AssetType.Image,
-          key: Assets.Product5,
-          path: "/product/5.png",
-        },
-        [Assets.Product6]: {
-          type: AssetType.Image,
-          key: Assets.Product6,
-          path: "/product/6.png",
-        },
-        [Assets.Product7]: {
-          type: AssetType.Image,
-          key: Assets.Product7,
-          path: "/product/7.png",
-        },
-        [Assets.Product8]: {
-          type: AssetType.Image,
-          key: Assets.Product8,
-          path: "/product/8.png",
-        },
-        [Assets.Product9]: {
-          type: AssetType.Image,
-          key: Assets.Product9,
-          path: "/product/9.png",
-        },
-        [Assets.Product10]: {
-          type: AssetType.Image,
-          key: Assets.Product10,
-          path: "/product/10.png",
-        },
-        [Assets.Missile]: {
-          type: AssetType.Image,
-          key: Assets.Missile,
-          path: "/missile/main.png",
-        },
       },
       maps: {
         [Maps.Main]: defineMapConfig({
@@ -1606,6 +1551,30 @@ export const phaserConfig = {
         [Sprites.Shipyard6]: {
           assetKey: Assets.MainAtlas,
           frame: "build-miner-6.png",
+        },
+        [Sprites.FactionHarvester1]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-1",
+        },
+        [Sprites.FactionHarvester2]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-2",
+        },
+        [Sprites.FactionHarvester3]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-3",
+        },
+        [Sprites.FactionHarvester4]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-4",
+        },
+        [Sprites.FactionHarvester5]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-5",
+        },
+        [Sprites.FactionHarvester6]: {
+          assetKey: Assets.MainAtlas,
+          frame: "faction-miner-6",
         },
       },
       animations: [

@@ -41,6 +41,8 @@ import { selectSystem } from "../network/systems/select/select";
 import { drawLine } from "../network/systems/view/draw-line";
 import { missileAttackSystem } from "../network/systems/action/missile-attack";
 import { harvestTransport } from "../network/systems/action/harvest-transport";
+import { populationTransport } from "../network/systems/action/population-transport";
+import { godownTransport } from "../network/systems/action/godown-transport";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -259,6 +261,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   drawLine(network, context);
   missileAttackSystem(network, context);
   harvestTransport(network, context);
-
+  populationTransport(network, context);
+  godownTransport(network, context);
   return context;
 }

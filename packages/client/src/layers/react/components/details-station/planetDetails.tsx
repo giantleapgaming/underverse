@@ -25,7 +25,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
       },
     },
     network: {
-      components: { EntityType, Position, Population, Level, Balance },
+      components: { EntityType, Position, Population, Level },
       api: { raptureSystem },
     },
   } = layers;
@@ -36,7 +36,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
     const population = getComponentValueStrict(Population, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const level = getComponentValue(Level, destinationDetails)?.value;
-    const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
+    const destinationPopulation = getComponentValue(Population, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
@@ -62,7 +62,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                 {action === "rapture" && destinationDetails && isDestinationSelected && (
                   <div>
                     <Rapture
-                      space={(destinationBalance && level && +level - +destinationBalance) || 0}
+                      space={(destinationPopulation && level && +level - +destinationPopulation) || 0}
                       rapture={async (weapons) => {
                         try {
                           sounds["confirm"].play();
