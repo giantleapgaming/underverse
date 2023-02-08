@@ -6,15 +6,6 @@ import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
 
-const stationColor = [
-  Sprites.BuildAttack1,
-  Sprites.BuildAttack2,
-  Sprites.BuildAttack3,
-  Sprites.BuildAttack4,
-  Sprites.BuildAttack5,
-  Sprites.BuildAttack6,
-];
-
 export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -59,15 +50,14 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
       const faction = getComponentValue(Faction, userEntityIndex)?.value;
       if (faction) {
-        const sprite = stationColor[+faction - 1] as Sprites.Build1;
-        const HoverSprite = config.sprites[sprite];
+        const HoverSprite = config.sprites[Sprites.Build1];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
 
         const hoverStation = objectPool.get("build-attack-station", "Sprite");
         hoverStation.setComponent({
           id: `hoverStation`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
+            gameObject.setTexture(HoverSprite.assetKey, `build-attack-${+faction}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;

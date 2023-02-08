@@ -1,4 +1,4 @@
-import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
+import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -41,26 +41,39 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
           {+entityType === Mapping.astroid.id && <AsteroidDetails layers={layers} />}
           {+entityType === Mapping.planet.id && <PlanetDetails layers={layers} />}
         </S.Border>
-        <button
-          style={{
-            height: "30px",
-            width: "30px",
-            borderRadius: "50%",
-            backgroundColor: "red",
-            color: "white",
-            fontSize: "20px",
-            fontWeight: "bold",
-            pointerEvents: "fill",
-            cursor: "pointer",
-          }}
+        <div
           onClick={() => {
             setDestinationDetails();
             setShowStationDetails();
             setShowLine(false, 0, 0);
           }}
+          style={{
+            marginLeft: "-25px",
+            marginTop: "-10px",
+            cursor: "pointer",
+            width: "30px",
+            height: "30px",
+          }}
         >
-          X
-        </button>
+          <button
+            style={{
+              width: "30px",
+              height: "30px",
+              color: "#0B8C85",
+              fontSize: "20px",
+              fontWeight: "bold",
+              pointerEvents: "fill",
+              backgroundColor: "transparent",
+              outline: "none",
+              cursor: "pointer",
+              paddingTop: "-10px",
+              paddingLeft: "-30px",
+              border: "none",
+            }}
+          >
+            X
+          </button>
+        </div>
       </S.Container>
     );
   } else {

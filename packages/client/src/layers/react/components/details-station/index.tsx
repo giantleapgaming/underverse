@@ -14,7 +14,7 @@ export const registerDetails = () => {
     {
       colStart: 1,
       colEnd: 13,
-      rowStart: 10,
+      rowStart: 9,
       rowEnd: 12,
     },
     (layers) => {
