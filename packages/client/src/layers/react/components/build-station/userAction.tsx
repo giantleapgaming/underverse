@@ -1,8 +1,9 @@
 import styled from "styled-components";
-import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { EntityID, getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { useState } from "react";
 import { factionData } from "../../../../utils/constants";
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const UserAction = ({ layers }: { layers: Layers }) => {
   const [showDetails, setShowDetails] = useState(false);
@@ -10,7 +11,7 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction },
+      components: { Name, Cash, Faction, Position, OwnedBy },
       network: { connectedAddress },
     },
     phaser: {
@@ -18,7 +19,12 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
       localApi: { shouldShowCircle },
       components: { ShowCircle },
       scenes: {
-        Main: { camera },
+        Main: {
+          camera,
+          maps: {
+            Main: { tileHeight, tileWidth },
+          },
+        },
       },
       sounds,
     },
@@ -50,7 +56,16 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
             src="/ui/recenter.png"
             onClick={() => {
               sounds["click"].play();
-              camera.centerOn(0, -1);
+              const allPositionEntities = [...getComponentEntities(Position)];
+              allPositionEntities.find((entity) => {
+                const position = getComponentValueStrict(Position, entity);
+                const ownedBy = getComponentValue(OwnedBy, entity)?.value;
+                if (ownedBy === userEntityId) {
+                  const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                  camera.centerOn(x, y);
+                }
+                return ownedBy === userEntityId;
+              });
             }}
           />
         </div>
