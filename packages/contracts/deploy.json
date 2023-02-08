@@ -196,7 +196,7 @@
       "writeAccess": [
         "LastUpdatedTimeComponent",
         "PositionComponent",
-        "FuelComponent"
+        "CashComponent"
       ]
     },
     {

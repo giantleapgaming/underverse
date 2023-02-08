@@ -159,6 +159,7 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Build"].executeTyped(x, y, entityType);
   }
   async function moveSystem({ x, y, entityType }: { x: number; y: number; entityType: EntityID }) {
+    console.log(x, y);
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y);
   }
   async function upgradeSystem(godownEntity: EntityID) {
