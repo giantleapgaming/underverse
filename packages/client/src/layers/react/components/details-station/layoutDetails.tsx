@@ -8,6 +8,7 @@ import { GodownDetails } from "./godownDetails";
 import { HarvesterDetails } from "./harvesterDetails";
 import { PlanetDetails } from "./planetDetails";
 import { ResidentialDetails } from "./residentialDetails";
+import { UserAction } from "./userAction";
 import { UserDetails } from "./userDetails";
 
 export const DetailsLayout = ({ layers }: { layers: Layers }) => {
@@ -27,7 +28,11 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     return (
       <S.Container>
-        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id && <UserDetails layers={layers} />}
+        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id ? (
+          <UserDetails layers={layers} />
+        ) : (
+          <UserAction layers={layers} hideFactionImage />
+        )}
         <S.Border>
           {+entityType === Mapping.attack.id && <AttackDetails layers={layers} />}
           {+entityType === Mapping.godown.id && <GodownDetails layers={layers} />}

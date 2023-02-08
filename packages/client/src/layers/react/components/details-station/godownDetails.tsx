@@ -48,7 +48,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
               <S.Text>GODOWN LVL {+level}</S.Text>
               <img src={`/build-stations/cargo-1-0.png`} width="100px" height="100px" />
               <S.Text>
-                POSITION {position.x}/{position.x}
+                POSITION {position.x}/{position.y}
               </S.Text>
             </S.Column>
             <S.Column style={{ width: "325px" }}>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { factionData } from "../../../../utils/constants";
 import { FactionImg } from "./FactionImg";
 
-export const UserAction = ({ layers }: { layers: Layers }) => {
+export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideFactionImage?: boolean }) => {
   const [showDetails, setShowDetails] = useState(false);
 
   const {
@@ -31,7 +31,7 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
   if (userEntityId) {
     return (
       <S.Container>
-        <FactionImg layers={layers} />
+        {!hideFactionImage && <FactionImg layers={layers} />}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}

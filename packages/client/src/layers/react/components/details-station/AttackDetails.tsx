@@ -74,7 +74,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                 height="100px"
               />
               <S.Text>
-                POSITION {position.x}/{position.x}
+                POSITION {position.x}/{position.y}
               </S.Text>
             </S.Column>
             <S.Column style={{ width: "325px" }}>
