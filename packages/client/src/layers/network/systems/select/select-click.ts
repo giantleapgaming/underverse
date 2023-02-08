@@ -63,6 +63,11 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
         sounds["click"].play();
         return;
       }
+      if (entityType && +entityType === Mapping.shipyard.id && defence && +defence) {
+        setShowStationDetails(stationEntity);
+        sounds["click"].play();
+        return;
+      }
     }
   });
 

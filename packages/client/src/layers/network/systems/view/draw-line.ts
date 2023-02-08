@@ -7,9 +7,9 @@ import { PhaserLayer } from "../../../phaser";
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowLine, ShowStationDetails, ShowDestinationDetails },
+    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation },
     localIds: { stationDetailsEntityIndex },
-    localApi: { setShowLine, setDestinationDetails },
+    localApi: { setShowLine, setDestinationDetails, setMoveStation },
     scenes: {
       Main: {
         maps: {
@@ -33,7 +33,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     const destination = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
-    if (lineDetails && lineDetails.showLine && selectedEntity && !destination) {
+    const moveStation = getComponentValue(MoveStation, stationDetailsEntityIndex)?.selected;
+
+    if (lineDetails && lineDetails.showLine && selectedEntity && lineDetails.type === "move" && !moveStation) {
+      const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      setShowLine(true, x, y, lineDetails.type);
+      return;
+    }
+    if (lineDetails && lineDetails.showLine && selectedEntity && !destination && lineDetails.type !== "move") {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
       setShowLine(true, x, y, lineDetails.type);
     }
@@ -45,6 +52,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+    const moveStation = getComponentValue(MoveStation, stationDetailsEntityIndex)?.selected;
+
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
@@ -87,10 +96,22 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
       }
     }
+    if (
+      lineDetails &&
+      lineDetails.showLine &&
+      !stationEntity &&
+      lineDetails.type === "move" &&
+      selectedEntity &&
+      !moveStation
+    ) {
+      setShowLine(true, x, y, "move");
+      setMoveStation(true, x, y);
+    }
   });
   const rightClick = input.rightClick$.subscribe(() => {
     setDestinationDetails();
     setShowLine(false, 0, 0);
+    setMoveStation(false);
   });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());

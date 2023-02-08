@@ -16,6 +16,7 @@ import {
   ShowLine,
   ShowDestinationDetails,
   ShowAnimation,
+  moveStation,
 } from "../local/components";
 
 import {
@@ -43,6 +44,7 @@ import { missileAttackSystem } from "../network/systems/action/missile-attack";
 import { harvestTransport } from "../network/systems/action/harvest-transport";
 import { populationTransport } from "../network/systems/action/population-transport";
 import { godownTransport } from "../network/systems/action/godown-transport";
+import { move } from "../network/systems/action/move";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -79,6 +81,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     Logs: Logs(world),
     ShowLine: ShowLine(world),
     ShowAnimation: ShowAnimation(world),
+    MoveStation: moveStation(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -122,6 +125,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     sourceY,
     faction,
     type,
+    frame,
   }: {
     amount?: number;
     destinationX?: number;
@@ -131,6 +135,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     sourceY?: number;
     faction?: number;
     type?: string;
+    frame?: string;
   }) => {
     setComponent(components.ShowAnimation, stationDetailsEntityIndex, {
       amount,
@@ -141,6 +146,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       sourceY,
       faction,
       type,
+      frame,
     });
   };
 
@@ -150,6 +156,11 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const showProgress = () => {
     setComponent(components.Progress, progressId, { value: true });
   };
+
+  const setMoveStation = (selected: boolean, x?: number, y?: number) => {
+    setComponent(components.MoveStation, stationDetailsEntityIndex, { x, y, selected });
+  };
+
   const hideProgress = () => {
     setComponent(components.Progress, progressId, { value: false });
   };
@@ -216,6 +227,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     scenes,
     localApi: {
       setBuild,
+      setMoveStation,
       hideProgress,
       showProgress,
       shouldShowCircle,
@@ -263,5 +275,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   harvestTransport(network, context);
   populationTransport(network, context);
   godownTransport(network, context);
+  move(network, context);
+
   return context;
 }

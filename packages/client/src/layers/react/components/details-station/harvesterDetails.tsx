@@ -6,6 +6,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
+import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
@@ -17,8 +18,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
-      components: { ShowStationDetails, ShowDestinationDetails },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setMoveStation },
+      components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
       scenes: {
         Main: {
@@ -31,7 +32,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Position, Balance, Level, Defence },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -50,6 +51,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
+    const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
     if (entityType && +entityType === Mapping.harvester.id) {
       return (
         <div>
@@ -181,6 +183,65 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {action === "move" &&
+                    moveStationDetails &&
+                    moveStationDetails.selected &&
+                    typeof moveStationDetails.x === "number" &&
+                    typeof moveStationDetails.y === "number" && (
+                      <Move
+                        cost={1000}
+                        moveSystem={async () => {
+                          if (
+                            moveStationDetails.selected &&
+                            typeof moveStationDetails?.x === "number" &&
+                            typeof moveStationDetails?.y === "number"
+                          ) {
+                            try {
+                              setAction("");
+                              sounds["confirm"].play();
+                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                                { x: moveStationDetails.x, y: moveStationDetails.y },
+                                tileWidth,
+                                tileHeight
+                              );
+                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                                { x: position.x, y: position.y },
+                                tileWidth,
+                                tileHeight
+                              );
+                              await moveSystem({
+                                entityType: world.entities[selectedEntity],
+                                x: moveStationDetails.x,
+                                y: moveStationDetails.y,
+                              });
+                              setMoveStation(false);
+                              setShowAnimation({
+                                showAnimation: true,
+                                destinationX,
+                                destinationY,
+                                sourceX,
+                                sourceY,
+                                type: "move",
+                                frame: `miner-${+level}-${+balance}.png`,
+                              });
+                              setShowLine(false);
+                              showProgress();
+                            } catch (e) {
+                              setAction("");
+                              console.log({
+                                error: e,
+                                system: "Scrap Attack",
+                                details: {
+                                  entityType: world.entities[selectedEntity],
+                                  x: moveStationDetails.x,
+                                  y: moveStationDetails.y,
+                                },
+                              });
+                            }
+                          }
+                        }}
+                      />
+                    )}
                 </S.Column>
               )}
             </S.Column>
@@ -209,55 +270,58 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          {ownedBy === connectedAddress.get() && !destinationDetails && !isDestinationSelected && (
-            <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <SelectButton
-                name="UPGRADE"
-                isActive={action === "upgrade"}
-                onClick={() => {
-                  setAction("upgrade");
-                  setShowLine(false);
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                name="TRANSPORT"
-                isActive={action === "transport"}
-                onClick={() => {
-                  setAction("transport");
-                  setShowLine(true, position.x, position.y, "transport");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "repair"}
-                name="REPAIR"
-                onClick={() => {
-                  setAction("repair");
-                  setShowLine(false);
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "scrap"}
-                name="SCRAP"
-                onClick={() => {
-                  setAction("scrap");
-                  setShowLine(false);
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "move"}
-                name="MOVE"
-                onClick={() => {
-                  setAction("move");
-                  setShowLine(false);
-                  sounds["click"].play();
-                }}
-              />
-            </S.Row>
-          )}
+          {ownedBy === connectedAddress.get() &&
+            !destinationDetails &&
+            !isDestinationSelected &&
+            !moveStationDetails?.selected && (
+              <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+                <SelectButton
+                  name="UPGRADE"
+                  isActive={action === "upgrade"}
+                  onClick={() => {
+                    setAction("upgrade");
+                    setShowLine(false);
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  name="TRANSPORT"
+                  isActive={action === "transport"}
+                  onClick={() => {
+                    setAction("transport");
+                    setShowLine(true, position.x, position.y, "transport");
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "repair"}
+                  name="REPAIR"
+                  onClick={() => {
+                    setAction("repair");
+                    setShowLine(false);
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "scrap"}
+                  name="SCRAP"
+                  onClick={() => {
+                    setAction("scrap");
+                    setShowLine(false);
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "move"}
+                  name="MOVE"
+                  onClick={() => {
+                    setAction("move");
+                    setShowLine(true, position.x, position.y, "move");
+                    sounds["click"].play();
+                  }}
+                />
+              </S.Row>
+            )}
         </div>
       );
     }

@@ -1,5 +1,5 @@
 import { defineComponent, Type, World } from "@latticexyz/recs";
-import { defineBoolComponent } from "@latticexyz/std-client";
+import { defineBoolComponent, defineCoordComponent } from "@latticexyz/std-client";
 
 export const Progress = (world: World) => {
   return defineBoolComponent(world, { id: "progress" });
@@ -46,6 +46,17 @@ export const ShowDestinationDetails = (world: World) => {
 export const ShowBuyModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowBuyModal" });
 };
+export const moveStation = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      selected: Type.Boolean,
+      x: Type.OptionalNumber,
+      y: Type.OptionalNumber,
+    },
+    { id: "moveStation" }
+  );
+};
 
 export const ShowUpgradeModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowUpgradeModal" });
@@ -73,6 +84,7 @@ export const ShowAnimation = (world: World) => {
       destinationX: Type.OptionalNumber,
       faction: Type.OptionalNumber,
       type: Type.OptionalString,
+      frame: Type.OptionalString,
     },
     { id: "ShowAnimation" }
   );
