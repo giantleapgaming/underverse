@@ -135,7 +135,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             destinationY,
                             sourceX,
                             sourceY,
-                            type: "harvest",
+                            type: "transport",
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });

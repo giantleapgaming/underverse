@@ -209,11 +209,7 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   const sellSystem = async (godownEntity: EntityID, kgs: number) => {
-    try {
-      await systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs);
-    } catch (e) {
-      console.log({ e });
-    }
+    return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs);
   };
 
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {

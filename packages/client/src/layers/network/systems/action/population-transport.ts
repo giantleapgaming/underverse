@@ -4,7 +4,7 @@ import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { NetworkLayer } from "../../types";
 
-export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
+export function populationTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowAnimation },
@@ -29,15 +29,15 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
       typeof destinationX === "number" &&
       typeof destinationY === "number" &&
       typeof amount === "number" &&
-      type === "harvest"
+      type === "residential"
     ) {
-      const object = objectPool.get("harvest", "Sprite");
+      const object = objectPool.get("population", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (180 / Math.PI) + 90;
       object.setComponent({
         id: "transport-harvest",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `transport-${amount}-product.png`);
+          gameObject.setTexture(missileSprite.assetKey, `transport-h-${amount}-product.png`);
           gameObject.setPosition(sourceX + 32, sourceY + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
@@ -55,7 +55,7 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             duration: 5_000,
             onComplete: () => {
-              objectPool.remove("harvest");
+              objectPool.remove("population");
             },
           });
         },

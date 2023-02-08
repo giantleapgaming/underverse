@@ -91,7 +91,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           factionObject.setComponent({
             id: `harvester-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `faction-attack-${+faction}.png`);
+              gameObject.setTexture(harvester.assetKey, `faction-miner-${+faction}.png`);
               gameObject.setPosition(x + 36, y + 15);
               gameObject.setDepth(2);
             },

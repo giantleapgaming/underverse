@@ -7,8 +7,8 @@ import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
+import { Sell } from "../action-system/sell";
 import { Upgrade } from "../action-system/upgrade";
-import { Weapon } from "../action-system/weapon";
 import { SelectButton } from "./Button";
 
 export const GodownDetails = ({ layers }: { layers: Layers }) => {
@@ -23,7 +23,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem },
+      api: { upgradeSystem, sellSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -78,12 +78,12 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       upgradeSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("");
                           sounds["confirm"].play();
                           await upgradeSystem(world.entities[selectedEntity]);
                           showProgress();
                         } catch (e) {
-                          setAction("upgrade");
+                          setAction("");
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}
@@ -96,12 +96,12 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       repairCost={repairPrice(position.x, position.y, level, defence)}
                       repairSystem={async () => {
                         try {
-                          setAction("attack");
+                          setAction("");
                           sounds["confirm"].play();
                           await repairSystem(world.entities[selectedEntity]);
                           showProgress();
                         } catch (e) {
-                          setAction("repair");
+                          setAction("");
                           console.log({ error: e, system: "Repair Attack", details: selectedEntity });
                         }
                       }}
@@ -112,13 +112,32 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       scrapCost={scrapPrice(position.x, position.y, level, defence, balance)}
                       scrapSystem={async () => {
                         try {
-                          setAction("scrap");
+                          setAction("");
                           sounds["confirm"].play();
                           await scrapeSystem(world.entities[selectedEntity]);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
-                          setAction("scrap");
+                          setAction("");
+                          console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                  {action === "sell" && (
+                    <Sell
+                      amount={balance}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                      sell={async (amount: number) => {
+                        try {
+                          setAction("");
+                          sounds["confirm"].play();
+                          await sellSystem(world.entities[selectedEntity], amount);
+                          showProgress();
+                        } catch (e) {
+                          setAction("");
                           console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
                         }
                       }}
@@ -169,7 +188,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                 sounds["click"].play();
               }}
             />
-
+            <SelectButton
+              name="SELL"
+              isActive={action === "sell"}
+              onClick={() => {
+                setAction("sell");
+                sounds["click"].play();
+              }}
+            />
             <SelectButton
               isActive={action === "repair"}
               name="REPAIR"
