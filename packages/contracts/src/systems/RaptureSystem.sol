@@ -16,7 +16,7 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 //Importing Entity Type and Population
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createPerson } from "../utils.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -149,6 +149,12 @@ contract RaptureSystem is System {
       destinationGodownEntity,
       destinationPopulation + peopleTransported
     );
+
+    //Create new person entities on the destination station once rapture occurs
+
+    for (uint256 i = 0; i < peopleTransported; i++) {
+      createPerson(world, components, destinationGodownPosition.x, destinationGodownPosition.y);
+    }
   }
 
   function executeTyped(

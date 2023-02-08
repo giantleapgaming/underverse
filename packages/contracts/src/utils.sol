@@ -12,17 +12,17 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair } from "./constants.sol";
+import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair, personType } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "./components/FuelComponent.sol";
 
-function getLastUpdatedTimeOfEntity(LastUpdatedTimeComponent lastUpdatedTimeComponent, uint256 lastUpdatedTimeEntity)
-  view
-  returns (uint256)
-{
+function getLastUpdatedTimeOfEntity(
+  LastUpdatedTimeComponent lastUpdatedTimeComponent,
+  uint256 lastUpdatedTimeEntity
+) view returns (uint256) {
   bytes memory currentEntityLastUpdatedTimeBytes = lastUpdatedTimeComponent.getRawValue(lastUpdatedTimeEntity);
   return currentEntityLastUpdatedTimeBytes.length == 0 ? 0 : abi.decode(currentEntityLastUpdatedTimeBytes, (uint256));
 }
@@ -43,17 +43,17 @@ function getEntityLevel(LevelComponent levelComponent, uint256 entity) view retu
 }
 
 // Uses distance formula to calculate distance in coordinate geometry
-function getDistanceBetweenCoordinatesWithMultiplier(Coord memory coordinate1, Coord memory coordinate2)
-  pure
-  returns (uint256)
-{
+function getDistanceBetweenCoordinatesWithMultiplier(
+  Coord memory coordinate1,
+  Coord memory coordinate2
+) pure returns (uint256) {
   int256 x1 = int256(coordinate1.x);
   int256 x2 = int256(coordinate2.x);
   int256 y1 = int256(coordinate1.y);
   int256 y2 = int256(coordinate2.y);
   int256 diff1 = x2 - x1;
   int256 diff2 = y2 - y1;
-  uint256 addSquare = uint256(((diff1**2) + (diff2**2))) * MULTIPLIER;
+  uint256 addSquare = uint256(((diff1 ** 2) + (diff2 ** 2))) * MULTIPLIER;
   uint256 distance = Math.sqrt(addSquare); // Multiplier used to preserve decimals
   return distance;
 }
@@ -75,17 +75,13 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 }
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
-  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x)**2) + (int256(y)**2));
+  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
   uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
   uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
   return godownCreationCost;
 }
 
-function getCargoSellingPrice(
-  int32 x,
-  int32 y,
-  uint256 kgs
-) pure returns (uint256) {
+function getCargoSellingPrice(int32 x, int32 y, uint256 kgs) pure returns (uint256) {
   uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
     uint256((int256(x) * int256(x)) + (int256(y) * int256(y)));
   uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
@@ -97,16 +93,12 @@ function getCargoSellingPrice(
 function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns (uint256) {
   uint256 totalCost;
   for (uint256 i = currentLevel; i > 1; i--) {
-    totalCost += (i**2) * 1000 * MULTIPLIER;
+    totalCost += (i ** 2) * 1000 * MULTIPLIER;
   }
   return totalCost;
 }
 
-function checkIntersections(
-  Coord memory a,
-  Coord memory b,
-  Coord[] memory circles
-) pure returns (Coord[] memory) {
+function checkIntersections(Coord memory a, Coord memory b, Coord[] memory circles) pure returns (Coord[] memory) {
   // An array to store the intersecting circles
   Coord[] memory intersections = new Coord[](circles.length);
   // A variable to keep track of the number of intersections
@@ -224,14 +216,7 @@ function isThereAnyObstacleOnTheWay(
   return false;
 }
 
-function createAsteroids(
-  IWorld world,
-  IUint256Component components,
-  int32 x,
-  int32 y,
-  uint256 balance,
-  uint256 fuel
-) {
+function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
   uint256 ent = world.getUniqueEntityId();
   PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
   BalanceComponent(getAddressById(components, BalanceComponentID)).set(ent, balance);
@@ -372,4 +357,12 @@ function getFactionRepairCosts(Faction faction) pure returns (uint256) {
 function getPlayerFuel(FuelComponent fuelComponent, uint256 entity) view returns (uint256) {
   bytes memory currentFuelBytes = fuelComponent.getRawValue(entity);
   return currentFuelBytes.length == 0 ? 0 : abi.decode(currentFuelBytes, (uint256));
+}
+
+function createPerson(IWorld world, IUint256Component components, int32 x, int32 y) {
+  uint256 personID = world.getUniqueEntityId();
+  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(personID, personType);
+  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(personID, block.timestamp);
+  PositionComponent(getAddressById(components, PositionComponentID)).set(personID, Coord({ x: x, y: y }));
+  LevelComponent(getAddressById(components, LevelComponentID)).set(personID, 1);
 }

@@ -171,7 +171,10 @@
         "CashComponent",
         "LastUpdatedTimeComponent",
         "PopulationComponent",
-        "FuelComponent"
+        "FuelComponent",
+        "EntityTypeComponent",
+        "PositionComponent",
+        "LevelComponent"
       ]
     },
     {
