@@ -8,12 +8,12 @@ import {
   Has,
   Not,
 } from "@latticexyz/recs";
-import { NetworkLayer } from "../../network";
-import { PhaserLayer } from "../../phaser";
-import { Sprites } from "../../phaser/constants";
+import { NetworkLayer } from "../..";
+import { PhaserLayer } from "../../../phaser";
+import { Sprites } from "../../../phaser/constants";
 const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 
-export function showUserStations(network: NetworkLayer, phaser: PhaserLayer) {
+export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowCircle },

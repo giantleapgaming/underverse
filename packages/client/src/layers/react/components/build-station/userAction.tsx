@@ -1,23 +1,19 @@
 import styled from "styled-components";
 import { EntityID, getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
-import { useState } from "react";
-import { factionData } from "../../../../utils/constants";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const UserAction = ({ layers }: { layers: Layers }) => {
-  const [showDetails, setShowDetails] = useState(false);
-
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Position, OwnedBy },
+      components: { Faction, Position, OwnedBy },
       network: { connectedAddress },
     },
     phaser: {
-      localIds: { showCircleIndex },
-      localApi: { shouldShowCircle },
-      components: { ShowCircle },
+      localIds: { stationDetailsEntityIndex },
+      localApi: { setShowHighLight },
+      components: { ShowHighLight },
       scenes: {
         Main: {
           camera,
@@ -29,11 +25,11 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
       sounds,
     },
   } = layers;
-  const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-  const allUserNameEntityId = [...getComponentEntities(Name)];
   const userEntityId = connectedAddress.get() as EntityID;
   const factionIndex = world.entities.indexOf(userEntityId);
   const faction = getComponentValue(Faction, factionIndex)?.value;
+  const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
+
   if (userEntityId) {
     return (
       <S.Container>
@@ -46,7 +42,9 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
             height={"20px"}
             onClick={() => {
               sounds["click"].play();
-              setShowDetails(!showDetails);
+              console.log("hello");
+
+              setShowHighLight(!showDetails);
             }}
           />
           <img
@@ -69,56 +67,6 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
             }}
           />
         </div>
-        {showDetails && (
-          <S.DetailsContainer>
-            <img src="/ui/CogButtonMenu.png" />
-            <S.HighLight>HIGHLIGHT</S.HighLight>
-            <S.List>
-              {allUserNameEntityId.map((nameEntity) => {
-                const name = getComponentValue(Name, nameEntity);
-                const cash = getComponentValue(Cash, nameEntity)?.value;
-                const owner = world.entities[nameEntity] === userEntityId;
-                const indexOf = selectedEntities.indexOf(nameEntity);
-                const exists = selectedEntities.some((entity) => entity === nameEntity);
-                const factionNumber = getComponentValue(Faction, nameEntity)?.value;
-                const faction = factionData.find((f) => f.factionNumber === (factionNumber && +factionNumber));
-                return (
-                  <S.Player key={nameEntity}>
-                    <S.CheckBox
-                      type="checkbox"
-                      className={exists ? "checked" : ""}
-                      checked={exists}
-                      onChange={() => {
-                        if (!exists) {
-                          const list = [...selectedEntities, nameEntity];
-                          shouldShowCircle(list);
-                        } else {
-                          const newList = [...selectedEntities];
-                          newList.splice(indexOf, 1);
-                          shouldShowCircle(newList);
-                        }
-                      }}
-                    ></S.CheckBox>
-                    <S.PLayerName style={{ color: faction?.color }}>
-                      {owner ? "Owned" : name?.value}
-                      <br />
-                      <S.Cash style={{ color: "white" }}>
-                        {cash &&
-                          new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          }).format(+cash / 1_000_000)}
-                        <span style={{ color: faction?.color }}>({faction?.name})</span>
-                      </S.Cash>
-                    </S.PLayerName>
-                  </S.Player>
-                );
-              })}
-            </S.List>
-          </S.DetailsContainer>
-        )}
       </S.Container>
     );
   } else {

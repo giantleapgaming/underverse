@@ -25,7 +25,7 @@ export const registerDetails = () => {
           world,
         },
         phaser: {
-          components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
+          components: { ShowStationDetails, ShowDestinationDetails, MoveStation, ShowHighLight },
         },
       } = layers;
       return merge(
@@ -33,7 +33,8 @@ export const registerDetails = () => {
         Cash.update$,
         ShowStationDetails.update$,
         ShowDestinationDetails.update$,
-        MoveStation.update$
+        MoveStation.update$,
+        ShowHighLight.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map((address) => {

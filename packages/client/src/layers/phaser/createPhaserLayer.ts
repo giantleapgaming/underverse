@@ -17,6 +17,7 @@ import {
   ShowDestinationDetails,
   ShowAnimation,
   moveStation,
+  ShowHighLight,
 } from "../local/components";
 
 import {
@@ -45,6 +46,7 @@ import { harvestTransport } from "../network/systems/action/harvest-transport";
 import { populationTransport } from "../network/systems/action/population-transport";
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
+import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -82,6 +84,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowLine: ShowLine(world),
     ShowAnimation: ShowAnimation(world),
     MoveStation: moveStation(world),
+    ShowHighLight: ShowHighLight(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -159,6 +162,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const setMoveStation = (selected: boolean, x?: number, y?: number) => {
     setComponent(components.MoveStation, stationDetailsEntityIndex, { x, y, selected });
+  };
+  const setShowHighLight = (selected: boolean) => {
+    setComponent(components.ShowHighLight, stationDetailsEntityIndex, { value: selected });
   };
 
   const hideProgress = () => {
@@ -240,6 +246,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setShowStationDetails,
       setDestinationDetails,
       setShowAnimation,
+      setShowHighLight,
     },
     sounds,
   };
@@ -276,6 +283,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   populationTransport(network, context);
   godownTransport(network, context);
   move(network, context);
-
+  highLightUserStations(network, context);
   return context;
 }

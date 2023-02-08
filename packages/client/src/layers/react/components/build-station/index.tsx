@@ -23,10 +23,10 @@ export const registerBuild = () => {
           world,
         },
         phaser: {
-          components: { Build, ShowStationDetails },
+          components: { Build, ShowStationDetails, ShowHighLight },
         },
       } = layers;
-      return merge(Name.update$, Cash.update$, Build.update$, ShowStationDetails.update$).pipe(
+      return merge(Name.update$, Cash.update$, Build.update$, ShowStationDetails.update$, ShowHighLight.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;

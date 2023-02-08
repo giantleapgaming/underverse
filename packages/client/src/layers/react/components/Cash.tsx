@@ -4,6 +4,7 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import { convertPrice } from "../../react/utils/priceConverter";
+import { Highlight } from "./details-station/highlight";
 
 const Cash = ({ layers }: { layers: Layers }) => {
   const {
@@ -18,13 +19,24 @@ const Cash = ({ layers }: { layers: Layers }) => {
   const users = [...getComponentEntities(Name)];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", justifyContent: "end", alignItems: "end" }}>
-      <p>{cash && convertPrice(+cash / 10_00_000)}</p>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
-        <img src="/build-stations/users.png" />
-        <p>100/{users.length}</p>
+    <>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "end",
+          alignItems: "end",
+          paddingLeft: "30px",
+        }}
+      >
+        <p>{cash && convertPrice(+cash / 10_00_000)}</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
+          <img src="/build-stations/users.png" />
+          <p>100/{users.length}</p>
+        </div>
       </div>
-    </div>
+      <Highlight layers={layers} />
+    </>
   );
 };
 
@@ -32,10 +44,10 @@ export const registerCashDetails = () => {
   registerUIComponent(
     "CashDetails",
     {
-      colStart: 11,
+      colStart: 9,
       colEnd: 13,
       rowStart: 1,
-      rowEnd: 2,
+      rowEnd: 12,
     },
     (layers) => {
       const {
@@ -44,8 +56,11 @@ export const registerCashDetails = () => {
           components: { Name },
           world,
         },
+        phaser: {
+          components: { ShowHighLight, ShowCircle },
+        },
       } = layers;
-      return merge(computedToStream(connectedAddress), Name.update$).pipe(
+      return merge(computedToStream(connectedAddress), Name.update$, ShowHighLight.update$, ShowCircle.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
