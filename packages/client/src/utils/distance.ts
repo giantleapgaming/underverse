@@ -110,10 +110,13 @@ export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
   return points;
 }
 
-export function getObstacleList(blockingStations: any[], network: NetworkLayer) {
+export function getObstacleList(arrayOfPointsOnThePath: any[], network: NetworkLayer) {
   const obstaclePoints: any[] = [];
-  for (let i = 0; i < blockingStations.length - 1; i += 1) {
-    const entityOnThatPoint = network?.utils?.getEntityIndexAtPosition(blockingStations[i].x, blockingStations[i].y);
+  for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {
+    const entityOnThatPoint = network?.utils?.getEntityIndexAtPosition(
+      arrayOfPointsOnThePath[i].x,
+      arrayOfPointsOnThePath[i].y
+    );
     const getLevel = getComponentValue(network?.components?.Level, entityOnThatPoint)?.value as EntityID;
     if (getLevel > 0) {
       obstaclePoints.push(entityOnThatPoint);

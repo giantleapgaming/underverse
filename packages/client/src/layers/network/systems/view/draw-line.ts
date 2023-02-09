@@ -3,13 +3,20 @@ import { defineComponentSystem, getComponentValue, getComponentValueStrict } fro
 import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
+import {
+  intersectingCircles,
+  enclosedPoints,
+  getCoordinatesArray,
+  segmentPoints,
+  getObstacleList,
+} from "../../../../utils/distance";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation },
     localIds: { stationDetailsEntityIndex },
-    localApi: { setShowLine, setDestinationDetails, setMoveStation },
+    localApi: { setShowLine, setDestinationDetails, setMoveStation, setObstacleHighlight },
     scenes: {
       Main: {
         maps: {
@@ -42,6 +49,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     }
     if (lineDetails && lineDetails.showLine && selectedEntity && !destination && lineDetails.type !== "move") {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      const sourcePosition = getComponentValueStrict(Position, selectedEntity);
+      const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
+      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+      console.log("obstacleEntityIndexList", obstacleEntityIndexList, setObstacleHighlight);
+      // setObstacleHighlight(obstacleEntityIndexList);
       setShowLine(true, x, y, lineDetails.type);
     }
   });
@@ -155,6 +167,20 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
       graphics.lineTo(x2, y2);
       graphics.strokePath();
+
+      // // console.log("qweqwe");
+      // console.log("MY POINTS", position.x, position.y, lineDetails.x, lineDetails.y);
+
+      // const arrayOfPointsOnThePath = segmentPoints(
+      //   //sourcePosition.x, sourcePosition.y, destitution.x, destitution.y
+      //   position.x,
+      //   position.y,
+      //   lineDetails.x,
+      //   lineDetails.y
+      // );
+      // console.log("The arrayOfPointsOnThePath", arrayOfPointsOnThePath);
+      // const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+      // console.log("The obstacleEntityIndexList", obstacleEntityIndexList);
     }
   });
 }

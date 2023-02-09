@@ -129,6 +129,16 @@ export const ShowCircle = (world: World) => {
   );
 };
 
+export const ObstacleHighlight = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      selectedEntities: Type.NumberArray,
+    },
+    { id: "ObstacleHighlight" }
+  );
+};
+
 export const ShowWeaponModal = (world: World) => {
   return defineComponent(
     world,
