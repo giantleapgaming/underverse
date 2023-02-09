@@ -1,33 +1,30 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineRxSystem, EntityIndex, getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
+import { factionData } from "../../../utils/constants";
+import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { Animations, Sprites } from "../../phaser/constants";
-import { playersColor } from "./system.Buy";
+import { colorString } from "./utils";
 
 export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
     network: { connectedAddress },
-    components: { OwnedBy, Position, Name, Faction },
+    components: { OwnedBy, Position, Name, Faction, EntityType },
   } = network;
   const {
-    localApi: { setLogs },
-    sounds,
+    localApi: { setLogs, setShowAnimation },
     scenes: {
       Main: {
-        objectPool,
-        config,
-        phaserScene,
         maps: {
-          Main: { tileHeight, tileWidth },
+          Main: { tileWidth, tileHeight },
         },
       },
     },
   } = phaser;
-  defineRxSystem(world, systemCallStreams["system.Attack"], ({ args, updates }) => {
+  defineRxSystem(world, systemCallStreams["system.Attack"], ({ args }) => {
     const { destinationGodownEntity, sourceGodownEntity, amount } = args as {
       destinationGodownEntity: BigNumber;
       sourceGodownEntity: BigNumber;
@@ -45,85 +42,68 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
     const srcOwnedBy = getComponentValue(OwnedBy, sourceGodownEntityIndex)?.value;
     const destOwnedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
 
+    const srcEntityType = getComponentValue(EntityType, sourceGodownEntityIndex)?.value;
+    const destEntityType = getComponentValue(EntityType, destinationGodownEntityIndex)?.value;
+
     const srcOwnedByIndex = world.entities.findIndex((entity) => entity === srcOwnedBy) as EntityIndex;
     const destOwnedByIndex = world.entities.findIndex((entity) => entity === destOwnedBy) as EntityIndex;
+
+    const factionSrcValue = getComponentValue(Faction, srcOwnedByIndex)?.value;
+    const factionDestValue = getComponentValue(Faction, destOwnedByIndex)?.value;
+
     const srcName = getComponentValue(Name, srcOwnedByIndex)?.value;
     const destName = getComponentValue(Name, destOwnedByIndex)?.value;
-    const allUserNameEntityId = [...getComponentEntities(Name)];
-    const srcIndexOwnedBy = allUserNameEntityId.indexOf(srcOwnedByIndex) as EntityIndex;
-    const destIndexOwnedBy = allUserNameEntityId.indexOf(destOwnedByIndex) as EntityIndex;
-    setLogs(
-      `<p><span style="color:${playersColor[srcIndexOwnedBy]};font-weight:bold">${srcName}</span> station at ${
-        srcPosition?.x
-      },${srcPosition?.y} attacked <span style="color:${
-        playersColor[destIndexOwnedBy]
-      };font-weight:bold">${destName}</span> station at ${destPosition?.x},${destPosition?.y} using  ${BigNumber.from(
-        amount
-      )} missiles</p>`
-    );
-    const address = connectedAddress.get();
-    if (address !== srcOwnedBy && destPosition && srcPosition) {
-      const source = tileCoordToPixelCoord({ x: srcPosition.x, y: srcPosition.y }, tileWidth, tileHeight);
-      const distraction = tileCoordToPixelCoord({ x: destPosition.x, y: destPosition.y }, tileWidth, tileHeight);
-      const object = objectPool.get("missile", "Sprite");
-      const missileSprite = config.sprites[Sprites.Missile2];
-      const repeatLoop = +BigNumber.from(amount) - 1;
-      const factionIndex = world.entities.indexOf(srcOwnedBy);
-      const faction = getComponentValue(Faction, factionIndex)?.value;
-      object.setComponent({
-        id: "missileRelease",
-        once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
-          gameObject.setPosition(source.x + 32, source.y + 32);
-          gameObject.setOrigin(0.5, 0.5);
-          const angle = Math.atan2(distraction.y - source.y, distraction.x - source.x) * (180 / Math.PI);
-          gameObject.setAngle(angle);
-          phaserScene.add.tween({
-            targets: gameObject,
-            x: {
-              from: gameObject.x,
-              to: distraction.x + 32,
-            },
-            y: {
-              from: gameObject.y,
-              to: distraction.y + 32,
-            },
-            repeat: repeatLoop,
-            yoyo: false,
-            duration: 2_000,
-            onRepeat: () => {
-              sounds["missile-launch"].play();
-              const blastObject = objectPool.get("explosion", "Sprite");
-              blastObject.setComponent({
-                id: "explosionRelease",
-                once: (explosionObject) => {
-                  explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
-                  explosionObject.setOrigin(0.5, 0.5);
-                  explosionObject.play(Animations.Explosion);
-                  sounds["explosion"].play();
-                },
-              });
-            },
-            onComplete: () => {
-              const blastObject = objectPool.get("explosion-end", "Sprite");
-              blastObject.setComponent({
-                id: "explosionRelease",
-                once: (explosionObject) => {
-                  explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
-                  explosionObject.setOrigin(0.5, 0.5);
-                  explosionObject.play(Animations.Explosion);
-                  sounds["explosion"].play();
-                  explosionObject.on(`animationcomplete-${Animations.Explosion}`, () => {
-                    objectPool.remove("explosion");
-                    objectPool.remove("explosion-end");
-                  });
-                },
-              });
-              objectPool.remove("missile");
-            },
-          });
-        },
-      });
+    if (
+      factionSrcValue &&
+      factionDestValue &&
+      destEntityType &&
+      srcEntityType &&
+      destEntityType &&
+      typeof +factionSrcValue === "number" &&
+      typeof +factionDestValue === "number" &&
+      typeof +srcEntityType === "number" &&
+      typeof +destEntityType === "number" &&
+      srcPosition &&
+      destPosition
+    ) {
+      const srccolor = factionData[+factionSrcValue - 1]?.color;
+      const destcolor = factionData[+factionDestValue - 1]?.color;
+      const srcStationName = numberMapping[+srcEntityType].name;
+      const destStationName = numberMapping[+destEntityType].name;
+      setLogs(
+        `<p>${colorString({ name: srcName, color: srccolor })} ${colorString({
+          name: srcStationName,
+          color: srccolor,
+        })} station at ${srcPosition?.x},${srcPosition?.y} attacked ${colorString({
+          name: destName,
+          color: destcolor,
+        })} ${colorString({ name: destStationName, color: destcolor })} station at ${destPosition?.x},${
+          destPosition?.y
+        } using ${colorString({ name: `${+amount}`, color: srccolor })}  missiles</p>`
+      );
+      const address = connectedAddress.get();
+      if (address !== srcOwnedBy) {
+        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+          { x: srcPosition.x, y: srcPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+          { x: destPosition.x, y: destPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        setShowAnimation({
+          showAnimation: true,
+          amount: +amount,
+          destinationX,
+          destinationY,
+          sourceX,
+          sourceY,
+          faction: +factionSrcValue,
+          type: "attack",
+        });
+      }
     }
   });
 }

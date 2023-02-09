@@ -29,9 +29,10 @@ export function systemBuyWeapon(network: NetworkLayer, phaser: PhaserLayer) {
       const color = factionData[+faction - 1]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} bought ${colorString({ name: `${+buyQuantity}`, color })} missiles at (${
-          position?.x
-        },${position?.y}) ${colorString({ name: stationName, color })} station</p>`
+        `<p>${colorString({ name, color })} bought ${colorString({
+          name: `${+buyQuantity}`,
+          color,
+        })} missiles at ${colorString({ name: stationName, color })} station (${position?.x}, ${position?.y})</p>`
       );
     }
   });
