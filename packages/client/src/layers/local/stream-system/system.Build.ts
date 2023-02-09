@@ -3,7 +3,8 @@ import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { factionData } from "../../../utils/constants";
-import { Mapping, numberMapping } from "../../../utils/mapping";
+import { numberMapping } from "../../../utils/mapping";
+import { colorString } from "./utils";
 export function systemBuild(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -24,10 +25,11 @@ export function systemBuild(network: NetworkLayer, phaser: PhaserLayer) {
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     if (faction && typeof +faction === "number") {
       const color = factionData[+faction - 1]?.color;
+      const stationName = numberMapping[+entity_type].name;
       setLogs(
-        `<p><span style="color:${color};font-weight:bold">${name}</span> built <span style="color:${color};font-weight:bold">${
-          numberMapping[+entity_type].name
-        }</span> station at (${position?.x},${position?.y}) </p>`
+        `<p>${colorString({ name, color })} built ${colorString({ name: stationName, color })} station at (${
+          position?.x
+        },${position?.y}) </p>`
       );
     }
   });
