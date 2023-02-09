@@ -1,23 +1,20 @@
-import { defineRxSystem, EntityIndex, getComponentEntities } from "@latticexyz/recs";
+import { defineRxSystem } from "@latticexyz/recs";
+import { BigNumber } from "ethers";
+import { factionData } from "../../../utils/constants";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import { playersColor } from "./system.Buy";
+import { colorString } from "./utils";
 
 export function systemInit(network: NetworkLayer, phaser: PhaserLayer) {
-  const {
-    world,
-    systemCallStreams,
-    components: { Name },
-    network: { connectedAddress },
-  } = network;
+  const { world, systemCallStreams } = network;
   const {
     localApi: { setLogs },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Init"], ({ args }) => {
-    const { name } = args as { name: string };
-    const ownedByIndex = world.entities.findIndex((entity) => entity === connectedAddress) as EntityIndex;
-    const allUserNameEntityId = [...getComponentEntities(Name)];
-    const userIndex = allUserNameEntityId.indexOf(ownedByIndex) as EntityIndex;
-    setLogs(`<p><span style="color:${playersColor[userIndex]};font-weight:bold">${name}</span> joined the game</p>`);
+    const { name, faction } = args as { name: string; faction: BigNumber };
+    console.log(args);
+    const color = factionData[+faction - 1]?.color;
+    const factionName = factionData[+faction - 1]?.name;
+    setLogs(`<p>${colorString({ name, color })} joined the game from ${colorString({ name: factionName, color })}</p>`);
   });
 }
