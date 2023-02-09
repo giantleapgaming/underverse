@@ -86,7 +86,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         factionObject.setComponent({
           id: `godown-faction-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(godown.assetKey, `faction-attack-${+faction}.png`);
+            gameObject.setTexture(godown.assetKey, `faction-${+faction}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setDepth(3);
             gameObject.setOrigin(0.5, 0.5);

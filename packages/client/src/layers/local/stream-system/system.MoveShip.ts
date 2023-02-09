@@ -10,8 +10,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Name, Faction, EntityType, Level },
-    utils: { getEntityIndexAtPosition },
+    components: { OwnedBy, Name, Faction, EntityType, Level, Position },
     network: { connectedAddress },
   } = network;
   const {
@@ -25,9 +24,17 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.MoveShip"], ({ args }) => {
-    const { x, y, sourceEntity } = args as { x: number; y: number; sourceEntity: BigNumber };
-    console.log(args);
+    const { x, y, sourceEntity, srcX, srcY } = args as {
+      x: number;
+      y: number;
+      sourceEntity: BigNumber;
+      srcX: number;
+      srcY: number;
+    };
+    console.log({ args });
     const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
+    const position = getComponentValue(Position, sourceEntityIndex);
+    console.log({ position });
     const ownedBy = getComponentValue(OwnedBy, sourceEntityIndex)?.value;
     const level = getComponentValue(Level, sourceEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
@@ -54,7 +61,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       const address = connectedAddress.get();
       if (ownedBy !== `${address}`) {
         const { x: destinationX, y: destinationY } = tileCoordToPixelCoord({ x: x, y: y }, tileWidth, tileHeight);
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord({ x: 0, y: 0 }, tileWidth, tileHeight);
+        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord({ x: srcX, y: srcY }, tileWidth, tileHeight);
         setShowAnimation({
           showAnimation: true,
           destinationX,
