@@ -48,7 +48,7 @@ import { populationTransport } from "../network/systems/action/population-transp
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
-import { systemBuild, systemInit, systemUpgrade } from "../local/stream-system";
+import { systemBuild, systemBuyWeapon, systemInit, systemUpgrade } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 
 /**
@@ -298,5 +298,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemBuild(network, context);
   systemInit(network, context);
   systemUpgrade(network, context);
+  systemBuyWeapon(network, context);
   return context;
 }
