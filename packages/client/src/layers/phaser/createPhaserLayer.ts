@@ -63,6 +63,7 @@ import {
 } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 import { systemTransport } from "../local/stream-system/system.Transport";
+import { displayOrbits } from "../network/systems/view/orbits";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -294,6 +295,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayHarvesterSystem(network, context);
   displayGodownSystem(network, context);
   displayShipyardSystem(network, context);
+  displayOrbits(network, context);
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);
