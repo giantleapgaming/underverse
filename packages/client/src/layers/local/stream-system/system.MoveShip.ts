@@ -44,6 +44,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     ) {
       const color = factionData[+faction - 1]?.color;
       const stationName = numberMapping[+entityType].name;
+      const frameName = numberMapping[+entityType].frameName;
       setLogs(
         `<p>${colorString({ name, color })} moved ${colorString({
           name: stationName,
@@ -61,7 +62,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
           sourceX,
           sourceY,
           type: "move",
-          frame: `attack-${+faction}-${+level}.png`,
+          frame: `${frameName}-${+faction}-${+level}.png`,
         });
       }
     }
