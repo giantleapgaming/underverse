@@ -43,6 +43,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       obstacleHighlight.forEach((entity) => {
         objectPool.remove(`obstetrical-circle-${entity}`);
       });
+      const sourcePosition = getComponentValueStrict(Position, selectedEntity);
+      const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
+      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+      setObstacleHighlight(obstacleEntityIndexList);
       setShowLine(true, x, y, lineDetails.type);
       return;
     }
