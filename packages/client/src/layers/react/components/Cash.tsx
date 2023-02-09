@@ -26,7 +26,9 @@ const Cash = ({ layers }: { layers: Layers }) => {
           flexDirection: "column",
           justifyContent: "end",
           alignItems: "end",
-          paddingLeft: "30px",
+          paddingRight: "30px",
+          paddingTop: "30px",
+          gap: "10px",
         }}
       >
         <p>{cash && convertPrice(+cash / 10_00_000)}</p>
