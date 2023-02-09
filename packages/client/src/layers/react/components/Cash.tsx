@@ -53,14 +53,20 @@ export const registerCashDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name },
+          components: { Name, Cash },
           world,
         },
         phaser: {
           components: { ShowHighLight, ShowCircle },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), Name.update$, ShowHighLight.update$, ShowCircle.update$).pipe(
+      return merge(
+        computedToStream(connectedAddress),
+        Name.update$,
+        ShowHighLight.update$,
+        ShowCircle.update$,
+        Cash.update$
+      ).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const entities = world.entities;
