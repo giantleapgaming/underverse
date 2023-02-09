@@ -52,12 +52,16 @@ import {
   systemAttack,
   systemBuild,
   systemBuyWeapon,
+  systemHarvest,
   systemInit,
+  systemRapture,
   systemRepaired,
   systemScraped,
+  systemSell,
   systemUpgrade,
 } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
+import { systemTransport } from "../local/stream-system/system.Transport";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -310,6 +314,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemAttack(network, context);
   systemRepaired(network, context);
   systemScraped(network, context);
+  systemSell(network, context);
+  systemTransport(network, context);
+  systemHarvest(network, context);
+  systemRapture(network, context);
 
   return context;
 }

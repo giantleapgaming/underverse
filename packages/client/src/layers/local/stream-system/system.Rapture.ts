@@ -7,7 +7,7 @@ import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
-export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
+export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     network: { connectedAddress },
@@ -26,11 +26,11 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
-  defineRxSystem(world, systemCallStreams["system.Transport"], ({ args }) => {
-    const { destinationGodownEntity, sourceGodownEntity, kgs } = args as {
+  defineRxSystem(world, systemCallStreams["system.Rapture"], ({ args }) => {
+    const { destinationGodownEntity, sourceGodownEntity, peopleTransported } = args as {
       destinationGodownEntity: BigNumber;
       sourceGodownEntity: BigNumber;
-      kgs: BigNumber;
+      peopleTransported: BigNumber;
     };
     const destinationGodownEntityIndex = world.entities.findIndex(
       (entity) => entity === destinationGodownEntity._hex
@@ -61,12 +61,12 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
       const srcStationName = numberMapping[+destEntityType].name;
       const destStationName = numberMapping[+sourceEntityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} moved ${colorString({ name: `${+kgs}`, color })} mt from  ${colorString({
-          name: srcStationName,
+        `<p>${colorString({ name, color })} moved ${colorString({
+          name: `${+peopleTransported}`,
           color,
-        })} (${srcPosition?.x},${srcPosition?.y}) to ${colorString({ name: destStationName, color })} (${
-          destPosition?.x
-        },${destPosition?.y})</p>`
+        })} people from  ${colorString({ name: destStationName, color })} (${srcPosition?.x},${
+          srcPosition?.y
+        }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`
       );
       const address = connectedAddress.get();
       if (ownedBy !== `${address}`) {
@@ -82,12 +82,12 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
         );
         setShowAnimation({
           showAnimation: true,
-          amount: +kgs,
+          amount: +peopleTransported,
           destinationX,
           destinationY,
           sourceX,
           sourceY,
-          type: "transport",
+          type: "residential",
         });
       }
     }
