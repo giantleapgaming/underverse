@@ -3,25 +3,20 @@ import { defineComponentSystem, getComponentValue, getComponentValueStrict } fro
 import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import {
-  intersectingCircles,
-  enclosedPoints,
-  getCoordinatesArray,
-  segmentPoints,
-  getObstacleList,
-} from "../../../../utils/distance";
+import { segmentPoints, getObstacleList } from "../../../../utils/distance";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation },
-    localIds: { stationDetailsEntityIndex },
+    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight },
+    localIds: { stationDetailsEntityIndex, showCircleIndex },
     localApi: { setShowLine, setDestinationDetails, setMoveStation, setObstacleHighlight },
     scenes: {
       Main: {
         maps: {
           Main: { tileWidth, tileHeight },
         },
+        objectPool,
         phaserScene,
         input,
       },
@@ -44,6 +39,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
 
     if (lineDetails && lineDetails.showLine && selectedEntity && lineDetails.type === "move" && !moveStation) {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
+      obstacleHighlight.forEach((entity) => {
+        objectPool.remove(`obstetrical-circle-${entity}`);
+      });
       setShowLine(true, x, y, lineDetails.type);
       return;
     }
@@ -52,8 +51,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
       const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
-      console.log("obstacleEntityIndexList", obstacleEntityIndexList, setObstacleHighlight);
-      // setObstacleHighlight(obstacleEntityIndexList);
+      const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
+      obstacleHighlight.forEach((entity) => {
+        objectPool.remove(`obstetrical-circle-${entity}`);
+      });
+      setObstacleHighlight(obstacleEntityIndexList);
       setShowLine(true, x, y, lineDetails.type);
     }
   });
@@ -121,6 +123,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     }
   });
   const rightClick = input.rightClick$.subscribe(() => {
+    const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
+    obstacleHighlight.forEach((entity) => {
+      objectPool.remove(`obstetrical-circle-${entity}`);
+    });
     setDestinationDetails();
     setShowLine(false, 0, 0);
     setMoveStation(false);

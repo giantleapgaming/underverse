@@ -1,13 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineSystem,
-  EntityID,
-  getComponentEntities,
-  getComponentValue,
-  getComponentValueStrict,
-  Has,
-  Not,
-} from "@latticexyz/recs";
+import { defineSystem, EntityID, getComponentValue, Has, Not } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
@@ -44,7 +36,7 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const Sprite = stationColor[+factionNumber - 1] as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
-        const circle = objectPool.get(`circle-${entity}`, "Sprite");
+        const circle = objectPool.get(`obstetrical-circle-${entity}`, "Sprite");
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {

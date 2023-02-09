@@ -173,14 +173,6 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           <S.Row style={{ gap: "10px", marginTop: "5px" }}>
             <SelectButton
-              name="TRANSPORT"
-              isActive={action === "transport"}
-              onClick={() => {
-                setAction("transport");
-                sounds["click"].play();
-              }}
-            />
-            <SelectButton
               name="UPGRADE"
               isActive={action === "upgrade"}
               onClick={() => {
