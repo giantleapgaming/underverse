@@ -69,10 +69,6 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
           [destitution.x, destitution.y],
         ]);
 
-        const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, destitution.x, destitution.y);
-        const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
-        console.log("The obstacleEntityIndexList", obstacleEntityIndexList);
-
         for (let i = 0; i < blockingStations.length; i++) {
           const blockingStation = blockingStations[i];
           const blockingStationEntity = getEntityIndexAtPosition(blockingStation[0], blockingStation[1]);

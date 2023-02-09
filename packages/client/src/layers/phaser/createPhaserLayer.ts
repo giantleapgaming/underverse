@@ -18,6 +18,7 @@ import {
   ShowAnimation,
   moveStation,
   ShowHighLight,
+  ObstacleHighlight,
 } from "../local/components";
 
 import {
@@ -48,6 +49,7 @@ import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 import { systemBuild } from "../local/stream-system";
+import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -86,6 +88,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowAnimation: ShowAnimation(world),
     MoveStation: moveStation(world),
     ShowHighLight: ShowHighLight(world),
+    ObstacleHighlight: ObstacleHighlight(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -175,6 +178,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const shouldShowCircle = (selectedEntities: number[]) =>
     setComponent(components.ShowCircle, showCircleIndex, { selectedEntities });
 
+  const setObstacleHighlight = (selectedEntities: number[]) =>
+    setComponent(components.ObstacleHighlight, showCircleIndex, { selectedEntities });
+
   const setLogs = (string: string) => {
     const existingLogs = getComponentValue(components.Logs, modalIndex)?.logStrings ?? [];
     if (existingLogs.length >= 0) {
@@ -248,6 +254,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setDestinationDetails,
       setShowAnimation,
       setShowHighLight,
+      setObstacleHighlight,
     },
     sounds,
   };
@@ -285,6 +292,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   godownTransport(network, context);
   move(network, context);
   highLightUserStations(network, context);
+  highlightObstacles(network, context);
 
   // --- Log Action ------------------------------------------------------------------
   systemBuild(network, context);
