@@ -54,6 +54,7 @@ import {
   systemBuyWeapon,
   systemHarvest,
   systemInit,
+  systemMoveShip,
   systemRapture,
   systemRepaired,
   systemScraped,
@@ -318,6 +319,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemTransport(network, context);
   systemHarvest(network, context);
   systemRapture(network, context);
+  systemMoveShip(network, context);
 
   return context;
 }

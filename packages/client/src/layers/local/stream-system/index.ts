@@ -9,3 +9,4 @@ export { systemAttack } from "./system.Attack";
 export { systemScraped } from "./system.Scrap";
 export { systemRepaired } from "./system.Repair";
 export { systemRapture } from "./system.Rapture";
+export { systemMoveShip } from "./system.MoveShip";
