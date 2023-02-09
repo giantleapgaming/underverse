@@ -66,6 +66,8 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
         if (+defence > 0 && faction && typeof +faction === "number") {
           const progress = +defence / (+level * 100);
           const endAngle = Phaser.Math.DegToRad(360 * progress);
+          healthBarBg.clear();
+          healthBar.clear();
           healthBarBg.lineStyle(6, 0xd3d3d3, 1);
           healthBarBg.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), 360);
           healthBarBg.setAlpha(0.1);
