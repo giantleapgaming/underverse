@@ -47,6 +47,7 @@ import { populationTransport } from "../network/systems/action/population-transp
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
+import { systemBuild } from "../local/stream-system";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -284,5 +285,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   godownTransport(network, context);
   move(network, context);
   highLightUserStations(network, context);
+
+  // --- Log Action ------------------------------------------------------------------
+  systemBuild(network, context);
   return context;
 }
