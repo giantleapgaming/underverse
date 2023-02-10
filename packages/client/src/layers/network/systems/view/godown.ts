@@ -38,7 +38,7 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const health = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `godown-health-bar-bg-${entity}`)
+        .find((item) => item.id === `godown-health-bar-${entity}`)
         // @ts-ignore
         ?.clear();
       const healthBar = health ?? phaserScene.add.graphics();
@@ -102,8 +102,8 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
         } else {
           objectPool.remove(`godown-${entity}`);
           objectPool.remove(`godown-faction-${entity}`);
-          health?.clear();
-          healthBg?.clear();
+          healthBarBg.clear();
+          healthBar.clear();
         }
       }
     }

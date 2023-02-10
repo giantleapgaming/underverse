@@ -38,7 +38,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
       const health = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `residential-health-bar-bg-${entity}`)
+        .find((item) => item.id === `residential-health-bar-${entity}`)
         // @ts-ignore
         ?.clear();
       const healthBar = health ?? phaserScene.add.graphics();
@@ -111,8 +111,8 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
         } else {
           objectPool.remove(`residential-faction-${entity}`);
           objectPool.remove(`residential-${entity}`);
-          health?.clear();
-          healthBg?.clear();
+          healthBarBg.clear();
+          healthBar.clear();
         }
       }
     }

@@ -38,7 +38,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const health = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `attack-health-bar-bg-${entity}`)
+        .find((item) => item.id === `attack-health-bar-${entity}`)
         // @ts-ignore
         ?.clear();
       const healthBar = health ?? phaserScene.add.graphics();
@@ -126,8 +126,8 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           objectPool.remove(`attack-${entity}`);
           objectPool.remove(`attack-faction-${entity}`);
           objectPool.remove(`group-missile-${entity}`);
-          health?.clear();
-          healthBg?.clear();
+          healthBarBg.clear();
+          healthBar.clear();
         }
       }
     }

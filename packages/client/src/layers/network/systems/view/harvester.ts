@@ -38,7 +38,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
       const health = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `harvester-health-bar-bg-${entity}`)
+        .find((item) => item.id === `harvester-health-bar-${entity}`)
         // @ts-ignore
         ?.clear();
       const healthBar = health ?? phaserScene.add.graphics();
@@ -101,8 +101,8 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
         } else {
           objectPool.remove(`harvester-${entity}`);
           objectPool.remove(`harvester-faction-${entity}`);
-          health?.clear();
-          healthBg?.clear();
+          healthBarBg.clear();
+          healthBar.clear();
         }
       }
     }

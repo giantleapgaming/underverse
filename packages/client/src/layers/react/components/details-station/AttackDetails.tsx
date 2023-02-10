@@ -198,7 +198,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             destinationY,
                             sourceX,
                             sourceY,
-                            faction: +factionNumber,
+                            faction: +factionNumber + 1,
                             type: "attack",
                           });
                           setDestinationDetails();
@@ -257,7 +257,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                                 sourceX,
                                 sourceY,
                                 type: "move",
-                                frame: `attack-${+factionNumber}-${+level}.png`,
+                                frame: `attack-${+factionNumber + 1}-${+level}.png`,
                               });
                               setShowLine(false);
                               showProgress();

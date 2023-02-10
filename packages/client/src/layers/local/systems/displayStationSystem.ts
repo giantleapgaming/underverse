@@ -79,11 +79,7 @@ export function displayStationSystem(network: NetworkLayer, phaser: PhaserLayer)
             progressBarBg.setDepth(99);
             progressBarBg.strokePath();
             progressBar.setAlpha(0.4);
-            progressBar.lineStyle(
-              6,
-              +`0x${factionData[factionNumber ? +factionNumber - 1 : 0].color.split("#")[1]}`,
-              1
-            );
+            progressBar.lineStyle(6, +`0x${factionData[factionNumber ? +factionNumber : 0].color.split("#")[1]}`, 1);
             progressBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
             progressBar.strokePath();
             progressBar.setDepth(100);
