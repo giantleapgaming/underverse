@@ -158,12 +158,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
             </div>
           </S.Container>
           {!destinationDetails && !isDestinationSelected && (
-            <S.Row
-              style={{
-                gap: "10px",
-                marginTop: action === "harvest" && destinationDetails && isDestinationSelected ? "30px" : "32px",
-              }}
-            >
+            <S.Row style={{ marginTop: "5px" }}>
               <SelectButton
                 name="HARVEST"
                 isActive={action === "harvest"}
