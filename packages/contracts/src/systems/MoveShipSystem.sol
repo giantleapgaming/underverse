@@ -13,7 +13,7 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -50,6 +50,17 @@ contract MoveShipSystem is System {
     //Destination position
 
     Coord memory destinationPosition = Coord({ x: x, y: y });
+
+    require(
+      atleastOneObstacleOnTheWay(
+        sourcePosition.x,
+        sourcePosition.y,
+        destinationPosition.x,
+        destinationPosition.y,
+        components
+      ) == false,
+      "Obstacle on the way"
+    );
 
     // PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
 

@@ -9,15 +9,17 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { isThereAnyObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, isThereAnyObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction, Coordd } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Transport"));
 
 contract TransportSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
+
+  Coordd[] private superPoints;
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 sourceGodownEntity, uint256 destinationGodownEntity, uint256 kgs) = abi.decode(
@@ -39,43 +41,45 @@ contract TransportSystem is System {
 
     require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
+    // uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
+    //   .getValue(addressToEntity(msg.sender));
 
+    // require(
+    //   playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
+    //   "Need 0 seconds of delay between actions"
+    // );
+
+    // {
+    // uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+    //   sourceGodownEntity
+    // );
     require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
+      "Invalid source godown entity"
     );
+    // }
 
-    {
-      uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-        sourceGodownEntity
-      );
-      require(sourceGodownLevel >= 1, "Invalid source godown entity");
-    }
-
-    uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      destinationGodownEntity
+    // uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+    //   destinationGodownEntity
+    // );
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationGodownEntity) >= 1,
+      "Invalid destination godown entity"
     );
-    require(destinationGodownLevel >= 1, "Invalid destination godown entity");
 
     // uint256 destinationGodownLevel = getEntityLevel(
     //   LevelComponent(getAddressById(components, LevelComponentID)),
     //   destinationGodownEntity
     // );
 
-    uint256 sourceGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
-      sourceGodownEntity
+    require(
+      kgs <= BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceGodownEntity),
+      "Provided transport quantity is more than source godown balance"
     );
-
-    uint256 destinationGodownBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
-      destinationGodownEntity
-    );
-
-    require(kgs <= sourceGodownBalance, "Provided transport quantity is more than source godown balance");
 
     require(
-      destinationGodownBalance + kgs <= destinationGodownLevel,
+      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(destinationGodownEntity) + kgs <=
+        LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationGodownEntity),
       "Provided transport quantity is more than godown storage capacity"
     );
 
@@ -89,16 +93,58 @@ contract TransportSystem is System {
       destinationGodownEntity
     );
 
+    // Coordd[] memory superPointss = isThereAnyObstacleOnTheWay(
+    //     sourceGodownPosition.x,
+    //     sourceGodownPosition.y,
+    //     destinationGodownPosition.x,
+    //     destinationGodownPosition.y,
+    //     components
+    // );
+
     require(
-      isThereAnyObstacleOnTheWay(
+      atleastOneObstacleOnTheWay(
         sourceGodownPosition.x,
         sourceGodownPosition.y,
         destinationGodownPosition.x,
         destinationGodownPosition.y,
         components
       ) == false,
-      "There is an obstacle along the path"
+      "Obstacle on the way"
     );
+
+    // Coordd[] memory superPointss =
+    // segmentPoints(sourceGodownPosition.x,sourceGodownPosition.y,destinationGodownPosition.x,destinationGodownPosition.y);
+
+    // for (uint256 i = 0; i <= superPointss.length; i++) {
+    //   superPoints[i] = superPointss[i];
+    // }
+
+    // Coordd[] memory points;
+    // int32 d = int32(
+    //   int256(Math.sqrt(uint256(int256(((destinationGodownPosition.x - sourceGodownPosition.x) * (destinationGodownPosition.x - sourceGodownPosition.x) + (destinationGodownPosition.y - sourceGodownPosition.y) * (destinationGodownPosition.y - sourceGodownPosition.y)) * int32(int256(MULTIPLIER)))))) /
+    //     int256(MULTIPLIER2)
+    // );
+    // int32 stepX = (destinationGodownPosition.x - sourceGodownPosition.x * 100) / d;
+    // int32 stepY = (destinationGodownPosition.y - sourceGodownPosition.y * 100) / d;
+    // int32 x = sourceGodownPosition.x * 100;
+    // int32 y = sourceGodownPosition.y * 100;
+    // for (int32 i = 0; i <= d; i++) {
+    //     superPoints[uint256(uint32(i))] = Coordd({x: x / 100, y: y / 100});
+    //     x += stepX;
+    //     y += stepY;
+    // }
+    // return points;
+
+    // require(
+    //   isThereAnyObstacleOnTheWay(
+    //     sourceGodownPosition.x,
+    //     sourceGodownPosition.y,
+    //     destinationGodownPosition.x,
+    //     destinationGodownPosition.y,
+    //     components
+    //   ) == false,
+    //   "There is an obstacle along the path"
+    // );
     /////////////////////
     //////////////////////
     // // Coord[] memory
@@ -146,7 +192,7 @@ contract TransportSystem is System {
     //                     ) == false,
     //   "There is an obstacle along the path"
     // );
-    /////////////////////
+    //////////////////////
     //////////////////////
 
     ///////////////////////////
@@ -171,30 +217,38 @@ contract TransportSystem is System {
     // console.log("MY obstaclePoints", obstaclePoints);
     ///////////////////////////
 
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
-      sourceGodownPosition,
-      destinationGodownPosition
-    );
+    // uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
+    //   sourceGodownPosition,
+    //   destinationGodownPosition
+    // );
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
       addressToEntity(msg.sender)
     );
 
-    uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
+    // uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
 
-    uint256 totalTransportCost = (((distanceBetweenGodowns * kgs)**2) * factionCostPercent) / 100;
+    uint256 totalTransportCost = (((getDistanceBetweenCoordinatesWithMultiplier(
+      sourceGodownPosition,
+      destinationGodownPosition
+    ) * kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 100;
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
+    // uint256 playerCash = getPlayerCash(
+    //   CashComponent(getAddressById(components, CashComponentID)),
+    //   addressToEntity(msg.sender)
+    // );
+
+    require(
+      getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), addressToEntity(msg.sender)) >=
+        totalTransportCost,
+      "Not enough money to transport product"
     );
-
-    require(playerCash >= totalTransportCost, "Not enough money to transport product");
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
       addressToEntity(msg.sender),
-      playerCash - totalTransportCost
+      getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), addressToEntity(msg.sender)) -
+        totalTransportCost
     );
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
@@ -202,11 +256,15 @@ contract TransportSystem is System {
     );
 
     // update godown data
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceGodownEntity, sourceGodownBalance - kgs);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(
+      sourceGodownEntity,
+      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceGodownEntity) - kgs
+    );
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(
       destinationGodownEntity,
-      destinationGodownBalance + kgs
+      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(destinationGodownEntity) + kgs
     );
+
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       sourceGodownEntity,
       block.timestamp
@@ -223,5 +281,9 @@ contract TransportSystem is System {
     uint256 kgs
   ) public returns (bytes memory) {
     return execute(abi.encode(sourceGodownEntity, destinationGodownEntity, kgs));
+  }
+
+  function getSuperPoints() public view returns (Coordd[] memory) {
+    return superPoints;
   }
 }
