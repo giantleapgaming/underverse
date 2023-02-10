@@ -9,7 +9,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { OwnedBy, Faction },
+      components: { OwnedBy, Faction, Name },
       world,
     },
     phaser: {
@@ -21,6 +21,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
     const factionIndex = world.entities.indexOf(ownedBy);
+    const name = getComponentValue(Name, factionIndex)?.value;
     const faction = getComponentValue(Faction, factionIndex)?.value;
 
     return (
@@ -37,6 +38,8 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
           }}
         >
           {copy ? "Copy" : walletAddress(`${ownedBy}`)}
+          <br />
+          <span style={{ color: "white" }}>{name} </span>
         </p>
         <UserAction layers={layers} />
       </S.Container>

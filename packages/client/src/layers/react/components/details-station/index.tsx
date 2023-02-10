@@ -5,7 +5,11 @@ import { Layers } from "../../../../types";
 import { DetailsLayout } from "./layoutDetails";
 
 const Details = ({ layers }: { layers: Layers }) => {
-  return <DetailsLayout layers={layers} />;
+  return (
+    <div style={{ display: "flex", height: "100%", position: "relative", justifyContent: "end", alignItems: "end" }}>
+      <DetailsLayout layers={layers} />;
+    </div>
+  );
 };
 
 export const registerDetails = () => {
@@ -14,8 +18,8 @@ export const registerDetails = () => {
     {
       colStart: 1,
       colEnd: 13,
-      rowStart: 9,
-      rowEnd: 12,
+      rowStart: 8,
+      rowEnd: 13,
     },
     (layers) => {
       const {

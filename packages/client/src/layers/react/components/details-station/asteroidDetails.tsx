@@ -39,6 +39,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const level = getComponentValue(Level, destinationDetails)?.value;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
+    const fuel = 0;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     if (entityType && +entityType === Mapping.astroid.id) {
@@ -47,7 +48,17 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>ASTROID</S.Text>
-              <img src={`/build-stations/astroid.png`} width="70px" height="70px" />
+              <div
+                style={{
+                  width: "100px",
+                  height: "100px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img src={`/build-stations/astroid.png`} width="70px" height="70px" />
+              </div>
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -57,6 +68,10 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/crystal.png" width="20px" height="20px" />
                   <p>{+balance}</p>
+                </S.Weapon>
+                <S.Weapon>
+                  <img src="/build-stations/hydrogen.png" />
+                  <p>{+fuel}</p>
                 </S.Weapon>
               </S.Row>
               <S.Column style={{ width: "100%" }}>

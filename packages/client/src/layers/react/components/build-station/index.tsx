@@ -4,7 +4,12 @@ import { map, merge } from "rxjs";
 import { Layers } from "../../../../types";
 import { Layout } from "./layout";
 
-const Build = ({ layers }: { layers: Layers }) => <Layout layers={layers} />;
+const Build = ({ layers }: { layers: Layers }) => (
+  <div style={{ display: "flex", height: "100%", position: "relative", justifyContent: "end", alignItems: "end" }}>
+    {" "}
+    <Layout layers={layers} />
+  </div>
+);
 
 export const registerBuild = () => {
   registerUIComponent(
@@ -12,8 +17,8 @@ export const registerBuild = () => {
     {
       colStart: 1,
       colEnd: 13,
-      rowStart: 10,
-      rowEnd: 12,
+      rowStart: 8,
+      rowEnd: 13,
     },
     (layers) => {
       const {

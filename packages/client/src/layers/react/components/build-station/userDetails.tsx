@@ -9,13 +9,15 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { Faction },
+      components: { Faction, Name },
       world,
       network: { connectedAddress },
     },
   } = layers;
   const address = connectedAddress.get();
   const factionIndex = world.entities.indexOf(address);
+  const name = getComponentValue(Name, factionIndex)?.value;
+
   const faction = getComponentValue(Faction, factionIndex)?.value;
   return (
     <S.Container>
@@ -31,6 +33,8 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
         }}
       >
         {copy ? "Copy" : walletAddress(`${address}`)}
+        <br />
+        <span style={{ color: "white" }}>{name} </span>
       </p>
       <UserAction layers={layers} />
     </S.Container>
