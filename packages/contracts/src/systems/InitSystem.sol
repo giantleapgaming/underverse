@@ -100,6 +100,7 @@ contract InitSystem is System {
       // Coord memory earthCoord = ;
       PositionComponent(getAddressById(components, PositionComponentID)).set(earthEntityId, Coord({ x: 0, y: 0 }));
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(earthEntityId, earthCenterPlanetDefence);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(earthEntityId, 1);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(earthEntityId, planetType);
       PopulationComponent(getAddressById(components, PopulationComponentID)).set(earthEntityId, earthInitialPopulation);
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(

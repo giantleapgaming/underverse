@@ -12,7 +12,7 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair, personType } from "./constants.sol";
+import { Coordd, MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair, personType } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
@@ -169,24 +169,28 @@ function isThereAnyObstacleOnTheWay(
   int32 x2,
   int32 y2,
   IUint256Component components
-) view returns (bool) {
+) view returns (Coordd[] memory) // bool
+{
   // (Coord[] memory) {
-  // Coord[] memory pointsArray; // new Coord[];
-  int32 deltaX = x2 - x1;
-  int32 deltaY = y2 - y1;
+  Coordd[] memory pointsArray; // new Coord[];
+  uint256 co;
+  // int32 deltaX = x2 - x1;
+  // int32 deltaY = y2 - y1;
   // int32 d = int32(int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER)))))) / int256(MULTIPLIER2));
   int32 d = int32(
-    int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER)))))) /
+    int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
       int256(MULTIPLIER2)
   );
-  int32 stepX = (deltaX * 100) / d;
-  int32 stepY = (deltaY * 100) / d;
+  int32 stepX = ((x2 - x1) * 100) / d;
+  int32 stepY = ((y2 - y1) * 100) / d;
   int32 x = x1 * 100;
   int32 y = y1 * 100;
   // for (int32 i = 1; i <= d; i++) {
   for (uint256 i = 0; i <= uint256(int256(d - 1)); i++) {
     // pointsArray[uint256(int256(i))] = Coord({x: x / 100, y: y / 100});
     if (i > 0) {
+      // int32 int32(x / 100) = int32(x / 100);
+      // int32 int32(y / 100) = int32(y / 100);
       if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
           .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
@@ -194,27 +198,83 @@ function isThereAnyObstacleOnTheWay(
         //////////////////////
         if (arrayOfGodownsAtThatCoord.length > 0) {
           for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
-            uint256 lvl = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-              arrayOfGodownsAtThatCoord[j]
-            );
-            if (lvl > 0) {
+            if (
+              LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0
+            ) {
+              pointsArray[co] = Coordd({ x: int32(x / 100), y: int32(y / 100) });
+              co++;
               // There is atleast one obstacle having level greater than 0
-              return true;
+              // return true;
             }
           }
         }
       }
-      // }
-      /////////////////
-      /////////////////
       x += stepX;
       y += stepY;
+      /////////////////
+      /////////////////
     }
   }
   // return pointsArray;
   // No obstacles along the path
-  return false;
+  // return false;
+  return pointsArray;
 }
+
+function atleastOneObstacleOnTheWay(
+  int32 x1,
+  int32 y1,
+  int32 x2,
+  int32 y2,
+  IUint256Component components
+) view returns (bool) {
+  bool result;
+  int32 deltaX = x2 - x1;
+  int32 deltaY = y2 - y1;
+  int32 distance = int32(
+    int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(1000000)))))) / int256(1000)
+  );
+  int32 stepX = (deltaX * 100) / distance;
+  int32 stepY = (deltaY * 100) / distance;
+  int32 x = x1 * 100;
+  int32 y = y1 * 100;
+  for (int32 i = 0; i <= distance; i++) {
+    if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
+      uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+        .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
+      for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
+        if (LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0) {
+          result = true;
+          break;
+        }
+      }
+      if (result) {
+        break;
+      }
+    }
+    x += stepX;
+    y += stepY;
+  }
+  return result;
+}
+
+// function segmentPoints(int32 x1, int32 y1, int32 x2, int32 y2) pure returns (Coordd[] memory) {
+//   Coordd[] memory points;
+//   int32 d = int32(
+//     int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
+//       int256(MULTIPLIER2)
+//   );
+//   int32 stepX = (x2 - x1 * 100) / d;
+//   int32 stepY = (y2 - y1 * 100) / d;
+//   int32 x = x1 * 100;
+//   int32 y = y1 * 100;
+//   for (int32 i = 0; i <= d; i++) {
+//       points[uint256(uint32(i))] = Coordd({x: x / 100, y: y / 100});
+//       x += stepX;
+//       y += stepY;
+//   }
+//   return points;
+// }
 
 function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
   uint256 ent = world.getUniqueEntityId();

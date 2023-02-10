@@ -46,6 +46,21 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
           },
         });
       }
+      if (position && !ownedBy) {
+        //
+        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+        const stationBackground = config.sprites[Sprites.View1];
+        const circle = objectPool.get(`obstetrical-circle-${entity}`, "Sprite");
+        circle.setComponent({
+          id: `circle-${entity}`,
+          once: (gameObject) => {
+            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
+          },
+        });
+        //
+      }
     });
   });
 }

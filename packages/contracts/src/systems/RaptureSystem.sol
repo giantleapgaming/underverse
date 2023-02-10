@@ -16,7 +16,7 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 //Importing Entity Type and Population
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createPerson } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createPerson } from "../utils.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -80,6 +80,17 @@ contract RaptureSystem is System {
     Coord memory destinationGodownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationGodownEntity
+    );
+
+    require(
+      atleastOneObstacleOnTheWay(
+        sourceGodownPosition.x,
+        sourceGodownPosition.y,
+        destinationGodownPosition.x,
+        destinationGodownPosition.y,
+        components
+      ) == false,
+      "Obstacle on the way"
     );
     // {
     //   PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));

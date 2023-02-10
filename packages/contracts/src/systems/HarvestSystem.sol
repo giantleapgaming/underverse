@@ -12,7 +12,7 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -54,7 +54,7 @@ contract HarvestSystem is System {
 
     //require(sourceGodownEntity != destinationGodownEntity, "Source and destination godown cannot be same");
 
-    // Commenting out time delay requirement 
+    // Commenting out time delay requirement
     //uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
     //  .getValue(addressToEntity(msg.sender));
 
@@ -103,6 +103,17 @@ contract HarvestSystem is System {
       destinationGodownEntity
     );
 
+    require(
+      atleastOneObstacleOnTheWay(
+        sourceGodownPosition.x,
+        sourceGodownPosition.y,
+        destinationGodownPosition.x,
+        destinationGodownPosition.y,
+        components
+      ) == false,
+      "Obstacle on the way"
+    );
+
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
       sourceGodownPosition,
       destinationGodownPosition
@@ -111,7 +122,7 @@ contract HarvestSystem is System {
     //Check to see if Harvester is close enough to Asteroid (<5 units)
     require(distanceBetweenGodowns <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs)**2);
+    uint256 totalTransportCost = ((distanceBetweenGodowns * kgs) ** 2);
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

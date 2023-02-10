@@ -110,6 +110,27 @@ export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
   return points;
 }
 
+// export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
+//   const deltaX = x2 - x1;
+//   const deltaY = y2 - y1;
+//   const distance = Number(Math.sqrt(deltaX * deltaX + deltaY * deltaY).toFixed());
+//   const stepX = Number(((deltaX / distance) * 100).toFixed());
+//   const stepY = Number(((deltaY / distance) * 100).toFixed());
+//   let x = x1 * 100;
+//   let y = y1 * 100;
+//   const points: any[] = [];
+//   let currentPoint: any;
+//   for (let i = 1; i <= distance; i++) {
+//     x += stepX;
+//     y += stepY;
+//     currentPoint = { x: (x / 100).toFixed(), y: (y / 100).toFixed() };
+//     if (!points.some((p) => p.x === currentPoint.x && p.y === currentPoint.y)) {
+//       points.push(currentPoint);
+//     }
+//   }
+//   return points;
+// }
+
 export function getObstacleList(arrayOfPointsOnThePath: any[], network: NetworkLayer) {
   const obstaclePoints: any[] = [];
   for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {

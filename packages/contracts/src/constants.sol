@@ -33,6 +33,11 @@ uint256 constant planetType = 6;
 uint256 constant shipyardType = 7;
 uint256 constant personType = 8;
 
+struct Coordd {
+  int32 x;
+  int32 y;
+}
+
 enum Faction {
   FREENAVY,
   RUSSIA,

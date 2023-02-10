@@ -12,7 +12,7 @@ import { OffenceComponent, ID as OffenceComponentID } from "../components/Offenc
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -67,6 +67,17 @@ contract AttackSystem is System {
     Coord memory destinationGodownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationGodownEntity
+    );
+
+    require(
+      atleastOneObstacleOnTheWay(
+        sourceGodownPosition.x,
+        sourceGodownPosition.y,
+        destinationGodownPosition.x,
+        destinationGodownPosition.y,
+        components
+      ) == false,
+      "Obstacle on the way"
     );
 
     // distanceBetweenGodowns the value that you get below is multiplied by MULTIPLIER
