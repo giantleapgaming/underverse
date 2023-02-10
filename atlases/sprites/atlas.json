@@ -3235,6 +3235,56 @@
 					}
 				},
 				{
+					"filename": "pebble-7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 0,
+						"w": 27,
+						"h": 32
+					},
+					"frame": {
+						"x": 575,
+						"y": 681,
+						"w": 27,
+						"h": 32
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "missile-4.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 62,
+						"h": 19
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 62,
+						"h": 19
+					},
+					"frame": {
+						"x": 604,
+						"y": 681,
+						"w": 62,
+						"h": 19
+					},
+					"anchor": {
+						"x": 0.5,
+						"y": 0.5
+					}
+				},
+				{
 					"filename": "1-5-0.png",
 					"rotated": false,
 					"trimmed": false,
@@ -4307,6 +4357,31 @@
 					"anchor": {
 						"x": 0.5,
 						"y": 0.5
+					}
+				},
+				{
+					"filename": "pebble-8.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 3,
+						"w": 32,
+						"h": 27
+					},
+					"frame": {
+						"x": 310,
+						"y": 1979,
+						"w": 32,
+						"h": 27
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
 					}
 				},
 				{
@@ -5635,7 +5710,7 @@
 					}
 				},
 				{
-					"filename": "missile-4.png",
+					"filename": "missile-5.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -5660,7 +5735,7 @@
 					}
 				},
 				{
-					"filename": "missile-5.png",
+					"filename": "missile-6.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -5828,31 +5903,6 @@
 						"y": 1910,
 						"w": 64,
 						"h": 64
-					},
-					"anchor": {
-						"x": 0.5,
-						"y": 0.5
-					}
-				},
-				{
-					"filename": "missile-6.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 62,
-						"h": 19
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 62,
-						"h": 19
-					},
-					"frame": {
-						"x": 575,
-						"y": 681,
-						"w": 62,
-						"h": 19
 					},
 					"anchor": {
 						"x": 0.5,
@@ -6832,6 +6882,31 @@
 					"anchor": {
 						"x": 0.5,
 						"y": 0.5
+					}
+				},
+				{
+					"filename": "pebble-4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 6,
+						"w": 19,
+						"h": 22
+					},
+					"frame": {
+						"x": 351,
+						"y": 947,
+						"w": 19,
+						"h": 22
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
 					}
 				},
 				{
@@ -9932,6 +10007,31 @@
 					"anchor": {
 						"x": 0.5,
 						"y": 0.5
+					}
+				},
+				{
+					"filename": "pebble-5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 0,
+						"w": 21,
+						"h": 32
+					},
+					"frame": {
+						"x": 900,
+						"y": 641,
+						"w": 21,
+						"h": 32
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
 					}
 				},
 				{
@@ -15785,24 +15885,24 @@
 					}
 				},
 				{
-					"filename": "faction-1.png",
+					"filename": "pebble-6.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 25,
-						"h": 25
+						"w": 32,
+						"h": 32
 					},
 					"spriteSourceSize": {
-						"x": 0,
+						"x": 3,
 						"y": 0,
-						"w": 25,
-						"h": 25
+						"w": 22,
+						"h": 32
 					},
 					"frame": {
 						"x": 735,
 						"y": 640,
-						"w": 25,
-						"h": 25
+						"w": 22,
+						"h": 32
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -15824,7 +15924,7 @@
 						"h": 59
 					},
 					"frame": {
-						"x": 762,
+						"x": 759,
 						"y": 641,
 						"w": 64,
 						"h": 59
@@ -15835,7 +15935,7 @@
 					}
 				},
 				{
-					"filename": "faction-2.png",
+					"filename": "faction-1.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -15850,7 +15950,7 @@
 					},
 					"frame": {
 						"x": 310,
-						"y": 1979,
+						"y": 2008,
 						"w": 25,
 						"h": 25
 					},
@@ -15860,7 +15960,7 @@
 					}
 				},
 				{
-					"filename": "faction-3.png",
+					"filename": "faction-2.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -15885,7 +15985,7 @@
 					}
 				},
 				{
-					"filename": "faction-4.png",
+					"filename": "faction-3.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -15910,7 +16010,7 @@
 					}
 				},
 				{
-					"filename": "faction-5.png",
+					"filename": "faction-4.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -15935,7 +16035,7 @@
 					}
 				},
 				{
-					"filename": "faction-6.png",
+					"filename": "faction-5.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -15951,6 +16051,31 @@
 					"frame": {
 						"x": 915,
 						"y": 1222,
+						"w": 25,
+						"h": 25
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "faction-6.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 25,
+						"h": 25
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 25,
+						"h": 25
+					},
+					"frame": {
+						"x": 959,
+						"y": 1420,
 						"w": 25,
 						"h": 25
 					},
@@ -15985,6 +16110,31 @@
 					}
 				},
 				{
+					"filename": "pebble-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 10,
+						"y": 6,
+						"w": 13,
+						"h": 21
+					},
+					"frame": {
+						"x": 336,
+						"y": 1043,
+						"w": 13,
+						"h": 21
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
 					"filename": "faction-attack-5.png",
 					"rotated": false,
 					"trimmed": false,
@@ -15999,8 +16149,8 @@
 						"h": 24
 					},
 					"frame": {
-						"x": 959,
-						"y": 1420,
+						"x": 1975,
+						"y": 523,
 						"w": 24,
 						"h": 24
 					},
@@ -16024,8 +16174,8 @@
 						"h": 24
 					},
 					"frame": {
-						"x": 1975,
-						"y": 523,
+						"x": 1007,
+						"y": 2014,
 						"w": 24,
 						"h": 24
 					},
@@ -16135,6 +16285,31 @@
 					}
 				},
 				{
+					"filename": "blue-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 2,
+						"w": 12,
+						"h": 12
+					},
+					"frame": {
+						"x": 942,
+						"y": 1222,
+						"w": 12,
+						"h": 12
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
 					"filename": "6-group-missile-1.png",
 					"rotated": false,
 					"trimmed": true,
@@ -16158,6 +16333,256 @@
 						"x": 0.5,
 						"y": 0.5
 					}
+				},
+				{
+					"filename": "copper-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 2,
+						"w": 12,
+						"h": 12
+					},
+					"frame": {
+						"x": 942,
+						"y": 1236,
+						"w": 12,
+						"h": 12
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "blue-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 4,
+						"w": 13,
+						"h": 8
+					},
+					"frame": {
+						"x": 501,
+						"y": 1368,
+						"w": 13,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "pebble-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 11,
+						"y": 11,
+						"w": 10,
+						"h": 11
+					},
+					"frame": {
+						"x": 1367,
+						"y": 801,
+						"w": 10,
+						"h": 11
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "copper-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 4,
+						"w": 13,
+						"h": 8
+					},
+					"frame": {
+						"x": 336,
+						"y": 1066,
+						"w": 13,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "purple-2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 4,
+						"w": 13,
+						"h": 8
+					},
+					"frame": {
+						"x": 516,
+						"y": 1368,
+						"w": 13,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "blue-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 4,
+						"w": 8,
+						"h": 8
+					},
+					"frame": {
+						"x": 497,
+						"y": 1099,
+						"w": 8,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "copper-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 4,
+						"w": 8,
+						"h": 8
+					},
+					"frame": {
+						"x": 352,
+						"y": 1528,
+						"w": 8,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "pebble-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 12,
+						"w": 8,
+						"h": 7
+					},
+					"frame": {
+						"x": 783,
+						"y": 1258,
+						"w": 8,
+						"h": 7
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "purple-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 4,
+						"w": 8,
+						"h": 8
+					},
+					"frame": {
+						"x": 1375,
+						"y": 1175,
+						"w": 8,
+						"h": 8
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "purple-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 16,
+						"h": 16
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 2,
+						"w": 12,
+						"h": 12
+					},
+					"frame": {
+						"x": 372,
+						"y": 777,
+						"w": 12,
+						"h": 12
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
 				}
 			]
 		}
@@ -16165,6 +16590,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:c808a5ed6e25c8ed84c6178dcf361ec3:89a706c22714952257191cd1eb82010d:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:2305f487e1518a525d340841111523a3:f0aa374a589da5f1d78e0f142fb11b25:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }
