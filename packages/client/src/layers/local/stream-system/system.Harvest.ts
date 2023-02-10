@@ -7,7 +7,7 @@ import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
-export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
+export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     network: { connectedAddress },
@@ -26,7 +26,7 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
-  defineRxSystem(world, systemCallStreams["system.Transport"], ({ args }) => {
+  defineRxSystem(world, systemCallStreams["system.Harvest"], ({ args }) => {
     const { destinationGodownEntity, sourceGodownEntity, kgs } = args as {
       destinationGodownEntity: BigNumber;
       sourceGodownEntity: BigNumber;
@@ -61,10 +61,10 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
       const srcStationName = numberMapping[+destEntityType].name;
       const destStationName = numberMapping[+sourceEntityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} moved ${colorString({ name: `${+kgs}`, color })} mt from  ${colorString({
-          name: srcStationName,
+        `<p>${colorString({ name, color })} ${colorString({ name: destStationName, color })} ${colorString({
+          name: `${+kgs}`,
           color,
-        })} (${srcPosition?.x},${srcPosition?.y}) to ${colorString({ name: destStationName, color })} (${
+        })} mt to ${colorString({ name: srcStationName, color })} (${srcPosition?.x},${srcPosition?.y}) to (${
           destPosition?.x
         },${destPosition?.y})</p>`
       );
@@ -87,7 +87,7 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
           destinationY,
           sourceX,
           sourceY,
-          type: "transport",
+          type: "harvest",
         });
       }
     }

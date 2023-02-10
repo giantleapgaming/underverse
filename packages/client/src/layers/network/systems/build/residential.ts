@@ -6,8 +6,6 @@ import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
 
-const stationColor = [Sprites.Build1, Sprites.Build2, Sprites.Build3, Sprites.Build4, Sprites.Build5, Sprites.Build6];
-
 export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -50,15 +48,14 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
 
       const faction = getComponentValue(Faction, userEntityIndex)?.value;
       if (faction) {
-        const sprite = stationColor[+faction - 1] as Sprites.Build1;
-        const HoverSprite = config.sprites[sprite];
+        const HoverSprite = config.sprites[Sprites.Build1];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
 
         const hoverStation = objectPool.get("build-residential-station", "Sprite");
         hoverStation.setComponent({
           id: `hoverStation`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
+            gameObject.setTexture(HoverSprite.assetKey, `build-${+faction + 1}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;

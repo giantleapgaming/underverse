@@ -57,7 +57,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         hoverStation.setComponent({
           id: `hoverStation`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, `build-attack-${+faction}.png`);
+            gameObject.setTexture(HoverSprite.assetKey, `build-attack-${+faction + 1}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;

@@ -23,7 +23,10 @@ contract MoveShipSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x, int32 y) = abi.decode(arguments, (uint256, int32, int32));
+    (uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) = abi.decode(
+      arguments,
+      (uint256, int32, int32, int32, int32)
+    );
 
     // Check if the ship being moved is owned by the user
     require(
@@ -111,7 +114,7 @@ contract MoveShipSystem is System {
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
-  function executeTyped(uint256 sourceEntity, int32 x, int32 y) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x, y));
+  function executeTyped(uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, x, y, srcX, srcY));
   }
 }

@@ -246,6 +246,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                                 entityType: world.entities[selectedEntity],
                                 x: moveStationDetails.x,
                                 y: moveStationDetails.y,
+                                srcX: position.x,
+                                srcY: position.y,
                               });
                               setMoveStation(false);
                               setShowAnimation({

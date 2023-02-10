@@ -97,7 +97,7 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const userEntityIndex = world.entities.indexOf(address);
       const faction = getComponentValue(Faction, userEntityIndex)?.value;
       if (faction) {
-        const sprite = stationColor[+faction - 1] as Sprites.Build1;
+        const sprite = stationColor[+faction] as Sprites.Build1;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
 

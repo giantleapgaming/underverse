@@ -84,7 +84,7 @@ export function transportSystem(network: NetworkLayer, phaser: PhaserLayer) {
             const object = objectPool.get(`blocking-station-${i}`, "Sprite");
             const factionIndex = world.entities.indexOf(ownedBy);
             const faction = getComponentValue(Faction, factionIndex)?.value;
-            const Sprite = stationColor[faction ? +faction - 1 : 1] as Sprites.View1;
+            const Sprite = stationColor[faction ? +faction : 1] as Sprites.View1;
             const stationBackground = config.sprites[Sprite];
             object.setComponent({
               id: `blocking-station-${i}`,

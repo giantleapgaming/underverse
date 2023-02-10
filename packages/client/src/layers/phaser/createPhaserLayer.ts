@@ -48,8 +48,22 @@ import { populationTransport } from "../network/systems/action/population-transp
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
-import { systemBuild, systemBuyWeapon, systemInit, systemUpgrade } from "../local/stream-system";
+import {
+  systemAttack,
+  systemBuild,
+  systemBuyWeapon,
+  systemHarvest,
+  systemInit,
+  systemMoveShip,
+  systemRapture,
+  systemRepaired,
+  systemScraped,
+  systemSell,
+  systemUpgrade,
+} from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
+import { systemTransport } from "../local/stream-system/system.Transport";
+import { displayOrbits } from "../network/systems/view/orbits";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -281,6 +295,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayHarvesterSystem(network, context);
   displayGodownSystem(network, context);
   displayShipyardSystem(network, context);
+  displayOrbits(network, context);
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);
@@ -299,5 +314,14 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemInit(network, context);
   systemUpgrade(network, context);
   systemBuyWeapon(network, context);
+  systemAttack(network, context);
+  systemRepaired(network, context);
+  systemScraped(network, context);
+  systemSell(network, context);
+  systemTransport(network, context);
+  systemHarvest(network, context);
+  systemRapture(network, context);
+  systemMoveShip(network, context);
+
   return context;
 }

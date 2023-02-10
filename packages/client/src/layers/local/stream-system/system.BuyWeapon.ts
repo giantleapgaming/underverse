@@ -26,12 +26,13 @@ export function systemBuyWeapon(network: NetworkLayer, phaser: PhaserLayer) {
     const entityType = getComponentValue(EntityType, godownEntityIndex)?.value;
 
     if (faction && entityType && typeof +faction === "number" && typeof +entityType === "number") {
-      const color = factionData[+faction - 1]?.color;
+      const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} bought ${colorString({ name: `${+buyQuantity}`, color })} missiles at (${
-          position?.x
-        },${position?.y}) ${colorString({ name: stationName, color })} station</p>`
+        `<p>${colorString({ name, color })} bought ${colorString({
+          name: `${+buyQuantity}`,
+          color,
+        })} missiles at ${colorString({ name: stationName, color })} station (${position?.x}, ${position?.y})</p>`
       );
     }
   });
