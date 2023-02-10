@@ -1,13 +1,12 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import {
-  defineSystem,
+  defineRxSystem,
   EntityID,
   getComponentEntities,
   getComponentValue,
   getComponentValueStrict,
-  Has,
-  Not,
 } from "@latticexyz/recs";
+import { merge } from "rxjs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
@@ -32,7 +31,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
     components: { OwnedBy, Position, Defence, Faction },
   } = network;
 
-  defineSystem(world, [Has(ShowCircle), Not(Position)], () => {
+  defineRxSystem(world, merge(Position.update$, ShowCircle.update$), () => {
     const allPositionEntity = [...getComponentEntities(Position)];
     const allShowCircleEntity = getComponentValueStrict(ShowCircle, showCircleIndex).selectedEntities;
     allPositionEntity.forEach((entity) => {
