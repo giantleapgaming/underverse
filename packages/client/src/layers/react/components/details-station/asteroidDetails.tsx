@@ -3,6 +3,7 @@ import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Mapping } from "../../../../utils/mapping";
 import { Harvest } from "../action-system/harvest";
 import { SelectButton } from "./Button";
@@ -40,7 +41,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
-
     if (entityType && +entityType === Mapping.astroid.id) {
       return (
         <div>
@@ -60,54 +60,61 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
               </S.Row>
               <S.Column style={{ width: "100%" }}>
-                {action === "harvest" && destinationDetails && isDestinationSelected && (
-                  <div>
-                    <Harvest
-                      space={(destinationBalance && level && +level - +destinationBalance) || 0}
-                      harvest={async (amount) => {
-                        try {
-                          sounds["confirm"].play();
-                          setShowLine(false);
-                          setAction("");
-                          setDestinationDetails();
-                          showProgress();
-                          await harvestSystem(
-                            world.entities[selectedEntity],
-                            world.entities[destinationDetails],
-                            amount
-                          );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          setShowAnimation({
-                            showAnimation: true,
-                            amount,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "harvest",
-                          });
-                          setShowLine(false);
-                          setAction("upgrade");
-                          showProgress();
-                        } catch (e) {
-                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
-                        }
-                      }}
-                      playSound={() => {
-                        sounds["click"].play();
-                      }}
-                    />
-                  </div>
-                )}
+                {action === "harvest" &&
+                  destinationDetails &&
+                  isDestinationSelected &&
+                  get10x10Grid(position.x, position.y)
+                    .flat()
+                    .some(
+                      ([xCoord, yCoord]) => xCoord === destinationPosition.x && yCoord === destinationPosition.y
+                    ) && (
+                    <div>
+                      <Harvest
+                        space={(destinationBalance && level && +level - +destinationBalance) || 0}
+                        harvest={async (amount) => {
+                          try {
+                            sounds["confirm"].play();
+                            setShowLine(false);
+                            setAction("");
+                            setDestinationDetails();
+                            showProgress();
+                            await harvestSystem(
+                              world.entities[selectedEntity],
+                              world.entities[destinationDetails],
+                              amount
+                            );
+                            const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                              { x: destinationPosition.x, y: destinationPosition.y },
+                              tileWidth,
+                              tileHeight
+                            );
+                            const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                              { x: position.x, y: position.y },
+                              tileWidth,
+                              tileHeight
+                            );
+                            setShowAnimation({
+                              showAnimation: true,
+                              amount,
+                              destinationX,
+                              destinationY,
+                              sourceX,
+                              sourceY,
+                              type: "harvest",
+                            });
+                            setShowLine(false);
+                            setAction("upgrade");
+                            showProgress();
+                          } catch (e) {
+                            console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                          }
+                        }}
+                        playSound={() => {
+                          sounds["click"].play();
+                        }}
+                      />
+                    </div>
+                  )}
               </S.Column>
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>

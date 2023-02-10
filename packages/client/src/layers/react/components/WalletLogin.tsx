@@ -72,8 +72,14 @@ const WalletLogin = () => {
                     const wallet = new Wallet(pk);
                     const address = wallet.address;
                     return (
-                      <P key={pk}>
-                        {index + 1}. {walletAddressLoginDisplay(address)}
+                      <P
+                        style={{ cursor: "pointer" }}
+                        key={pk}
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${address}`);
+                        }}
+                      >
+                        {index + 1}. {address}
                       </P>
                     );
                   })}
