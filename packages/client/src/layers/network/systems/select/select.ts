@@ -1,5 +1,6 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineComponentSystem, defineSystem, EntityIndex, getComponentValue, Has, Not } from "@latticexyz/recs";
+import { defineComponentSystem, defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
+import { merge } from "rxjs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
@@ -22,7 +23,7 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Position },
   } = network;
 
-  defineSystem(world, [Has(ShowStationDetails), Not(Position)], () => {
+  defineRxSystem(world, merge(Position.update$, ShowStationDetails.update$), () => {
     const object = objectPool.get("select-box", "Sprite");
     const entityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const position = getComponentValue(Position, entityId);
