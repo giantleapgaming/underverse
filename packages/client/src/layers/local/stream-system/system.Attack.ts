@@ -84,12 +84,12 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       const address = connectedAddress.get();
       if (address !== srcOwnedBy) {
         const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-          { x: srcPosition.x, y: srcPosition.y },
+          { x: destPosition.x, y: destPosition.y },
           tileWidth,
           tileHeight
         );
         const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-          { x: destPosition.x, y: destPosition.y },
+          { x: srcPosition.x, y: srcPosition.y },
           tileWidth,
           tileHeight
         );
