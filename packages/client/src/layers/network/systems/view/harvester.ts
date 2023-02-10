@@ -73,7 +73,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           healthBarBg.setAlpha(0.1);
           healthBarBg.setDepth(99);
           healthBarBg.strokePath();
-          healthBar.setAlpha(0.4);
+          healthBar.setAlpha(0.2);
           healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();

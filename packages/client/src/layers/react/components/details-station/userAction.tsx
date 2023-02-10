@@ -56,6 +56,7 @@ export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideF
                 if (ownedBy === userEntityId) {
                   const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
                   camera.centerOn(x, y);
+                  camera.setZoom(2);
                 }
                 return ownedBy === userEntityId;
               });

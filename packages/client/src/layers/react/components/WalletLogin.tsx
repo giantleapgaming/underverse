@@ -71,17 +71,7 @@ const WalletLogin = () => {
                   {allKeys.map((pk: string, index: number) => {
                     const wallet = new Wallet(pk);
                     const address = wallet.address;
-                    return (
-                      <P
-                        style={{ cursor: "pointer" }}
-                        key={pk}
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${address}`);
-                        }}
-                      >
-                        {index + 1}. {address}
-                      </P>
-                    );
+                    return <CopyAddress address={address} index={index} />;
                   })}
                 </>
               )}
@@ -201,6 +191,25 @@ const WalletLogin = () => {
         </form>
       </SkyBlueLines>
     </Container>
+  );
+};
+
+const CopyAddress = ({ address, index }: { address: string; index: number }) => {
+  const [copy, setCopy] = useState(false);
+  return (
+    <P
+      style={{ cursor: "pointer" }}
+      key={address}
+      onClick={() => {
+        setCopy(true);
+        navigator.clipboard.writeText(`${address}`);
+        setTimeout(() => {
+          setCopy(false);
+        }, 1000);
+      }}
+    >
+      {index + 1}. {copy ? "Copied" : address}
+    </P>
   );
 };
 const Container = styled.div`
