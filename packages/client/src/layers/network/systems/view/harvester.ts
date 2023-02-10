@@ -74,7 +74,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           healthBarBg.setDepth(99);
           healthBarBg.strokePath();
           healthBar.setAlpha(0.4);
-          healthBar.lineStyle(6, +`0x${factionData[+faction - 1].color.split("#")[1]}`, 1);
+          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
@@ -93,7 +93,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           factionObject.setComponent({
             id: `harvester-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `faction-miner-${+faction}.png`);
+              gameObject.setTexture(harvester.assetKey, `faction-miner-${+faction + 1}.png`);
               gameObject.setPosition(x + 36, y + 15);
               gameObject.setDepth(2);
             },

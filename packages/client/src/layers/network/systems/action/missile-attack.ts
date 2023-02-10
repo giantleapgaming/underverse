@@ -42,7 +42,7 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       object.setComponent({
         id: "missileRelease",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
+          gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction + 1}.png`);
           gameObject.setPosition(sourceX + 32, sourceY + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);

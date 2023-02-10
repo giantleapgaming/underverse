@@ -57,7 +57,7 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
       destPosition &&
       srcPosition
     ) {
-      const color = factionData[+faction - 1]?.color;
+      const color = factionData[+faction]?.color;
       const srcStationName = numberMapping[+destEntityType].name;
       const destStationName = numberMapping[+sourceEntityType].name;
       setLogs(

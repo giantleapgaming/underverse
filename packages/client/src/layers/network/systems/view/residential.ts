@@ -74,7 +74,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           healthBarBg.setDepth(99);
           healthBarBg.strokePath();
           healthBar.setAlpha(0.4);
-          healthBar.lineStyle(6, +`0x${factionData[+faction - 1].color.split("#")[1]}`, 1);
+          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
@@ -84,7 +84,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           astroidObject.setComponent({
             id: `residential-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `${+faction}-${+level}-${+population}.png`);
+              gameObject.setTexture(residential.assetKey, `${+faction + 1}-${+level}-${+population}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(2);
               gameObject.setOrigin(0.5, 0.5);
@@ -102,7 +102,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           factionObject.setComponent({
             id: `residential-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `faction-${faction && +faction}.png`);
+              gameObject.setTexture(residential.assetKey, `faction-${faction && +faction + 1}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(3);
               gameObject.setOrigin(0.5, 0.5);

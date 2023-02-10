@@ -49,7 +49,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       level &&
       typeof +faction === "number"
     ) {
-      const color = factionData[+faction - 1]?.color;
+      const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       const frameName = numberMapping[+entityType].frameName;
       setLogs(

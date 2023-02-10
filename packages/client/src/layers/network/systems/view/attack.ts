@@ -78,14 +78,14 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           healthBarBg.setDepth(99);
           healthBarBg.strokePath();
           healthBar.setAlpha(0.4);
-          healthBar.lineStyle(6, +`0x${factionData[+faction - 1].color.split("#")[1]}`, 1);
+          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
           astroidObject.setComponent({
             id: `attack-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(attack.assetKey, `attack-${+faction}-${+level}.png`);
+              gameObject.setTexture(attack.assetKey, `attack-${+faction + 1}-${+level}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
@@ -94,7 +94,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           factionObject.setComponent({
             id: `attack-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(attack.assetKey, `faction-attack-${+faction}.png`);
+              gameObject.setTexture(attack.assetKey, `faction-attack-${+faction + 1}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(2);
               gameObject.setOrigin(0.5, 0.5);

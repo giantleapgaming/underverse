@@ -1,6 +1,6 @@
 export const factionData = [
   {
-    img: "/faction/1.png",
+    img: "/faction/0.png",
     name: "FREE NAVY",
     description1: "Cheaper upgrades, buildings and weapons. Deal more damage.",
     description2: "Lower income generation.",
@@ -9,7 +9,7 @@ export const factionData = [
   },
 
   {
-    img: "/faction/2.png",
+    img: "/faction/1.png",
     name: "RUSSIA",
     description1: "Lower cost for mining, transport, building & weapons",
     description2: "Lower income generation & damage.",
@@ -18,7 +18,7 @@ export const factionData = [
   },
 
   {
-    img: "/faction/3.png",
+    img: "/faction/2.png",
     name: "CHINA",
     description1: "Lower costs for mining, transport, buildings & weapons.",
     description2: "Lower income generation & damage.",
@@ -27,7 +27,7 @@ export const factionData = [
   },
 
   {
-    img: "/faction/4.png",
+    img: "/faction/3.png",
     name: "INDIA",
     description1: "Lower costs from mining, transport, buildings & weapons",
     description2: "Lower income generation & damage",
@@ -36,7 +36,7 @@ export const factionData = [
   },
 
   {
-    img: "/faction/5.png",
+    img: "/faction/4.png",
     name: "EU",
     description1: "Generates most income",
     description2: "Buildings & repairs cost the cost",
@@ -45,7 +45,7 @@ export const factionData = [
   },
 
   {
-    img: "/faction/6.png",
+    img: "/faction/5.png",
     name: "USA",
     description1: "Higher income generation. Deal more damage",
     description2: "Buildings & weapons cost more",

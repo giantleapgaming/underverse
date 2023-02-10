@@ -34,7 +34,7 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
       const factionNumber = getComponentValue(Faction, factionIndex)?.value;
       if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const Sprite = stationColor[+factionNumber - 1] as Sprites.View1;
+        const Sprite = stationColor[+factionNumber] as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
         const circle = objectPool.get(`obstetrical-circle-${entity}`, "Sprite");
         circle.setComponent({

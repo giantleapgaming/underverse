@@ -66,8 +66,8 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       srcPosition &&
       destPosition
     ) {
-      const srccolor = factionData[+factionSrcValue - 1]?.color;
-      const destcolor = factionData[+factionDestValue - 1]?.color;
+      const srccolor = factionData[+factionSrcValue]?.color;
+      const destcolor = factionData[+factionDestValue]?.color;
       const srcStationName = numberMapping[+srcEntityType].name;
       const destStationName = numberMapping[+destEntityType].name;
       setLogs(

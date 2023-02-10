@@ -24,7 +24,7 @@ export function systemBuild(network: NetworkLayer, phaser: PhaserLayer) {
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     if (faction && typeof +faction === "number") {
-      const color = factionData[+faction - 1]?.color;
+      const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entity_type].name;
       setLogs(
         `<p>${colorString({ name, color })} built ${colorString({ name: stationName, color })} station at (${

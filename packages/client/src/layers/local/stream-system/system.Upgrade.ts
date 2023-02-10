@@ -33,7 +33,7 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
       typeof +entityType === "number" &&
       typeof +level === "number"
     ) {
-      const color = factionData[+faction - 1]?.color;
+      const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
         `<p>${colorString({ name, color })} upgraded ${colorString({ name: stationName, color })} station at (${

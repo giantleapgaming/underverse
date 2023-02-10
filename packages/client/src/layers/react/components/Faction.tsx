@@ -18,7 +18,7 @@ export const Faction = ({
           <S.FactionSelect
             key={`index-${index}`}
             onClick={() => {
-              setSelectFaction(index);
+              setSelectFaction(data.factionNumber);
               clickSound();
             }}
           >

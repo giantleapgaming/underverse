@@ -18,8 +18,8 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
     phaser: { sounds },
   } = layers;
   return (
-    <Container faction={!!selectFaction}>
-      {selectFaction ? (
+    <Container faction={!!(typeof selectFaction === "number")}>
+      {typeof selectFaction === "number" ? (
         <>
           <Gif>
             <img src="/img/nameSun.gif" />
