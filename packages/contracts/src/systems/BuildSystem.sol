@@ -13,10 +13,10 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 //Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
+//import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getPlayerCount, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts, getGodownCreationCost } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -41,19 +41,9 @@ contract BuildSystem is System {
     Coord memory coord = Coord({ x: x, y: y });
     Coord memory center = Coord({ x: zeroCoord, y: zeroCoord });
 
-    uint256 playerCount = getPlayerCount(
-      PlayerCountComponent(getAddressById(components, PlayerCountComponentID)),
-      addressToEntity(msg.sender)
-    );
+    //We allow build only within 15 units from center
 
-    //We check if the entity being built is built at a distance from the center that is allowed
-    //We steadily expand the buildable area based on the number of players that are in the game
-    //The initial space is a circle of 30 units from center and as each new player joins in the buildable area expands by 5 units
-
-    require(
-      getDistanceBetweenCoordinatesWithMultiplier(coord, center) < (30000 + (playerCount * 5000)),
-      "This coordinate is not yet open for building"
-    );
+    require(getDistanceBetweenCoordinatesWithMultiplier(coord, center) < 15000, "Can only build 15 units from earth");
 
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
@@ -80,7 +70,7 @@ contract BuildSystem is System {
 
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
 
-    uint256 godownCreationCost = (getGodownCreationCost(coord.x, coord.y) * factionCostPercent) / 100;
+    uint256 godownCreationCost = (50000000000 * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),

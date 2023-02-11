@@ -70,6 +70,15 @@ contract AttackSystem is System {
     );
 
     require(
+      (destinationGodownPosition.x ** 2 + destinationGodownPosition.y ** 2) > 225,
+      "Destination is at less than 15 units from earth and is hence in a no fire zone"
+    );
+    require(
+      (sourceGodownPosition.x ** 2 + sourceGodownPosition.y ** 2) > 225,
+      "Source is at less than 15 units from earth and is hence in a no fire zone"
+    );
+
+    require(
       atleastOneObstacleOnTheWay(
         sourceGodownPosition.x,
         sourceGodownPosition.y,

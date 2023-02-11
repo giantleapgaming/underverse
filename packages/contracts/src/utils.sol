@@ -75,8 +75,8 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 }
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
-  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
-  uint256 totalPriceRaw = (1000000 * MULTIPLIER) / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
+  //uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
+  uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
   uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
   return godownCreationCost;
 }
@@ -169,7 +169,11 @@ function isThereAnyObstacleOnTheWay(
   int32 x2,
   int32 y2,
   IUint256Component components
-) view returns (Coordd[] memory) // bool
+)
+  view
+  returns (
+    Coordd[] memory // bool
+  )
 {
   // (Coord[] memory) {
   Coordd[] memory pointsArray; // new Coord[];

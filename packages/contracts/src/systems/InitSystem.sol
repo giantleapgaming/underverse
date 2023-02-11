@@ -29,46 +29,46 @@ contract InitSystem is System {
   mapping(address => bool) registeredPlayers;
   uint256 private playerCount;
 
-  int32[18] private sinArr = [
-    int32(0),
-    int32(342),
-    int32(642),
-    int32(866),
-    int32(984),
-    int32(984),
-    int32(866),
-    int32(642),
-    int32(342),
-    int32(0),
-    int32(-342),
-    int32(-642),
-    int32(-866),
-    int32(-984),
-    int32(-984),
-    int32(-866),
-    int32(-642),
-    int32(-342)
-  ];
-  int32[18] private cosArr = [
-    int32(1000),
-    int32(939),
-    int32(766),
-    int32(500),
-    int32(173),
-    int32(-173),
-    int32(-500),
-    int32(-766),
-    int32(-939),
-    int32(-1000),
-    int32(-939),
-    int32(-766),
-    int32(-500),
-    int32(-173),
-    int32(173),
-    int32(500),
-    int32(766),
-    int32(939)
-  ];
+  // int32[18] private sinArr = [
+  //   int32(0),
+  //   int32(342),
+  //   int32(642),
+  //   int32(866),
+  //   int32(984),
+  //   int32(984),
+  //   int32(866),
+  //   int32(642),
+  //   int32(342),
+  //   int32(0),
+  //   int32(-342),
+  //   int32(-642),
+  //   int32(-866),
+  //   int32(-984),
+  //   int32(-984),
+  //   int32(-866),
+  //   int32(-642),
+  //   int32(-342)
+  // ];
+  // int32[18] private cosArr = [
+  //   int32(1000),
+  //   int32(939),
+  //   int32(766),
+  //   int32(500),
+  //   int32(173),
+  //   int32(-173),
+  //   int32(-500),
+  //   int32(-766),
+  //   int32(-939),
+  //   int32(-1000),
+  //   int32(-939),
+  //   int32(-766),
+  //   int32(-500),
+  //   int32(-173),
+  //   int32(173),
+  //   int32(500),
+  //   int32(766),
+  //   int32(939)
+  // ];
 
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
@@ -108,16 +108,16 @@ contract InitSystem is System {
         block.timestamp
       );
 
-      //Initialize 9 asteroids instead of previous 18 by using increments of 40 instead of 20 degrees
-      for (uint256 i = 0; i < 18; i += 2) {
-        uint256 angle = i * 20;
-        int256 radius = 15 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 11);
-        int32 x = (int32(radius) * cosArr[i]) / int32(1000);
-        int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * sinArr[i]) / int32(1000);
-        uint256 balance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 91);
-        uint256 fuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 901);
-        createAsteroids(world, components, x, y, balance, fuel);
-      }
+      //   //Initialize 9 asteroids instead of previous 18 by using increments of 40 instead of 20 degrees
+      //   for (uint256 i = 0; i < 18; i += 2) {
+      //     uint256 angle = i * 20;
+      //     int256 radius = 15 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 11);
+      //     int32 x = (int32(radius) * cosArr[i]) / int32(1000);
+      //     int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * sinArr[i]) / int32(1000);
+      //     uint256 balance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 91);
+      //     uint256 fuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, x, y))) % 901);
+      //     createAsteroids(world, components, x, y, balance, fuel);
+      //   }
     }
     registeredPlayers[msg.sender] = true;
     playerCount += 1;
@@ -139,39 +139,39 @@ contract InitSystem is System {
     //Converting to cartesian
     //Setup a shipyard entity that will serve as HQ
 
-    uint256 baseAngle = (playerCount % 9) * 40;
-    uint256 asteroidAngle = baseAngle + 40;
-    int256 baseRadius = 30 +
-      (int256(playerCount) - 1) *
-      5 +
-      int256(uint256(keccak256(abi.encodePacked(block.timestamp, playerCount))) % 6);
-    int256 asteroidRadius = 30 +
-      (int256(playerCount) - 1) *
-      5 +
-      int256(uint256(keccak256(abi.encodePacked(block.timestamp, playerCount))) % 5);
-    int32 baseX = (int32(baseRadius) * cosArr[baseAngle / 40]) / int32(1000);
-    int32 asteroidX = (int32(asteroidRadius) * cosArr[asteroidAngle / 40]) / int32(1000);
-    int32 asteroidY = (asteroidAngle == 0 || asteroidAngle == 180)
-      ? int32(0)
-      : (int32(-1) * int32(asteroidRadius) * sinArr[asteroidAngle / 40]) / int32(1000);
-    int32 baseY = (baseAngle == 0 || baseAngle == 180)
-      ? int32(0)
-      : (int32(-1) * int32(baseRadius) * sinArr[baseAngle / 40]) / int32(1000);
+    // uint256 baseAngle = (playerCount % 9) * 40;
+    // uint256 asteroidAngle = baseAngle + 40;
+    // int256 baseRadius = 30 +
+    //   (int256(playerCount) - 1) *
+    //   5 +
+    //   int256(uint256(keccak256(abi.encodePacked(block.timestamp, playerCount))) % 6);
+    // int256 asteroidRadius = 30 +
+    //   (int256(playerCount) - 1) *
+    //   5 +
+    //   int256(uint256(keccak256(abi.encodePacked(block.timestamp, playerCount))) % 5);
+    // int32 baseX = (int32(baseRadius) * cosArr[baseAngle / 40]) / int32(1000);
+    // int32 asteroidX = (int32(asteroidRadius) * cosArr[asteroidAngle / 40]) / int32(1000);
+    // int32 asteroidY = (asteroidAngle == 0 || asteroidAngle == 180)
+    //   ? int32(0)
+    //   : (int32(-1) * int32(asteroidRadius) * sinArr[asteroidAngle / 40]) / int32(1000);
+    // int32 baseY = (baseAngle == 0 || baseAngle == 180)
+    //   ? int32(0)
+    //   : (int32(-1) * int32(baseRadius) * sinArr[baseAngle / 40]) / int32(1000);
 
-    uint256 baseID = world.getUniqueEntityId();
-    PositionComponent(getAddressById(components, PositionComponentID)).set(baseID, Coord({ x: baseX, y: baseY }));
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(baseID, baseInitialBalance);
-    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(baseID, shipyardType);
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(baseID, block.timestamp);
-    LevelComponent(getAddressById(components, LevelComponentID)).set(baseID, godownInitialLevel);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(baseID, baseInitialfuel);
-    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(baseID, addressToEntity(msg.sender));
-    OffenceComponent(getAddressById(components, OffenceComponentID)).set(baseID, baseInitialWeapons);
-    DefenceComponent(getAddressById(components, DefenceComponentID)).set(baseID, baseInitialHealth);
+    // uint256 baseID = world.getUniqueEntityId();
+    // PositionComponent(getAddressById(components, PositionComponentID)).set(baseID, Coord({ x: baseX, y: baseY }));
+    // BalanceComponent(getAddressById(components, BalanceComponentID)).set(baseID, baseInitialBalance);
+    // EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(baseID, shipyardType);
+    // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(baseID, block.timestamp);
+    // LevelComponent(getAddressById(components, LevelComponentID)).set(baseID, godownInitialLevel);
+    // FuelComponent(getAddressById(components, FuelComponentID)).set(baseID, baseInitialfuel);
+    // OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(baseID, addressToEntity(msg.sender));
+    // OffenceComponent(getAddressById(components, OffenceComponentID)).set(baseID, baseInitialWeapons);
+    // DefenceComponent(getAddressById(components, DefenceComponentID)).set(baseID, baseInitialHealth);
 
-    uint256 asteroidBalance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 91);
-    uint256 asteroidFuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 901);
-    createAsteroids(world, components, asteroidX, asteroidY, asteroidBalance, asteroidFuel);
+    // uint256 asteroidBalance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 91);
+    // uint256 asteroidFuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 901);
+    // createAsteroids(world, components, asteroidX, asteroidY, asteroidBalance, asteroidFuel);
   }
 
   //Moresh: Updated to accept faction as input from UI

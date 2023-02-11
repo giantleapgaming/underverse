@@ -40,10 +40,10 @@ contract MoveShipSystem is System {
     require(sourceEntityLevel >= 1, "Ship has already been destroyed");
 
     //Check that the entity is either a harvester or an attack ship
-    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      sourceEntity
-    );
-    require(((sourceEntityType == 4) || (sourceEntityType == 5)), "Only Harvesters and Attack ships can move");
+    // uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+    //   sourceEntity
+    // );
+    //require(((sourceEntityType == 4) || (sourceEntityType == 5)), "Only Harvesters and Attack ships can move");
 
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
