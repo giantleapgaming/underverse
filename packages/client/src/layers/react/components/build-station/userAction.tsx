@@ -52,17 +52,18 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
             src="/ui/recenter.png"
             onClick={() => {
               sounds["click"].play();
-              const allPositionEntities = [...getComponentEntities(Position)];
-              allPositionEntities.find((entity) => {
-                const position = getComponentValueStrict(Position, entity);
-                const ownedBy = getComponentValue(OwnedBy, entity)?.value;
-                if (ownedBy === userEntityId) {
-                  const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-                  camera.centerOn(x, y);
-                  camera.setZoom(2);
-                }
-                return ownedBy === userEntityId;
-              });
+              camera.centerOn(0, -1);
+              // const allPositionEntities = [...getComponentEntities(Position)];
+              // allPositionEntities.find((entity) => {
+              //   const position = getComponentValueStrict(Position, entity);
+              //   const ownedBy = getComponentValue(OwnedBy, entity)?.value;
+              //   if (ownedBy === userEntityId) {
+              //     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+              //     camera.centerOn(x, y);
+              //     camera.setZoom(2);
+              //   }
+              //   return ownedBy === userEntityId;
+              // });
             }}
           />
         </div>

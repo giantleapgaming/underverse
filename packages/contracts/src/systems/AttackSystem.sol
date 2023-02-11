@@ -27,13 +27,13 @@ contract AttackSystem is System {
       (uint256, uint256, uint256)
     );
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
+    // uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
+    //   .getValue(addressToEntity(msg.sender));
 
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
-    );
+    // require(
+    //   playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
+    //   "Need 0 seconds of delay between actions"
+    // );
 
     uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
       sourceGodownEntity
