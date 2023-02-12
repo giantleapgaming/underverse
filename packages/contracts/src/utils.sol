@@ -279,6 +279,7 @@ function atleastOneObstacleOnTheWay(
 //   }
 //   return points;
 // }
+//We will split the creation of the Asteroid and determining its balances into two different steps
 
 function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
   uint256 ent = world.getUniqueEntityId();

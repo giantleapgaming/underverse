@@ -196,22 +196,10 @@
       "writeAccess": [
         "LastUpdatedTimeComponent",
         "PositionComponent",
-        "CashComponent"
-      ]
-    },
-    {
-      "name": "BuildFromShipyardSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "NameComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "OffenceComponent",
-        "DefenceComponent",
+        "CashComponent",
+        "EntityTypeComponent",
         "LevelComponent",
         "BalanceComponent",
-        "FactionComponent",
-        "EntityTypeComponent",
         "FuelComponent"
       ]
     }

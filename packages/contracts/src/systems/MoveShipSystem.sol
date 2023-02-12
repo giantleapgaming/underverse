@@ -13,7 +13,7 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createAsteroids } from "../utils.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -65,26 +65,6 @@ contract MoveShipSystem is System {
       "Obstacle on the way"
     );
 
-    // PositionComponent position = PositionComponent(getAddressById(components, PositionComponentID));
-
-    // uint256[] memory allPositionEntities = position.getEntities();
-
-    // Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
-
-    //Check if any stations are blocking path
-    //This will ensure you cannot move to a destination if there is something in the way or something at the destination as well
-
-    // Coord[] memory blockingCoords = checkIntersections(
-    //   sourcePosition,
-    //   destinationPosition,
-    //   // enclosedPoints
-    //   allStationCoords
-    // );
-
-    // require(blockingCoords.length < 1, "Blocker entity in the way");
-
-    //END: Check if enemy stations are blocking path
-
     //Calculate cost of transport
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
@@ -111,6 +91,8 @@ contract MoveShipSystem is System {
       addressToEntity(msg.sender),
       block.timestamp
     );
+
+    createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
