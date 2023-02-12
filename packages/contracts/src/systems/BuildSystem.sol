@@ -16,7 +16,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 //import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts, getGodownCreationCost } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -70,7 +70,7 @@ contract BuildSystem is System {
 
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
 
-    uint256 godownCreationCost = (50000000000 * factionCostPercent) / 100;
+    uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
