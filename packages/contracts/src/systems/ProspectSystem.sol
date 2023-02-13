@@ -28,15 +28,15 @@ contract ProspectSystem is System {
 
     // Check if source and destination are Harvester and Asteroid respectively
 
-    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      sourceGodownEntity
+    require(
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceGodownEntity) == 5,
+      "Source has to be an Harvester"
     );
-    require(sourceEntityType == 5, "Source has to be an Harvester");
 
-    uint256 destinationEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      destinationGodownEntity
+    require(
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationGodownEntity) == 2,
+      "Destination has to be an Asteroid"
     );
-    require(destinationEntityType == 2, "Destination has to be an Asteroid");
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
@@ -44,10 +44,15 @@ contract ProspectSystem is System {
       "Harvester not owned by user"
     );
 
-    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      sourceGodownEntity
+    require(
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).getValue(destinationGodownEntity) == 0,
+      "Asteroid already Prospected"
     );
-    require(sourceGodownLevel >= 1, "Harvester needs to be atleast Level 1");
+
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
+      "Harvester needs to be atleast Level 1"
+    );
 
     Coord memory sourceGodownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
