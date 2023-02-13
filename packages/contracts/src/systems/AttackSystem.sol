@@ -5,6 +5,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
+import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -27,23 +28,15 @@ contract AttackSystem is System {
       (uint256, uint256, uint256)
     );
 
-    // uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-    //   .getValue(addressToEntity(msg.sender));
-
-    // require(
-    //   playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-    //   "Need 0 seconds of delay between actions"
-    // );
-
-    uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      sourceGodownEntity
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
+      "Invalid Source godown entity"
     );
-    require(sourceGodownLevel >= 1, "Invalid Source godown entity");
 
-    uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      destinationGodownEntity
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationGodownEntity) >= 1,
+      "Invalid Destination godown entity"
     );
-    require(destinationGodownLevel >= 1, "Invalid Destination godown entity");
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
@@ -94,6 +87,8 @@ contract AttackSystem is System {
       sourceGodownPosition,
       destinationGodownPosition
     );
+
+    require(distanceBetweenGodowns <= 10000, "Can only attack upto 10 unit distance");
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
       addressToEntity(msg.sender)
