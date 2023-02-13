@@ -40,7 +40,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence },
+      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence, Fuel },
       api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, attackSystem, moveSystem },
       network: { connectedAddress },
     },
@@ -57,7 +57,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationPosition = getComponentValue(Position, destinationDetails);
-    const fuel = 0;
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);

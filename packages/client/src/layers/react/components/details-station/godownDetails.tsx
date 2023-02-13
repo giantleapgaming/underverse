@@ -22,7 +22,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
       api: { upgradeSystem, sellSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
@@ -37,8 +37,8 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
-    const fuel = 0;
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+    //const fuel = 0;
 
     if (entityType && +entityType === Mapping.godown.id) {
       return (

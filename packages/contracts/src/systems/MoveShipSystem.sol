@@ -50,7 +50,7 @@ contract MoveShipSystem is System {
     Coord memory destinationPosition = Coord({ x: x, y: y });
 
     uint256 distFromCenterSq = uint256(int256(destinationPosition.x) ** 2 + int256(destinationPosition.y) ** 2);
-    require(distFromCenterSq < 10000, "Cannot build beyond 100 orbits");
+    require(distFromCenterSq < 10000, "Cannot move beyond 100 orbits");
 
     require(
       atleastOneObstacleOnTheWay(
@@ -70,14 +70,26 @@ contract MoveShipSystem is System {
     //Transport cost is a square function of the distance and level of the entity
     uint256 totalTransportCost = ((distanceBetweenGodowns * sourceEntityLevel) ** 2);
 
-    // uint256 playerCash = getPlayerCash(
-    //   CashComponent(getAddressById(components, CashComponentID)),
-    //   addressToEntity(msg.sender)
-    // );
-
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
     require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to transport product");
+
+    // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
+    // The greater the distance from center the higher the probability that the second condition will be satisfied
+    // This means the odds of an asteroid discovery increase as you go further from the center
+    // We check that the ship is of class harvester to ensure it can discover stuff
+
+    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+      sourceEntity
+    );
+
+    if (
+      (sourceEntityType == 5) &&
+      (distFromCenterSq > 225) &&
+      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
+    ) {
+      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+    }
 
     // update player data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
@@ -88,16 +100,6 @@ contract MoveShipSystem is System {
       addressToEntity(msg.sender),
       block.timestamp
     );
-
-    // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
-    // The greater the distance from center the higher the probability that the second condition will be satisfied
-    // This means the odds of an asteroid discovery increase as you go further from the center
-    if (
-      (distFromCenterSq > 225) &&
-      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
-    ) {
-      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
-    }
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates

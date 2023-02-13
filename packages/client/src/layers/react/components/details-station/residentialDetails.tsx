@@ -21,7 +21,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Population },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Population, Fuel },
       api: { upgradeSystem, repairSystem, scrapeSystem },
       network: { connectedAddress },
     },
@@ -36,8 +36,8 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     const population = getComponentValueStrict(Population, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    // const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
-    const fuel = 0;
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+    //const fuel = 0;
 
     if (entityType && +entityType === Mapping.residential.id) {
       return (

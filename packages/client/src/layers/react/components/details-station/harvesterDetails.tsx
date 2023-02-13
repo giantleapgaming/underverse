@@ -31,7 +31,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Position, Balance, Level, Defence },
+      components: { EntityType, OwnedBy, Position, Balance, Level, Defence, Fuel },
       api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem },
       network: { connectedAddress },
     },
@@ -44,11 +44,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    const fuel = 0;
+    //const fuel = 0;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
