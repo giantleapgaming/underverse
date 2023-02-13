@@ -40,12 +40,6 @@ contract MoveShipSystem is System {
     uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
     require(sourceEntityLevel >= 1, "Ship has already been destroyed");
 
-    //Check that the entity is either a harvester or an attack ship
-    // uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-    //   sourceEntity
-    // );
-    //require(((sourceEntityType == 4) || (sourceEntityType == 5)), "Only Harvesters and Attack ships can move");
-
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       sourceEntity
@@ -54,6 +48,9 @@ contract MoveShipSystem is System {
     //Destination position
 
     Coord memory destinationPosition = Coord({ x: x, y: y });
+
+    uint256 distFromCenterSq = uint256(int256(destinationPosition.x) ** 2 + int256(destinationPosition.y) ** 2);
+    require(distFromCenterSq < 10000, "Cannot build beyond 100 orbits");
 
     require(
       atleastOneObstacleOnTheWay(
@@ -92,7 +89,15 @@ contract MoveShipSystem is System {
       block.timestamp
     );
 
-    createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+    // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
+    // The greater the distance from center the higher the probability that the second condition will be satisfied
+    // This means the odds of an asteroid discovery increase as you go further from the center
+    if (
+      (distFromCenterSq > 225) &&
+      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
+    ) {
+      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+    }
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
