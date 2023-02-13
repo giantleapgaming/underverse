@@ -205,6 +205,16 @@
         "FuelComponent",
         "ProspectedComponent"
       ]
+    },
+    {
+      "name": "ProspectSystem",
+      "writeAccess": [
+        "CashComponent",
+        "LastUpdatedTimeComponent",
+        "BalanceComponent",
+        "FuelComponent",
+        "ProspectedComponent"
+      ]
     }
   ]
 }
