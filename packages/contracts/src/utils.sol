@@ -17,7 +17,7 @@ import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
-import { FuelComponent, ID as FuelComponentID } from "./components/FuelComponent.sol";
+import { ProspectedComponent, ID as ProspectedComponentID } from "./components/ProspectedComponent.sol";
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -289,6 +289,7 @@ function createAsteroids(IWorld world, IUint256Component components, int32 x, in
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
   FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
+  ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
 }
 
 function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
