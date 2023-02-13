@@ -16,8 +16,9 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 //import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
+import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord } from "../constants.sol";
+import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord, baseInitialfuel } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
@@ -90,7 +91,7 @@ contract BuildSystem is System {
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(godownEntity, initialEntityPopulation);
-    //Moresh: Assign Entity type
+    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
