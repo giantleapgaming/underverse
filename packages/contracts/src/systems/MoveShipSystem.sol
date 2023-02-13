@@ -16,6 +16,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createAsteroids } from "../utils.sol";
 import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
+import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 

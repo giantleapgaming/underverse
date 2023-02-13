@@ -14,7 +14,8 @@
     "PopulationComponent",
     "FuelComponent",
     "PlayerCountComponent",
-    "RankComponent"
+    "RankComponent",
+    "SectorEdgeComponent"
   ],
   "systems": [
     {
@@ -39,7 +40,8 @@
         "EntityTypeComponent",
         "PopulationComponent",
         "FuelComponent",
-        "PlayerCountComponent"
+        "PlayerCountComponent",
+        "SectorEdgeComponent"
       ]
     },
     {

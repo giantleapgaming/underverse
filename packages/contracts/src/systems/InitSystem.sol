@@ -22,6 +22,7 @@ import { PlayerCountComponent, ID as PlayerCountComponentID } from "../component
 import { earthInitialPopulation, baseInitialBalance, shipyardType, godownInitialLevel, baseInitialfuel, baseInitialWeapons, baseInitialHealth } from "../constants.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
 
@@ -172,6 +173,13 @@ contract InitSystem is System {
     // uint256 asteroidBalance = 10 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 91);
     // uint256 asteroidFuel = 1000 + (uint256(keccak256(abi.encodePacked(block.timestamp, asteroidX, asteroidY))) % 901);
     // createAsteroids(world, components, asteroidX, asteroidY, asteroidBalance, asteroidFuel);
+
+    uint256[] memory componentIds = new uint256[](8);
+    for (uint256 i = 0; i < 8; i++) {
+      componentIds[i] = 15;
+    }
+
+    SectorEdgeComponent(getAddressById(components, SectorEdgeComponentID)).set(ID, componentIds);
   }
 
   //Moresh: Updated to accept faction as input from UI
