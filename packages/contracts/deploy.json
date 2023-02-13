@@ -16,7 +16,8 @@
     "PlayerCountComponent",
     "RankComponent",
     "SectorEdgeComponent",
-    "ProspectedComponent"
+    "ProspectedComponent",
+    "PrevPositionComponent"
   ],
   "systems": [
     {
@@ -203,7 +204,8 @@
         "LevelComponent",
         "BalanceComponent",
         "FuelComponent",
-        "ProspectedComponent"
+        "ProspectedComponent",
+        "PrevPositionComponent"
       ]
     },
     {
