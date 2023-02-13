@@ -117,7 +117,7 @@ contract ProspectSystem is System {
       block.timestamp
     );
 
-    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationGodownEntity, 0);
+    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationGodownEntity, 1);
   }
 
   function executeTyped(uint256 sourceGodownEntity, uint256 destinationGodownEntity) public returns (bytes memory) {
