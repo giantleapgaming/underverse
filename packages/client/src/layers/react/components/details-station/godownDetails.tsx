@@ -5,6 +5,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
+import { distance } from "../../utils/distance";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Sell } from "../action-system/sell";
@@ -87,13 +88,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}
+                      faction={+factionNumber}
                     />
                   )}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence)}
+                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("");
@@ -109,7 +111,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance)}
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance, factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");
@@ -141,6 +143,8 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                           console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
                         }
                       }}
+                      distance={distance(position.x, position.y, 0, 0)}
+                      faction={+factionNumber}
                     />
                   )}
                 </S.Column>

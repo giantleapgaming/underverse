@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Mapping } from "../../../../utils/mapping";
+import { distance } from "../../utils/distance";
 import { Harvest } from "../action-system/harvest";
 import { SelectButton } from "./Button";
 
@@ -86,6 +87,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                     <div>
                       <Harvest
                         space={(destinationBalance && level && +level - +destinationBalance) || 0}
+                        // harvestCost={harvestPrice(position.x, position.y, destinationPosition.x , destinationPosition.y, amount)}
                         harvest={async (amount) => {
                           try {
                             sounds["confirm"].play();
@@ -124,6 +126,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                             console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                           }
                         }}
+                        distance={distance(position.x, position.y, destinationPosition.x , destinationPosition.y)}
                         playSound={() => {
                           sounds["click"].play();
                         }}

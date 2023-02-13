@@ -1,21 +1,25 @@
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
+import { factionData } from "../../../../utils/constants";
 
 export const Upgrade = ({
   level,
   upgradeSystem,
   defence,
+  faction
 }: {
   level: number;
   defence: number;
   upgradeSystem: () => void;
+  faction: number;
 }) => {
+  const upgradeCost = Math.pow(level + 1, 2) * 1_000 * factionData[+faction]?.upgrade;
   return (
     <S.Details>
       {level < 8 ? (
         <>
           <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
-            <S.Cost>{level && convertPrice(Math.pow(level + 1, 2) * 1_000)}</S.Cost>
+            <S.Cost>{level && convertPrice(upgradeCost)}</S.Cost>
             <S.OtherDetails>
               LEVEL: <span style={{ color: "white" }}>{level}</span> &rarr; {level + 1}
             </S.OtherDetails>

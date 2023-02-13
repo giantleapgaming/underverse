@@ -6,6 +6,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { Rapture } from "../action-system/rapture";
 import { SelectButton } from "./Button";
+import { distance } from "../../utils/distance";
 
 export const PlanetDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("rapture");
@@ -101,6 +102,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                       playSound={() => {
                         sounds["click"].play();
                       }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                     />
                   </div>
                 )}

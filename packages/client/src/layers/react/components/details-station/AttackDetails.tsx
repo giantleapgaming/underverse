@@ -115,6 +115,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                               console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                             }
                           }}
+                          faction={+factionNumber}
                         />
                       )}
                       {action === "weapon" && (
@@ -133,13 +134,14 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                               console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
                             }
                           }}
+                          faction={+factionNumber}
                         />
                       )}
                       {action === "repair" && (
                         <Repair
                           defence={+defence}
                           level={+level}
-                          repairCost={repairPrice(position.x, position.y, level, defence)}
+                          repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
                           repairSystem={async () => {
                             try {
                               setAction("upgrade");
@@ -155,7 +157,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       )}
                       {action === "scrap" && (
                         <Scrap
-                          scrapCost={scrapPrice(position.x, position.y, level, defence, offence)}
+                          scrapCost={scrapPrice(position.x, position.y, level, defence, offence, factionNumber)}
                           scrapSystem={async () => {
                             try {
                               sounds["confirm"].play();
@@ -214,6 +216,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       playSound={() => {
                         sounds["click"].play();
                       }}
+                      faction={+factionNumber}
                     />
                   )}
                   {action === "move" &&
@@ -222,7 +225,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={1000}
+                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y ) * +level, 2)}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&

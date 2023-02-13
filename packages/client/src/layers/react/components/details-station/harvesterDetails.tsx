@@ -6,6 +6,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
+import { distance } from "../../utils/distance";
 import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
@@ -31,7 +32,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Position, Balance, Level, Defence, Fuel },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
       api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem },
       network: { connectedAddress },
     },
@@ -40,6 +41,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
+    const entityIndex = world.entities.indexOf(ownedBy);
+    const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
     const position = getComponentValueStrict(Position, selectedEntity);
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
@@ -100,6 +103,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}
+                      faction={+factionNumber}
                     />
                   )}
                   {action === "transport" && destinationDetails && isDestinationSelected && (
@@ -147,13 +151,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       playSound={() => {
                         sounds["click"].play();
                       }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      faction={+factionNumber}
                     />
                   )}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence)}
+                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("");
@@ -169,7 +175,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance)}
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance, factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");
@@ -190,7 +196,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={1000}
+                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y ) * +level, 2)}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&

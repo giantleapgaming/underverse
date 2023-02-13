@@ -87,6 +87,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                           console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
                         }
                       }}
+                      faction={+factionNumber}
                     />
                   )}
 
@@ -94,7 +95,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence)}
+                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("attack");
@@ -110,7 +111,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, population)}
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, population, factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("scrap");

@@ -1,16 +1,19 @@
 import { useState } from "react";
 import styled from "styled-components";
+import { factionData } from "../../../../utils/constants";
 
 export const Attack = ({
   offence,
   playSound,
   distance,
   onFire,
+  faction
 }: {
   offence: number;
   playSound: () => void;
   distance: number;
   onFire: (missiles: number) => void;
+  faction: number;
 }) => {
   const [selected, setSelected] = useState("0");
 
@@ -42,7 +45,7 @@ export const Attack = ({
       </div>
       {+offence > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>TOTAL DAMAGE {Math.floor(+selected * (250 / distance))}</S.Text>
+          <S.Text>TOTAL DAMAGE {Math.floor(+selected * (250 / distance * factionData[+faction]?.attack))}</S.Text>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
