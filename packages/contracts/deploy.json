@@ -198,7 +198,6 @@
       "writeAccess": [
         "LastUpdatedTimeComponent",
         "PositionComponent",
-        "CashComponent",
         "EntityTypeComponent",
         "LevelComponent",
         "BalanceComponent",

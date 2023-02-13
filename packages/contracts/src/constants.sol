@@ -17,7 +17,7 @@ uint256 constant earthCenterPlanetDefence = 1000000;
 uint256 constant earthInitialPopulation = 100000;
 uint256 constant initialEntityPopulation = 0;
 uint256 constant baseInitialBalance = 100;
-uint256 constant baseInitialfuel = 1000;
+uint256 constant baseInitialfuel = 1000 * MULTIPLIER;
 uint256 constant baseInitialWeapons = 8;
 uint256 constant baseInitialHealth = 1000;
 
