@@ -25,7 +25,7 @@ contract RefuelSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
 
-    // Check if source is a Fuel Carrier owned by you
+    //Use this system to refuel all kinds of ships and harvest fuel from asteroids
     // We do not prevent from refuelling others,
     // We rely on users discretion to ensure that they are not refuelling others or sending fuel to planets and asteroids etc
     // Consider making similar changes for attack and transport cargo
@@ -33,13 +33,21 @@ contract RefuelSystem is System {
     uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       sourceEntity
     );
-    require(sourceEntityType == 9, "Source has to be an Fuel Carrier");
 
+    //We check that the source is either owned by you or is an Asteroid
+    //If it is an unprospected Asteroid its balance will be 0 and it will now allow you to refuel
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
-      "Source not owned by user"
+      ((OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
+        addressToEntity(msg.sender)) || (sourceEntityType == 2)),
+      "Source not owned by user or is not an Asteroid"
     );
+
+    if ((sourceEntityType == 2)) {
+      require(
+        EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 5,
+        "If source is Asteroid, destination has to be a Harvester"
+      );
+    }
 
     require(sourceEntity != destinationEntity, "Source and destination cannot be same");
 
@@ -53,7 +61,7 @@ contract RefuelSystem is System {
 
     uint256 destinationFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(destinationEntity);
 
-    require(kgs <= sourceFuel, "Harvest quantity is more than Asteroid balance");
+    require(kgs <= sourceFuel, "Harvest quantity is more than source ship fuel balance");
 
     //If destination is another fuel carrier, the max carrying capacity is level * 5000
     //If destination is any other type of vessel, the max carrying capacity is level * 1000
@@ -64,7 +72,7 @@ contract RefuelSystem is System {
       );
     } else {
       require(
-        destinationFuel + kgs <= destinationLevel * 5000,
+        destinationFuel + kgs <= destinationLevel * 1000,
         "Supplied Fuel is more than destination  storage capacity"
       );
     }
@@ -92,7 +100,7 @@ contract RefuelSystem is System {
 
     uint256 distanceBetween = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
 
-    require(distanceBetween <= 2000, "Fuel Carrier is further than 2 units distance from target ship");
+    require(distanceBetween <= 5000, "Fuel Source is further than 5 units distance from target ship");
 
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
