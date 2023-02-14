@@ -49,7 +49,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   label2.setOrigin(0.5, 0.5);
   label2.setDepth(20);
 
-  circle3.setStrokeStyle(0.3, 0x2d2d36);
+  circle3.setStrokeStyle(2, 0x2d2d36);
   circle3.setDisplaySize(1984, 1984);
   label3.setOrigin(0.5, 0.5);
   label3.setDepth(20);
