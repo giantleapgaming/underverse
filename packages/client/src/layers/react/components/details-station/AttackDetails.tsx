@@ -93,7 +93,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
-                  <p>{+fuel}</p>
+                  <p>{Math.floor(+fuel / 10_00_000)}</p>
                 </S.Weapon>
               </S.Row>
               {ownedBy === connectedAddress.get() && (

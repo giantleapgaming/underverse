@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
 
 export const Move = ({ moveSystem, cost }: { moveSystem: () => void; cost: number }) => {
   return (
@@ -8,7 +7,8 @@ export const Move = ({ moveSystem, cost }: { moveSystem: () => void; cost: numbe
         <S.Cost>
           MOVE FOR
           <br />
-          {convertPrice(cost)}
+          <img src="/build-stations/hydrogen.png" />
+            {(Math.round(cost))}
         </S.Cost>
       </div>
       <S.InlinePointer onClick={moveSystem}>

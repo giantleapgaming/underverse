@@ -5,6 +5,8 @@ import {
   getComponentValue,
   getEntitiesWithValue,
   overridableComponent,
+  defineComponent,
+  Type,
 } from "@latticexyz/recs";
 import {
   createActionSystem,
@@ -115,6 +117,24 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Position" },
     }),
+
+    PersonName: defineStringComponent(world, {
+      id: "PersonName",
+      indexed: true,
+      metadata: { contractId: "component.PersonName" },
+    }),
+
+    PrevPosition: defineCoordComponent(world, {
+      id: "PrevPosition",
+      indexed: true,
+      metadata: { contractId: "component.PrevPosition" },
+    }),
+
+    SectorEdge: defineComponent(
+      world,
+      { value: Type.NumberArray },
+      { id: "SectorEdge", metadata: { contractId: "component.SectorEdge" } }
+    ),
   };
   const componentsWithOverrides = {
     Position: overridableComponent(components.Position),
@@ -133,6 +153,9 @@ export async function createNetworkLayer(config: GameConfig) {
     Population: overridableComponent(components.Population),
     Rank: overridableComponent(components.Rank),
     OwnedBy: overridableComponent(components.OwnedBy),
+    PersonName: overridableComponent(components.PersonName),
+    PrevPosition: overridableComponent(components.PrevPosition),
+    SectorEdge: overridableComponent(components.SectorEdge),
   };
 
   // --- SETUP ----------------------------------------------------------------------
