@@ -2,6 +2,7 @@
 pragma solidity >=0.8.0;
 
 import { PositionComponent, ID as PositionComponentID, Coord } from "./components/PositionComponent.sol";
+import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "./components/PrevPositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "./components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "./components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
@@ -29,6 +30,11 @@ function getLastUpdatedTimeOfEntity(
 
 function getCurrentPosition(PositionComponent positionComponent, uint256 entity) view returns (Coord memory) {
   (int32 x, int32 y) = abi.decode(positionComponent.getRawValue(entity), (int32, int32));
+  return Coord(x, y);
+}
+
+function getPrevPosition(PrevPositionComponent prevPositionComponent, uint256 entity) view returns (Coord memory) {
+  (int32 x, int32 y) = abi.decode(prevPositionComponent.getRawValue(entity), (int32, int32));
   return Coord(x, y);
 }
 

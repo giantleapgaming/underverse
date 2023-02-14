@@ -13,7 +13,7 @@ import { OffenceComponent, ID as OffenceComponentID } from "../components/Offenc
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts, getPrevPosition } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -23,72 +23,117 @@ contract AttackSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceGodownEntity, uint256 destinationGodownEntity, uint256 amount) = abi.decode(
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 amount) = abi.decode(
       arguments,
       (uint256, uint256, uint256)
     );
 
-    require(
-      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
-      "Invalid Source godown entity"
-    );
+    uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
+    require(sourceEntityLevel >= 1, "Invalid Source  entity");
+
+    // require(
+    //   LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity) >= 1,
+    //   "Invalid Destination  entity"
+    // );
 
     require(
-      LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationGodownEntity) >= 1,
-      "Invalid Destination godown entity"
-    );
-
-    require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
         addressToEntity(msg.sender),
-      "Source godown not owned by user"
+      "Source not owned by user"
     );
 
-    uint256 sourceGodownEntityOffenceAmount = OffenceComponent(getAddressById(components, OffenceComponentID)).getValue(
-      sourceGodownEntity
+    uint256 sourceEntityOffenceAmount = OffenceComponent(getAddressById(components, OffenceComponentID)).getValue(
+      sourceEntity
     );
 
-    require(sourceGodownEntityOffenceAmount >= amount, "Not enough torpedos in godown");
+    require(sourceEntityOffenceAmount >= amount, "Not enough torpedos in ");
 
-    // At this moment we know attack will be successful
-
-    Coord memory sourceGodownPosition = getCurrentPosition(
+    // Take current position
+    Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      sourceGodownEntity
+      sourceEntity
     );
+    // Take previous position, this allows us to draw a line from previous position to current position and get the line of attack
 
-    Coord memory destinationGodownPosition = getCurrentPosition(
+    Coord memory sourcePrevPosition = getPrevPosition(
+      PrevPositionComponent(getAddressById(components, PrevPositionComponentID)),
+      sourceEntity
+    );
+    //Get destination attack coordinates
+
+    Coord memory destinationPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      destinationGodownEntity
+      destinationEntity
     );
 
     require(
-      (destinationGodownPosition.x ** 2 + destinationGodownPosition.y ** 2) > 225,
+      (destinationPosition.x ** 2 + destinationPosition.y ** 2) > 225,
       "Destination is at less than 15 units from earth and is hence in a no fire zone"
     );
     require(
-      (sourceGodownPosition.x ** 2 + sourceGodownPosition.y ** 2) > 225,
+      (sourcePosition.x ** 2 + sourcePosition.y ** 2) > 225,
       "Source is at less than 15 units from earth and is hence in a no fire zone"
     );
 
     require(
       atleastOneObstacleOnTheWay(
-        sourceGodownPosition.x,
-        sourceGodownPosition.y,
-        destinationGodownPosition.x,
-        destinationGodownPosition.y,
+        sourcePosition.x,
+        sourcePosition.y,
+        destinationPosition.x,
+        destinationPosition.y,
         components
       ) == false,
       "Obstacle on the way"
     );
 
-    // distanceBetweenGodowns the value that you get below is multiplied by MULTIPLIER
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
-      sourceGodownPosition,
-      destinationGodownPosition
+    // distance the value that you get below is multiplied by MULTIPLIER
+    uint256 distance = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
+
+    require(
+      distance <= (9000 + (sourceEntityLevel * MULTIPLIER2)),
+      "Can only attack upto a certain distance based on your level"
     );
 
-    require(distanceBetweenGodowns <= 10000, "Can only attack upto 10 unit distance");
+    //Now we check if the attack coordinate is less than certain units (dictated by your level) away from a line
+    //that is drawn from the previous position to current position of the attacker
+    // The distance of the attack point to the line connecting the two points
+    //We check if the attack point is less than a certain distaince from the heading line
+    //The greater this distance the more wider your shooting arc, which means higher level ships become more powerful at shooting
+
+    require(
+      (
+        Math.abs(
+          (sourcePosition.y - sourcePrevPosition.y) *
+            destinationPosition.x -
+            (sourcePosition.x - sourcePrevPosition.x) *
+            destinationPosition.y +
+            sourcePosition.x *
+            sourcePrevPosition.y -
+            sourcePosition.y *
+            sourcePrevPosition.x
+        )
+      ) /
+        (
+          Math.sqrtInt(
+            (sourcePosition.y - sourcePrevPosition.y) *
+              (sourcePosition.y - sourcePrevPosition.y) +
+              (sourcePosition.x - sourcePrevPosition.x) *
+              (sourcePosition.x - sourcePrevPosition.x)
+          )
+        ) <=
+        int256(sourceEntityLevel),
+      "Attack coordinate is out of shooting arc"
+    );
+
+    //We also want to ensure that the attack point is in the direction the ship was heading and not on the back side of the ship
+    //It is possible for the attack point to be at the right distance but on the other side of the ship, we want to prevent attacks on points behind you
+    //You should only be able to attack points which are ahead of you and in the attack arc
+    //To do this we will find distance from prev position and compare it to distance from current position to ensure that it is greater
+
+    require(
+      getDistanceBetweenCoordinatesWithMultiplier(sourcePrevPosition, destinationPosition) > distance,
+      "Attack point is behind the attacker"
+    );
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
       addressToEntity(msg.sender)
@@ -96,41 +141,38 @@ contract AttackSystem is System {
 
     uint256 factionCostPercent = getFactionAttackCosts(Faction(userFaction));
 
-    // distanceBetweenGodowns is 25806 for (15,9) and (30,30)
-    // uint256 totalDamage = (amount * 500 * MULTIPLIER2) / distanceBetweenGodowns;
-    uint256 totalDamage = (amount * ((250 * MULTIPLIER2) / distanceBetweenGodowns) * factionCostPercent) / 100;
+    // distanceBetweens is 25806 for (15,9) and (30,30)
+    // uint256 totalDamage = (amount * 500 * MULTIPLIER2) / distanceBetweens;
+    uint256 totalDamage = (amount * ((250 * MULTIPLIER2) / distance) * factionCostPercent) / 100;
     // uint256 totalDamage = 101;
 
-    // reduce balance of weapons of source godown by the amount used up,
+    // reduce balance of weapons of source  by the amount used up,
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(
-      sourceGodownEntity,
-      sourceGodownEntityOffenceAmount - amount
+      sourceEntity,
+      sourceEntityOffenceAmount - amount
     );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
-      block.timestamp
-    );
+    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
 
     uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
-      destinationGodownEntity
+      destinationEntity
     );
 
     if (totalDamage >= destinationDefenceAmount) {
-      deleteGodown(destinationGodownEntity, components);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(destinationGodownEntity, 0);
-      // DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationGodownEntity, 0);
-      // OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationGodownEntity, 0);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationGodownEntity, 0);
+      deleteGodown(destinationEntity, components);
+      // LevelComponent(getAddressById(components, LevelComponentID)).set(destinationEntity, 0);
+      // DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, 0);
+      // OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationEntity, 0);
+      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, 0);
       // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      //   .set(destinationGodownEntity,block.timestamp);
-      // PositionComponent(getAddressById(components, PositionComponentID)).remove(destinationGodownEntity);
+      //   .set(destinationEntity,block.timestamp);
+      // PositionComponent(getAddressById(components, PositionComponentID)).remove(destinationEntity);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
-        destinationGodownEntity,
+        destinationEntity,
         destinationDefenceAmount - totalDamage
       );
       LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-        destinationGodownEntity,
+        destinationEntity,
         block.timestamp
       );
     }
@@ -142,11 +184,7 @@ contract AttackSystem is System {
     );
   }
 
-  function executeTyped(
-    uint256 sourceGodownEntity,
-    uint256 destinationGodownEntity,
-    uint256 amount
-  ) public returns (bytes memory) {
-    return execute(abi.encode(sourceGodownEntity, destinationGodownEntity, amount));
+  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 amount) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, amount));
   }
 }
