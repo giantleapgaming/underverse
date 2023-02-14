@@ -5,6 +5,8 @@ import {
   getComponentValue,
   getEntitiesWithValue,
   overridableComponent,
+  defineComponent,
+  Type,
 } from "@latticexyz/recs";
 import {
   createActionSystem,
@@ -33,6 +35,12 @@ export async function createNetworkLayer(config: GameConfig) {
     Name: defineStringComponent(world, { id: "Name", indexed: true, metadata: { contractId: "component.Name" } }),
 
     Cash: defineNumberComponent(world, { id: "Cash", indexed: true, metadata: { contractId: "component.Cash" } }),
+
+    SectorEdge: defineComponent(
+      world,
+      { value: Type.NumberArray },
+      { id: "SectorEdge", metadata: { contractId: "component.SectorEdge" } }
+    ),
 
     Faction: defineNumberComponent(world, {
       id: "Faction",
@@ -133,6 +141,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Population: overridableComponent(components.Population),
     Rank: overridableComponent(components.Rank),
     OwnedBy: overridableComponent(components.OwnedBy),
+    SectorEdge: overridableComponent(components.SectorEdge),
   };
 
   // --- SETUP ----------------------------------------------------------------------

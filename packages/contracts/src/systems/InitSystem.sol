@@ -179,7 +179,8 @@ contract InitSystem is System {
       componentIds[i] = 15;
     }
 
-    SectorEdgeComponent(getAddressById(components, SectorEdgeComponentID)).set(ID, componentIds);
+    uint256 newEntityId = world.getUniqueEntityId();
+    SectorEdgeComponent(getAddressById(components, SectorEdgeComponentID)).set(newEntityId, componentIds);
   }
 
   //Moresh: Updated to accept faction as input from UI
