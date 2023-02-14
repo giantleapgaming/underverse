@@ -217,6 +217,13 @@
         "FuelComponent",
         "ProspectedComponent"
       ]
+    },
+    {
+      "name": "RefuelSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "FuelComponent"
+      ]
     }
   ]
 }

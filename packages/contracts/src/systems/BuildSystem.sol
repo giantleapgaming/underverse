@@ -32,7 +32,7 @@ contract BuildSystem is System {
 
     // Shipyards can only be initialized via the init system and cannot be built
 
-    require(entity_type != 7, "Cannot build Shipyard");
+    //require(entity_type != 7, "Cannot build Shipyard");
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
       ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
@@ -72,6 +72,13 @@ contract BuildSystem is System {
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
 
     uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
+    uint256 initialFuel = baseInitialfuel;
+
+    //If building fuel carrier, it will be twice the cost and 5X more fuel
+    if (entity_type == 9) {
+      godownCreationCost = godownCreationCost * 2;
+      initialFuel = baseInitialfuel * 5;
+    }
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
@@ -91,7 +98,7 @@ contract BuildSystem is System {
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(godownEntity, initialEntityPopulation);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
+    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, initialFuel);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(

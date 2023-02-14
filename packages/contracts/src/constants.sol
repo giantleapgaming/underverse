@@ -30,8 +30,9 @@ uint256 constant residentialType = 3;
 uint256 constant attackType = 4;
 uint256 constant harvesterType = 5;
 uint256 constant planetType = 6;
-uint256 constant shipyardType = 7;
+//uint256 constant shipyardType = 7;
 uint256 constant personType = 8;
+uint256 constant fuelCarrier = 9;
 
 struct Coordd {
   int32 x;
