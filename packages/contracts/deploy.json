@@ -87,7 +87,6 @@
     {
       "name": "TransportSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent",
@@ -98,7 +97,6 @@
     {
       "name": "HarvestSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent"
@@ -158,15 +156,6 @@
         "CashComponent",
         "LastUpdatedTimeComponent",
         "DefenceComponent"
-      ]
-    },
-    {
-      "name": "TransportWithBlockSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "BalanceComponent",
-        "FuelComponent"
       ]
     },
     {

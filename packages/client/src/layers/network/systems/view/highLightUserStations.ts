@@ -1,11 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineRxSystem,
-  EntityID,
-  getComponentEntities,
-  getComponentValue,
-  getComponentValueStrict,
-} from "@latticexyz/recs";
+import { defineRxSystem, EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { merge } from "rxjs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
@@ -33,7 +27,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
 
   defineRxSystem(world, merge(Position.update$, ShowCircle.update$), () => {
     const allPositionEntity = [...getComponentEntities(Position)];
-    const allShowCircleEntity = getComponentValueStrict(ShowCircle, showCircleIndex).selectedEntities;
+    const allShowCircleEntity = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities;
     allPositionEntity.forEach((entity) => {
       const defence = getComponentValue(Defence, entity);
       const position = getComponentValue(Position, entity);
@@ -45,7 +39,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
         const Sprite = stationColor[+factionNumber] as Sprites.View1;
         const stationBackground = config.sprites[Sprite];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
-        const showSelected = allShowCircleEntity.includes(factionIndex);
+        const showSelected = allShowCircleEntity?.includes(factionIndex);
         if (showSelected) {
           circle.setComponent({
             id: `circle-${entity}`,
