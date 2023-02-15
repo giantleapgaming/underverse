@@ -97,7 +97,6 @@
     {
       "name": "HarvestSystem",
       "writeAccess": [
-        "CashComponent",
         "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent"
