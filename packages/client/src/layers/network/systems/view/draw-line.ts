@@ -115,6 +115,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           setShowLine(true, x, y, "transport");
         }
       }
+      if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
+        // const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
+        // if (connectedAddress.get() === ownedBy) {
+        setDestinationDetails(stationEntity);
+        setShowLine(true, x, y, "prospect");
+        // }
+      }
     }
     if (
       lineDetails &&
