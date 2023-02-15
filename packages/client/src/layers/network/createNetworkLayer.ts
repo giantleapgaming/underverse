@@ -135,6 +135,12 @@ export async function createNetworkLayer(config: GameConfig) {
       { value: Type.NumberArray },
       { id: "SectorEdge", metadata: { contractId: "component.SectorEdge" } }
     ),
+
+    Prospected: defineNumberComponent(world, {
+      id: "Prospected",
+      indexed: true,
+      metadata: { contractId: "component.Prospected" },
+    }),
   };
   const componentsWithOverrides = {
     Position: overridableComponent(components.Position),
@@ -156,6 +162,7 @@ export async function createNetworkLayer(config: GameConfig) {
     PersonName: overridableComponent(components.PersonName),
     PrevPosition: overridableComponent(components.PrevPosition),
     SectorEdge: overridableComponent(components.SectorEdge),
+    Prospected: overridableComponent(components.Prospected),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -206,6 +213,14 @@ export async function createNetworkLayer(config: GameConfig) {
       kgsToTransfer
     );
   }
+
+  async function prospectSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID) {
+    return systems["system.Prospect"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity)
+    );
+  }
+
   async function raptureSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, people: number) {
     return systems["system.Rapture"].executeTyped(
       BigNumber.from(srcGodownEntity),
@@ -296,6 +311,7 @@ export async function createNetworkLayer(config: GameConfig) {
       repairSystem,
       harvestSystem,
       raptureSystem,
+      prospectSystem,
       refuelSystem,
     },
     utils: {

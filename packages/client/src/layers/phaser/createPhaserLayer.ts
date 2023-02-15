@@ -63,6 +63,7 @@ import {
 } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 import { systemTransport } from "../local/stream-system/system.Transport";
+import { systemProspect } from "../local/stream-system/system.Prospect";
 import { displayOrbits } from "../network/systems/view/orbits";
 
 /**
@@ -322,6 +323,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemHarvest(network, context);
   systemRapture(network, context);
   systemMoveShip(network, context);
+  systemProspect(network, context);
 
   return context;
 }

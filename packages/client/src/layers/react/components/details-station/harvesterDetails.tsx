@@ -11,6 +11,7 @@ import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
+import { Prospect } from "../action-system/prospect";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 
@@ -33,7 +34,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -196,7 +197,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y ) * +level, 2)}
+                        cost={Math.pow(
+                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
+                          2
+                        )}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&
@@ -251,6 +255,60 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         }}
                       />
                     )}
+                  {/*  */}
+                  {/*  */}
+                  {action === "prospect" && destinationDetails && isDestinationSelected && (
+                    <Prospect
+                      space={
+                        (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
+                          ? destinationLevel - destinationBalance
+                          : +balance) || 0
+                      }
+                      prospect={async () => {
+                        try {
+                          sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          console.log("pro", selectedEntity, destinationDetails);
+                          await prospectSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails]
+                            // weapons
+                          );
+                          // const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                          //   { x: destinationPosition.x, y: destinationPosition.y },
+                          //   tileWidth,
+                          //   tileHeight
+                          // );
+                          // const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                          //   { x: position.x, y: position.y },
+                          //   tileWidth,
+                          //   tileHeight
+                          // );
+                          // setShowAnimation({
+                          //   showAnimation: true,
+                          //   amount: weapons,
+                          //   destinationX,
+                          //   destinationY,
+                          //   sourceX,
+                          //   sourceY,
+                          //   type: "transport",
+                          // });
+                        } catch (e) {
+                          console.log({ error: e, system: "Prospect", details: selectedEntity });
+                        }
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      // faction={+factionNumber}
+                    />
+                  )}
+                  {/*  */}
+                  {/*  */}
                 </S.Column>
               )}
             </S.Column>
@@ -326,6 +384,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   onClick={() => {
                     setAction("move");
                     setShowLine(true, position.x, position.y, "move");
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "prospect"}
+                  name="PROSPECT"
+                  onClick={() => {
+                    setAction("prospect");
+                    setShowLine(true, position.x, position.y, "prospect");
                     sounds["click"].play();
                   }}
                 />

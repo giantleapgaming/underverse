@@ -10,3 +10,4 @@ export { systemScraped } from "./system.Scrap";
 export { systemRepaired } from "./system.Repair";
 export { systemRapture } from "./system.Rapture";
 export { systemMoveShip } from "./system.MoveShip";
+export { systemProspect } from "./system.Prospect";
