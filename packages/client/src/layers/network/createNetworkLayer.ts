@@ -243,6 +243,14 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs);
   };
 
+  async function refuelSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgs: number) {
+    return systems["system.Refuel"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      kgs
+    );
+  }
+
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
     const entitiesAtPosition = [...getEntitiesWithValue(components.Position, { x, y })].filter((position) => {
       const entity = getComponentValue(components.EntityType, position)?.value;
@@ -288,6 +296,7 @@ export async function createNetworkLayer(config: GameConfig) {
       repairSystem,
       harvestSystem,
       raptureSystem,
+      refuelSystem,
     },
     utils: {
       getEntityIndexAtPosition,
