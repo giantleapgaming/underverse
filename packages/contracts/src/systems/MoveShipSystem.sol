@@ -90,7 +90,7 @@ contract MoveShipSystem is System {
       (distFromCenterSq > 225) &&
       (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
     ) {
-      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 100, 100);
+      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
     }
 
     // update player data
