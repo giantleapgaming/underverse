@@ -45,7 +45,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       });
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
-      // console.log("arrayOfPointsOnThePath", arrayOfPointsOnThePath);
       const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
       setObstacleHighlight(obstacleEntityIndexList);
       setShowLine(true, x, y, lineDetails.type);
@@ -55,7 +54,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
-      // console.log("arrayOfPointsOnThePath", arrayOfPointsOnThePath);
       const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
       const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
       obstacleHighlight.forEach((entity) => {
@@ -116,11 +114,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
       }
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
-        // const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        // if (connectedAddress.get() === ownedBy) {
         setDestinationDetails(stationEntity);
         setShowLine(true, x, y, "prospect");
-        // }
       }
     }
     if (
@@ -175,9 +170,9 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const y1 = sourceY;
       const x2 = destinationX;
       const y2 = destinationY;
-      const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)); // length of the line
-      const dotSize = 4; // size of the dots in pixels
-      const gapSize = 8; // size of the gaps between dots in pixels
+      const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
+      const dotSize = 4;
+      const gapSize = 8;
       const angle = Math.atan2(y2 - y1, x2 - x1);
       graphics.moveTo(x1, y1);
       for (let i = 0; i < lineLength; i += dotSize + gapSize) {
@@ -186,20 +181,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
       graphics.lineTo(x2, y2);
       graphics.strokePath();
-
-      // // console.log("qweqwe");
-      // console.log("MY POINTS", position.x, position.y, lineDetails.x, lineDetails.y);
-
-      // const arrayOfPointsOnThePath = segmentPoints(
-      //   //sourcePosition.x, sourcePosition.y, destitution.x, destitution.y
-      //   position.x,
-      //   position.y,
-      //   lineDetails.x,
-      //   lineDetails.y
-      // );
-      // console.log("The arrayOfPointsOnThePath", arrayOfPointsOnThePath);
-      // const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
-      // console.log("The obstacleEntityIndexList", obstacleEntityIndexList);
     }
   });
 }

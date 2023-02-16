@@ -53,7 +53,6 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
           gameObject.setDepth(151);
-
           phaserScene.add.tween({
             targets: gameObject,
             x: {
