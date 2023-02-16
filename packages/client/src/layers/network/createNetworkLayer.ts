@@ -262,7 +262,7 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Refuel"].executeTyped(
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
-      kgs
+      kgs * 1000000
     );
   }
 

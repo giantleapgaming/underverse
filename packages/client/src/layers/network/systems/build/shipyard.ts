@@ -112,10 +112,11 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
             gameObject.setAngle(0);
           },
         });
-        const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
-        const build = 1_000_000 / distance;
-        const price = convertPrice(100_000 / distance);
-        const buildPrice = convertPrice(build);
+        // const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
+        // const build = 1_000_000 / distance;
+        // const price = convertPrice(100_000 / distance);
+        // const buildPrice = convertPrice(build);
+        const buildPrice = convertPrice(50000);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "white-build-text",

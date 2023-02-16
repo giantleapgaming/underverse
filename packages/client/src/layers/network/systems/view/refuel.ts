@@ -8,7 +8,7 @@ import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
 import { factionData } from "../../../../utils/constants";
 
-export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer) {
+export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     scenes: {
@@ -23,51 +23,45 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     },
   } = phaser;
   const {
-    components: { Position, Level, EntityType, Faction, Balance, OwnedBy, Defence, PrevPosition },
+    components: { Position, Level, EntityType, Faction, Fuel, OwnedBy, Defence },
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence), Has(PrevPosition)],
+    [Has(Position), Has(Fuel), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence)],
     ({ entity }) => {
       const healthBg = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `harvester-health-bar-bg-${entity}`)
+        .find((item) => item.id === `refuel-health-bar-bg-${entity}`)
         // @ts-ignore
         ?.clear();
       const health = phaserScene.children
         .getChildren()
         // @ts-ignore
-        .find((item) => item.id === `harvester-health-bar-${entity}`)
+        .find((item) => item.id === `refuel-health-bar-${entity}`)
         // @ts-ignore
         ?.clear();
       const healthBar = health ?? phaserScene.add.graphics();
       const healthBarBg = healthBg ?? phaserScene.add.graphics();
       !healthBg &&
         Object.defineProperty(healthBar, "id", {
-          value: `harvester-health-bar-bg-${entity}`,
+          value: `refuel-health-bar-bg-${entity}`,
           writable: true,
         });
       !health &&
         Object.defineProperty(healthBarBg, "id", {
-          value: `harvester-health-bar-${entity}`,
+          value: `refuel-health-bar-${entity}`,
           writable: true,
         });
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
-      if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
+      if (entityTypeNumber && +entityTypeNumber === Mapping.refuel.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
         const faction = getComponentValue(Faction, factionIndex)?.value;
         const level = getComponentValueStrict(Level, entity).value;
-        const balance = getComponentValueStrict(Balance, entity).value;
+        const fuel = getComponentValueStrict(Fuel, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
-        const prevPosition = getComponentValueStrict(PrevPosition, entity);
-        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
-          { x: prevPosition.x, y: prevPosition.y },
-          tileWidth,
-          tileHeight
-        );
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         if (+defence > 0 && faction && typeof +faction === "number") {
           const progress = +defence / (+level * 100);
@@ -84,32 +78,33 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
-
-          const astroidObject = objectPool.get(`harvester-${entity}`, "Sprite");
-          const factionObject = objectPool.get(`harvester-faction-${entity}`, "Sprite");
-          const harvester = config.sprites[Sprites.Asteroid12];
-          const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
+          const astroidObject = objectPool.get(`refuel-${entity}`, "Sprite");
+          const factionObject = objectPool.get(`refuel-faction-${entity}`, "Sprite");
+          const refuel = config.sprites[Sprites.Asteroid12];
+          const circle = phaserScene.add.circle(x + 32, y + 32);
+          circle.setStrokeStyle(0.3, 0x2d2d36);
+          circle.setDisplaySize(704, 704);
           astroidObject.setComponent({
-            id: `harvester-${entity}`,
+            id: `refuel-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `miner-${+level}-${+balance}.png`);
+              gameObject.setTexture(refuel.assetKey, `refuel-${+level}.png`);
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
-              gameObject.setAngle(angle);
             },
           });
           factionObject.setComponent({
-            id: `harvester-faction-${entity}`,
+            id: `refuel-faction-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `faction-harvester-${+faction + 1}.png`);
-              gameObject.setPosition(x + 35, y + 36);
+              gameObject.setTexture(refuel.assetKey, `faction-${+faction + 1}.png`);
+              gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(2);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
         } else {
-          objectPool.remove(`harvester-${entity}`);
-          objectPool.remove(`harvester-faction-${entity}`);
+          objectPool.remove(`refuel-${entity}`);
+          objectPool.remove(`refuel-faction-${entity}`);
           healthBarBg.clear();
           healthBar.clear();
         }

@@ -82,7 +82,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         (+entityType === Mapping.attack.id ||
           +entityType === Mapping.godown.id ||
           +entityType === Mapping.harvester.id ||
-          +entityType === Mapping.residential.id)
+          +entityType === Mapping.residential.id ||
+          +entityType === Mapping.refuel.id)
       ) {
         const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
         const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
@@ -116,6 +117,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         setDestinationDetails(stationEntity);
         setShowLine(true, x, y, "prospect");
+      }
+      if (entityType && lineDetails.type === "refuel") {
+        // const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
+        // if (connectedAddress.get() === ownedBy) {
+        setDestinationDetails(stationEntity);
+        setShowLine(true, x, y, "refuel");
+        // }
       }
     }
     if (

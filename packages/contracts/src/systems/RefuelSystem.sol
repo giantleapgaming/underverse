@@ -67,12 +67,12 @@ contract RefuelSystem is System {
     //If destination is any other type of vessel, the max carrying capacity is level * 1000
     if (EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 9) {
       require(
-        destinationFuel + kgs <= destinationLevel * 5000,
+        destinationFuel + kgs <= (destinationLevel * 5000 * MULTIPLIER),
         "Supplied Fuel is more than destination  storage capacity"
       );
     } else {
       require(
-        destinationFuel + kgs <= destinationLevel * 1000,
+        destinationFuel + kgs <= (destinationLevel * 1000 * MULTIPLIER),
         "Supplied Fuel is more than destination  storage capacity"
       );
     }

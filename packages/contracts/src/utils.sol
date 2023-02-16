@@ -78,8 +78,9 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
   //uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
-  uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
-  uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
+  // uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
+  // uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
+  uint256 godownCreationCost = (50000 * MULTIPLIER); // 10^6
   return godownCreationCost;
 }
 

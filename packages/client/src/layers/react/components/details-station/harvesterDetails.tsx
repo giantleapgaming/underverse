@@ -12,6 +12,7 @@ import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
 import { Prospect } from "../action-system/prospect";
+import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 
@@ -34,7 +35,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -308,6 +309,58 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       // faction={+factionNumber}
                     />
                   )}
+                  {action === "refuel" && destinationDetails && isDestinationSelected && (
+                    <Refuel
+                    //   space={
+                    //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
+                    //       ? destinationLevel - destinationFuel
+                    //       : +fuel) || 0
+                    //   }
+                      space={
+                        20
+                      }
+                      refuel={async (weapons) => {
+                        try {
+                          sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          await refuelSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons
+                          );
+                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                            { x: destinationPosition.x, y: destinationPosition.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            amount: weapons,
+                            destinationX,
+                            destinationY,
+                            sourceX,
+                            sourceY,
+                            type: "refuel",
+                          });
+                        } catch (e) {
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                        }
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                    //   faction={+factionNumber}
+                    />
+                  )}
                   {/*  */}
                   {/*  */}
                 </S.Column>
@@ -394,6 +447,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   onClick={() => {
                     setAction("prospect");
                     setShowLine(true, position.x, position.y, "prospect");
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "refuel"}
+                  name="REFUEL"
+                  onClick={() => {
+                    setAction("refuel");
+                    setShowLine(true, position.x, position.y, "refuel");
                     sounds["click"].play();
                   }}
                 />

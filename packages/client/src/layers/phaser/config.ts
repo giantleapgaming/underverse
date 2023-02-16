@@ -1528,6 +1528,10 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "build-miner-1.png",
         },
+        [Sprites.BuildRefuel]: {
+          assetKey: Assets.MainAtlas,
+          frame: "build-refuel-1.png",
+        },
         [Sprites.Shipyard1]: {
           assetKey: Assets.MainAtlas,
           frame: "shipyard-1.png",
