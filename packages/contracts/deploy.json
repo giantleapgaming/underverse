@@ -61,7 +61,8 @@
         "FactionComponent",
         "EntityTypeComponent",
         "FuelComponent",
-        "PopulationComponent"
+        "PopulationComponent",
+        "PrevPositionComponent"
       ]
     },
     {
