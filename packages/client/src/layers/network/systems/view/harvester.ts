@@ -23,11 +23,11 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     },
   } = phaser;
   const {
-    components: { Position, Level, EntityType, Faction, Balance, OwnedBy, Defence },
+    components: { Position, Level, EntityType, Faction, Balance, OwnedBy, Defence, PrevPosition },
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence)],
+    [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence), Has(PrevPosition)],
     ({ entity }) => {
       const healthBg = phaserScene.children
         .getChildren()
@@ -62,6 +62,12 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
         const balance = getComponentValueStrict(Balance, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
+        const prevPosition = getComponentValueStrict(PrevPosition, entity);
+        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+          { x: prevPosition.x, y: prevPosition.y },
+          tileWidth,
+          tileHeight
+        );
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         if (+defence > 0 && faction && typeof +faction === "number") {
           const progress = +defence / (+level * 100);
@@ -78,9 +84,11 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
+
           const astroidObject = objectPool.get(`harvester-${entity}`, "Sprite");
           const factionObject = objectPool.get(`harvester-faction-${entity}`, "Sprite");
           const harvester = config.sprites[Sprites.Asteroid12];
+          const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           astroidObject.setComponent({
             id: `harvester-${entity}`,
             once: (gameObject) => {
@@ -88,6 +96,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
             },
           });
           factionObject.setComponent({

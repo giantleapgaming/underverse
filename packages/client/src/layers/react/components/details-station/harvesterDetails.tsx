@@ -236,6 +236,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                                 sourceY,
                                 type: "move",
                                 frame: `miner-${+level}-${+balance}.png`,
+                                faction: +factionNumber,
                               });
                               setShowLine(false);
                               showProgress();

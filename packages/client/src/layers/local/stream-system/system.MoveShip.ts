@@ -67,6 +67,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
           sourceY,
           type: "move",
           frame: `${frameName}-${+faction}-${+level}.png`,
+          faction: +faction,
         });
       }
     }

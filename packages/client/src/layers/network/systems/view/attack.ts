@@ -96,9 +96,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
-              {
-                angle && gameObject.setAngle(angle);
-              }
+              gameObject.setAngle(angle);
             },
           });
           factionObject.setComponent({

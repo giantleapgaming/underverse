@@ -225,7 +225,10 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y ) * +level, 2)}
+                        cost={Math.pow(
+                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
+                          2
+                        )}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&
@@ -261,6 +264,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                                 sourceY,
                                 type: "move",
                                 frame: `attack-${+factionNumber + 1}-${+level}.png`,
+                                faction: +factionNumber,
                               });
                               setShowLine(false);
                               showProgress();
