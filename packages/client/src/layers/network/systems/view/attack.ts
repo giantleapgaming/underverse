@@ -23,7 +23,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
     },
   } = phaser;
   const {
-    components: { Position, Level, Defence, Offence, EntityType, Faction, OwnedBy },
+    components: { Position, PrevPosition, Level, Defence, Offence, EntityType, Faction, OwnedBy },
   } = network;
   defineSystem(
     world,
@@ -82,6 +82,15 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
+          const prevPosition = getComponentValue(PrevPosition, entity);
+          const angle = prevPosition
+            ? Math.atan2(
+                y - tileCoordToPixelCoord({ x: prevPosition.x, y: prevPosition.y }, tileWidth, tileHeight).y,
+                x - tileCoordToPixelCoord({ x: prevPosition.x, y: prevPosition.y }, tileWidth, tileHeight).x
+              ) *
+                (180 / Math.PI) +
+              90
+            : undefined;
           astroidObject.setComponent({
             id: `attack-${entity}`,
             once: (gameObject) => {
@@ -89,6 +98,9 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
+              {
+                angle && gameObject.setAngle(angle);
+              }
             },
           });
           factionObject.setComponent({

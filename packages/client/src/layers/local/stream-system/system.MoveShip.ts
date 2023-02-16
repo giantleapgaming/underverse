@@ -31,10 +31,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       srcX: number;
       srcY: number;
     };
-    console.log({ args });
     const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
-    const position = getComponentValue(Position, sourceEntityIndex);
-    console.log({ position });
     const ownedBy = getComponentValue(OwnedBy, sourceEntityIndex)?.value;
     const level = getComponentValue(Level, sourceEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;

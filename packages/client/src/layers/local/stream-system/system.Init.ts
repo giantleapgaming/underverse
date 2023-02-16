@@ -12,7 +12,6 @@ export function systemInit(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Init"], ({ args }) => {
     const { name, faction } = args as { name: string; faction: BigNumber };
-    console.log(args);
     const color = factionData[+faction]?.color;
     const factionName = factionData[+faction]?.name;
     setLogs(`<p>${colorString({ name, color })} joined the game from ${colorString({ name: factionName, color })}</p>`);

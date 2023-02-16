@@ -34,6 +34,8 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
       const object = objectPool.get("move", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (180 / Math.PI) + 90;
+      console.log(angle, "move");
+
       object.setComponent({
         id: "move",
         once: (gameObject) => {

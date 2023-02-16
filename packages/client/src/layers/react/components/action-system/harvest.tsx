@@ -6,7 +6,7 @@ export const Harvest = ({
   space,
   playSound,
   harvest,
-  distance
+  distance,
 }: {
   space: number;
   playSound: () => void;
@@ -44,7 +44,6 @@ export const Harvest = ({
       {+space > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.Text>TOTAL COST {+selected && convertPrice(Math.pow(distance * +selected, 2))}</S.Text>
-          {console.log(+selected, )}
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
