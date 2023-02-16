@@ -19,7 +19,7 @@ uint256 constant ID = uint256(keccak256("system.Transport"));
 contract TransportSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  Coordd[] private superPoints;
+  //Coordd[] private superPoints;
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
