@@ -92,8 +92,8 @@ contract ProspectSystem is System {
 
     require(playerCash >= prospectCost, "Not enough money to Prospect");
 
-    uint256 distFromCenterSq = uint256(
-      int256(destinationGodownPosition.x) ** 2 + int256(destinationGodownPosition.y) ** 2
+    uint256 distFromCenterSq = Math.sqrt(
+      uint256(int256(destinationGodownPosition.x) ** 2 + int256(destinationGodownPosition.y) ** 2)
     );
     uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, playerCash))) % distFromCenterSq;
     uint256 asteroidFuel = uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost))) % distFromCenterSq;

@@ -27,7 +27,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, Position, Balance, Level },
+      components: { EntityType, Position, Balance, Level, Fuel },
       api: { harvestSystem },
     },
   } = layers;
@@ -40,7 +40,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const level = getComponentValue(Level, destinationDetails)?.value;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
-    const fuel = 0;
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     if (entityType && +entityType === Mapping.astroid.id) {
