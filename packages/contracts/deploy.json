@@ -214,6 +214,21 @@
         "LastUpdatedTimeComponent",
         "FuelComponent"
       ]
+    },
+    {
+      "name": "BuildFromHarvesterSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "EntityTypeComponent",
+        "FuelComponent",
+        "PopulationComponent"
+      ]
     }
   ]
 }
