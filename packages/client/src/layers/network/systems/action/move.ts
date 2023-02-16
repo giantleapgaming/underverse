@@ -32,11 +32,14 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
       frame
     ) {
       const object = objectPool.get("move", "Sprite");
-      const graphics = phaserScene.add.graphics();
-
-      graphics.fillStyle(0x000000, 1);
-      graphics.fillCircle(destinationX + 32, destinationY + 32, 100);
-      graphics.setDepth(150);
+      const destinationCircle = phaserScene.add.graphics();
+      const sourceCircle = phaserScene.add.graphics();
+      sourceCircle.fillStyle(0x000000, 1);
+      sourceCircle.setDepth(150);
+      sourceCircle.fillCircle(sourceX + 32, sourceY + 32, 100);
+      destinationCircle.fillStyle(0x000000, 1);
+      destinationCircle.fillCircle(destinationX + 32, destinationY + 32, 100);
+      destinationCircle.setDepth(150);
       const missileSprite = config.sprites[Sprites.Missile2];
       const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (180 / Math.PI) + 90;
       object.setComponent({
@@ -63,7 +66,8 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove("move");
-              graphics.clear();
+              destinationCircle.clear();
+              sourceCircle.clear();
             },
           });
         },
