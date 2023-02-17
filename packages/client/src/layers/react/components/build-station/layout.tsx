@@ -37,15 +37,15 @@ export const Layout = ({ layers }: { layers: Layers }) => {
         <S.Border>
           <S.Flex>
             <S.Button onClick={() => build(Mapping.residential.id)}>
-              <S.Img src="/layout/hex.png"  width="70px" height="70px" />
+              <S.Img src="/layout/hex.png" width="70px" height="70px" />
               <S.Img src={`/build-stations/${+factionNumber}-1-0.png`} width="30px" height="30px" />
             </S.Button>
             <S.Button onClick={() => build(Mapping.attack.id)}>
-              <S.Img src="/layout/hex.png"  width="70px" height="70px" />
+              <S.Img src="/layout/hex.png" width="70px" height="70px" />
               <S.Img src={`/build-stations/attack-${+factionNumber}-1.png`} width="30px" height="30px" />
             </S.Button>
             <S.Button onClick={() => build(Mapping.godown.id)}>
-              <S.Img src="/layout/hex.png"  width="70px" height="70px" />
+              <S.Img src="/layout/hex.png" width="70px" height="70px" />
               <S.Img src={`/build-stations/cargo-1-0.png`} width="30px" height="30px" />
             </S.Button>
             <S.Button onClick={() => build(Mapping.harvester.id)}>
@@ -53,36 +53,9 @@ export const Layout = ({ layers }: { layers: Layers }) => {
               <S.Img src="/build-stations/harvester.png" width="30px" height="30px" />
             </S.Button>
             <S.Button onClick={() => build(Mapping.refuel.id)}>
-              <S.Img src="/layout/hex.png"  width="70px" height="70px"  />
+              <S.Img src="/layout/hex.png" width="70px" height="70px" />
               <S.Img src="/build-stations/refuel.png" width="30px" height="30px" />
             </S.Button>
-            {/* <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button>
-            <S.Button>
-              <S.Img src="/layout/hex.png" />
-            </S.Button> */}
           </S.Flex>
         </S.Border>
       </S.Container>
@@ -108,7 +81,6 @@ const S = {
     align-items: center;
     flex-direction: column;
     pointer-events: fill;
-    padding: 21px 0 0 37px;
   `,
   Flex: styled.div`
     display: flex;
@@ -116,6 +88,10 @@ const S = {
     align-items: center;
     justify-content: start;
     gap: 16px;
+    height: 100%;
+    width: 90%;
+    justify-content: space-around;
+    padding-bottom: 30px;
   `,
   Button: styled.div`
     cursor: pointer;
