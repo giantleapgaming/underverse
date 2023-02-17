@@ -22,9 +22,9 @@ contract BuildFromHarvesterSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 harvesterEntity, uint256 asteroidEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
+    (uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
       arguments,
-      (uint256, uint256, int32, int32, uint256)
+      (uint256, int32, int32, uint256)
     );
 
     require(
@@ -44,11 +44,6 @@ contract BuildFromHarvesterSystem is System {
     );
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(asteroidEntity) == 2,
-      "Asteroid has to be an Asteroid"
-    );
-
-    require(
       (entity_type == 1 || entity_type == 3 || entity_type == 7),
       "Can only build residential, godowns or shipyards"
     );
@@ -64,20 +59,10 @@ contract BuildFromHarvesterSystem is System {
       harvesterEntity
     );
 
-    Coord memory asteroidPosition = getCurrentPosition(
-      PositionComponent(getAddressById(components, PositionComponentID)),
-      asteroidEntity
-    );
-
     Coord memory buildPosition = Coord({ x: x, y: y });
 
     //Check that the Asteroid and harvester are no further than 5 units away from each other
     //Check that the build location and harvester are no further than 5 units from each other
-
-    require(
-      getDistanceBetweenCoordinatesWithMultiplier(harvesterPosition, asteroidPosition) <= 5000,
-      "Harvester is further than 5 units distance from Asteroid"
-    );
 
     require(
       getDistanceBetweenCoordinatesWithMultiplier(harvesterPosition, buildPosition) <= 5000,
@@ -122,13 +107,7 @@ contract BuildFromHarvesterSystem is System {
 
   //Input parameters are harvester, asteroid, build location and what you want to build
 
-  function executeTyped(
-    uint256 harvesterEntity,
-    uint256 asteroidEntity,
-    int32 x,
-    int32 y,
-    uint256 entity_type
-  ) public returns (bytes memory) {
-    return execute(abi.encode(harvesterEntity, asteroidEntity, x, y, entity_type));
+  function executeTyped(uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
+    return execute(abi.encode(harvesterEntity, x, y, entity_type));
   }
 }

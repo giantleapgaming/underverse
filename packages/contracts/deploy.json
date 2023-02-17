@@ -172,20 +172,6 @@
       ]
     },
     {
-      "name": "AttackWithBlockSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "OffenceComponent",
-        "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent",
-        "FuelComponent"
-      ]
-    },
-    {
       "name": "MoveShipSystem",
       "writeAccess": [
         "LastUpdatedTimeComponent",
