@@ -89,7 +89,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       ) {
         const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
         const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
-        if (ownedBy && selectedOwnedBy && ownedBy !== selectedOwnedBy) {
+        if (ownedBy && selectedOwnedBy && selectedEntity !== stationEntity) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "attack");
           return;
