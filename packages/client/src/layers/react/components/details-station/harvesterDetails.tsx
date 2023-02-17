@@ -353,14 +353,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
-                    //   space={
-                    //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
-                    //       ? destinationLevel - destinationFuel
-                    //       : +fuel) || 0
-                    //   }
-                      space={
-                        20
-                      }
+                      //   space={
+                      //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
+                      //       ? destinationLevel - destinationFuel
+                      //       : +fuel) || 0
+                      //   }
+                      space={20}
                       refuel={async (weapons) => {
                         try {
                           sounds["confirm"].play();
@@ -400,7 +398,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         sounds["click"].play();
                       }}
                       distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                    //   faction={+factionNumber}
+                      //   faction={+factionNumber}
                     />
                   )}
                   {/*  */}
@@ -408,30 +406,86 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
               )}
             </S.Column>
-            <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
-              <S.Column>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-              </S.Column>
-              <S.Column>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-              </S.Column>
-            </div>
+            {ownedBy === connectedAddress.get() &&
+              !destinationDetails &&
+              !isDestinationSelected &&
+              !moveStationDetails?.selected && (
+                <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
+                  <S.Column>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("move");
+                        const { x, y } = position;
+                        setShowLine(true, x, y, "move");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("upgrade");
+                        setShowLine(false);
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("refuel");
+                        setShowLine(true, position.x, position.y, "refuel");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </S.Column>
+                  <S.Column>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                    <S.SideButton>
+                      <S.Img
+                        src={
+                          action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"
+                        }
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </S.Column>
+                </div>
+              )}
           </S.Container>
           {ownedBy === connectedAddress.get() &&
             !destinationDetails &&
@@ -439,70 +493,11 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             !moveStationDetails?.selected && (
               <S.Row style={{ gap: "10px", marginTop: "5px" }}>
                 <SelectButton
-                  name="UPGRADE"
-                  isActive={action === "upgrade"}
-                  onClick={() => {
-                    setAction("upgrade");
-                    setShowLine(false);
-                    sounds["click"].play();
-                  }}
-                />
-                <SelectButton
-                  name="TRANSPORT"
-                  isActive={action === "transport"}
-                  onClick={() => {
-                    setAction("transport");
-                    setShowLine(true, position.x, position.y, "transport");
-                    sounds["click"].play();
-                  }}
-                />
-                <SelectButton
-                  isActive={action === "repair"}
-                  name="REPAIR"
-                  onClick={() => {
-                    setAction("repair");
-                    setShowLine(false);
-                    sounds["click"].play();
-                  }}
-                />
-                <SelectButton
-                  isActive={action === "scrap"}
-                  name="SCRAP"
-                  onClick={() => {
-                    setAction("scrap");
-                    setShowLine(false);
-                    sounds["click"].play();
-                  }}
-                />
-                <SelectButton
-                  isActive={action === "move"}
-                  name="MOVE"
-                  onClick={() => {
-                    setAction("move");
-                    setShowLine(true, position.x, position.y, "move");
-                    sounds["click"].play();
-                  }}
-                />
-                <SelectButton
                   isActive={action === "prospect"}
                   name="PROSPECT"
                   onClick={() => {
                     setAction("prospect");
                     setShowLine(true, position.x, position.y, "prospect");
-                    sounds["click"].play();
-                    //
-                    // const circle = phaserScene.add.circle(position.x + 32, position.y + 32);
-                    // circle.setStrokeStyle(0.3, 0x2d2d36);
-                    // circle.setDisplaySize(704, 704);
-                    //
-                  }}
-                />
-                <SelectButton
-                  isActive={action === "refuel"}
-                  name="REFUEL"
-                  onClick={() => {
-                    setAction("refuel");
-                    setShowLine(true, position.x, position.y, "refuel");
                     sounds["click"].play();
                   }}
                 />
@@ -554,6 +549,10 @@ const S = {
     display: flex;
     align-items: center;
     gap: 10px;
+  `,
+  SideButton: styled.div`
+    height: 100%;
+    cursor: pointer;
   `,
   Slanted: styled.div<{ selected: boolean }>`
     position: relative;
