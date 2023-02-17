@@ -90,7 +90,7 @@ contract AttackSystem is System {
     uint256 distance = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
 
     require(
-      distance <= (9000 + (sourceEntityLevel * MULTIPLIER2)),
+      distance <= (5000 + (sourceEntityLevel * MULTIPLIER2)),
       "Can only attack upto a certain distance based on your level"
     );
 
