@@ -29,7 +29,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   } = network;
   const graphics = phaserScene.add.graphics();
   const direction = phaserScene.add.graphics();
-
+  const circle = phaserScene.add.circle();
   graphics.lineStyle(1, 0xffffff, 1);
 
   const hoverSub = input.pointermove$.subscribe((p) => {
@@ -55,6 +55,19 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     if (lineDetails && lineDetails.showLine && selectedEntity && !destination && lineDetails.type !== "move") {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
+      const { x: sourceXX, y: sourceYY } = tileCoordToPixelCoord(
+        { x: sourcePosition.x, y: sourcePosition.y },
+        tileWidth,
+        tileHeight
+      );
+      if (lineDetails.type === "prospect") {
+        circle.setPosition(sourceXX + 32, sourceYY + 32);
+        circle.setStrokeStyle(0.3, 0x2d2d36);
+        circle.setDisplaySize(704, 704);
+        circle.setAlpha(1);
+      } else {
+        circle.setAlpha(0);
+      }
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
       const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
       const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
@@ -122,11 +135,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
-        //
-        // const circle = phaserScene.add.circle(x + 32, y + 32);
-        // circle.setStrokeStyle(0.3, 0x2d2d36);
-        // circle.setDisplaySize(704, 704);
-        //
         if (!+isProspected) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "prospect");
@@ -154,6 +162,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     setDestinationDetails();
     setShowLine(false, 0, 0);
     setMoveStation(false);
+    // circle.clear();
+    // circle.clearMask();
+    // circle.clearAlpha();
+    // circle.removedFromScene();
+    // circle.destroy();
+    circle.setAlpha(0);
   });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
