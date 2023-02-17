@@ -96,7 +96,8 @@ contract ProspectSystem is System {
       uint256(int256(destinationGodownPosition.x) ** 2 + int256(destinationGodownPosition.y) ** 2)
     );
     uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, playerCash))) % distFromCenterSq;
-    uint256 asteroidFuel = uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost))) % distFromCenterSq;
+    uint256 asteroidFuel = (uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost))) % distFromCenterSq) *
+      MULTIPLIER;
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
       addressToEntity(msg.sender),
