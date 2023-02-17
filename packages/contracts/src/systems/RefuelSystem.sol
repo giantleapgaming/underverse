@@ -36,16 +36,17 @@ contract RefuelSystem is System {
 
     //We check that the source is either owned by you or is an Asteroid
     //If it is an unprospected Asteroid its balance will be 0 and it will now allow you to refuel
-    require(
-      ((OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender)) || (sourceEntityType == 2)),
-      "Source not owned by user or is not an Asteroid"
-    );
 
     if ((sourceEntityType == 2)) {
       require(
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 5,
         "If source is Asteroid, destination has to be a Harvester"
+      );
+    } else {
+      require(
+        (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
+          addressToEntity(msg.sender)),
+        "Source not owned by user or is not an Asteroid"
       );
     }
 
