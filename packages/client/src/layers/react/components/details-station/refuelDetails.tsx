@@ -12,7 +12,6 @@ import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
-import { SelectButton } from "./Button";
 
 export const RefuelDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -47,10 +46,10 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    //const fuel = 0;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
+    const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
@@ -208,12 +207,22 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                     )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
-                      //   space={
-                      //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
-                      //       ? destinationLevel - destinationFuel
-                      //       : +fuel) || 0
-                      //   }
-                      space={20}
+                      space={
+                        (destinationFuel &&
+                        destinationLevel &&
+                        +destinationLevel *
+                          (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
+                          10_00_000 -
+                          destinationFuel <
+                          +fuel
+                          ? destinationLevel *
+                              (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
+                                ? 5000
+                                : 1000) *
+                              10_00_000 -
+                            destinationFuel
+                          : +fuel) || 0
+                      }
                       refuel={async (weapons) => {
                         try {
                           sounds["confirm"].play();
@@ -252,8 +261,6 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                       playSound={() => {
                         sounds["click"].play();
                       }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                      //   faction={+factionNumber}
                     />
                   )}
                 </S.Column>

@@ -49,6 +49,7 @@ import { harvestTransport } from "../network/systems/action/harvest-transport";
 import { populationTransport } from "../network/systems/action/population-transport";
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
+import { fuelTransport } from "../network/systems/action/fuel-transport";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 import {
   systemAttack,
@@ -311,6 +312,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   populationTransport(network, context);
   godownTransport(network, context);
   move(network, context);
+  fuelTransport(network, context);
   highLightUserStations(network, context);
   highlightObstacles(network, context);
 

@@ -6,6 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
 import { findSector } from "../../../../utils/sector";
+import { factionData } from "../../../../utils/constants";
 
 const stationColor = [Sprites.Build1, Sprites.Build2, Sprites.Build3, Sprites.Build4, Sprites.Build5, Sprites.Build6];
 
@@ -116,7 +117,7 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
         // const build = 1_000_000 / distance;
         // const price = convertPrice(100_000 / distance);
         // const buildPrice = convertPrice(build);
-        const buildPrice = convertPrice(50000);
+        const buildPrice = convertPrice(50000 * factionData[+faction]?.build);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "white-build-text",

@@ -81,9 +81,9 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
           const astroidObject = objectPool.get(`refuel-${entity}`, "Sprite");
           const factionObject = objectPool.get(`refuel-faction-${entity}`, "Sprite");
           const refuel = config.sprites[Sprites.Asteroid12];
-          const circle = phaserScene.add.circle(x + 32, y + 32);
-          circle.setStrokeStyle(0.3, 0x2d2d36);
-          circle.setDisplaySize(704, 704);
+          //   const circle = phaserScene.add.circle(x + 32, y + 32);
+          //   circle.setStrokeStyle(0.3, 0x2d2d36);
+          //   circle.setDisplaySize(704, 704);
           astroidObject.setComponent({
             id: `refuel-${entity}`,
             once: (gameObject) => {

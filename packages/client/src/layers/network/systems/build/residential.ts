@@ -5,6 +5,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
+import { factionData } from "../../../../utils/constants";
 
 export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -65,7 +66,7 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
         // const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
         // const build = 1_000_000 / distance;
         // const buildPrice = convertPrice(build);
-        const buildPrice = convertPrice(50000);
+        const buildPrice = convertPrice(50000 * factionData[+faction]?.build);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "build-residential-station-text-white",

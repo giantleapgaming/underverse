@@ -1,19 +1,18 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
 
 export const Refuel = ({
   space,
   playSound,
   refuel,
-  distance,
 }: {
   space: number;
   playSound: () => void;
   refuel: (amount: number) => void;
-  distance: number;
 }) => {
-  const [selected, setSelected] = useState("0");
+  const [selected, setSelected] = useState<number | number[]>(1);
 
   return (
     <>
@@ -26,29 +25,36 @@ export const Refuel = ({
           minWidth: "330px",
         }}
       >
-        {+space > 0 &&
-          new Array(+space).fill(0).map((_, i) => {
-            return (
-              <S.Slanted
-                key={`red${i}`}
-                selected={+selected > i}
-                onClick={() => {
-                  playSound();
-                  setSelected((i + 1).toString());
-                }}
-              >
-                <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-              </S.Slanted>
-            );
-          })}
+        <div style={{ width: "260px", margin: "0px 50px" }}>
+          {+space > 0 && (
+            <Slider
+              min={1}
+              max={space}
+              value={selected}
+              onChange={(value) => {
+                setSelected(value);
+              }}
+              handleStyle={{
+                borderColor: "#008073",
+                height: 20,
+                width: 14,
+                marginLeft: 0,
+                marginTop: -9,
+                backgroundColor: "#008073",
+                opacity: 1,
+                borderRadius: 2,
+              }}
+            />
+          )}
+        </div>
       </div>
-      {+space > 0 && (
+      {+space > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-            {console.log("refuel trigger")}
-          <S.Text>TOTAL COST {+selected && convertPrice(Math.pow(distance * +selected, 2))}</S.Text>
+          <S.TextLg>H {Math.round(+selected / 10_00_000)}</S.TextLg>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
+                playSound();
                 refuel(+selected);
               }
             }}
@@ -57,6 +63,8 @@ export const Refuel = ({
             <S.DeployText>REFUEL</S.DeployText>
           </S.InlinePointer>
         </S.Row>
+      ) : (
+        <S.TextLg>REFUEL MAX CAPACITY REACHED</S.TextLg>
       )}
     </>
   );
@@ -66,6 +74,12 @@ const S = {
   Text: styled.p`
     font-size: 10px;
     font-weight: 500;
+    color: #ffffff;
+    text-align: center;
+  `,
+  TextLg: styled.p`
+    font-size: 12px;
+    font-weight: bold;
     color: #ffffff;
     text-align: center;
   `,

@@ -60,7 +60,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
-      if (lineDetails.type === "prospect") {
+      if (lineDetails.type === "prospect" || lineDetails.type === "refuel") {
         circle.setPosition(sourceXX + 32, sourceYY + 32);
         circle.setStrokeStyle(0.3, 0x2d2d36);
         circle.setDisplaySize(704, 704);
@@ -129,16 +129,21 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           setShowLine(true, x, y, "transport");
         }
       }
-      if (entityType && lineDetails.type === "refuel") {
-        setDestinationDetails(stationEntity);
-        setShowLine(true, x, y, "refuel");
-      }
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
         if (!+isProspected) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "prospect");
         }
+      }
+      if (
+        entityType &&
+        +entityType !== Mapping.planet.id &&
+        +entityType !== Mapping.astroid.id &&
+        lineDetails.type === "refuel"
+      ) {
+        setDestinationDetails(stationEntity);
+        setShowLine(true, x, y, "refuel");
       }
     }
 

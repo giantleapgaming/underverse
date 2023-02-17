@@ -1,21 +1,9 @@
 import { Assets, Sprites } from "./../../phaser/constants";
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import {
-  defineComponentSystem,
-  EntityID,
-  EntityIndex,
-  getComponentEntities,
-  getComponentValue,
-} from "@latticexyz/recs";
+import { defineComponentSystem, EntityID, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
-import {
-  intersectingCircles,
-  enclosedPoints,
-  getCoordinatesArray,
-  segmentPoints,
-  getObstacleList,
-} from "../../../utils/distance";
+import { intersectingCircles, enclosedPoints, getCoordinatesArray } from "../../../utils/distance";
 
 const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 

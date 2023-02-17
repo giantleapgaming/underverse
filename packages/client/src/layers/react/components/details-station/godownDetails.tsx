@@ -50,6 +50,9 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationPosition = getComponentValue(Position, destinationDetails);
+    const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
+    const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
+    const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     //const fuel = 0;
@@ -162,7 +165,22 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
-                      space={20}
+                      space={
+                        (destinationFuel &&
+                        destinationLevel &&
+                        +destinationLevel *
+                          (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
+                          10_00_000 -
+                          destinationFuel <
+                          +fuel
+                          ? destinationLevel *
+                              (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
+                                ? 5000
+                                : 1000) *
+                              10_00_000 -
+                            destinationFuel
+                          : +fuel) || 0
+                      }
                       refuel={async (weapons) => {
                         try {
                           sounds["confirm"].play();
@@ -201,7 +219,6 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       playSound={() => {
                         sounds["click"].play();
                       }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                     />
                   )}
                 </S.Column>
