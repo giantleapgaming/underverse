@@ -29,11 +29,13 @@ import {
   displayPlanetSystem,
   displayResidentialSystem,
   displayShipyardSystem,
+  displayRefuelSystem,
 } from "../network/systems/view";
 import {
   buildAttackSystem,
   buildGodownSystem,
   buildHarvesterSystem,
+  buildRefuelSystem,
   buildResidentialSystem,
   leftClickBuildSystem,
   mouseHover,
@@ -287,6 +289,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   buildAttackSystem(network, context);
   buildGodownSystem(network, context);
   buildHarvesterSystem(network, context);
+  buildRefuelSystem(network, context);
 
   //to display all the station
   displayAttackSystem(network, context);
@@ -296,6 +299,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayHarvesterSystem(network, context);
   displayGodownSystem(network, context);
   displayShipyardSystem(network, context);
+  displayRefuelSystem(network, context);
   displayOrbits(network, context);
   //Select system for the station
   selectClickSystem(network, context);

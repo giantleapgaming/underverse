@@ -1,13 +1,16 @@
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { distance } from "../../utils/distance";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
+import { Refuel } from "../action-system/refuel";
 import { SelectButton } from "./Button";
 
 export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
@@ -15,14 +18,21 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { showProgress },
-      components: { ShowStationDetails },
+      localApi: { setShowLine, showProgress, setDestinationDetails, setShowAnimation },
+      components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
+      scenes: {
+        Main: {
+          maps: {
+            Main: { tileWidth, tileHeight },
+          },
+        },
+      },
     },
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Population, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -37,7 +47,10 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
-    //const fuel = 0;
+    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const destinationPosition = getComponentValue(Position, destinationDetails);
+    const isDestinationSelected =
+      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
 
     if (entityType && +entityType === Mapping.residential.id) {
       return (
@@ -66,7 +79,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
-                  <p>{+fuel}</p>
+                  <p>{+fuel / 10_00_000}</p>
                 </S.Weapon>
               </S.Row>
               {ownedBy === connectedAddress.get() && (
@@ -126,6 +139,57 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {action === "refuel" && destinationDetails && isDestinationSelected && (
+                    <Refuel
+                    //   space={
+                    //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
+                    //       ? destinationLevel - destinationFuel
+                    //       : +fuel) || 0
+                    //   }
+                      space={
+                        20
+                      }
+                      refuel={async (weapons) => {
+                        try {
+                          sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          await refuelSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons
+                          );
+                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                            { x: destinationPosition.x, y: destinationPosition.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            amount: weapons,
+                            destinationX,
+                            destinationY,
+                            sourceX,
+                            sourceY,
+                            type: "refuel",
+                          });
+                        } catch (e) {
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                        }
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                    />
+                  )}
                 </S.Column>
               )}
             </S.Column>
@@ -178,6 +242,15 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 name="SCRAP"
                 onClick={() => {
                   setAction("scrap");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "refuel"}
+                name="REFUEL"
+                onClick={() => {
+                  setAction("refuel");
+                  setShowLine(true, position.x, position.y, "refuel");
                   sounds["click"].play();
                 }}
               />

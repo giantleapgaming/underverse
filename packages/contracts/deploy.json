@@ -61,7 +61,8 @@
         "FactionComponent",
         "EntityTypeComponent",
         "FuelComponent",
-        "PopulationComponent"
+        "PopulationComponent",
+        "PrevPositionComponent"
       ]
     },
     {
@@ -171,20 +172,6 @@
       ]
     },
     {
-      "name": "AttackWithBlockSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "OffenceComponent",
-        "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent",
-        "FuelComponent"
-      ]
-    },
-    {
       "name": "MoveShipSystem",
       "writeAccess": [
         "LastUpdatedTimeComponent",
@@ -212,6 +199,36 @@
       "writeAccess": [
         "LastUpdatedTimeComponent",
         "FuelComponent"
+      ]
+    },
+    {
+      "name": "BuildFromHarvesterSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "EntityTypeComponent",
+        "FuelComponent",
+        "PopulationComponent"
+      ]
+    },
+    {
+      "name": "BuildFromShipyardSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "EntityTypeComponent",
+        "FuelComponent",
+        "PopulationComponent"
       ]
     }
   ]

@@ -7,6 +7,7 @@ import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Mapping } from "../../../../utils/mapping";
 import { distance } from "../../utils/distance";
 import { Harvest } from "../action-system/harvest";
+import { Refuel } from "../action-system/refuel";
 import { SelectButton } from "./Button";
 
 export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
@@ -28,7 +29,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, Position, Balance, Level, Fuel, Prospected },
-      api: { harvestSystem },
+      api: { harvestSystem, refuelSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -75,7 +76,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   </S.Weapon>
                   <S.Weapon>
                     <img src="/build-stations/hydrogen.png" />
-                    <p>{+fuel}</p>
+                    <p>{+fuel / 10_00_000}</p>
                   </S.Weapon>
                 </S.Row>
               ) : (
@@ -177,6 +178,52 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </div>
                   )}
+                {action === "refuel" && destinationDetails && isDestinationSelected && (
+                  <Refuel
+                    //   space={
+                    //     (destinationFuel && destinationLevel && +destinationLevel - destinationFuel < +fuel
+                    //       ? destinationLevel - destinationFuel
+                    //       : +fuel) || 0
+                    //   }
+                    space={20}
+                    refuel={async (weapons) => {
+                      try {
+                        sounds["confirm"].play();
+                        setDestinationDetails();
+                        setShowLine(false);
+                        setAction("");
+                        showProgress();
+                        await refuelSystem(world.entities[selectedEntity], world.entities[destinationDetails], weapons);
+                        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                          { x: destinationPosition.x, y: destinationPosition.y },
+                          tileWidth,
+                          tileHeight
+                        );
+                        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                          { x: position.x, y: position.y },
+                          tileWidth,
+                          tileHeight
+                        );
+                        setShowAnimation({
+                          showAnimation: true,
+                          amount: weapons,
+                          destinationX,
+                          destinationY,
+                          sourceX,
+                          sourceY,
+                          type: "refuel",
+                        });
+                      } catch (e) {
+                        console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                      }
+                    }}
+                    playSound={() => {
+                      sounds["click"].play();
+                    }}
+                    distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                    //   faction={+factionNumber}
+                  />
+                )}
               </S.Column>
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
@@ -212,6 +259,15 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 onClick={() => {
                   setAction("harvest");
                   setShowLine(true, position.x, position.y, "harvest");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "refuel"}
+                name="REFUEL"
+                onClick={() => {
+                  setAction("refuel");
+                  setShowLine(true, position.x, position.y, "refuel");
                   sounds["click"].play();
                 }}
               />

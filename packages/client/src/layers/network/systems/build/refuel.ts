@@ -6,7 +6,7 @@ import { PhaserLayer } from "../../../phaser";
 import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
 
-export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
+export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     scenes: {
@@ -41,23 +41,24 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
       canPlace &&
       isBuilding &&
       !(xCoord === 0 && yCoord === 0) &&
-      buildDetails.entityType === Mapping.attack.id
+      buildDetails.entityType === Mapping.refuel.id
     ) {
-      const textWhite = objectPool.get("build-attack-station-text-white", "Text");
+      const textWhite = objectPool.get("build-refuel-station-text-white", "Text");
 
       const address = connectedAddress.get();
       const userEntityIndex = world.entities.indexOf(address);
 
       const faction = getComponentValue(Faction, userEntityIndex)?.value;
       if (faction) {
-        const HoverSprite = config.sprites[Sprites.Build1];
+        const sprite = Sprites.BuildRefuel;
+        const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
 
-        const hoverStation = objectPool.get("build-attack-station", "Sprite");
+        const hoverStation = objectPool.get("build-refuel-station", "Sprite");
         hoverStation.setComponent({
           id: `hoverStation`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, `build-attack-${+faction + 1}.png`);
+            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.depth = 4;
@@ -67,10 +68,10 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         // const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
         // const build = 1_000_000 / distance;
         // const buildPrice = convertPrice(build);
-        const buildPrice = convertPrice(50000);
+        const buildPrice = convertPrice(100000);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
-          id: "build-attack-station-text-white",
+          id: "build-refuel-station-text-white",
           once: (gameObject) => {
             gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
             gameObject.depth = 4;
@@ -82,8 +83,8 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         });
       }
     } else {
-      objectPool.remove("build-attack-station");
-      objectPool.remove("build-attack-station-text-white");
+      objectPool.remove("build-refuel-station");
+      objectPool.remove("build-refuel-station-text-white");
     }
   });
 }

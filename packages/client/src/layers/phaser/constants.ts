@@ -416,6 +416,7 @@ export enum Sprites {
   BuildAttack6,
   BuildCargo,
   BuildHarvester,
+  BuildRefuel,
   FactionAttack1,
   FactionAttack2,
   FactionAttack3,

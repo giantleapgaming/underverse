@@ -16,57 +16,63 @@ import { PopulationComponent, ID as PopulationComponentID } from "../components/
 import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownInitialBalance, initialEntityPopulation, baseInitialfuel } from "../constants.sol";
 import "../libraries/Math.sol";
 
-uint256 constant ID = uint256(keccak256("system.BuildFromShipyard"));
+uint256 constant ID = uint256(keccak256("system.BuildFromHarvester"));
 
-contract BuildFromShipyardSystem is System {
+contract BuildFromHarvesterSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 ShipyardEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
+    (uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
       arguments,
       (uint256, int32, int32, uint256)
     );
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(ShipyardEntity) ==
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(harvesterEntity) ==
         addressToEntity(msg.sender),
-      "Shipyard not owned by user"
+      "Harvester  not owned by user"
     );
 
     require(
-      LevelComponent(getAddressById(components, LevelComponentID)).getValue(ShipyardEntity) >= 1,
-      "Invalid Shipyard entity"
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(harvesterEntity) >= 1,
+      "Invalid Harvester entity"
     );
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(ShipyardEntity) == 7,
-      "Source entity has to be a Shipyard"
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(harvesterEntity) == 5,
+      "Harvester has to be a harvester"
     );
 
-    require((entity_type == 4 || entity_type == 5), "Can only build Attack or Harvester ships");
+    require(
+      (entity_type == 1 || entity_type == 3 || entity_type == 7),
+      "Can only build residential, godowns or shipyards"
+    );
 
-    uint256 balanceShipyard = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(ShipyardEntity);
+    uint256 balanceHarvester = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
+      harvesterEntity
+    );
 
-    require(balanceShipyard >= 2, "Need atleast 2 minerals to build anything");
+    require(balanceHarvester >= 2, "Need atleast 2 minerals to build anything");
 
-    Coord memory ShipyardPosition = getCurrentPosition(
+    Coord memory harvesterPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      ShipyardEntity
+      harvesterEntity
     );
 
     Coord memory buildPosition = Coord({ x: x, y: y });
 
-    //Check that the build location and Shipyard are no further than 5 units from each other
+    //Check that the Asteroid and harvester are no further than 5 units away from each other
+    //Check that the build location and harvester are no further than 5 units from each other
 
     require(
-      getDistanceBetweenCoordinatesWithMultiplier(ShipyardPosition, buildPosition) <= 5000,
-      "Shipyard is further than 5 units distance from build location"
+      getDistanceBetweenCoordinatesWithMultiplier(harvesterPosition, buildPosition) <= 5000,
+      "Harvester is further than 5 units distance from build location"
     );
 
     require(
       atleastOneObstacleOnTheWay(
-        ShipyardPosition.x,
-        ShipyardPosition.y,
+        harvesterPosition.x,
+        harvesterPosition.y,
         buildPosition.x,
         buildPosition.y,
         components
@@ -79,10 +85,10 @@ contract BuildFromShipyardSystem is System {
       block.timestamp
     );
 
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(ShipyardEntity, balanceShipyard - 2);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(harvesterEntity, balanceHarvester - 2);
 
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      ShipyardEntity,
+      harvesterEntity,
       block.timestamp
     );
 
@@ -99,9 +105,9 @@ contract BuildFromShipyardSystem is System {
     FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
   }
 
-  //Input parameters are Shipyard, Build location and what you want to build
+  //Input parameters are harvester, asteroid, build location and what you want to build
 
-  function executeTyped(uint256 ShipyardEntity, int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
-    return execute(abi.encode(ShipyardEntity, x, y, entity_type));
+  function executeTyped(uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
+    return execute(abi.encode(harvesterEntity, x, y, entity_type));
   }
 }

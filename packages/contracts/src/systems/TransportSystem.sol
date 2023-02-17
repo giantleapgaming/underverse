@@ -9,7 +9,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { atleastOneObstacleOnTheWay, isThereAnyObstacleOnTheWay, getCurrentPosition, getPlayerFuel, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerFuel, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction, Coordd } from "../constants.sol";
 import "../libraries/Math.sol";
@@ -19,7 +19,7 @@ uint256 constant ID = uint256(keccak256("system.Transport"));
 contract TransportSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  Coordd[] private superPoints;
+  //Coordd[] private superPoints;
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
@@ -54,13 +54,16 @@ contract TransportSystem is System {
     //   "Invalid destination  entity"
     // );
 
-    require(
-      kgs <= BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity),
-      "Provided transport quantity is more than source  balance"
+    uint256 sourceBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity);
+
+    require(kgs <= sourceBalance, "Provided transport quantity is more than source  balance");
+
+    uint256 destinationBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
+      destinationEntity
     );
 
     require(
-      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(destinationEntity) + kgs <=
+      destinationBalance + kgs <=
         LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity),
       "Provided transport quantity is more than destination  storage capacity"
     );
@@ -93,7 +96,7 @@ contract TransportSystem is System {
     // uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
 
     uint256 totalTransportCost = (((getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) *
-      kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 100;
+      kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 1000;
 
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
@@ -109,14 +112,8 @@ contract TransportSystem is System {
     );
 
     // update  data
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(
-      sourceEntity,
-      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity) - kgs
-    );
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(
-      destinationEntity,
-      BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(destinationEntity) + kgs
-    );
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
 
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
@@ -128,8 +125,4 @@ contract TransportSystem is System {
   function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) public returns (bytes memory) {
     return execute(abi.encode(sourceEntity, destinationEntity, kgs));
   }
-
-  // function getSuperPoints() public view returns (Coordd[] memory) {
-  //   return superPoints;
-  // }
 }

@@ -8,6 +8,7 @@ import { GodownDetails } from "./godownDetails";
 import { HarvesterDetails } from "./harvesterDetails";
 import { PlanetDetails } from "./planetDetails";
 import { ResidentialDetails } from "./residentialDetails";
+import { RefuelDetails } from "./refuelDetails";
 import { UserAction } from "./userAction";
 import { UserDetails } from "./userDetails";
 
@@ -40,6 +41,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
           {+entityType === Mapping.residential.id && <ResidentialDetails layers={layers} />}
           {+entityType === Mapping.astroid.id && <AsteroidDetails layers={layers} />}
           {+entityType === Mapping.planet.id && <PlanetDetails layers={layers} />}
+          {+entityType === Mapping.refuel.id && <RefuelDetails layers={layers} />}
         </S.Border>
         <div
           onClick={() => {

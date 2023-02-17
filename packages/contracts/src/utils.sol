@@ -53,12 +53,8 @@ function getDistanceBetweenCoordinatesWithMultiplier(
   Coord memory coordinate1,
   Coord memory coordinate2
 ) pure returns (uint256) {
-  int256 x1 = int256(coordinate1.x);
-  int256 x2 = int256(coordinate2.x);
-  int256 y1 = int256(coordinate1.y);
-  int256 y2 = int256(coordinate2.y);
-  int256 diff1 = x2 - x1;
-  int256 diff2 = y2 - y1;
+  int256 diff1 = int256(coordinate2.x) - int256(coordinate1.x);
+  int256 diff2 = int256(coordinate2.y) - int256(coordinate1.y);
   uint256 addSquare = uint256(((diff1 ** 2) + (diff2 ** 2))) * MULTIPLIER;
   uint256 distance = Math.sqrt(addSquare); // Multiplier used to preserve decimals
   return distance;
@@ -82,8 +78,9 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
   //uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
-  uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
-  uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
+  // uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
+  // uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
+  uint256 godownCreationCost = (50000 * MULTIPLIER); // 10^6
   return godownCreationCost;
 }
 

@@ -27,7 +27,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(EntityType), Has(Level), Has(Defence), Has(Offence), Has(OwnedBy)],
+    [Has(Position), Has(EntityType), Has(Level), Has(Defence), Has(Offence), Has(OwnedBy), Has(PrevPosition)],
     ({ entity }) => {
       const healthBg = phaserScene.children
         .getChildren()
@@ -62,7 +62,13 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
         const defence = getComponentValueStrict(Defence, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const offence = getComponentValueStrict(Offence, entity).value;
+        const prevPosition = getComponentValueStrict(PrevPosition, entity);
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+          { x: prevPosition.x, y: prevPosition.y },
+          tileWidth,
+          tileHeight
+        );
         if (+defence > 0 && faction && typeof +faction === "number") {
           const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
           const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
@@ -82,15 +88,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
           healthBar.strokePath();
           healthBar.setDepth(100);
-          const prevPosition = getComponentValue(PrevPosition, entity);
-          const angle = prevPosition
-            ? Math.atan2(
-                y - tileCoordToPixelCoord({ x: prevPosition.x, y: prevPosition.y }, tileWidth, tileHeight).y,
-                x - tileCoordToPixelCoord({ x: prevPosition.x, y: prevPosition.y }, tileWidth, tileHeight).x
-              ) *
-                (180 / Math.PI) +
-              90
-            : undefined;
+          const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           astroidObject.setComponent({
             id: `attack-${entity}`,
             once: (gameObject) => {
@@ -98,9 +96,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + 32, y + 32);
               gameObject.setDepth(1);
               gameObject.setOrigin(0.5, 0.5);
-              {
-                angle && gameObject.setAngle(angle);
-              }
+              gameObject.setAngle(angle);
             },
           });
           factionObject.setComponent({
