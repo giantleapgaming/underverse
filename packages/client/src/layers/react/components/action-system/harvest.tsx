@@ -52,7 +52,7 @@ export const Harvest = ({
             }}
           >
             <S.ButtonImg src="/button/greenButton.png" />
-            <S.DeployText>HARVEST</S.DeployText>
+            <S.DeployText>MINE</S.DeployText>
           </S.InlinePointer>
         </S.Row>
       )}

@@ -27,7 +27,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, Position, Balance, Level },
+      components: { EntityType, Position, Balance, Level, Fuel, Prospected },
       api: { harvestSystem },
     },
   } = layers;
@@ -40,7 +40,8 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const level = getComponentValue(Level, destinationDetails)?.value;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
-    const fuel = 0;
+    const fuel = getComponentValueStrict(Fuel, selectedEntity).value || 0;
+    const isProspected = getComponentValueStrict(Prospected, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     if (entityType && +entityType === Mapping.astroid.id) {
@@ -65,16 +66,59 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
               </S.Text>
             </S.Column>
             <S.Column style={{ width: "325px" }}>
-              <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
-                <S.Weapon>
-                  <img src="/build-stations/crystal.png" width="20px" height="20px" />
-                  <p>{+balance}</p>
-                </S.Weapon>
-                <S.Weapon>
+              {/*  */}
+              {+isProspected ? (
+                <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
+                  <S.Weapon>
+                    <img src="/build-stations/crystal.png" width="20px" height="20px" />
+                    <p>{+balance}</p>
+                  </S.Weapon>
+                  <S.Weapon>
+                    <img src="/build-stations/hydrogen.png" />
+                    <p>{+fuel}</p>
+                  </S.Weapon>
+                </S.Row>
+              ) : (
+                <>
+                  <S.Row
+                    style={{
+                      justifyContent: "space-around",
+                      width: "100%",
+                      paddingTop: "5%",
+                      gap: "20px",
+                      fontSize: "15px",
+                    }}
+                  >
+                    <S.Weapon>
+                      <img src="/build-stations/crystal.png" width="20px" height="20px" />
+                      <p>MINERALS: X/X</p>
+                    </S.Weapon>
+                    {/* <S.Weapon>
+                    <img src="/build-stations/hydrogen.png" />
+                    <p>{+fuel}</p>
+                  </S.Weapon> */}
+                  </S.Row>
+                  <S.Row
+                    style={{
+                      justifyContent: "space-around",
+                      width: "100%",
+                      gap: "20px",
+                      paddingTop: "5%",
+                      paddingLeft: "5%",
+                      fontSize: "14px",
+                    }}
+                  >
+                    <S.Weapon>
+                      <p>PROSPECT THIS ASTEROID WITH YOUR HARVESTER TO MINE</p>
+                    </S.Weapon>
+                    {/* <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>{+fuel}</p>
-                </S.Weapon>
-              </S.Row>
+                </S.Weapon> */}
+                  </S.Row>
+                </>
+              )}
+              {/*  */}
               <S.Column style={{ width: "100%" }}>
                 {action === "harvest" &&
                   destinationDetails &&
@@ -126,7 +170,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                             console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                           }
                         }}
-                        distance={distance(position.x, position.y, destinationPosition.x , destinationPosition.y)}
+                        distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                         playSound={() => {
                           sounds["click"].play();
                         }}
@@ -163,7 +207,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
           {!destinationDetails && !isDestinationSelected && (
             <S.Row style={{ marginTop: "5px" }}>
               <SelectButton
-                name="HARVEST"
+                name="MINE"
                 isActive={action === "harvest"}
                 onClick={() => {
                   setAction("harvest");

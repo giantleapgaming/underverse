@@ -23,7 +23,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected },
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
   } = network;
@@ -118,9 +118,20 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         // const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
         // if (connectedAddress.get() === ownedBy) {
-        setDestinationDetails(stationEntity);
-        setShowLine(true, x, y, "prospect");
-        // }
+        // const entityType = getComponentValue(EntityType, stationEntity)?.value;
+        const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
+        //
+        //
+        // const circle = phaserScene.add.circle(x + 32, y + 32);
+        // circle.setStrokeStyle(0.3, 0x2d2d36);
+        // circle.setDisplaySize(704, 704);
+        //
+        //
+        if (!+isProspected) {
+          setDestinationDetails(stationEntity);
+          setShowLine(true, x, y, "prospect");
+          // }
+        }
       }
     }
     if (

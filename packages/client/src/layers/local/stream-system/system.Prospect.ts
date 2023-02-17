@@ -39,7 +39,7 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
     ) as EntityIndex;
     const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
     const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
-    const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
+    const ownedBy = getComponentValue(OwnedBy, sourceGodownEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
@@ -48,6 +48,18 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
 
     const destBalance = getComponentValue(Balance, destinationGodownEntityIndex)?.value;
     const destFuel = getComponentValue(Fuel, destinationGodownEntityIndex)?.value;
+
+    // console.log(
+    //   "pros",
+    //   faction,
+    //   sourceEntityType,
+    //   destEntityType,
+    //   typeof +faction === "number",
+    //   typeof +destEntityType === "number",
+    //   typeof +sourceEntityType === "number",
+    //   destPosition,
+    //   srcPosition
+    // );
 
     if (
       faction &&

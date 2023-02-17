@@ -15,7 +15,7 @@ export const Prospect = ({
 }) => {
   return (
     <>
-      <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
+      <S.Row style={{ justifyContent: "space-around", width: "100%", paddingTop: "10%" }}>
         <S.Text>TOTAL COST {convertPrice(Math.pow(distance, 2))}</S.Text>
         <S.InlinePointer
           onClick={() => {

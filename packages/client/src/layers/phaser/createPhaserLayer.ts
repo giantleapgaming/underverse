@@ -60,10 +60,10 @@ import {
   systemScraped,
   systemSell,
   systemUpgrade,
+  systemProspect,
 } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 import { systemTransport } from "../local/stream-system/system.Transport";
-import { systemProspect } from "../local/stream-system/system.Prospect";
 import { displayOrbits } from "../network/systems/view/orbits";
 
 /**
