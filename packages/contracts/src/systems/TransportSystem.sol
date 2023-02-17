@@ -96,7 +96,7 @@ contract TransportSystem is System {
     // uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
 
     uint256 totalTransportCost = (((getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) *
-      kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 100;
+      kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 1000;
 
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 

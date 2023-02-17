@@ -67,10 +67,10 @@ contract MoveShipSystem is System {
 
     //Calculate cost of transport
 
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
+    //uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
 
     //Transport cost is a square function of the distance
-    uint256 totalTransportCost = distanceBetweenGodowns ** 2;
+    uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
 
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
