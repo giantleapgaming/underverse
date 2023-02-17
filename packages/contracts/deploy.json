@@ -230,6 +230,18 @@
         "FuelComponent",
         "PopulationComponent"
       ]
+    },
+    {
+      "name": "BuildWallSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "EntityTypeComponent"
+      ]
     }
   ]
 }
