@@ -23,11 +23,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy },
+    components: { Position, Defence, EntityType, OwnedBy, Level },
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
   } = network;
   const graphics = phaserScene.add.graphics();
+  const direction = phaserScene.add.graphics();
+
   graphics.lineStyle(1, 0xffffff, 1);
 
   const hoverSub = input.pointermove$.subscribe((p) => {
@@ -119,11 +121,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         setShowLine(true, x, y, "prospect");
       }
       if (entityType && lineDetails.type === "refuel") {
-        // const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        // if (connectedAddress.get() === ownedBy) {
         setDestinationDetails(stationEntity);
         setShowLine(true, x, y, "refuel");
-        // }
       }
     }
     if (
@@ -156,6 +155,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     graphics.clear();
+    direction.clear();
     graphics.lineStyle(2, 0xeeeeee, 1);
     if (
       lineDetails?.showLine &&
@@ -164,6 +164,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       typeof lineDetails?.y === "number"
     ) {
       const position = getComponentValueStrict(Position, selectedEntity);
+      const level = getComponentValueStrict(Level, selectedEntity).value;
       const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
         { x: position.x + 0.5, y: position.y + 0.5 },
         tileWidth,
@@ -174,6 +175,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
+      if (lineDetails.type === "attack") {
+        direction.fillStyle(0xffffff, 1);
+        direction.fillRect(sourceX + 32, sourceY - 32 - (+level * 64) / 2, 64 * (9 + +level), 64 + +level * 64);
+        direction.lineStyle(2, 0x000000, 1);
+        direction.strokeRect(sourceX + 32, sourceY - 32 - (+level * 64) / 2, 64 * (9 + +level), 64 + +level * 64);
+        direction.setAlpha(0.2);
+      }
       const x1 = sourceX;
       const y1 = sourceY;
       const x2 = destinationX;
