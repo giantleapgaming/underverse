@@ -215,6 +215,21 @@
         "FuelComponent",
         "PopulationComponent"
       ]
+    },
+    {
+      "name": "BuildFromShipyardSystem",
+      "writeAccess": [
+        "LastUpdatedTimeComponent",
+        "NameComponent",
+        "OwnedByComponent",
+        "PositionComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent",
+        "EntityTypeComponent",
+        "FuelComponent",
+        "PopulationComponent"
+      ]
     }
   ]
 }
