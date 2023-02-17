@@ -259,7 +259,6 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   async function refuelSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgs: number) {
-    console.log(BigNumber.from(srcGodownEntity), BigNumber.from(destinationGodownEntity), kgs);
     return systems["system.Refuel"].executeTyped(
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
