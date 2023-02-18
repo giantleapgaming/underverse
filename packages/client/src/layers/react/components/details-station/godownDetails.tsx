@@ -84,7 +84,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
-                  <p>{+fuel / 10_00_000}</p>
+                  <p>{Math.floor(+fuel / 10_00_000)}</p>
                 </S.Weapon>
               </S.Row>
               {ownedBy === connectedAddress.get() && (
@@ -127,7 +127,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance, factionNumber)}
+                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance, +factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");

@@ -110,7 +110,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
+                      repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("");
@@ -126,7 +126,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, fuel, factionNumber)}
+                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +fuel, +factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");
@@ -186,6 +186,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                                 sourceY,
                                 type: "move",
                                 frame: `refuel-${+level}.png`,
+                                faction: +factionNumber,
                               });
                               setShowLine(false);
                               showProgress();

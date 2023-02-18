@@ -242,10 +242,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={Math.pow(
-                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
-                          2
-                        )}
+                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y), 2)}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&
@@ -485,7 +482,13 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         width="40px"
                       />
                     </S.SideButton>
-                    <S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("transport");
+                        setShowLine(true, position.x, position.y, "transport");
+                        sounds["click"].play();
+                      }}
+                    >
                       <S.Img
                         src={
                           action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"

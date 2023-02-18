@@ -53,7 +53,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
         <div>
           <S.Container>
             <S.Column>
-              <S.Text>ASTROID</S.Text>
+              <S.Text>ASTEROID</S.Text>
               <div
                 style={{
                   width: "100px",
@@ -79,7 +79,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   </S.Weapon>
                   <S.Weapon>
                     <img src="/build-stations/hydrogen.png" />
-                    <p>{+fuel / 10_00_000}</p>
+                    <p>{Math.floor(+fuel / 10_00_000)}</p>
                   </S.Weapon>
                 </S.Row>
               ) : (
@@ -237,7 +237,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 )}
               </S.Column>
             </S.Column>
-            <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
+            {/* <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
               <S.Column>
                 <S.Missiles>
                   <S.Img src="/layout/hex.png" width="40px" />
@@ -260,7 +260,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   <S.Img src="/layout/hex.png" width="40px" />
                 </S.Missiles>
               </S.Column>
-            </div>
+            </div> */}
           </S.Container>
           {!destinationDetails && !isDestinationSelected && (
             <S.Row style={{ marginTop: "5px" }}>

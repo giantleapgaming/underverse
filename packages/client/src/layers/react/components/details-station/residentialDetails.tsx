@@ -80,7 +80,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 </S.Weapon>
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
-                  <p>{+fuel / 10_00_000}</p>
+                  <p>{Math.floor(+fuel / 10_00_000)}</p>
                 </S.Weapon>
               </S.Row>
               {ownedBy === connectedAddress.get() && (
