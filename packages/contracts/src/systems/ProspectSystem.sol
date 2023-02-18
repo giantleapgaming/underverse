@@ -99,7 +99,9 @@ contract ProspectSystem is System {
       uint256(Math.abs(destinationGodownPosition.x));
 
     uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost)))) %
-      uint256(Math.abs(destinationGodownPosition.y))) * MULTIPLIER;
+      uint256(Math.abs(destinationGodownPosition.y))) *
+      MULTIPLIER *
+      10;
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(
