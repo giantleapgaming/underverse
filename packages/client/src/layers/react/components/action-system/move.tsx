@@ -5,10 +5,7 @@ export const Move = ({ moveSystem, cost }: { moveSystem: () => void; cost: numbe
     <S.Details>
       <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <S.Cost>
-          MOVE FOR
-          <br />
-          <img src="/build-stations/hydrogen.png" />
-            {(Math.round(cost))}
+          MOVE FOR H {(Math.round(cost))}
         </S.Cost>
       </div>
       <S.InlinePointer onClick={moveSystem}>
