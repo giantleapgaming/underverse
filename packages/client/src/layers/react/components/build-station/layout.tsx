@@ -36,25 +36,9 @@ export const Layout = ({ layers }: { layers: Layers }) => {
         <UserDetails layers={layers} />
         <S.Border>
           <S.Flex>
-            <S.Button onClick={() => build(Mapping.residential.id)}>
-              <S.Img src="/layout/hex.png" width="70px" height="70px" />
-              <S.Img src={`/build-stations/${+factionNumber}-1-0.png`} width="30px" height="30px" />
-            </S.Button>
-            <S.Button onClick={() => build(Mapping.attack.id)}>
-              <S.Img src="/layout/hex.png" width="70px" height="70px" />
-              <S.Img src={`/build-stations/attack-${+factionNumber}-1.png`} width="30px" height="30px" />
-            </S.Button>
-            <S.Button onClick={() => build(Mapping.godown.id)}>
-              <S.Img src="/layout/hex.png" width="70px" height="70px" />
-              <S.Img src={`/build-stations/cargo-1-0.png`} width="30px" height="30px" />
-            </S.Button>
             <S.Button onClick={() => build(Mapping.harvester.id)}>
               <S.Img src="/layout/hex.png" width="70px" height="70px" />
               <S.Img src="/build-stations/harvester.png" width="30px" height="30px" />
-            </S.Button>
-            <S.Button onClick={() => build(Mapping.refuel.id)}>
-              <S.Img src="/layout/hex.png" width="70px" height="70px" />
-              <S.Img src="/build-stations/refuel.png" width="30px" height="30px" />
             </S.Button>
           </S.Flex>
         </S.Border>

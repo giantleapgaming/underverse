@@ -16,7 +16,6 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 //import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
 import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord, baseInitialfuel } from "../constants.sol";
@@ -31,9 +30,8 @@ contract BuildSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
 
-    // Shipyards can only be initialized via the init system and cannot be built
+    require(entity_type == 5, "Can only build Harvesters in spawning zone");
 
-    //require(entity_type != 7, "Cannot build Shipyard");
     // Not allowing to build godown in central 3x3 grid (sun)
     require(
       ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
@@ -75,12 +73,6 @@ contract BuildSystem is System {
     uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
     uint256 initialFuel = baseInitialfuel;
 
-    //If building fuel carrier, it will be twice the cost and 5X more fuel
-    if (entity_type == 9) {
-      godownCreationCost = godownCreationCost * 2;
-      initialFuel = baseInitialfuel * 5;
-    }
-
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
       addressToEntity(msg.sender)
@@ -99,7 +91,6 @@ contract BuildSystem is System {
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
-    PopulationComponent(getAddressById(components, PopulationComponentID)).set(godownEntity, initialEntityPopulation);
     FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, initialFuel);
 
     // update player data
