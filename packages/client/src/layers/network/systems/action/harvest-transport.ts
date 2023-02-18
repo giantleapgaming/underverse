@@ -37,7 +37,7 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
       object.setComponent({
         id: "transport-harvest",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `pebble-2-${amount}.png`);
+          gameObject.setTexture(missileSprite.assetKey, `pebble-1-${amount}.png`);
           gameObject.setPosition(sourceX + 32, sourceY + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
