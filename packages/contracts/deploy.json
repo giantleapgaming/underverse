@@ -213,7 +213,8 @@
         "BalanceComponent",
         "EntityTypeComponent",
         "FuelComponent",
-        "PopulationComponent"
+        "PopulationComponent",
+        "OffenceComponent"
       ]
     },
     {
@@ -228,7 +229,8 @@
         "BalanceComponent",
         "EntityTypeComponent",
         "FuelComponent",
-        "PopulationComponent"
+        "PopulationComponent",
+        "OffenceComponent"
       ]
     },
     {

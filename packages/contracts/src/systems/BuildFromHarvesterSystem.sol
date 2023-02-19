@@ -13,7 +13,8 @@ import { atleastOneObstacleOnTheWay, isThereAnyObstacleOnTheWay, getCurrentPosit
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownInitialBalance, initialEntityPopulation, baseInitialfuel } from "../constants.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownInitialBalance, initialEntityPopulation, baseInitialfuel, offenceInitialAmount } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildFromHarvester"));
@@ -103,6 +104,7 @@ contract BuildFromHarvesterSystem is System {
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(buildEntity, godownInitialBalance);
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(buildEntity, initialEntityPopulation);
     FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
+    OffenceComponent(getAddressById(components, OffenceComponentID)).set(buildEntity, offenceInitialAmount);
   }
 
   //Input parameters are harvester, asteroid, build location and what you want to build
