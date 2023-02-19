@@ -214,7 +214,8 @@
         "EntityTypeComponent",
         "FuelComponent",
         "PopulationComponent",
-        "OffenceComponent"
+        "OffenceComponent",
+        "PrevPositionComponent"
       ]
     },
     {
@@ -230,7 +231,8 @@
         "EntityTypeComponent",
         "FuelComponent",
         "PopulationComponent",
-        "OffenceComponent"
+        "OffenceComponent",
+        "PrevPositionComponent"
       ]
     },
     {

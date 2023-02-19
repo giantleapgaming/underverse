@@ -14,6 +14,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownInitialBalance, initialEntityPopulation, baseInitialfuel, offenceInitialAmount } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -96,6 +97,7 @@ contract BuildFromHarvesterSystem is System {
     uint256 buildEntity = world.getUniqueEntityId();
 
     PositionComponent(getAddressById(components, PositionComponentID)).set(buildEntity, buildPosition);
+    PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(buildEntity, buildPosition);
     OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(buildEntity, addressToEntity(msg.sender));
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(buildEntity, block.timestamp);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(buildEntity, defenceInitialAmount);
