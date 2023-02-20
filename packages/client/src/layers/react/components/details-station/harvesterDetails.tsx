@@ -97,47 +97,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   <p>{Math.floor(+fuel / 10_00_000)}</p>
                 </S.Weapon>
               </S.Row>
-              {/*  */}
-              {/*  */}
-              {/* <S.Row
-                style={{
-                  justifyContent: "space-around",
-                  width: "100%",
-                  gap: "20px",
-                  paddingTop: "6%",
-                  fontSize: "13px",
-                }}
-              >
-                <S.Column>
-                  <S.Weapon>
-                    <p>PROSPECT ASTEROIDS</p>
-                  </S.Weapon>
-                  <S.Weapon
-                    style={{
-                      paddingTop: "5%",
-                    }}
-                  >
-                    <p>TOTAL COST: XX</p>
-                  </S.Weapon>
-                </S.Column>
-                <S.Weapon
-                  style={{
-                    marginRight: "10%",
-                  }}
-                >
-                  <SelectButton
-                    isActive={action === "prospect"}
-                    name="PROSPECT"
-                    onClick={() => {
-                      setAction("prospect");
-                      setShowLine(true, position.x, position.y, "prospect");
-                      sounds["click"].play();
-                    }}
-                  />
-                </S.Weapon>
-              </S.Row> */}
-              {/*  */}
-              {/*  */}
               {ownedBy === connectedAddress.get() && (
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
@@ -429,7 +388,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       onClick={() => {
                         setAction("move");
                         const { x, y } = position;
-                        setShowLine(true, x, y, "move");
+                        setShowLine(true, x, y, "move", 1);
                         sounds["click"].play();
                       }}
                       title="Move" // add title prop with tooltip text

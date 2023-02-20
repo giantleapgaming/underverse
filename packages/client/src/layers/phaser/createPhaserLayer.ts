@@ -128,8 +128,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
     setComponent(components.Build, buildId, { x, y, show, canPlace, entityType, isBuilding });
   };
 
-  const setShowLine = (showLine: boolean, x?: number, y?: number, type?: string) => {
-    setComponent(components.ShowLine, stationDetailsEntityIndex, { showLine, x, y, type });
+  const setShowLine = (showLine: boolean, x?: number, y?: number, type?: string, action?: number) => {
+    setComponent(components.ShowLine, stationDetailsEntityIndex, { showLine, x, y, type, action });
   };
   const setDestinationDetails = (entityId?: EntityIndex) => {
     setComponent(components.ShowDestinationDetails, stationDetailsEntityIndex, { entityId });

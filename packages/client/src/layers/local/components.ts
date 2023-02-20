@@ -192,6 +192,7 @@ export const ShowLine = (world: World) => {
       x: Type.OptionalNumber,
       y: Type.OptionalNumber,
       type: Type.OptionalString,
+      action: Type.OptionalNumber,
     },
     { id: "ShowLine" }
   );
