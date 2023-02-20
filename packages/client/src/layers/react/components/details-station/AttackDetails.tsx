@@ -1,6 +1,6 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -47,6 +47,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+
+  useEffect(() => {
+    setAction("move");
+    setShowLine(true, 0, 0, "move");
+  }, []);
+
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;

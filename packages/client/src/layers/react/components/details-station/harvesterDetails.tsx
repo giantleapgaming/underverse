@@ -1,6 +1,6 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -29,7 +29,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
           maps: {
             Main: { tileWidth, tileHeight },
           },
-          phaserScene,
         },
       },
     },
@@ -41,6 +40,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+
+  useEffect(() => {
+    setAction("move");
+    setShowLine(true, 0, 0, "move");
+  }, []);
+
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
@@ -61,6 +66,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
+
     if (entityType && +entityType === Mapping.harvester.id) {
       return (
         <div>
