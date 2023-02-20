@@ -39,6 +39,12 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     color: "#c0c0c0",
   });
 
+  const circle7 = phaserScene.add.circle(32, 32);
+  const label7 = phaserScene.add.text(32, -6080, "100", {
+    fontSize: "24px",
+    color: "#c0c0c0",
+  });
+
   circle1.setStrokeStyle(0.3, 0x2d2d36);
   circle1.setDisplaySize(704, 704);
   label1.setOrigin(0.5, 0.5);
@@ -68,6 +74,11 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   circle6.setDisplaySize(3904, 3904);
   label6.setOrigin(0.5, 0.5);
   label6.setDepth(20);
+
+  circle7.setStrokeStyle(1, 0x2d2d36);
+  circle7.setDisplaySize(12224, 12224);
+  label7.setOrigin(0.5, 0.5);
+  label7.setDepth(20);
 
   input.pointermove$.subscribe(({ pointer }) => {
     if (pointer.rightButtonDown()) {

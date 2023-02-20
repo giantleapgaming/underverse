@@ -242,7 +242,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                                 sourceX,
                                 sourceY,
                                 type: "move",
-                                frame: `miner-${+level}-${+balance}.png`,
+                                frame: `miner-f-${+level}-${+balance}.png`,
                                 faction: +factionNumber,
                               });
                               setShowLine(false);

@@ -211,7 +211,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               sourceX: sourceX,
               sourceY: sourceY,
               type: "move",
-              frame: `miner-${+level}-${+balance}.png`,
+              frame: `miner-f-${+level}-${+balance}.png`,
               faction: +factionNumber,
             });
             setShowLine(false);

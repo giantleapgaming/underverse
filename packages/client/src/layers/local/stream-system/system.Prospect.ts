@@ -78,7 +78,7 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
         `</p>${colorString({ name, color })} prospected asteroid at (${destPosition?.x},${
           destPosition?.y
         }) and discovered ${destBalance ? colorString({ name: `${+destBalance}`, color }) : 0} mineral and ${
-          destFuel ? colorString({ name: `${+destFuel}`, color }) : 0
+          destFuel ? colorString({ name: `${+(+destFuel / 10_00_000)}`, color }) : 0
         } hydrogen on it</p>`
       );
       // const address = connectedAddress.get();
