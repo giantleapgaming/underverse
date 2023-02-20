@@ -25,7 +25,7 @@ export const registerDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, Cash },
+          components: { Name, Cash, Fuel },
           world,
         },
         phaser: {
@@ -38,7 +38,8 @@ export const registerDetails = () => {
         ShowStationDetails.update$,
         ShowDestinationDetails.update$,
         MoveStation.update$,
-        ShowHighLight.update$
+        ShowHighLight.update$,
+        Fuel.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
