@@ -1,6 +1,45 @@
-# Mudbasics
+# Giantleap Gaming
 
-A simple mud reference implementation
+[![N|Solid](https://mud.dev/public/logo512.png)](https://mud.dev/)
 
-## Getting started
-For a simple tutorial on how to use MUD, check out the slides of the [MUD workshop](https://www.figma.com/file/n4Ld4tpaiymotp9mRH5Te9/Mud-Workshop?node-id=0%3A1). Solutions for Quest 1 and Quest 2 can be found at [#1](https://github.com/latticexyz/mudbasics/pull/1) and [#2](https://github.com/latticexyz/mudbasics/pull/2).
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://github.com/giantleapgaming/underverse/actions/runs/4233712559/jobs/7355026582)
+
+Giantleap's underverse is powered by the MUD engine.
+
+## Installation
+
+Giantleap Underverse requires [Node.js](https://nodejs.org/) v12+ to run.
+
+Install the dependencies and devDependencies and start the server.
+
+```sh
+cd underverse
+yarn
+yarn start
+```
+
+For production environments...
+
+```sh
+cd packages/contracts
+yarn deploy:prod
+```
+
+## Official Links
+
+| Giantleap Gaming | Links                                                   |
+| ---------------- | ------------------------------------------------------- |
+| Twitter          | [Twitter](https://twitter.com/giantleapgg)              |
+| Github           | [Github](https://github.com/giantleapgaming/underverse) |
+| Website          | [Official website](https://giantleap.gg/)               |
+
+Verify the deployment by navigating to your server address in
+your preferred browser.
+
+```sh
+http://localhost:3000/{url after deployment}
+```
+
+## License
+
+MIT
