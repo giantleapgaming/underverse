@@ -56,6 +56,8 @@ contract BuildFromHarvesterSystem is System {
 
     require(balanceHarvester >= 2, "Need atleast 2 minerals to build anything");
 
+    require((x ** 2 + y ** 2) > 225, "Cannot build in spawning zone");
+
     Coord memory harvesterPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       harvesterEntity
