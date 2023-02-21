@@ -1,3 +1,4 @@
+import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
 import { getComponentValue } from "@latticexyz/recs";
 import { defineComponentSystem } from "@latticexyz/recs";
 import { PhaserLayer } from "../../../phaser";
@@ -9,8 +10,16 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
     world,
     components: { ShowAnimation },
     localIds: { stationDetailsEntityIndex },
+    localApi: { setShowLine },
     scenes: {
-      Main: { objectPool, config, phaserScene },
+      Main: {
+        objectPool,
+        config,
+        phaserScene,
+        maps: {
+          Main: { tileWidth, tileHeight },
+        },
+      },
     },
   } = phaser;
   defineComponentSystem(world, ShowAnimation, () => {
@@ -33,6 +42,7 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
       frame &&
       typeof faction === "number"
     ) {
+      const { x, y } = pixelCoordToTileCoord({ x: destinationX, y: destinationY }, tileWidth, tileHeight);
       const object = objectPool.get("move", "Sprite");
       const objectFaction = objectPool.get("move-faction", "Sprite");
       const destinationCircle = phaserScene.add.graphics();
@@ -99,6 +109,7 @@ export function move(network: NetworkLayer, phaser: PhaserLayer) {
               objectPool.remove("move-faction");
               destinationCircle.clear();
               sourceCircle.clear();
+              setShowLine(true, x, y, "move");
             },
           });
         },

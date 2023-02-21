@@ -43,7 +43,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
 
   useEffect(() => {
     setAction("move");
-    setShowLine(true, 0, 0, "move");
+    const position = getComponentValue(Position, selectedEntity);
+    if (position) {
+      setShowLine(true, position.x, position.y, "move");
+    }
   }, []);
 
   if (selectedEntity) {

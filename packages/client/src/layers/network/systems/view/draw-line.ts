@@ -214,7 +214,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               frame: `miner-f-${+level}-${+balance}.png`,
               faction: +factionNumber,
             });
-            setShowLine(false);
             showProgress();
             setShowLine(false);
           } catch (e) {
