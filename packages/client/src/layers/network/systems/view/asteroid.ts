@@ -41,14 +41,15 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
           gameObject.setPosition(x + 32, y + 32);
+          const durationMultiplier = 0.8 + Math.random() * 0.4;
           phaserScene.add.tween({
             targets: gameObject,
-            angle: x / 2 === 0 ? 360 : -360,
-            duration: 4500000,
+            angle: Math.random() < 0.5 ? 360 : -360,
+            duration: 1000000 * durationMultiplier,
             ease: "circular",
             repeat: -1,
             yoyo: false,
-            rotation: x / 2 === 0 ? 360 : -360,
+            rotation: Math.random() < 0.5 ? 360 : -360,
           });
         },
       });
