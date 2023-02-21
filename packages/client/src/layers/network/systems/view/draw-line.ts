@@ -5,6 +5,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { segmentPoints, getObstacleList } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
+import { Sprites } from "../../../phaser/constants";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -25,6 +26,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           Main: { tileWidth, tileHeight },
         },
         objectPool,
+        config,
         phaserScene,
         input,
       },
@@ -35,7 +37,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, PrevPosition },
     utils: { getEntityIndexAtPosition },
     network: { connectedAddress },
   } = network;
@@ -272,17 +274,36 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
-      if (lineDetails.type === "attack") {
-        direction.fillStyle(0xffffff, 1);
-        direction.fillRect(sourceX + 32, sourceY - 32 - (+level * 64) / 2, 64 * (9 + +level), 64 + +level * 64);
-        direction.lineStyle(2, 0x000000, 1);
-        direction.strokeRect(sourceX + 32, sourceY - 32 - (+level * 64) / 2, 64 * (9 + +level), 64 + +level * 64);
-        direction.setAlpha(0.2);
-      }
       const x1 = sourceX;
       const y1 = sourceY;
       const x2 = destinationX;
       const y2 = destinationY;
+      if (lineDetails.type === "attack") {
+        const rect = objectPool.get(`attack-rectangle-box`, "Sprite");
+        const attackBox = config.sprites[Sprites.Select];
+        const prevPosition = getComponentValueStrict(PrevPosition, selectedEntity);
+        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+          { x: prevPosition.x, y: prevPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI);
+
+        rect.setComponent({
+          id: `attack-rectangle-box`,
+          once: (gameObject) => {
+            gameObject.setTexture(attackBox.assetKey, `attack-rectangle-box-${+level}.png`);
+            gameObject.setPosition(sourceX, sourceY);
+            gameObject.setDepth(1);
+            gameObject.setOrigin(0, 0.5);
+            gameObject.setAlpha(0.3);
+            gameObject.setAngle(angle);
+          },
+        });
+      } else {
+        objectPool.remove(`attack-rectangle-box`);
+      }
       const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
       const dotSize = 4;
       const gapSize = 8;
