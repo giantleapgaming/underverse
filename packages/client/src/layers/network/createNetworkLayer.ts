@@ -187,7 +187,9 @@ export async function createNetworkLayer(config: GameConfig) {
 
   async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType);
+    // return 1;
   }
+
   async function moveSystem({
     x,
     y,
@@ -203,9 +205,11 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, srcX, srcY);
   }
+
   async function upgradeSystem(godownEntity: EntityID) {
     return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
   }
+
   async function harvestSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgsToTransfer: number) {
     return systems["system.Harvest"].executeTyped(
       BigNumber.from(srcGodownEntity),
@@ -228,6 +232,7 @@ export async function createNetworkLayer(config: GameConfig) {
       people
     );
   }
+
   async function transportSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgs: number) {
     return systems["system.Transport"].executeTyped(
       BigNumber.from(srcGodownEntity),
@@ -235,9 +240,11 @@ export async function createNetworkLayer(config: GameConfig) {
       kgs
     );
   }
+
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs);
   }
+
   async function repairSystem(godownEntity: EntityID) {
     return systems["system.Repair"].executeTyped(BigNumber.from(godownEntity));
   }
@@ -259,12 +266,39 @@ export async function createNetworkLayer(config: GameConfig) {
   };
 
   async function refuelSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, kgs: number) {
-    console.log(BigNumber.from(srcGodownEntity), BigNumber.from(destinationGodownEntity), kgs);
     return systems["system.Refuel"].executeTyped(
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       kgs
     );
+  }
+
+  async function buildFromHarvesterSystem({
+    harvesterEntity,
+    x,
+    y,
+    entityType,
+  }: {
+    harvesterEntity: EntityID;
+    x: number;
+    y: number;
+    entityType: number;
+  }) {
+    return systems["system.BuildFromHarvester"].executeTyped(BigNumber.from(harvesterEntity), x, y, entityType);
+  }
+
+  async function buildFromShipyardSystem({
+    shipyardEntity,
+    x,
+    y,
+    entityType,
+  }: {
+    shipyardEntity: EntityID;
+    x: number;
+    y: number;
+    entityType: number;
+  }) {
+    return systems["system.BuildFromShipyard"].executeTyped(BigNumber.from(shipyardEntity), x, y, entityType);
   }
 
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
@@ -314,6 +348,8 @@ export async function createNetworkLayer(config: GameConfig) {
       raptureSystem,
       prospectSystem,
       refuelSystem,
+      buildFromHarvesterSystem,
+      buildFromShipyardSystem,
     },
     utils: {
       getEntityIndexAtPosition,

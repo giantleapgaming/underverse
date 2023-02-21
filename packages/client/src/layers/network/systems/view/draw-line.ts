@@ -123,7 +123,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           +entityType === Mapping.godown.id ||
           +entityType === Mapping.harvester.id ||
           +entityType === Mapping.residential.id ||
-          +entityType === Mapping.refuel.id)
+          +entityType === Mapping.refuel.id ||
+          +entityType === Mapping.shipyard.id)
       ) {
         const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
         const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
@@ -147,7 +148,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           setShowLine(true, x, y, "rapture");
         }
       }
-      if (entityType && +entityType === Mapping.godown.id && lineDetails.type === "transport") {
+      if (
+        entityType &&
+        (+entityType === Mapping.godown.id || +entityType === Mapping.shipyard.id) &&
+        lineDetails.type === "transport"
+      ) {
         const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
         if (connectedAddress.get() === ownedBy) {
           setDestinationDetails(stationEntity);
@@ -191,7 +196,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const entityIndex = world.entities.indexOf(ownedBy);
         const factionNumber = getComponentValue(Faction, entityIndex)?.value;
         const entityType = getComponentValue(EntityType, selectedEntity)?.value;
-        if (factionNumber && entityType && +entityType === Mapping.harvester.id) {
+        if (
+          factionNumber &&
+          entityType &&
+          (+entityType === Mapping.harvester.id || +entityType === Mapping.shipyard.id)
+        ) {
           const level = getComponentValueStrict(Level, selectedEntity).value;
           const balance = getComponentValueStrict(Balance, selectedEntity).value;
           try {

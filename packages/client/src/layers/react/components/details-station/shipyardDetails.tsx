@@ -1,34 +1,28 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
-import { distance } from "../../utils/distance";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
-import { Attack } from "../action-system/attack";
+import { distance } from "../../utils/distance";
 import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
-import { Upgrade } from "../action-system/upgrade";
-import { Weapon } from "../action-system/weapon";
+import { Transport } from "../action-system/transport";
+import { Prospect } from "../action-system/prospect";
 import { Refuel } from "../action-system/refuel";
+import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
+import { BuildFromShipyardLayout } from "../build-station/buildFromShipyardLayout";
 
-export const AttackDetails = ({ layers }: { layers: Layers }) => {
+export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
-      localApi: {
-        showProgress,
-        setShowStationDetails,
-        setShowLine,
-        setShowAnimation,
-        setDestinationDetails,
-        setMoveStation,
-      },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setMoveStation },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
       scenes: {
@@ -41,8 +35,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Offence, Level, Defence, Fuel },
-      api: { upgradeSystem, buyWeaponSystem, repairSystem, scrapeSystem, attackSystem, moveSystem, refuelSystem },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -50,7 +44,10 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
 
   useEffect(() => {
     setAction("move");
-    setShowLine(true, 0, 0, "move");
+    const position = getComponentValue(Position, selectedEntity);
+    if (position) {
+      setShowLine(true, position.x, position.y, "move");
+    }
   }, []);
 
   if (selectedEntity) {
@@ -59,10 +56,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
     const entityIndex = world.entities.indexOf(ownedBy);
     const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
     const position = getComponentValueStrict(Position, selectedEntity);
-    const offence = getComponentValueStrict(Offence, selectedEntity).value;
+    const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
+    //const fuel = 0;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
@@ -72,17 +71,13 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
 
-    if (entityType && +entityType === Mapping.attack.id) {
+    if (entityType && +entityType === Mapping.shipyard.id) {
       return (
         <div>
           <S.Container>
             <S.Column>
-              <S.Text>ATTACK LVL {+level}</S.Text>
-              <img
-                src={`/build-stations/attack-${factionNumber && +factionNumber}-1.png`}
-                width="100px"
-                height="100px"
-              />
+              <S.Text>SHIPYARD LVL {+level}</S.Text>
+              <img src={`/build-stations/shipyard-${+factionNumber}.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -96,9 +91,9 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
                 <S.Weapon>
-                  <img src="/build-stations/weapon.png" />
+                  <img src="/build-stations/box.png" />
                   <p>
-                    {+offence}/{+level}
+                    {+balance}/{+level}
                   </p>
                 </S.Weapon>
                 <S.Weapon>
@@ -108,87 +103,39 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
               </S.Row>
               {ownedBy === connectedAddress.get() && (
                 <S.Column style={{ width: "100%" }}>
-                  {!isDestinationSelected && (
-                    <>
-                      {action === "upgrade" && (
-                        <Upgrade
-                          defence={+defence}
-                          level={+level}
-                          upgradeSystem={async () => {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              await upgradeSystem(world.entities[selectedEntity]);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
-                            }
-                          }}
-                          faction={+factionNumber}
-                        />
-                      )}
-                      {action === "weapon" && (
-                        <Weapon
-                          offence={+offence}
-                          defence={+defence}
-                          level={+level}
-                          buyWeaponSystem={async (kgs: number) => {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              await buyWeaponSystem(world.entities[selectedEntity], kgs);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({ error: e, system: "Weapon Attack", details: selectedEntity });
-                            }
-                          }}
-                          faction={+factionNumber}
-                        />
-                      )}
-                      {action === "repair" && (
-                        <Repair
-                          defence={+defence}
-                          level={+level}
-                          repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
-                          repairSystem={async () => {
-                            try {
-                              setAction("upgrade");
-                              sounds["confirm"].play();
-                              await repairSystem(world.entities[selectedEntity]);
-                              showProgress();
-                            } catch (e) {
-                              setAction("repair");
-                              console.log({ error: e, system: "Repair Attack", details: selectedEntity });
-                            }
-                          }}
-                        />
-                      )}
-                      {action === "scrap" && (
-                        <Scrap
-                          scrapCost={scrapPrice(position.x, position.y, +level, +defence, +offence, +factionNumber)}
-                          scrapSystem={async () => {
-                            try {
-                              sounds["confirm"].play();
-                              await scrapeSystem(world.entities[selectedEntity]);
-                              setShowStationDetails();
-                              showProgress();
-                            } catch (e) {
-                              setAction("scrap");
-                              console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
-                            }
-                          }}
-                        />
-                      )}
-                    </>
+                  {action === "upgrade" && (
+                    <Upgrade
+                      defence={+defence}
+                      level={+level}
+                      upgradeSystem={async () => {
+                        try {
+                          setAction("");
+                          sounds["confirm"].play();
+                          await upgradeSystem(world.entities[selectedEntity]);
+                          showProgress();
+                        } catch (e) {
+                          setAction("");
+                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                        }
+                      }}
+                      faction={+factionNumber}
+                    />
                   )}
-                  {action === "attack" && isDestinationSelected && (
-                    <Attack
-                      onFire={async (weapons) => {
+                  {action === "transport" && destinationDetails && isDestinationSelected && (
+                    <Transport
+                      space={
+                        (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
+                          ? destinationLevel - destinationBalance
+                          : +balance) || 0
+                      }
+                      transport={async (weapons) => {
                         try {
                           sounds["confirm"].play();
-                          await attackSystem(
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          await transportSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
                             weapons
@@ -210,23 +157,52 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             destinationY,
                             sourceX,
                             sourceY,
-                            faction: +factionNumber + 1,
-                            type: "attack",
+                            type: "transport",
                           });
-                          setDestinationDetails();
-                          setShowLine(false);
-                          setAction("upgrade");
-                          showProgress();
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
                         }
                       }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                      offence={+offence}
                       playSound={() => {
                         sounds["click"].play();
                       }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                       faction={+factionNumber}
+                    />
+                  )}
+                  {action === "repair" && (
+                    <Repair
+                      defence={+defence}
+                      level={+level}
+                      repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
+                      repairSystem={async () => {
+                        try {
+                          setAction("");
+                          sounds["confirm"].play();
+                          await repairSystem(world.entities[selectedEntity]);
+                          showProgress();
+                        } catch (e) {
+                          setAction("");
+                          console.log({ error: e, system: "Repair Attack", details: selectedEntity });
+                        }
+                      }}
+                    />
+                  )}
+                  {action === "scrap" && (
+                    <Scrap
+                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
+                      scrapSystem={async () => {
+                        try {
+                          setAction("");
+                          sounds["confirm"].play();
+                          await scrapeSystem(world.entities[selectedEntity]);
+                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+                          showProgress();
+                        } catch (e) {
+                          setAction("");
+                          console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
+                        }
+                      }}
                     />
                   )}
                   {action === "move" &&
@@ -235,10 +211,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     typeof moveStationDetails.x === "number" &&
                     typeof moveStationDetails.y === "number" && (
                       <Move
-                        cost={Math.pow(
-                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
-                          2
-                        )}
+                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y), 2)}
                         moveSystem={async () => {
                           if (
                             moveStationDetails.selected &&
@@ -273,7 +246,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                                 sourceX,
                                 sourceY,
                                 type: "move",
-                                frame: `attack-${+factionNumber + 1}-${+level}.png`,
+                                frame: `miner-f-${+level}-${+balance}.png`,
                                 faction: +factionNumber,
                               });
                               setShowLine(false);
@@ -294,6 +267,61 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         }}
                       />
                     )}
+                  {/*  */}
+                  {/*  */}
+                  {action === "prospect" && destinationDetails && isDestinationSelected && (
+                    <Prospect
+                      space={
+                        (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
+                          ? destinationLevel - destinationBalance
+                          : +balance) || 0
+                      }
+                      prospect={async () => {
+                        try {
+                          sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          console.log("pro", selectedEntity, destinationDetails);
+                          await prospectSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails]
+                            // weapons
+                          );
+                          // const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
+                          //   { x: destinationPosition.x, y: destinationPosition.y },
+                          //   tileWidth,
+                          //   tileHeight
+                          // );
+                          // const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
+                          //   { x: position.x, y: position.y },
+                          //   tileWidth,
+                          //   tileHeight
+                          // );
+                          // setShowAnimation({
+                          //   showAnimation: true,
+                          //   amount: weapons,
+                          //   destinationX,
+                          //   destinationY,
+                          //   sourceX,
+                          //   sourceY,
+                          //   type: "transport",
+                          // });
+                        } catch (e) {
+                          console.log({ error: e, system: "Prospect", details: selectedEntity });
+                        }
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      // faction={+factionNumber}
+                    />
+                  )}
+                  {action === "build" && (
+                    <BuildFromShipyardLayout layers={layers}/>
+                  )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -352,6 +380,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {/*  */}
+                  {/*  */}
                 </S.Column>
               )}
             </S.Column>
@@ -365,7 +395,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       onClick={() => {
                         setAction("move");
                         const { x, y } = position;
-                        setShowLine(true, x, y, "move");
+                        setShowLine(true, x, y, "move", 1);
                         sounds["click"].play();
                       }}
                       title="Move" // add title prop with tooltip text
@@ -429,6 +459,21 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         width="40px"
                       />
                     </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("transport");
+                        setShowLine(true, position.x, position.y, "transport");
+                        sounds["click"].play();
+                      }}
+                      title="Transport Minerals" // add title prop with tooltip text
+                    >
+                      <S.Img
+                        src={
+                          action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"
+                        }
+                        width="40px"
+                      />
+                    </S.SideButton>
                   </S.Column>
                 </div>
               )}
@@ -439,21 +484,20 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
             !moveStationDetails?.selected && (
               <S.Row style={{ gap: "10px", marginTop: "5px" }}>
                 <SelectButton
-                  isActive={action === "attack"}
-                  name="ATTACk"
+                  isActive={action === "prospect"}
+                  name="PROSPECT"
                   onClick={() => {
-                    setAction("attack");
-                    const { x, y } = position;
-                    setShowLine(true, x, y, "attack");
+                    setAction("prospect");
+                    setShowLine(true, position.x, position.y, "prospect");
                     sounds["click"].play();
                   }}
                 />
                 <SelectButton
-                  isActive={action === "weapon"}
-                  name="WEAPON"
+                  isActive={action === "build"}
+                  name="BUILD"
                   onClick={() => {
-                    setShowLine(false);
-                    setAction("weapon");
+                    setAction("build");
+                    // setShowLine(true, position.x, position.y, "build");
                     sounds["click"].play();
                   }}
                 />
@@ -492,9 +536,8 @@ const S = {
     justify-content: center;
     gap: 5px;
   `,
-  SideButton: styled.div`
+  Missiles: styled.div`
     height: 100%;
-    cursor: pointer;
   `,
   Img: styled.img`
     display: flex;
@@ -506,6 +549,10 @@ const S = {
     display: flex;
     align-items: center;
     gap: 10px;
+  `,
+  SideButton: styled.div`
+    height: 100%;
+    cursor: pointer;
   `,
   Slanted: styled.div<{ selected: boolean }>`
     position: relative;

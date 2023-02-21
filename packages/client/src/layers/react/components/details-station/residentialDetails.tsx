@@ -109,7 +109,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
+                      repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("attack");

@@ -37,7 +37,7 @@ export const Layout = ({ layers }: { layers: Layers }) => {
         <S.Border>
           <S.Flex>
             <S.Button onClick={() => build(Mapping.harvester.id)}>
-              <S.Img src="/layout/hex.png" width="70px" height="70px" />
+              <S.Img src="/layout/hex.png" width="70px" height="64px" />
               <S.Img src="/build-stations/harvester.png" width="30px" height="30px" />
             </S.Button>
           </S.Flex>

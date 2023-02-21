@@ -5,7 +5,6 @@ import { PhaserLayer } from "../../../phaser";
 
 export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
-    world,
     scenes: {
       Main: {
         input,
@@ -14,14 +13,15 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       },
     },
-    components: { Build },
+    components: { Build, ShowStationDetails },
     localApi: { setBuild, showProgress },
-    localIds: { buildId },
+    localIds: { buildId, stationDetailsEntityIndex },
     sounds,
   } = phaser;
 
   const {
-    api: { buildSystem },
+    world,
+    api: { buildSystem, buildFromHarvesterSystem, buildFromShipyardSystem },
   } = network;
 
   // on left click build the station
@@ -29,13 +29,30 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const buildDetails = getComponentValue(Build, buildId);
+    const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+    console.log(selectedEntity, "as");
 
     if (buildDetails && buildDetails?.canPlace && buildDetails.show) {
       sounds["click"].play();
       try {
+        console.log(buildDetails.entityType, "build", selectedEntity);
         setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
         sounds["click"].play();
-        await buildSystem({ x, y, entityType: buildDetails.entityType });
+        if (typeof selectedEntity === "undefined" && buildDetails.entityType == 5) {
+          await buildSystem({ x, y, entityType: buildDetails.entityType });
+        } else if (
+          selectedEntity &&
+          (buildDetails.entityType == 1 ||
+            buildDetails.entityType == 3 ||
+            buildDetails.entityType == 7 ||
+            buildDetails.entityType == 9)
+        ) {
+          const harvesterEntity = world.entities[selectedEntity];
+          await buildFromHarvesterSystem({ harvesterEntity, x, y, entityType: buildDetails.entityType });
+        } else if (selectedEntity) {
+          const shipyardEntity = world.entities[selectedEntity];
+          await buildFromShipyardSystem({ shipyardEntity, x, y, entityType: buildDetails.entityType });
+        }
         showProgress();
       } catch (e) {
         console.log({ error: e, system: "build", details: buildDetails });

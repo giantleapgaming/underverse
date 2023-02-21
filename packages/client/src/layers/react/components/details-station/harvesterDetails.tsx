@@ -15,6 +15,7 @@ import { Prospect } from "../action-system/prospect";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
+import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
 
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -173,7 +174,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     <Repair
                       defence={+defence}
                       level={+level}
-                      repairCost={repairPrice(position.x, position.y, level, defence, factionNumber)}
+                      repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
                         try {
                           setAction("");
@@ -189,7 +190,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, balance, factionNumber)}
+                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");
@@ -317,6 +318,9 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                       // faction={+factionNumber}
                     />
+                  )}
+                  {action === "build" && (
+                    <BuildFromHarvesterLayout layers={layers}/>
                   )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
@@ -485,6 +489,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   onClick={() => {
                     setAction("prospect");
                     setShowLine(true, position.x, position.y, "prospect");
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "build"}
+                  name="BUILD"
+                  onClick={() => {
+                    setAction("build");
+                    // setShowLine(true, position.x, position.y, "build");
                     sounds["click"].play();
                   }}
                 />

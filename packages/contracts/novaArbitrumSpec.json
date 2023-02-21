@@ -1,0 +1,5 @@
+{
+    "chainId": 42170,
+    "rpc": "https://nova.arbitrum.io/rpc",
+    "wsRpc": "wss://nova.arbitrum.io/feed"
+}
