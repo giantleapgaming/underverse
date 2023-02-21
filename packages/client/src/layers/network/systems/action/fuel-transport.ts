@@ -37,7 +37,7 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
       object.setComponent({
         id: "fuel-harvest",
         once: (gameObject) => {
-          gameObject.setTexture(missileSprite.assetKey, `transport-ore-6-product.png`);
+          gameObject.setTexture(missileSprite.assetKey, `transport-ore-1-product.png`);
           gameObject.setPosition(sourceX + 32, sourceY + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
