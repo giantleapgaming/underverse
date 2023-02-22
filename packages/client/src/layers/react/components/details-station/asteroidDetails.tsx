@@ -38,7 +38,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const position = getComponentValueStrict(Position, selectedEntity);
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
-    const level = getComponentValue(Level, destinationDetails)?.value;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const isProspected = getComponentValueStrict(Prospected, selectedEntity).value;
@@ -134,8 +133,11 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                     ) && (
                     <div>
                       <Harvest
-                        space={(destinationBalance && level && +level - +destinationBalance) || 0}
-                        // harvestCost={harvestPrice(position.x, position.y, destinationPosition.x , destinationPosition.y, amount)}
+                        space={
+                          (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
+                            ? destinationLevel - destinationBalance
+                            : +balance) || 0
+                        }
                         harvest={async (amount) => {
                           try {
                             sounds["confirm"].play();
@@ -185,18 +187,18 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   <Refuel
                     space={
                       (destinationFuel &&
-                      destinationLevel &&
-                      +destinationLevel *
+                        destinationLevel &&
+                        +destinationLevel *
                         (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
                         10_00_000 -
                         destinationFuel <
                         +fuel
                         ? destinationLevel *
-                            (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
-                              ? 5000
-                              : 1000) *
-                            10_00_000 -
-                          destinationFuel
+                        (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
+                          ? 5000
+                          : 1000) *
+                        10_00_000 -
+                        destinationFuel
                         : +fuel) || 0
                     }
                     refuel={async (weapons) => {
@@ -237,30 +239,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 )}
               </S.Column>
             </S.Column>
-            {/* <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
-              <S.Column>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-              </S.Column>
-              <S.Column>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-                <S.Missiles>
-                  <S.Img src="/layout/hex.png" width="40px" />
-                </S.Missiles>
-              </S.Column>
-            </div> */}
           </S.Container>
           {!destinationDetails && !isDestinationSelected && (
             <S.Row style={{ marginTop: "5px" }}>
