@@ -153,6 +153,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
     action,
     showBuildWall,
     stopBuildWall,
+    hoverX,
+    hoverY,
+    showHover,
   }: {
     sourcePositionX?: number;
     sourcePositionY?: number;
@@ -162,6 +165,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
     action?: number;
     showBuildWall?: boolean;
     stopBuildWall?: boolean;
+    showHover?: boolean;
+    hoverX?: number;
+    hoverY?: number;
   }) => {
     setComponent(components.BuildWall, buildId, {
       sourcePositionX,
@@ -172,6 +178,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
       action,
       showBuildWall: showBuildWall ? true : false,
       stopBuildWall: stopBuildWall ? true : false,
+      hoverX,
+      hoverY,
+      showHover: showHover ? true : false,
     });
   };
 

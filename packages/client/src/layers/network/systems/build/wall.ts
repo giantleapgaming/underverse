@@ -3,6 +3,7 @@ import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
+import { Sprites } from "../../../phaser/constants";
 
 export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -10,6 +11,8 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
       Main: {
         input,
         phaserScene,
+        objectPool,
+        config,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -39,8 +42,12 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const showBuildWall = buildDetails?.showBuildWall;
     const type = buildDetails?.type === "buildWall";
     const sourcePositionX = buildDetails?.sourcePositionX;
+    const showHover = buildDetails?.showHover;
     const sourcePositionY = buildDetails?.sourcePositionY;
-
+    console.log(showHover);
+    if (showHover) {
+      setBuildWall({ ...buildDetails, hoverX: destinationPositionX, hoverY: destinationPositionY });
+    }
     if (showBuildWall && type && typeof sourcePositionX === "number" && typeof sourcePositionY == "number") {
       setBuildWall({ ...buildDetails, destinationPositionX, destinationPositionY });
     }
@@ -68,7 +75,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
           !(typeof destinationPositionX == "number" && typeof destinationPositionY == "number") &&
           allPossiblePosition
         ) {
-          setBuildWall({ ...buildDetails, sourcePositionX: sourceX, sourcePositionY: sourceY });
+          setBuildWall({ ...buildDetails, sourcePositionX: sourceX, sourcePositionY: sourceY, showHover: false });
         }
         if (
           showBuildWall &&
@@ -83,7 +90,6 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             destinationPositionY: sourceY,
             stopBuildWall: true,
           });
-          console.log(world.entities[selectedEntity]);
           try {
             await wallSystem({
               entityType: world.entities[selectedEntity],
@@ -132,6 +138,31 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const showBuildWall = buildDetails?.showBuildWall;
     const stopBuildWall = buildDetails?.stopBuildWall;
     const type = buildDetails?.type === "buildWall";
+    if (showBuildWall && type) {
+      const showHover = buildDetails?.showHover;
+      const hoverX = buildDetails?.hoverX;
+      const hoverY = buildDetails?.hoverY;
+      const type = buildDetails?.type === "buildWall";
+      if (showHover && typeof hoverX === "number" && typeof hoverY === "number" && type) {
+        const hoverStation = objectPool.get("build-wall", "Sprite");
+        const HoverSprite = config.sprites[Sprites.Build1];
+        const { x, y } = tileCoordToPixelCoord({ x: hoverX, y: hoverY }, tileWidth, tileHeight);
+        hoverStation.setComponent({
+          id: `hoverStation`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `wall.png`);
+            gameObject.setPosition(x, y);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.depth = 4;
+            gameObject.setAngle(0);
+          },
+        });
+        graphics.clear();
+        return;
+      } else {
+        objectPool.remove("build-wall");
+      }
+    }
     if (
       typeof sourcePositionX === "number" &&
       typeof sourcePositionY == "number" &&

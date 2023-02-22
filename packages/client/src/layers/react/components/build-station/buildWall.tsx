@@ -15,7 +15,10 @@ export const BuildWall = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     return (
       <S.Flex>
-        <S.Button onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true })} title="Habitat">
+        <S.Button
+          onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
+          title="Habitat"
+        >
           <S.Img src="/layout/hex.png" width="70px" height="64px" />
           <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
         </S.Button>

@@ -210,6 +210,9 @@ export const BuildWall = (world: World) => {
       action: Type.OptionalNumber,
       showBuildWall: Type.Boolean,
       stopBuildWall: Type.Boolean,
+      showHover: Type.Boolean,
+      hoverX: Type.OptionalNumber,
+      hoverY: Type.OptionalNumber,
     },
     { id: "BuildWall" }
   );
