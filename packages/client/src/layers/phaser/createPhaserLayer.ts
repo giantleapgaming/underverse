@@ -38,6 +38,7 @@ import {
   buildHarvesterSystem,
   buildRefuelSystem,
   buildResidentialSystem,
+  buildShipyardSystem,
   leftClickBuildSystem,
   mouseHover,
   rightClickBuildSystem,
@@ -335,6 +336,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   buildGodownSystem(network, context);
   buildHarvesterSystem(network, context);
   buildRefuelSystem(network, context);
+  buildShipyardSystem(network, context);
   buildWallSystem(network, context);
   //to display all the station
   displayAttackSystem(network, context);

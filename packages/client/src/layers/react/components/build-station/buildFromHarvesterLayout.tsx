@@ -38,10 +38,6 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
                     <S.Img src="/layout/hex.png" width="70px" height="64px" />
                     <S.Img src={`/build-stations/cargo-1-0.png`} width="30px" height="30px" />
                 </S.Button>
-                <S.Button onClick={() => build(Mapping.refuel.id)} title="Fueler">
-                    <S.Img src="/layout/hex.png" width="70px" height="64px" />
-                    <S.Img src="/build-stations/refuel.png" width="30px" height="30px" />
-                </S.Button>
                 <S.Button onClick={() => build(Mapping.shipyard.id)} title="Shipyard">
                     <S.Img src="/layout/hex.png" width="70px" height="64px" />
                     <S.Img src={`/build-stations/shipyard-${+factionNumber}.png`} width="30px" height="30px" />
