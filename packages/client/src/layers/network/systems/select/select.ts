@@ -56,7 +56,7 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
       object.setComponent({
         id: "destination-select-box",
         once: (gameObject) => {
-          // gameObject.setTexture(select.assetKey, select.frame);
+          gameObject.setTexture(select.assetKey, select.frame);
           gameObject.setPosition(x + 32, y + 32);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
