@@ -10,6 +10,7 @@ import { Sprites } from "../../../phaser/constants";
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
+    sounds,
     components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight },
     localIds: { stationDetailsEntityIndex, showCircleIndex },
     localApi: {
@@ -176,6 +177,15 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
         if (!+isProspected) {
+          try {
+            sounds["confirm"].play();
+            setShowLine(false);
+            showProgress();
+            await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity]);
+            objectPool.remove(`prospect-text-white`);
+          } catch (e) {
+            console.log({ error: e, system: "Prospect", details: selectedEntity });
+          }
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "prospect");
         }
