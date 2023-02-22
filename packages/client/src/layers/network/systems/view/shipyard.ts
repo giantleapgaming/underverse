@@ -28,25 +28,25 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
     const healthBg = phaserScene.children
       .getChildren()
       // @ts-ignore
-      .find((item) => item.id === `godown-health-bar-bg-${entity}`)
+      .find((item) => item.id === `shipyard-health-bar-bg-${entity}`)
       // @ts-ignore
       ?.clear();
     const health = phaserScene.children
       .getChildren()
       // @ts-ignore
-      .find((item) => item.id === `godown-health-bar-${entity}`)
+      .find((item) => item.id === `shipyard-health-bar-${entity}`)
       // @ts-ignore
       ?.clear();
     const healthBar = health ?? phaserScene.add.graphics();
     const healthBarBg = healthBg ?? phaserScene.add.graphics();
     !healthBg &&
       Object.defineProperty(healthBarBg, "id", {
-        value: `godown-health-bar-bg-${entity}`,
+        value: `shipyard-health-bar-bg-${entity}`,
         writable: true,
       });
     !health &&
       Object.defineProperty(healthBar, "id", {
-        value: `godown-health-bar-${entity}`,
+        value: `shipyard-health-bar-${entity}`,
         writable: true,
       });
     const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
@@ -73,30 +73,30 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
         healthBar.strokePath();
         healthBar.setDepth(100);
-        const astroidObject = objectPool.get(`godown-${entity}`, "Sprite");
-        const factionObject = objectPool.get(`godown-faction-${entity}`, "Sprite");
-        const godown = config.sprites[Sprites.Asteroid12];
+        const astroidObject = objectPool.get(`shipyard-${entity}`, "Sprite");
+        const factionObject = objectPool.get(`shipyard-faction-${entity}`, "Sprite");
+        const shipyard = config.sprites[Sprites.Asteroid12];
         astroidObject.setComponent({
-          id: `godown-${entity}`,
+          id: `shipyard-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(godown.assetKey, `shipyard-${+faction + 1}.png`);
+            gameObject.setTexture(shipyard.assetKey, `shipyard-${+faction + 1}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setDepth(3);
             gameObject.setOrigin(0.5, 0.5);
           },
         });
         factionObject.setComponent({
-          id: `godown-faction-${entity}`,
+          id: `shipyard-faction-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(godown.assetKey, `faction-${+faction + 1}.png`);
+            gameObject.setTexture(shipyard.assetKey, `faction-${+faction + 1}.png`);
             gameObject.setPosition(x + 32, y + 32);
             gameObject.setDepth(3);
             gameObject.setOrigin(0.5, 0.5);
           },
         });
       } else {
-        objectPool.remove(`godown-${entity}`);
-        objectPool.remove(`godown-faction-${entity}`);
+        objectPool.remove(`shipyard-${entity}`);
+        objectPool.remove(`shipyard-faction-${entity}`);
         healthBarBg.clear();
         healthBar.clear();
       }

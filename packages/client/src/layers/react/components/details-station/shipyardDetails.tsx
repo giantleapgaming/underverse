@@ -205,68 +205,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "move" &&
-                    moveStationDetails &&
-                    moveStationDetails.selected &&
-                    typeof moveStationDetails.x === "number" &&
-                    typeof moveStationDetails.y === "number" && (
-                      <Move
-                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y), 2)}
-                        moveSystem={async () => {
-                          if (
-                            moveStationDetails.selected &&
-                            typeof moveStationDetails?.x === "number" &&
-                            typeof moveStationDetails?.y === "number"
-                          ) {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                                { x: moveStationDetails.x, y: moveStationDetails.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                                { x: position.x, y: position.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              await moveSystem({
-                                entityType: world.entities[selectedEntity],
-                                x: moveStationDetails.x,
-                                y: moveStationDetails.y,
-                                srcX: position.x,
-                                srcY: position.y,
-                              });
-                              setMoveStation(false);
-                              setShowAnimation({
-                                showAnimation: true,
-                                destinationX,
-                                destinationY,
-                                sourceX,
-                                sourceY,
-                                type: "move",
-                                frame: `miner-f-${+level}-${+balance}.png`,
-                                faction: +factionNumber,
-                              });
-                              setShowLine(false);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({
-                                error: e,
-                                system: "Scrap Attack",
-                                details: {
-                                  entityType: world.entities[selectedEntity],
-                                  x: moveStationDetails.x,
-                                  y: moveStationDetails.y,
-                                },
-                              });
-                            }
-                          }
-                        }}
-                      />
-                    )}
+                  
                   {/*  */}
                   {/*  */}
                   {action === "prospect" && destinationDetails && isDestinationSelected && (
@@ -391,20 +330,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
               !moveStationDetails?.selected && (
                 <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                   <S.Column>
-                    <S.SideButton
-                      onClick={() => {
-                        setAction("move");
-                        const { x, y } = position;
-                        setShowLine(true, x, y, "move", 1);
-                        sounds["click"].play();
-                      }}
-                      title="Move" // add title prop with tooltip text
-                    >
-                      <S.Img
-                        src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
                     <S.SideButton
                       onClick={() => {
                         setAction("upgrade");

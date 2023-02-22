@@ -144,7 +144,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "sell" && (
                     <Sell
-                      amount={0}
+                      amount={balance}
                       playSound={() => {
                         sounds["click"].play();
                       }}
