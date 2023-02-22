@@ -46,9 +46,11 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
             buildDetails.entityType == 9)
         ) {
           const harvesterEntity = world.entities[selectedEntity];
+          console.log("harvester", harvesterEntity, x, y, buildDetails.entityType);
           await buildFromHarvesterSystem({ harvesterEntity, x, y, entityType: buildDetails.entityType });
         } else if (selectedEntity) {
           const shipyardEntity = world.entities[selectedEntity];
+          console.log("shipyard", shipyardEntity);
           await buildFromShipyardSystem({ shipyardEntity, x, y, entityType: buildDetails.entityType });
         }
         showProgress();

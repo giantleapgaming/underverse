@@ -32,7 +32,7 @@ contract BuildFromHarvesterSystem is System {
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(harvesterEntity) ==
         addressToEntity(msg.sender),
-      "Harvester  not owned by user"
+      "Harvester not owned by user"
     );
 
     require(
@@ -46,8 +46,8 @@ contract BuildFromHarvesterSystem is System {
     );
 
     require(
-      (entity_type == 1 || entity_type == 3 || entity_type == 7),
-      "Can only build residential, godowns or shipyards"
+      (entity_type == 1 || entity_type == 3 || entity_type == 7 || entity_type == 9),
+      "Can only build residential, godowns, shipyards or fuel stations"
     );
 
     uint256 balanceHarvester = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(
