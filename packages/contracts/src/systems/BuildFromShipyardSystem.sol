@@ -45,7 +45,10 @@ contract BuildFromShipyardSystem is System {
       "Source entity has to be a Shipyard"
     );
 
-    require((entity_type == 4 || entity_type == 5), "Can only build Attack or Harvester ships");
+    require(
+      (entity_type == 4 || entity_type == 5 || entity_type == 9),
+      "Can only build Attack or Harvester or fuel carrier ships"
+    );
 
     uint256 balanceShipyard = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(ShipyardEntity);
 
