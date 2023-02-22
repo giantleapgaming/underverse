@@ -16,6 +16,7 @@ import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
+import { BuildWall } from "../build-station/buildWall";
 
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -283,31 +284,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           setShowLine(false);
                           setAction("");
                           showProgress();
-                          console.log("pro", selectedEntity, destinationDetails);
-                          await prospectSystem(
-                            world.entities[selectedEntity],
-                            world.entities[destinationDetails]
-                            // weapons
-                          );
-                          // const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                          //   { x: destinationPosition.x, y: destinationPosition.y },
-                          //   tileWidth,
-                          //   tileHeight
-                          // );
-                          // const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                          //   { x: position.x, y: position.y },
-                          //   tileWidth,
-                          //   tileHeight
-                          // );
-                          // setShowAnimation({
-                          //   showAnimation: true,
-                          //   amount: weapons,
-                          //   destinationX,
-                          //   destinationY,
-                          //   sourceX,
-                          //   sourceY,
-                          //   type: "transport",
-                          // });
+                          await prospectSystem(world.entities[selectedEntity], world.entities[destinationDetails]);
                         } catch (e) {
                           console.log({ error: e, system: "Prospect", details: selectedEntity });
                         }
@@ -316,12 +293,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         sounds["click"].play();
                       }}
                       distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                      // faction={+factionNumber}
                     />
                   )}
-                  {action === "build" && (
-                    <BuildFromHarvesterLayout layers={layers}/>
-                  )}
+                  {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
+                  {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -380,8 +355,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {/*  */}
-                  {/*  */}
                 </S.Column>
               )}
             </S.Column>
@@ -398,7 +371,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, x, y, "move", 1);
                         sounds["click"].play();
                       }}
-                      title="Move" // add title prop with tooltip text
+                      title="Move"
                     >
                       <S.Img
                         src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
@@ -411,7 +384,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(false);
                         sounds["click"].play();
                       }}
-                      title="Upgrade" // add title prop with tooltip text
+                      title="Upgrade"
                     >
                       <S.Img
                         src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
@@ -424,7 +397,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "refuel");
                         sounds["click"].play();
                       }}
-                      title="Refuel" // add title prop with tooltip text
+                      title="Refuel"
                     >
                       <S.Img
                         src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
@@ -439,7 +412,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setAction("repair");
                         sounds["click"].play();
                       }}
-                      title="Repair" // add title prop with tooltip text
+                      title="Repair"
                     >
                       <S.Img
                         src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
@@ -452,7 +425,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setAction("scrap");
                         sounds["click"].play();
                       }}
-                      title="Scrap" // add title prop with tooltip text
+                      title="Scrap"
                     >
                       <S.Img
                         src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
@@ -465,7 +438,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "transport");
                         sounds["click"].play();
                       }}
-                      title="Transport Minerals" // add title prop with tooltip text
+                      title="Transport Minerals"
                     >
                       <S.Img
                         src={
@@ -497,7 +470,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   name="BUILD"
                   onClick={() => {
                     setAction("build");
-                    // setShowLine(true, position.x, position.y, "build");
+                    sounds["click"].play();
+                  }}
+                />
+                <SelectButton
+                  isActive={action === "defence"}
+                  name="DEFENCE"
+                  onClick={() => {
+                    setAction("defence");
                     sounds["click"].play();
                   }}
                 />

@@ -43,8 +43,7 @@ export function mouseHover(network: NetworkLayer, phaser: PhaserLayer) {
             return flatGrid.find(([xCoord, yCoord]) => xCoord === x && yCoord === y) ? true : false;
           }
         });
-      const test = "x";
-      setBuild({ x, y, canPlace: !canPlace, isBuilding: true, show: true, entityType: buildDetails.entityType, test });
+      setBuild({ x, y, canPlace: !canPlace, isBuilding: true, show: true, entityType: buildDetails.entityType });
     }
   });
 

@@ -7,6 +7,7 @@ export const Mapping = {
   planet: { id: 6 },
   shipyard: { id: 7 },
   refuel: { id: 9 },
+  wall: { id: 10 },
 };
 export const numberMapping: { [key: number]: { id: number; name: string; frameName: string } } = {
   1: {
@@ -48,5 +49,10 @@ export const numberMapping: { [key: number]: { id: number; name: string; frameNa
     id: 9,
     name: "Refuel",
     frameName: "Refuel",
+  },
+  10: {
+    id: 10,
+    name: "Wall",
+    frameName: "wall",
   },
 };

@@ -1,4 +1,4 @@
-import { createEntity, EntityIndex, getComponentValue, namespaceWorld, setComponent, Type } from "@latticexyz/recs";
+import { createEntity, EntityIndex, getComponentValue, namespaceWorld, setComponent } from "@latticexyz/recs";
 import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
@@ -19,6 +19,7 @@ import {
   moveStation,
   ShowHighLight,
   ObstacleHighlight,
+  BuildWall,
 } from "../local/components";
 
 import {
@@ -68,6 +69,8 @@ import {
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 import { systemTransport } from "../local/stream-system/system.Transport";
 import { displayOrbits } from "../network/systems/view/orbits";
+import { displayWallSystem } from "../network/systems/view/wall";
+import { buildWallSystem } from "../network/systems/build/wall";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -107,6 +110,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     MoveStation: moveStation(world),
     ShowHighLight: ShowHighLight(world),
     ObstacleHighlight: ObstacleHighlight(world),
+    BuildWall: BuildWall(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -139,6 +143,36 @@ export async function createPhaserLayer(network: NetworkLayer) {
   };
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
+  };
+  const setBuildWall = ({
+    sourcePositionX,
+    sourcePositionY,
+    destinationPositionX,
+    destinationPositionY,
+    type,
+    action,
+    showBuildWall,
+    stopBuildWall,
+  }: {
+    sourcePositionX?: number;
+    sourcePositionY?: number;
+    destinationPositionX?: number;
+    destinationPositionY?: number;
+    type?: string;
+    action?: number;
+    showBuildWall?: boolean;
+    stopBuildWall?: boolean;
+  }) => {
+    setComponent(components.BuildWall, buildId, {
+      sourcePositionX,
+      sourcePositionY,
+      destinationPositionX,
+      destinationPositionY,
+      type,
+      action,
+      showBuildWall: showBuildWall ? true : false,
+      stopBuildWall: stopBuildWall ? true : false,
+    });
   };
 
   const setShowAnimation = ({
@@ -273,6 +307,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setShowAnimation,
       setShowHighLight,
       setObstacleHighlight,
+      setBuildWall,
     },
     sounds,
   };
@@ -291,7 +326,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   buildGodownSystem(network, context);
   buildHarvesterSystem(network, context);
   buildRefuelSystem(network, context);
-
+  buildWallSystem(network, context);
   //to display all the station
   displayAttackSystem(network, context);
   displayAsteroidSystem(network, context);
@@ -302,6 +337,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayShipyardSystem(network, context);
   displayRefuelSystem(network, context);
   displayOrbits(network, context);
+  displayWallSystem(network, context);
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);

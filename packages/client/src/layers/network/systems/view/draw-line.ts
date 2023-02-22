@@ -42,7 +42,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     network: { connectedAddress },
   } = network;
   const graphics = phaserScene.add.graphics();
-  const direction = phaserScene.add.graphics();
   const circle = phaserScene.add.circle();
   graphics.lineStyle(1, 0xffffff, 1);
 
@@ -254,7 +253,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     graphics.clear();
-    direction.clear();
     graphics.lineStyle(2, 0xeeeeee, 1);
     if (
       lineDetails?.showLine &&

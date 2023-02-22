@@ -206,6 +206,23 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, srcX, srcY);
   }
 
+  async function wallSystem({
+    x1,
+    y1,
+    entityType,
+    x2,
+    y2,
+  }: {
+    x1: number;
+    y1: number;
+    entityType: EntityID;
+    x2: number;
+    y2: number;
+  }) {
+    console.log(BigNumber.from(entityType), x1, y1, x2, y2);
+    return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2);
+  }
+
   async function upgradeSystem(godownEntity: EntityID) {
     return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity));
   }
@@ -350,6 +367,7 @@ export async function createNetworkLayer(config: GameConfig) {
       refuelSystem,
       buildFromHarvesterSystem,
       buildFromShipyardSystem,
+      wallSystem,
     },
     utils: {
       getEntityIndexAtPosition,

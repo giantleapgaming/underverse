@@ -197,3 +197,20 @@ export const ShowLine = (world: World) => {
     { id: "ShowLine" }
   );
 };
+
+export const BuildWall = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      sourcePositionX: Type.OptionalNumber,
+      sourcePositionY: Type.OptionalNumber,
+      destinationPositionX: Type.OptionalNumber,
+      destinationPositionY: Type.OptionalNumber,
+      type: Type.OptionalString,
+      action: Type.OptionalNumber,
+      showBuildWall: Type.Boolean,
+      stopBuildWall: Type.Boolean,
+    },
+    { id: "BuildWall" }
+  );
+};

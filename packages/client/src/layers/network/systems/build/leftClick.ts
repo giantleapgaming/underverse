@@ -30,12 +30,10 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const buildDetails = getComponentValue(Build, buildId);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-    console.log(selectedEntity, "as");
 
     if (buildDetails && buildDetails?.canPlace && buildDetails.show) {
       sounds["click"].play();
       try {
-        console.log(buildDetails.entityType, "build", selectedEntity);
         setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
         sounds["click"].play();
         if (typeof selectedEntity === "undefined" && buildDetails.entityType == 5) {
