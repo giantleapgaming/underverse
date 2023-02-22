@@ -88,10 +88,23 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileHeight
       );
       if (lineDetails.type === "prospect" || lineDetails.type === "refuel") {
+        const textWhite = objectPool.get("prospect-text-white", "Text");
+        const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
         circle.setPosition(sourceXX + 32, sourceYY + 32);
         circle.setStrokeStyle(0.3, 0x2d2d36);
         circle.setDisplaySize(704, 704);
         circle.setAlpha(1);
+        textWhite.setComponent({
+          id: "white-build-text",
+          once: (gameObject) => {
+            gameObject.setPosition(pointer.worldX + 10, pointer.worldY - 30);
+            gameObject.depth = 4;
+            gameObject.setText(`H Cost - ${fuelCost}`);
+            gameObject.setFontSize(12);
+            gameObject.setFontStyle("bold");
+            gameObject.setColor("#FFFFFF");
+          },
+        });
       } else {
         circle.setAlpha(0);
       }
@@ -213,6 +226,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               srcY: sourcePosition.y,
             });
             objectPool.remove(`fuel-text-white`);
+            objectPool.remove(`prospect-text-white`);
             setMoveStation(false);
             setShowAnimation({
               showAnimation: true,
