@@ -206,95 +206,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "move" &&
-                    moveStationDetails &&
-                    moveStationDetails.selected &&
-                    typeof moveStationDetails.x === "number" &&
-                    typeof moveStationDetails.y === "number" && (
-                      <Move
-                        cost={Math.pow(distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y), 2)}
-                        moveSystem={async () => {
-                          if (
-                            moveStationDetails.selected &&
-                            typeof moveStationDetails?.x === "number" &&
-                            typeof moveStationDetails?.y === "number"
-                          ) {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                                { x: moveStationDetails.x, y: moveStationDetails.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                                { x: position.x, y: position.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              await moveSystem({
-                                entityType: world.entities[selectedEntity],
-                                x: moveStationDetails.x,
-                                y: moveStationDetails.y,
-                                srcX: position.x,
-                                srcY: position.y,
-                              });
-                              setMoveStation(false);
-                              setShowAnimation({
-                                showAnimation: true,
-                                destinationX,
-                                destinationY,
-                                sourceX,
-                                sourceY,
-                                type: "move",
-                                frame: `miner-f-${+level}-${+balance}.png`,
-                                faction: +factionNumber,
-                              });
-                              setShowLine(false);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({
-                                error: e,
-                                system: "Scrap Attack",
-                                details: {
-                                  entityType: world.entities[selectedEntity],
-                                  x: moveStationDetails.x,
-                                  y: moveStationDetails.y,
-                                },
-                              });
-                            }
-                          }
-                        }}
-                      />
-                    )}
+
                   {/*  */}
                   {/*  */}
-                  {action === "prospect" && destinationDetails && isDestinationSelected && (
-                    <Prospect
-                      space={
-                        (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
-                          ? destinationLevel - destinationBalance
-                          : +balance) || 0
-                      }
-                      prospect={async () => {
-                        try {
-                          sounds["confirm"].play();
-                          setDestinationDetails();
-                          setShowLine(false);
-                          setAction("");
-                          showProgress();
-                          await prospectSystem(world.entities[selectedEntity], world.entities[destinationDetails]);
-                        } catch (e) {
-                          console.log({ error: e, system: "Prospect", details: selectedEntity });
-                        }
-                      }}
-                      playSound={() => {
-                        sounds["click"].play();
-                      }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                    />
-                  )}
+
                   {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
                   {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
