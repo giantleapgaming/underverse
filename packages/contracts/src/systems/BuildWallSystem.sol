@@ -51,13 +51,13 @@ contract BuildWallSystem is System {
     bool orientation;
 
     if (y2 == y1) {
-      wallLength = uint256(Math.abs(x2 - x1));
+      wallLength = uint256(Math.abs(x2 - x1)) + 1;
       orientation = true;
     }
     //Since we have already checked that one of the 2 conditions is met atleast
     //and if the first condition is not met then the second has to be true
     else {
-      wallLength = uint256(Math.abs(y2 - y1));
+      wallLength = uint256(Math.abs(y2 - y1)) + 1;
       orientation = false;
     }
 
