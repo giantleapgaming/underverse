@@ -8,7 +8,7 @@ export const Scrap = ({ scrapSystem, scrapCost }: { scrapSystem: () => void; scr
         <S.Cost>
           SCRAP FOR
           <br />
-          {convertPrice(scrapCost)}
+          {convertPrice(+scrapCost)}
         </S.Cost>
       </div>
       <S.InlinePointer onClick={scrapSystem}>

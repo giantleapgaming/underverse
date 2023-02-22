@@ -44,7 +44,6 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const sourcePositionX = buildDetails?.sourcePositionX;
     const showHover = buildDetails?.showHover;
     const sourcePositionY = buildDetails?.sourcePositionY;
-    console.log(showHover);
     if (showHover) {
       setBuildWall({ ...buildDetails, hoverX: destinationPositionX, hoverY: destinationPositionY });
     }

@@ -213,7 +213,9 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         if (
           factionNumber &&
           entityType &&
-          (+entityType === Mapping.harvester.id || +entityType === Mapping.shipyard.id)
+          (+entityType === Mapping.harvester.id ||
+            +entityType === Mapping.attack.id ||
+            +entityType === Mapping.shipyard.id)
         ) {
           const level = getComponentValueStrict(Level, selectedEntity).value;
           const balance = getComponentValueStrict(Balance, selectedEntity).value;

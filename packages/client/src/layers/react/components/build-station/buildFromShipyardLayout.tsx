@@ -29,11 +29,11 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
     if (selectedEntity) {
         return (
             <S.Flex>
-                <S.Button onClick={() => build(Mapping.attack.id)} title="Habitat">
+                <S.Button onClick={() => build(Mapping.attack.id)} title="Attack ship">
                     <S.Img src="/layout/hex.png" width="70px" height="64px" />
                     <S.Img src={`/build-stations/attack-${+factionNumber}-1.png`} width="30px" height="30px" />
                 </S.Button>
-                <S.Button onClick={() => build(Mapping.harvester.id)} title="Depot">
+                <S.Button onClick={() => build(Mapping.harvester.id)} title="Harvester">
                     {console.log(world.entities[selectedEntity], selectedEntity)}
                     <S.Img src="/layout/hex.png" width="70px" height="64px" />
                     <S.Img src={`/build-stations/harvester.png`} width="30px" height="30px" />
