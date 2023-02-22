@@ -75,7 +75,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
             gameObject.depth = 4;
-            gameObject.setText(`2 CARGO`);
+            gameObject.setText(`2 DIAMONDS`);
             gameObject.setFontSize(12);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
