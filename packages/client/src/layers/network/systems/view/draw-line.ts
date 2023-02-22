@@ -33,7 +33,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
     network: {
       components: { Balance, Faction },
-      api: { moveSystem },
+      api: { moveSystem, prospectSystem },
     },
   } = phaser;
   const {
@@ -257,6 +257,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     setMoveStation(false);
     circle.setAlpha(0);
     objectPool.remove(`fuel-text-white`);
+    objectPool.remove(`prospect-text-white`);
   });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
