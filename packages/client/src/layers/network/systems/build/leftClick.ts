@@ -40,10 +40,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
           await buildSystem({ x, y, entityType: buildDetails.entityType });
         } else if (
           selectedEntity &&
-          (buildDetails.entityType == 1 ||
-            buildDetails.entityType == 3 ||
-            buildDetails.entityType == 7 ||
-            buildDetails.entityType == 9)
+          (buildDetails.entityType == 1 || buildDetails.entityType == 3 || buildDetails.entityType == 7)
         ) {
           const harvesterEntity = world.entities[selectedEntity];
           console.log("harvester", harvesterEntity, x, y, buildDetails.entityType);

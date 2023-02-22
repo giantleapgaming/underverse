@@ -33,6 +33,7 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
+    const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -40,7 +41,8 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       canPlace &&
       isBuilding &&
       !(xCoord === 0 && yCoord === 0) &&
-      buildDetails.entityType === Mapping.residential.id
+      buildDetails.entityType === Mapping.residential.id &&
+      distanceFromCenter > 15
     ) {
       const textWhite = objectPool.get("build-residential-station-text-white", "Text");
 

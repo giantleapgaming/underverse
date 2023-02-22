@@ -46,8 +46,8 @@ contract BuildFromHarvesterSystem is System {
     );
 
     require(
-      (entity_type == 1 || entity_type == 3 || entity_type == 7 || entity_type == 9),
-      "Can only build residential, godowns, shipyards or fuel stations"
+      (entity_type == 1 || entity_type == 3 || entity_type == 7),
+      "Can only build residential, godowns or shipyards"
     );
 
     uint256 balanceHarvester = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(

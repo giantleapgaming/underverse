@@ -1546,15 +1546,15 @@ export const phaserConfig = {
         },
         [Sprites.Shipyard4]: {
           assetKey: Assets.MainAtlas,
-          frame: "build-miner-4.png",
+          frame: "shipyard-4.png",
         },
         [Sprites.Shipyard5]: {
           assetKey: Assets.MainAtlas,
-          frame: "build-miner-5.png",
+          frame: "shipyard-5.png",
         },
         [Sprites.Shipyard6]: {
           assetKey: Assets.MainAtlas,
-          frame: "build-miner-6.png",
+          frame: "shipyard-6.png",
         },
         [Sprites.FactionHarvester1]: {
           assetKey: Assets.MainAtlas,

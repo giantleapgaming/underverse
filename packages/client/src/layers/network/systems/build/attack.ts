@@ -35,6 +35,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
+    const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -42,7 +43,8 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
       canPlace &&
       isBuilding &&
       !(xCoord === 0 && yCoord === 0) &&
-      buildDetails.entityType === Mapping.attack.id
+      buildDetails.entityType === Mapping.attack.id &&
+      distanceFromCenter > 15
     ) {
       const textWhite = objectPool.get("build-attack-station-text-white", "Text");
 
