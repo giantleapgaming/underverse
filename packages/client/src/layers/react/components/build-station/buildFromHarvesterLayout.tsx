@@ -34,7 +34,6 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
                     <S.Img src={`/build-stations/${+factionNumber}-1-0.png`} width="30px" height="30px" />
                 </S.Button>
                 <S.Button onClick={() => build(Mapping.godown.id)} title="Depot">
-                    {console.log(world.entities[selectedEntity], selectedEntity)}
                     <S.Img src="/layout/hex.png" width="70px" height="64px" />
                     <S.Img src={`/build-stations/cargo-1-0.png`} width="30px" height="30px" />
                 </S.Button>

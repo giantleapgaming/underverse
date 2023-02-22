@@ -1,8 +1,6 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
-import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
@@ -10,21 +8,11 @@ import { colorString } from "./utils";
 export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    network: { connectedAddress },
     systemCallStreams,
     components: { OwnedBy, Position, Name, Faction, EntityType, Balance, Fuel },
   } = network;
   const {
-    scenes: {
-      Main: {
-        maps: {
-          Main: { tileWidth, tileHeight },
-        },
-      },
-    },
-  } = phaser;
-  const {
-    localApi: { setLogs, setShowAnimation },
+    localApi: { setLogs },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Prospect"], ({ args }) => {
     const { destinationGodownEntity, sourceGodownEntity } = args as {
@@ -49,18 +37,6 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
     const destBalance = getComponentValue(Balance, destinationGodownEntityIndex)?.value;
     const destFuel = getComponentValue(Fuel, destinationGodownEntityIndex)?.value;
 
-    // console.log(
-    //   "pros",
-    //   faction,
-    //   sourceEntityType,
-    //   destEntityType,
-    //   typeof +faction === "number",
-    //   typeof +destEntityType === "number",
-    //   typeof +sourceEntityType === "number",
-    //   destPosition,
-    //   srcPosition
-    // );
-
     if (
       faction &&
       sourceEntityType &&
@@ -72,8 +48,6 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
       srcPosition
     ) {
       const color = factionData[+faction]?.color;
-      // const srcStationName = numberMapping[+destEntityType].name;
-      // const destStationName = numberMapping[+sourceEntityType].name;
       setLogs(
         `</p>${colorString({ name, color })} prospected asteroid at (${destPosition?.x},${
           destPosition?.y
@@ -81,28 +55,6 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
           destFuel ? colorString({ name: `${+(+destFuel / 10_00_000)}`, color }) : 0
         } hydrogen on it</p>`
       );
-      // const address = connectedAddress.get();
-      // if (ownedBy !== `${address}`) {
-      // const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-      //   { x: destPosition.x, y: destPosition.y },
-      //   tileWidth,
-      //   tileHeight
-      // );
-      // const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-      //   { x: srcPosition.x, y: srcPosition.y },
-      //   tileWidth,
-      //   tileHeight
-      // );
-      // setShowAnimation({
-      //   showAnimation: true,
-      //   amount: +kgs,
-      //   destinationX,
-      //   destinationY,
-      //   sourceX,
-      //   sourceY,
-      //   type: "transport",
-      // });
-      // }
     }
   });
 }

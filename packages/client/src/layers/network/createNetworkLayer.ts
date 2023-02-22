@@ -219,7 +219,6 @@ export async function createNetworkLayer(config: GameConfig) {
     x2: number;
     y2: number;
   }) {
-    console.log(BigNumber.from(entityType), x1, y1, x2, y2);
     return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2);
   }
 

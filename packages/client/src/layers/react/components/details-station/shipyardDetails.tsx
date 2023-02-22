@@ -59,7 +59,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
-    //const fuel = 0;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
     const destinationPosition = getComponentValue(Position, destinationDetails);
@@ -222,31 +221,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                           setShowLine(false);
                           setAction("");
                           showProgress();
-                          console.log("pro", selectedEntity, destinationDetails);
                           await prospectSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails]
-                            // weapons
                           );
-                          // const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                          //   { x: destinationPosition.x, y: destinationPosition.y },
-                          //   tileWidth,
-                          //   tileHeight
-                          // );
-                          // const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                          //   { x: position.x, y: position.y },
-                          //   tileWidth,
-                          //   tileHeight
-                          // );
-                          // setShowAnimation({
-                          //   showAnimation: true,
-                          //   amount: weapons,
-                          //   destinationX,
-                          //   destinationY,
-                          //   sourceX,
-                          //   sourceY,
-                          //   type: "transport",
-                          // });
                         } catch (e) {
                           console.log({ error: e, system: "Prospect", details: selectedEntity });
                         }
@@ -255,7 +233,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         sounds["click"].play();
                       }}
                       distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                      // faction={+factionNumber}
                     />
                   )}
                   {action === "build" && (
@@ -319,8 +296,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {/*  */}
-                  {/*  */}
                 </S.Column>
               )}
             </S.Column>
@@ -336,7 +311,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(false);
                         sounds["click"].play();
                       }}
-                      title="Upgrade" // add title prop with tooltip text
+                      title="Upgrade" 
                     >
                       <S.Img
                         src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
@@ -349,7 +324,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "refuel");
                         sounds["click"].play();
                       }}
-                      title="Refuel" // add title prop with tooltip text
+                      title="Refuel" 
                     >
                       <S.Img
                         src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
@@ -364,7 +339,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         setAction("repair");
                         sounds["click"].play();
                       }}
-                      title="Repair" // add title prop with tooltip text
+                      title="Repair" 
                     >
                       <S.Img
                         src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
@@ -377,7 +352,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         setAction("scrap");
                         sounds["click"].play();
                       }}
-                      title="Scrap" // add title prop with tooltip text
+                      title="Scrap" 
                     >
                       <S.Img
                         src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
@@ -390,7 +365,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "transport");
                         sounds["click"].play();
                       }}
-                      title="Transport Minerals" // add title prop with tooltip text
+                      title="Transport Minerals" 
                     >
                       <S.Img
                         src={
