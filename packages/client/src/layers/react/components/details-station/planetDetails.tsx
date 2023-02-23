@@ -47,7 +47,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>Earth</S.Text>
-              <img src={`/build-stations/earth.png`} width="100px" height="100px" />
+              <img src={`/build-stations/planetDetails.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
