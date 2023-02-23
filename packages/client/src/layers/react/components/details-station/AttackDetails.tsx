@@ -272,7 +272,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                                 destinationY,
                                 sourceX,
                                 sourceY,
-                                type: "move",
+                                type: "attack",
                                 frame: `attack-${+factionNumber + 1}-${+level}.png`,
                                 faction: +factionNumber,
                               });
@@ -368,7 +368,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, x, y, "move");
                         sounds["click"].play();
                       }}
-                      title="Move" 
+                      title="Move"
                     >
                       <S.Img
                         src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
@@ -381,7 +381,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(false);
                         sounds["click"].play();
                       }}
-                      title="Upgrade" 
+                      title="Upgrade"
                     >
                       <S.Img
                         src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
@@ -394,7 +394,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "refuel");
                         sounds["click"].play();
                       }}
-                      title="Refuel" 
+                      title="Refuel"
                     >
                       <S.Img
                         src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
@@ -409,7 +409,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         setAction("repair");
                         sounds["click"].play();
                       }}
-                      title="Repair" 
+                      title="Repair"
                     >
                       <S.Img
                         src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
@@ -422,7 +422,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         setAction("scrap");
                         sounds["click"].play();
                       }}
-                      title="Scrap" 
+                      title="Scrap"
                     >
                       <S.Img
                         src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}

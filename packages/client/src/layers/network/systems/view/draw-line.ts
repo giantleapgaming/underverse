@@ -183,11 +183,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             showProgress();
             await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity]);
             objectPool.remove(`prospect-text-white`);
+            setShowLine(false);
           } catch (e) {
             console.log({ error: e, system: "Prospect", details: selectedEntity });
           }
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "prospect");
         }
       }
       if (
