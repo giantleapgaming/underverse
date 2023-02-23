@@ -238,6 +238,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             });
             objectPool.remove(`fuel-text-white`);
             objectPool.remove(`prospect-text-white`);
+            const frame =
+              +entityType === Mapping.harvester.id
+                ? `miner-f-${+level}-${+balance}.png`
+                : `attack-${+factionNumber + 1}-${+level}.png`;
             setMoveStation(false);
             setShowAnimation({
               showAnimation: true,
@@ -246,7 +250,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               sourceX: sourceX,
               sourceY: sourceY,
               type: "move",
-              frame: `miner-f-${+level}-${+balance}.png`,
+              frame: frame,
               faction: +factionNumber,
             });
             showProgress();
