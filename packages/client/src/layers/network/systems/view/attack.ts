@@ -112,7 +112,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             missileObject.setComponent({
               id: `group-missile-${entity}`,
               once: (gameObject) => {
-                gameObject.setTexture(attack.assetKey, `${+faction}-group-missile-${+offence}.png`);
+                gameObject.setTexture(attack.assetKey, `${+faction + 1}-group-missile-${+offence}.png`);
                 gameObject.setPosition(x + 32, y + 32);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setDepth(2);
