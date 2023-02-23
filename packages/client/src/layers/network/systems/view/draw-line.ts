@@ -325,7 +325,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(sourceX, sourceY);
             gameObject.setDepth(1);
             gameObject.setOrigin(0, 0.5);
-            gameObject.setAlpha(0.3);
+            gameObject.setAlpha(0.1);
             gameObject.setAngle(angle);
           },
         });
