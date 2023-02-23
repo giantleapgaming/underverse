@@ -65,26 +65,33 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
             gameObject.setAngle(0);
           },
         });
-        // const distance = typeof xCoord === "number" ? Math.sqrt(Math.pow(xCoord, 2) + Math.pow(yCoord, 2)) : 1;
-        // const build = 1_000_000 / distance;
-        // const buildPrice = convertPrice(build);
-        const buildPrice = convertPrice(50000 * factionData[+faction]?.build);
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         textWhite.setComponent({
           id: "build-residential-station-text-white",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
+            gameObject.setPosition(textPosition.x + 40, textPosition.y - 35);
             gameObject.depth = 4;
-            gameObject.setText(`2 DIAMONDS`);
-            gameObject.setFontSize(12);
+            gameObject.setText(`2`);
+            gameObject.setFontSize(16);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
+          },
+        });
+        const mineral = objectPool.get("build-residential-station-text-white-m", "Sprite");
+        mineral.setComponent({
+          id: "build-residential-station-text-white-m",
+          once: (gameObject) => {
+            gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
+            gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
+            gameObject.depth = 4;
+            gameObject.setOrigin(0.5, 0.5);
           },
         });
       }
     } else {
       objectPool.remove("build-residential-station");
       objectPool.remove("build-residential-station-text-white");
+      objectPool.remove("build-residential-station-text-white-m");
     }
   });
 }
