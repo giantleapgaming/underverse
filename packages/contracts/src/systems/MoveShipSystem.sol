@@ -7,7 +7,6 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -41,6 +40,15 @@ contract MoveShipSystem is System {
     //Check that the ship is not a destroyed ship (Level 0)
     uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
     require(sourceEntityLevel >= 1, "Ship has already been destroyed");
+
+    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+      sourceEntity
+    );
+
+    require(
+      sourceEntityType == 4 || sourceEntityType == 5 || sourceEntityType == 9,
+      "Source has to be an Harvester, Attack ship or fuel carrier"
+    );
 
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
@@ -81,10 +89,6 @@ contract MoveShipSystem is System {
     // This means the odds of an asteroid discovery increase as you go further from the center
     // We check that the ship is of class harvester to ensure it can discover stuff
 
-    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      sourceEntity
-    );
-
     if (
       (sourceEntityType == 5) &&
       (distFromCenterSq > 225) &&
@@ -98,11 +102,6 @@ contract MoveShipSystem is System {
 
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
