@@ -7,7 +7,6 @@ import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
 import { distance } from "../../utils/distance";
-import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
@@ -22,8 +21,8 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setMoveStation },
-      components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
       scenes: {
         Main: {
@@ -36,19 +35,11 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem, refuelSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, prospectSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-
-  useEffect(() => {
-    setAction("move");
-    const position = getComponentValue(Position, selectedEntity);
-    if (position) {
-      setShowLine(true, position.x, position.y, "move");
-    }
-  }, []);
 
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
@@ -68,7 +59,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
-    const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
 
     if (entityType && +entityType === Mapping.shipyard.id) {
       return (
@@ -302,7 +292,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
             {ownedBy === connectedAddress.get() &&
               !destinationDetails &&
               !isDestinationSelected &&
-              !moveStationDetails?.selected && (
+              (
                 <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                   <S.Column>
                     <S.SideButton
@@ -381,7 +371,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           {ownedBy === connectedAddress.get() &&
             !destinationDetails &&
             !isDestinationSelected &&
-            !moveStationDetails?.selected && (
+            (
               <S.Row style={{ gap: "10px", marginTop: "5px" }}>
                 <SelectButton
                   isActive={action === "prospect"}

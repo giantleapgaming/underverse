@@ -93,7 +93,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                           });
                           setDestinationDetails();
                           setShowLine(false);
-                          setAction("upgrade");
+                          setAction("rapture");
                           showProgress();
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
