@@ -273,6 +273,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     circle.setAlpha(0);
     objectPool.remove(`fuel-text-white`);
     objectPool.remove(`prospect-text-white`);
+    objectPool.remove(`attack-rectangle-box`);
   });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
