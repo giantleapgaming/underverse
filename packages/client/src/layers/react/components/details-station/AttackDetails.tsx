@@ -48,11 +48,6 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
 
-  useEffect(() => {
-    setAction("move");
-    setShowLine(true, 0, 0, "move");
-  }, []);
-
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;

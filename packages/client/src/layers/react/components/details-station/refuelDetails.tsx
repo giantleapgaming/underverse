@@ -1,6 +1,6 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -37,11 +37,6 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-
-  useEffect(() => {
-    setAction("move");
-    setShowLine(true, 0, 0, "move");
-  }, []);
 
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
@@ -286,7 +281,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, x, y, "move");
                         sounds["click"].play();
                       }}
-                      title="Move" 
+                      title="Move"
                     >
                       <S.Img
                         src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
@@ -299,7 +294,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(false);
                         sounds["click"].play();
                       }}
-                      title="Upgrade" 
+                      title="Upgrade"
                     >
                       <S.Img
                         src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
@@ -312,7 +307,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         setShowLine(true, position.x, position.y, "refuel");
                         sounds["click"].play();
                       }}
-                      title="Refuel" 
+                      title="Refuel"
                     >
                       <S.Img
                         src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
@@ -327,7 +322,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         setAction("repair");
                         sounds["click"].play();
                       }}
-                      title="Repair" 
+                      title="Repair"
                     >
                       <S.Img
                         src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
@@ -340,7 +335,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         setAction("scrap");
                         sounds["click"].play();
                       }}
-                      title="Scrap" 
+                      title="Scrap"
                     >
                       <S.Img
                         src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}

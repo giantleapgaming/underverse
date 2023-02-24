@@ -1,17 +1,15 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
 import { distance } from "../../utils/distance";
-import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
-import { Prospect } from "../action-system/prospect";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
@@ -23,7 +21,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setMoveStation },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
       scenes: {
@@ -37,19 +35,11 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, moveSystem, prospectSystem, refuelSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-
-  useEffect(() => {
-    setAction("move");
-    const position = getComponentValue(Position, selectedEntity);
-    if (position) {
-      setShowLine(true, position.x, position.y, "move");
-    }
-  }, []);
 
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
@@ -206,10 +196,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-
-                  {/*  */}
-                  {/*  */}
-
                   {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
                   {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
