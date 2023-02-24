@@ -8,7 +8,7 @@ export const Sell = ({
   playSound,
   sell,
   distance,
-  faction
+  faction,
 }: {
   amount: number;
   playSound: () => void;
@@ -46,7 +46,10 @@ export const Sell = ({
       </div>
       {+amount > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>TOTAL COST {+selected && convertPrice(((100000/distance) * +selected * 0.9) * factionData[faction]?.transport)}</S.Text>
+          <S.Text>
+            TOTAL SELL{" "}
+            {+selected && convertPrice((100000 / distance) * +selected * 0.9 * factionData[faction]?.transport)}
+          </S.Text>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
