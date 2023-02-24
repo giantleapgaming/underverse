@@ -75,7 +75,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/users.png" />
                   <p>
-                    {+population}/{+level}
+                    {+level}/{+population}
                   </p>
                 </S.Weapon>
                 <S.Weapon>

@@ -6,7 +6,6 @@ import { Layout } from "./layout";
 
 const Build = ({ layers }: { layers: Layers }) => (
   <div style={{ display: "flex", height: "100%", position: "relative", justifyContent: "end", alignItems: "end" }}>
-    {" "}
     <Layout layers={layers} />
   </div>
 );
