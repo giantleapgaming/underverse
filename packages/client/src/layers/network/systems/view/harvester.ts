@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -14,7 +14,6 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     scenes: {
       Main: {
         objectPool,
-        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -29,37 +28,11 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     world,
     [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence), Has(PrevPosition)],
     ({ entity }) => {
-      const healthBg = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `harvester-health-bar-bg-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const health = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `harvester-health-bar-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const healthBar = health ?? phaserScene.add.graphics();
-      const healthBarBg = healthBg ?? phaserScene.add.graphics();
-      !healthBg &&
-        Object.defineProperty(healthBar, "id", {
-          value: `harvester-health-bar-bg-${entity}`,
-          writable: true,
-        });
-      !health &&
-        Object.defineProperty(healthBarBg, "id", {
-          value: `harvester-health-bar-${entity}`,
-          writable: true,
-        });
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const factionIndex = world.entities.indexOf(ownedBy);
         const faction = getComponentValue(Faction, factionIndex)?.value;
-        const level = getComponentValueStrict(Level, entity).value;
-        const balance = getComponentValueStrict(Balance, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
         const prevPosition = getComponentValueStrict(PrevPosition, entity);
@@ -70,48 +43,35 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
         );
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         if (+defence > 0 && faction && typeof +faction === "number") {
-          const progress = +defence / (+level * 100);
-          const endAngle = Phaser.Math.DegToRad(360 * progress);
-          healthBarBg.clear();
-          healthBar.clear();
-          healthBarBg.lineStyle(6, 0xd3d3d3, 1);
-          healthBarBg.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), 360);
-          healthBarBg.setAlpha(0.1);
-          healthBarBg.setDepth(99);
-          healthBarBg.strokePath();
-          healthBar.setAlpha(0.2);
-          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
-          healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
-          healthBar.strokePath();
-          healthBar.setDepth(100);
-
-          const astroidObject = objectPool.get(`harvester-${entity}`, "Sprite");
-          const factionObject = objectPool.get(`harvester-faction-${entity}`, "Sprite");
+          const harvesterObjectTopLayer = objectPool.get(`harvester-top-${entity}`, "Sprite");
+          const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-${entity}`, "Sprite");
           const harvester = config.sprites[Sprites.Asteroid12];
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
-          astroidObject.setComponent({
-            id: `harvester-${entity}`,
+          harvesterObjectTopLayer.setComponent({
+            id: `harvester-top-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `miner-${+level}-${+balance}.png`);
+              gameObject.setTexture(harvester.assetKey, `harvester-1.png`);
               gameObject.setPosition(x + 32, y + 32);
-              gameObject.setDepth(1);
+              gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },
           });
-          factionObject.setComponent({
-            id: `harvester-faction-${entity}`,
+          harvesterObjectGrayLayer.setComponent({
+            id: `harvester-gray-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(harvester.assetKey, `faction-harvester-${+faction + 1}.png`);
-              gameObject.setPosition(x + 35, y + 36);
-              gameObject.setDepth(2);
+              gameObject.setTexture(harvester.assetKey, `harvester-2.png`);
+              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
         } else {
           objectPool.remove(`harvester-${entity}`);
           objectPool.remove(`harvester-faction-${entity}`);
-          healthBarBg.clear();
-          healthBar.clear();
         }
       }
     }
