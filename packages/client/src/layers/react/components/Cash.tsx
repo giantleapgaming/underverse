@@ -5,18 +5,32 @@ import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import { convertPrice } from "../../react/utils/priceConverter";
 import { Highlight } from "./details-station/highlight";
+import { Mapping } from "../../../utils/mapping";
 
 const Cash = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       network: { connectedAddress },
-      components: { Name, Cash },
+      components: { Cash, Position, EntityType, OwnedBy, Population, Level },
       world,
     },
   } = layers;
   const ownedByEntity = world.entities.indexOf(connectedAddress.get());
   const cash = getComponentValue(Cash, ownedByEntity)?.value;
-  const users = [...getComponentEntities(Name)];
+  let totalPopulation = 0;
+  let totalLevel = 0;
+  [...getComponentEntities(Position)].forEach((entity) => {
+    const entityType = getComponentValue(EntityType, entity)?.value;
+    const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
+    if (entityType && +entityType === Mapping.residential.id && OwnedByEntityId && +OwnedByEntityId === ownedByEntity) {
+      const population = getComponentValue(Population, entity)?.value;
+      const level = getComponentValue(Level, entity)?.value;
+      if (population && level) {
+        totalPopulation += +population;
+        totalLevel += +level;
+      }
+    }
+  });
 
   return (
     <>
@@ -32,10 +46,14 @@ const Cash = ({ layers }: { layers: Layers }) => {
         }}
       >
         <p>{cash && convertPrice(+cash / 10_00_000)}</p>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
-          <img src="/build-stations/users.png" />
-          <p>100/{users.length}</p>
-        </div>
+        {!!totalLevel && (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
+            <img src="/build-stations/users.png" />
+            <p>
+              {totalLevel}/{totalPopulation}
+            </p>
+          </div>
+        )}
       </div>
       <Highlight layers={layers} />
     </>
