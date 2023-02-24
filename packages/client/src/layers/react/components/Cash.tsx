@@ -22,7 +22,12 @@ const Cash = ({ layers }: { layers: Layers }) => {
   [...getComponentEntities(Position)].forEach((entity) => {
     const entityType = getComponentValue(EntityType, entity)?.value;
     const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
-    if (entityType && +entityType === Mapping.residential.id && OwnedByEntityId && +OwnedByEntityId === ownedByEntity) {
+    if (
+      entityType &&
+      +entityType === Mapping.residential.id &&
+      OwnedByEntityId &&
+      OwnedByEntityId === connectedAddress.get()
+    ) {
       const population = getComponentValue(Population, entity)?.value;
       const level = getComponentValue(Level, entity)?.value;
       if (population && level) {
@@ -31,7 +36,6 @@ const Cash = ({ layers }: { layers: Layers }) => {
       }
     }
   });
-
   return (
     <>
       <div
@@ -73,7 +77,7 @@ export const registerCashDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, Cash },
+          components: { Name, Cash, Position },
           world,
         },
         phaser: {
@@ -85,7 +89,8 @@ export const registerCashDetails = () => {
         Name.update$,
         ShowHighLight.update$,
         ShowCircle.update$,
-        Cash.update$
+        Cash.update$,
+        Position.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
