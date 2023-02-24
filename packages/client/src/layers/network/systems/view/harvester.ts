@@ -22,7 +22,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     },
   } = phaser;
   const {
-    components: { Position, Level, EntityType, Faction, Balance, OwnedBy, Defence, PrevPosition },
+    components: { Position, Level, EntityType, Balance, OwnedBy, Defence, PrevPosition },
   } = network;
   defineSystem(
     world,
@@ -30,19 +30,18 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
     ({ entity }) => {
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
-        const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
-        const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValue(Faction, factionIndex)?.value;
-        const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
-        const prevPosition = getComponentValueStrict(PrevPosition, entity);
-        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
-          { x: prevPosition.x, y: prevPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        if (+defence > 0 && faction && typeof +faction === "number") {
+
+        if (+defence > 0) {
+          const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+          const position = getComponentValueStrict(Position, entity);
+          const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+            { x: prevPosition.x, y: prevPosition.y },
+            tileWidth,
+            tileHeight
+          );
+          const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const harvesterObjectTopLayer = objectPool.get(`harvester-top-${entity}`, "Sprite");
           const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-${entity}`, "Sprite");
           const harvester = config.sprites[Sprites.Asteroid12];
@@ -51,7 +50,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             id: `harvester-top-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(harvester.assetKey, `harvester-1.png`);
-              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
