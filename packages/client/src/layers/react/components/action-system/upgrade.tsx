@@ -6,7 +6,7 @@ export const Upgrade = ({
   level,
   upgradeSystem,
   defence,
-  faction
+  faction,
 }: {
   level: number;
   defence: number;
@@ -24,7 +24,7 @@ export const Upgrade = ({
               LEVEL: <span style={{ color: "white" }}>{level}</span> &rarr; {level + 1}
             </S.OtherDetails>
             <S.OtherDetails>
-              WEAPON HOLD: <span style={{ color: "white" }}>{level}</span> &rarr; {level + 1}
+              STORAGE: <span style={{ color: "white" }}>{level}</span> &rarr; {level + 1}
             </S.OtherDetails>
             <S.OtherDetails>
               DEFENCE: <span style={{ color: "white" }}>{defence}</span> &rarr; {defence + 100}

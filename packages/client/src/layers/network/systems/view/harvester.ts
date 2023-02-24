@@ -60,7 +60,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             id: `harvester-gray-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(harvester.assetKey, `harvester-2.png`);
-              gameObject.setPosition(x + 32, y + 32);
+              gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);

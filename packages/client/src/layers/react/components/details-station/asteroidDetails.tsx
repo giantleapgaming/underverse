@@ -79,9 +79,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   </S.Weapon>
                   <S.Weapon>
                     <img src="/build-stations/hydrogen.png" />
-                    <p>
-                      {level * 1000}/{Math.floor(+fuel / 10_00_000)}
-                    </p>
+                    <p>{Math.floor(+fuel / 10_00_000)}</p>
                   </S.Weapon>
                 </S.Row>
               ) : (
