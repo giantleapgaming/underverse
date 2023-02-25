@@ -19,6 +19,7 @@ import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "./components/ProspectedComponent.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -434,4 +435,14 @@ function createPerson(IWorld world, IUint256Component components, int32 x, int32
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(personID, block.timestamp);
   PositionComponent(getAddressById(components, PositionComponentID)).set(personID, Coord({ x: x, y: y }));
   LevelComponent(getAddressById(components, LevelComponentID)).set(personID, 1);
+}
+
+function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
+  IERC1155 nft = IERC1155(nftContract);
+  uint256 balance = nft.balanceOf(msg.sender, nftID);
+  if (balance > 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
