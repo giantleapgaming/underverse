@@ -68,6 +68,7 @@
     "wait-on": "^6.0.1"
   },
   "dependencies": {
+    "@openzeppelin/contracts": "^4.8.1",
     "@solidstate/contracts": "^0.0.52"
   }
 }
