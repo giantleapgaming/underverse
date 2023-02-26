@@ -12,23 +12,25 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-//Moresh
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-//import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord, baseInitialfuel } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts, checkNFT } from "../utils.sol";
+import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, baseInitialfuel, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
 contract BuildSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
-  //Moresh: Updated to support entity_type
   function execute(bytes memory arguments) public returns (bytes memory) {
     (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
+
+    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
     require(entity_type == 5, "Can only build Harvesters in spawning zone");
 
