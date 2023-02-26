@@ -3,25 +3,17 @@ import { BigNumber } from "ethers";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../../phaser";
 import { factionData } from "../../../utils/constants";
-import { numberMapping } from "../../../utils/mapping";
+import { Mapping, numberMapping } from "../../../utils/mapping";
 import { colorString } from "./utils";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Name, Faction, EntityType, Level, Position },
+    components: { OwnedBy, Name, Faction, EntityType, Level },
     network: { connectedAddress },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
-    scenes: {
-      Main: {
-        maps: {
-          Main: { tileWidth, tileHeight },
-        },
-      },
-    },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.MoveShip"], ({ args }) => {
     const { x, y, sourceEntity, srcX, srcY } = args as {
@@ -48,7 +40,6 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     ) {
       const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
-      const frameName = numberMapping[+entityType].frameName;
       setLogs(
         `<p>${colorString({ name, color })} moved ${colorString({
           name: stationName,
@@ -57,17 +48,17 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       );
       const address = connectedAddress.get();
       if (ownedBy !== `${address}`) {
-        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord({ x: x, y: y }, tileWidth, tileHeight);
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord({ x: srcX, y: srcY }, tileWidth, tileHeight);
         setShowAnimation({
           showAnimation: true,
-          destinationX,
-          destinationY,
-          sourceX,
-          sourceY,
-          type: "move",
-          frame: `${frameName}-${+faction}-${+level}.png`,
-          faction: +faction,
+          destinationX: x,
+          destinationY: y,
+          sourceX: srcX,
+          sourceY: srcY,
+          type:
+            (+entityType === Mapping.harvester.id && "moveHarvester") ||
+            (+entityType === Mapping.attack.id && "moveAttackShip") ||
+            "move",
+          entityID: sourceEntityIndex,
         });
       }
     }
