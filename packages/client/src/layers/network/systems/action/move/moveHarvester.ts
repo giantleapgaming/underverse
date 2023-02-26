@@ -44,6 +44,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
       const destinationY = animation && animation?.destinationY;
       const type = animation && animation?.type;
       const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+
       if (
         animation &&
         animation.showAnimation &&
@@ -68,12 +69,27 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
         const harvesterObjectTopLayer = objectPool.get(`harvester-top-move-${entity}`, "Sprite");
         const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-move-${entity}`, "Sprite");
         const harvester = config.sprites[Sprites.Asteroid12];
+        const destinationCircle = phaserScene.add.graphics();
+        const sourceCircle = phaserScene.add.graphics();
+        sourceCircle.fillStyle(0x000000, 1);
+        sourceCircle.setDepth(150);
+        sourceCircle.fillCircle(sourcePixelX + tileWidth / 2, sourcePixelX + tileHeight / 2, 200);
+        destinationCircle.fillStyle(0x000000, 1);
+        destinationCircle.fillCircle(destinationPixelX + tileWidth / 2, destinationPixelY + tileHeight / 2, 200);
+        destinationCircle.setDepth(150);
+        const onComplete = () => {
+          objectPool.remove(`harvester-gray-move-${entity}`);
+          destinationCircle.clear();
+          sourceCircle.clear();
+          setShowLine(true, destinationX, destinationY, "move");
+          objectPool.remove(`harvester-top-move-${entity}`);
+        };
         harvesterObjectTopLayer.setComponent({
           id: `harvester-top-move-${entity}`,
           once: (gameObject) => {
             gameObject.setTexture(harvester.assetKey, `harvester-1.png`);
             gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-            gameObject.setDepth(4);
+            gameObject.setDepth(151);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(angle);
             phaserScene.add.tween({
@@ -89,9 +105,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
               yoyo: false,
               repeat: 0,
               duration: 5_000,
-              onComplete: () => {
-                objectPool.remove(`harvester-top-move-${entity}`);
-              },
+              onComplete,
             });
           },
         });
@@ -100,7 +114,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setTexture(harvester.assetKey, `harvester-2.png`);
             gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
-            gameObject.setDepth(4);
+            gameObject.setDepth(151);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(angle);
             const color = generateColorsFromWalletAddress(`${ownedBy}`);
@@ -118,10 +132,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
               yoyo: false,
               repeat: 0,
               duration: 5_000,
-              onComplete: () => {
-                objectPool.remove(`harvester-gray-move-${entity}`);
-                setShowLine(true, destinationPixelX, destinationPixelY, "move");
-              },
+              onComplete,
             });
           },
         });
