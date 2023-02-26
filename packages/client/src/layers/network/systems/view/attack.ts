@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -15,7 +15,6 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       Main: {
         objectPool,
         config,
-        phaserScene,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -29,113 +28,60 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
     world,
     [Has(Position), Has(EntityType), Has(Level), Has(Defence), Has(Offence), Has(OwnedBy), Has(PrevPosition)],
     ({ entity }) => {
-      const healthBg = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `attack-health-bar-bg-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const health = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `attack-health-bar-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const healthBar = health ?? phaserScene.add.graphics();
-      const healthBarBg = healthBg ?? phaserScene.add.graphics();
-      !healthBg &&
-        Object.defineProperty(healthBar, "id", {
-          value: `attack-health-bar-bg-${entity}`,
-          writable: true,
-        });
-      !health &&
-        Object.defineProperty(healthBarBg, "id", {
-          value: `attack-health-bar-${entity}`,
-          writable: true,
-        });
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.attack.id) {
-        const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
-        const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValue(Faction, factionIndex)?.value;
-        const level = getComponentValueStrict(Level, entity).value;
         const defence = getComponentValueStrict(Defence, entity).value;
-        const position = getComponentValueStrict(Position, entity);
-        const offence = getComponentValueStrict(Offence, entity).value;
-        const prevPosition = getComponentValueStrict(PrevPosition, entity);
-        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
-          { x: prevPosition.x, y: prevPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        if (+defence > 0 && faction && typeof +faction === "number") {
-          const astroidObject = objectPool.get(`attack-${entity}`, "Sprite");
-          const factionObject = objectPool.get(`attack-faction-${entity}`, "Sprite");
-          const missileObject = objectPool.get(`group-missile-${entity}`, "Sprite");
-          const attack = config.sprites[Sprites.Asteroid12];
-          const progress = +defence / (+level * 100);
-          const endAngle = Phaser.Math.DegToRad(360 * progress);
-          healthBarBg.clear();
-          healthBar.clear();
-          healthBarBg.lineStyle(6, 0xd3d3d3, 1);
-          healthBarBg.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), 360);
-          healthBarBg.setAlpha(0.1);
-          healthBarBg.setDepth(99);
-          healthBarBg.strokePath();
-          healthBar.setAlpha(0.2);
-          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
-          healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
-          healthBar.strokePath();
-          healthBar.setDepth(100);
+        if (+defence > 0) {
+          const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+          const position = getComponentValueStrict(Position, entity);
+          const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+          const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+            { x: prevPosition.x, y: prevPosition.y },
+            tileWidth,
+            tileHeight
+          );
+          const attackShipObjectTop1Layer = objectPool.get(`attack-top1-${entity}`, "Sprite");
+          const attackShipObjectTop2Layer = objectPool.get(`attack-top2-${entity}`, "Sprite");
+          const attackShipObjectGrayLayer = objectPool.get(`attack-gray-${entity}`, "Sprite");
+          const attackShip = config.sprites[Sprites.Asteroid12];
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
-          astroidObject.setComponent({
-            id: `attack-${entity}`,
+          attackShipObjectTop1Layer.setComponent({
+            id: `attack-top1-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(attack.assetKey, `attack-${+faction + 1}-${+level}.png`);
-              gameObject.setPosition(x + 32, y + 32);
-              gameObject.setDepth(1);
+              gameObject.setTexture(attackShip.assetKey, `attack-1.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+              gameObject.setDepth(7);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },
           });
-          factionObject.setComponent({
-            id: `attack-faction-${entity}`,
+          attackShipObjectTop2Layer.setComponent({
+            id: `attack-top2-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(attack.assetKey, `faction-attack-${+faction + 1}.png`);
-              gameObject.setPosition(x + 32, y + 32);
-              gameObject.setDepth(2);
+              gameObject.setTexture(attackShip.assetKey, `attack-3.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+              gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
             },
           });
-          if (offence && offence > 0) {
-            missileObject.setComponent({
-              id: `group-missile-${entity}`,
-              once: (gameObject) => {
-                gameObject.setTexture(attack.assetKey, `${+faction + 1}-group-missile-${+offence}.png`);
-                gameObject.setPosition(x + 32, y + 32);
-                gameObject.setOrigin(0.5, 0.5);
-                gameObject.setDepth(2);
-                phaserScene.add.tween({
-                  targets: gameObject,
-                  angle: 360,
-                  duration: 1240000,
-                  ease: "circular",
-                  repeat: -1,
-                  yoyo: false,
-                  rotation: 360,
-                });
-              },
-            });
-          } else {
-            objectPool.remove(`group-missile-${entity}`);
-          }
+          attackShipObjectGrayLayer.setComponent({
+            id: `attack-gray-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(attackShip.assetKey, `attack-2.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+              gameObject.setDepth(6);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
+            },
+          });
         } else {
-          objectPool.remove(`attack-${entity}`);
-          objectPool.remove(`attack-faction-${entity}`);
-          objectPool.remove(`group-missile-${entity}`);
-          healthBarBg.clear();
-          healthBar.clear();
+          objectPool.remove(`attack-top1-${entity}`);
+          objectPool.remove(`attack-top2-${entity}`);
+          objectPool.remove(`attack-gray-${entity}`);
         }
       }
     }
