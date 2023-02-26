@@ -20,7 +20,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       fontSize: "64px",
       color: "#c0c0c0",
     });
-    console.log(i * 5 * tileWidth);
     circle.setStrokeStyle(0.3, 0x2d2d36);
     circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
     label.setOrigin(0.5, 0.5);
