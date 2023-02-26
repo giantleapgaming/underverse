@@ -151,27 +151,16 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                               world.entities[destinationDetails],
                               amount
                             );
-                            const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                              { x: destinationPosition.x, y: destinationPosition.y },
-                              tileWidth,
-                              tileHeight
-                            );
-                            const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                              { x: position.x, y: position.y },
-                              tileWidth,
-                              tileHeight
-                            );
                             setShowAnimation({
                               showAnimation: true,
-                              amount,
-                              destinationX,
-                              destinationY,
-                              sourceX,
-                              sourceY,
-                              type: "harvest",
+                              destinationX: destinationPosition.x,
+                              destinationY: destinationPosition.y,
+                              sourceX: position.x,
+                              sourceY: position.y,
+                              type: "mineTransport",
+                              entityID: destinationDetails,
                             });
                             setShowLine(false);
-                            setAction("upgrade");
                             showProgress();
                           } catch (e) {
                             console.log({ error: e, system: "Fire Attack", details: selectedEntity });
@@ -210,24 +199,14 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                         setAction("");
                         showProgress();
                         await refuelSystem(world.entities[selectedEntity], world.entities[destinationDetails], weapons);
-                        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                          { x: destinationPosition.x, y: destinationPosition.y },
-                          tileWidth,
-                          tileHeight
-                        );
-                        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                          { x: position.x, y: position.y },
-                          tileWidth,
-                          tileHeight
-                        );
                         setShowAnimation({
                           showAnimation: true,
-                          amount: weapons,
-                          destinationX,
-                          destinationY,
-                          sourceX,
-                          sourceY,
-                          type: "refuel",
+                          destinationX: destinationPosition.x,
+                          destinationY: destinationPosition.y,
+                          sourceX: position.x,
+                          sourceY: position.y,
+                          type: "fuelTransport",
+                          entityID: destinationDetails,
                         });
                       } catch (e) {
                         console.log({ error: e, system: "Fire Attack", details: selectedEntity });
