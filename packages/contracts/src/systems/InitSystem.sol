@@ -22,7 +22,7 @@ import { PlayerCountComponent, ID as PlayerCountComponentID } from "../component
 import { earthInitialPopulation, baseInitialBalance, godownInitialLevel, baseInitialfuel, baseInitialWeapons, baseInitialHealth } from "../constants.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
-import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
+//import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
 import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
@@ -71,12 +71,12 @@ contract InitSystem is System {
       playerCount
     );
 
-    uint256[] memory componentIds = new uint256[](8);
-    for (uint256 i = 0; i < 8; i++) {
-      componentIds[i] = 15;
-    }
+    // uint256[] memory componentIds = new uint256[](8);
+    // for (uint256 i = 0; i < 8; i++) {
+    //   componentIds[i] = 15;
+    // }
 
-    SectorEdgeComponent(getAddressById(components, SectorEdgeComponentID)).set(ID, componentIds);
+    // SectorEdgeComponent(getAddressById(components, SectorEdgeComponentID)).set(ID, componentIds);
   }
 
   function executeTyped(string calldata name, uint256 faction, uint256 nftID) public returns (bytes memory) {
