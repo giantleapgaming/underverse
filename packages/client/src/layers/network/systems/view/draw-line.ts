@@ -243,7 +243,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               destinationY: y,
               sourceX: sourcePosition.x,
               sourceY: sourcePosition.y,
-              type: +entityType === Mapping.harvester.id ? "moveHarvester" : "move",
+              type:
+                (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                "move",
               frame: frame,
               faction: +factionNumber,
               entityID: selectedEntity,
