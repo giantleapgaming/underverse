@@ -17,7 +17,8 @@
     "RankComponent",
     "SectorEdgeComponent",
     "ProspectedComponent",
-    "PrevPositionComponent"
+    "PrevPositionComponent",
+    "NFTIDComponent"
   ],
   "systems": [
     {
@@ -42,7 +43,8 @@
         "EntityTypeComponent",
         "PopulationComponent",
         "FuelComponent",
-        "PlayerCountComponent"
+        "PlayerCountComponent",
+        "NFTIDComponent"
       ]
     },
     {

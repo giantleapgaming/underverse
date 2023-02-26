@@ -23,6 +23,7 @@ import { earthInitialPopulation, baseInitialBalance, godownInitialLevel, baseIni
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 //import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
@@ -70,6 +71,8 @@ contract InitSystem is System {
       addressToEntity(msg.sender),
       playerCount
     );
+
+    NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(addressToEntity(msg.sender), nftID);
 
     // uint256[] memory componentIds = new uint256[](8);
     // for (uint256 i = 0; i < 8; i++) {
