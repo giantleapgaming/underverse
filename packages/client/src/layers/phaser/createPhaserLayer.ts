@@ -72,6 +72,7 @@ import { systemTransport } from "../local/stream-system/system.Transport";
 import { displayOrbits } from "../network/systems/view/orbits";
 import { displayWallSystem } from "../network/systems/view/wall";
 import { buildWallSystem } from "../network/systems/build/wall";
+import { moveHarvester } from "../network/systems/action/move/moveHarvester";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -195,6 +196,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     faction,
     type,
     frame,
+    entityID,
   }: {
     amount?: number;
     destinationX?: number;
@@ -205,8 +207,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
     faction?: number;
     type?: string;
     frame?: string;
+    entityID: EntityIndex;
   }) => {
-    setComponent(components.ShowAnimation, stationDetailsEntityIndex, {
+    setComponent(components.ShowAnimation, entityID, {
       amount,
       destinationX,
       destinationY,
@@ -378,5 +381,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemMoveShip(network, context);
   systemProspect(network, context);
 
+  //-----animations---------------------------------------
+  moveHarvester(network, context);
   return context;
 }

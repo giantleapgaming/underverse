@@ -209,12 +209,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     ) {
       const sourcePosition = getComponentValue(Position, selectedEntity);
       if (sourcePosition) {
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-          { x: sourcePosition.x, y: sourcePosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord({ x: x, y: y }, tileWidth, tileHeight);
         const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
         const entityIndex = world.entities.indexOf(ownedBy);
         const factionNumber = getComponentValue(Faction, entityIndex)?.value;
@@ -245,13 +239,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             setMoveStation(false);
             setShowAnimation({
               showAnimation: true,
-              destinationX: destinationX,
-              destinationY: destinationY,
-              sourceX: sourceX,
-              sourceY: sourceY,
-              type: "move",
+              destinationX: x,
+              destinationY: y,
+              sourceX: sourcePosition.x,
+              sourceY: sourcePosition.y,
+              type: +entityType === Mapping.harvester.id ? "moveHarvester" : "move",
               frame: frame,
               faction: +factionNumber,
+              entityID: selectedEntity,
             });
             showProgress();
             setShowLine(false);
