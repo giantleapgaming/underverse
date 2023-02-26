@@ -22,7 +22,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
     },
   } = phaser;
   const {
-    components: { Position, PrevPosition, Level, Defence, Offence, EntityType, Faction, OwnedBy },
+    components: { Position, PrevPosition, Level, Defence, Offence, EntityType, OwnedBy },
   } = network;
   defineSystem(
     world,
