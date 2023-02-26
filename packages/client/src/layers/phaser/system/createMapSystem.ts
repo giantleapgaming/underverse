@@ -4,81 +4,28 @@ import { PhaserLayer } from "../types";
 export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     scenes: {
-      Main: { camera, input, phaserScene },
+      Main: {
+        camera,
+        input,
+        phaserScene,
+        maps: {
+          Main: { tileWidth, tileHeight },
+        },
+      },
     },
   } = phaser;
-
-  const circle1 = phaserScene.add.circle(32, 32);
-  const label1 = phaserScene.add.text(32, -320, "5", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-  const circle2 = phaserScene.add.circle(32, 32);
-  const label2 = phaserScene.add.text(32, -640, "10", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-  const circle3 = phaserScene.add.circle(32, 32);
-  const label3 = phaserScene.add.text(32, -960, "15", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-  const circle4 = phaserScene.add.circle(32, 32);
-  const label4 = phaserScene.add.text(32, -1280, "20", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-  const circle5 = phaserScene.add.circle(32, 32);
-  const label5 = phaserScene.add.text(32, -1600, "25", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-  const circle6 = phaserScene.add.circle(32, 32);
-  const label6 = phaserScene.add.text(32, -1920, "30", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-
-  const circle7 = phaserScene.add.circle(32, 32);
-  const label7 = phaserScene.add.text(32, -6080, "100", {
-    fontSize: "24px",
-    color: "#c0c0c0",
-  });
-
-  circle1.setStrokeStyle(0.3, 0x2d2d36);
-  circle1.setDisplaySize(704, 704);
-  label1.setOrigin(0.5, 0.5);
-  label1.setDepth(20);
-
-  circle2.setStrokeStyle(0.3, 0x2d2d36);
-  circle2.setDisplaySize(1344, 1344);
-  label2.setOrigin(0.5, 0.5);
-  label2.setDepth(20);
-
-  circle3.setStrokeStyle(2, 0x2d2d36);
-  circle3.setDisplaySize(1984, 1984);
-  label3.setOrigin(0.5, 0.5);
-  label3.setDepth(20);
-
-  circle4.setStrokeStyle(0.3, 0x2d2d36);
-  circle4.setDisplaySize(2624, 2624);
-  label4.setOrigin(0.5, 0.5);
-  label4.setDepth(20);
-
-  circle5.setStrokeStyle(0.3, 0x2d2d36);
-  circle5.setDisplaySize(3264, 3264);
-  label5.setOrigin(0.5, 0.5);
-  label5.setDepth(20);
-
-  circle6.setStrokeStyle(0.3, 0x2d2d36);
-  circle6.setDisplaySize(3904, 3904);
-  label6.setOrigin(0.5, 0.5);
-  label6.setDepth(20);
-
-  circle7.setStrokeStyle(1, 0x2d2d36);
-  circle7.setDisplaySize(12224, 12224);
-  label7.setOrigin(0.5, 0.5);
-  label7.setDepth(20);
+  for (let i = 1; i < 7; i++) {
+    const circle = phaserScene.add.circle(tileWidth / 2, tileWidth / 2);
+    const label = phaserScene.add.text(tileWidth / 2, -(i * 5 * tileWidth - tileWidth / 2), `${i * 5}`, {
+      fontSize: "64px",
+      color: "#c0c0c0",
+    });
+    console.log(i * 5 * tileWidth);
+    circle.setStrokeStyle(0.3, 0x2d2d36);
+    circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
+    label.setOrigin(0.5, 0.5);
+    label.setDepth(20);
+  }
 
   input.pointermove$.subscribe(({ pointer }) => {
     if (pointer.rightButtonDown()) {
@@ -89,4 +36,5 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     }
   });
   camera.centerOn(0, -1);
+  camera.setZoom(0.08);
 }
