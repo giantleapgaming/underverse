@@ -32,18 +32,11 @@ contract BuildSystem is System {
 
     require(entity_type == 5, "Can only build Harvesters in spawning zone");
 
-    // Not allowing to build godown in central 3x3 grid (sun)
-    require(
-      ((x == -1 || x == 0 || x == 1) && (y == -1 || y == 0 || y == 1)) == false,
-      "Cannot build godown in the center of the grid"
-    );
+    int32 distSq = x ** 2 + y ** 2;
 
     Coord memory coord = Coord({ x: x, y: y });
-    Coord memory center = Coord({ x: zeroCoord, y: zeroCoord });
 
-    //We allow build only within 15 units from center
-
-    require(getDistanceBetweenCoordinatesWithMultiplier(coord, center) < 15000, "Can only build 15 units from earth");
+    require(distSq < 225 && distSq > 9, "Can only build between 3 to 15 units from earth");
 
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
