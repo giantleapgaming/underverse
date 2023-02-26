@@ -37,7 +37,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
         id: `astroid-${entity}`,
         once: (gameObject) => {
           const astroid = config.sprites[Sprites.Asteroid12];
-          gameObject.setTexture(astroid.assetKey, `asteroid-${sizeCalculate(balance)}-1.png`);
+          gameObject.setTexture(astroid.assetKey, `asteroid-${sizeCalculate(balance)}.png`);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
           gameObject.setPosition(x + 32, y + 32);
@@ -58,11 +58,21 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
 }
 
 function sizeCalculate(num: number) {
-  if (num >= 0 && num <= 25) {
+  if (num >= 0 && num <= 10) {
     return 1;
-  } else if (num > 25 && num <= 75) {
+  } else if (num > 10 && num <= 25) {
     return 2;
-  } else if (num > 75) {
+  } else if (num > 25 && num <= 35) {
     return 3;
+  } else if (num > 35 && num <= 45) {
+    return 4;
+  } else if (num > 45 && num <= 55) {
+    return 5;
+  } else if (num > 55 && num <= 65) {
+    return 6;
+  } else if (num > 65 && num <= 75) {
+    return 7;
+  } else if (num > 75 && num <= 85) {
+    return 8;
   }
 }
