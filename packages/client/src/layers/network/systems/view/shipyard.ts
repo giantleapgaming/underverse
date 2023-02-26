@@ -40,7 +40,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `shipyard-new-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-            gameObject.setDepth(4);
+            gameObject.setDepth(5);
             gameObject.setOrigin(0.5, 0.5);
           },
         });
