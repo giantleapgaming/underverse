@@ -31,7 +31,7 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
       typeof amount === "number" &&
       type === "harvest"
     ) {
-      const object = objectPool.get("harvest", "Sprite");
+      const object = objectPool.get("transport-harvest", "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const angle = Math.atan2(destinationY - sourceY, destinationX - sourceX) * (180 / Math.PI) + 90;
       object.setComponent({
@@ -55,7 +55,7 @@ export function harvestTransport(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             duration: 5_000,
             onComplete: () => {
-              objectPool.remove("harvest");
+              objectPool.remove("transport-harvest");
             },
           });
         },

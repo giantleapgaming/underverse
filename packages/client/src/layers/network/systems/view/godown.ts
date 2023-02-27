@@ -35,9 +35,11 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const balance = getComponentValueStrict(Balance, entity).value;
+          const level = getComponentValueStrict(Level, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const godownObjectTop2Layer = objectPool.get(`godown-top2-${entity}`, "Sprite");
           const godownObjectGrayLayer = objectPool.get(`godown-gray-${entity}`, "Sprite");
+          const levelSprite = objectPool.get(`godown-level-${entity}`, "Sprite");
           const godown = config.sprites[Sprites.Asteroid12];
           if (+balance) {
             const godownObjectTop1Layer = objectPool.get(`godown-top1-${entity}`, "Sprite");
@@ -74,10 +76,21 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
+          levelSprite.setComponent({
+            id: `godown-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(godown.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`godown-top1-${entity}`);
           objectPool.remove(`godown-top2-${entity}`);
           objectPool.remove(`godown-gray-${entity}`);
+          objectPool.remove(`godown-level-${entity}`);
         }
       }
     }

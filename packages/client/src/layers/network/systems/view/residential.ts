@@ -35,8 +35,10 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           const position = getComponentValueStrict(Position, entity);
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+          const level = getComponentValueStrict(Level, entity).value;
           const residentialObjectTopLayer = objectPool.get(`residential-top-${entity}`, "Sprite");
           const residentialObjectGrayLayer = objectPool.get(`residential-gray-${entity}`, "Sprite");
+          const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
           const residential = config.sprites[Sprites.Asteroid12];
           residentialObjectTopLayer.setComponent({
             id: `residential-top-${entity}`,
@@ -60,9 +62,20 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
               gameObject.setAngle(0);
             },
           });
+          levelSprite.setComponent({
+            id: `residential-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(residential.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`residential-top-${entity}`);
           objectPool.remove(`residential-${entity}`);
+          objectPool.remove(`residential-level-${entity}`);
         }
       }
     }

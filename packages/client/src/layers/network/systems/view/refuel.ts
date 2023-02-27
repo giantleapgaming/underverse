@@ -36,6 +36,8 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const level = getComponentValueStrict(Level, entity).value;
+          const levelSprite = objectPool.get(`refuel-level-${entity}`, "Sprite");
           const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
             { x: prevPosition.x, y: prevPosition.y },
             tileWidth,
@@ -68,9 +70,20 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
+          levelSprite.setComponent({
+            id: `refuel-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(refuel.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`refuel-top-${entity}`);
           objectPool.remove(`refuel-gray-${entity}`);
+          objectPool.remove(`refuel-level-${entity}`);
         }
       }
     }

@@ -30,7 +30,9 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
 
       if (+defence > 0) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+        const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);
+        const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const shipyardObjectTopLayer = objectPool.get(`shipyard-top-${entity}`, "Sprite");
         const shipyardObjectGrayLayer = objectPool.get(`shipyard-gray-${entity}`, "Sprite");
@@ -55,9 +57,20 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
             gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
         });
+        levelSprite.setComponent({
+          id: `shipyard-level-${entity}`,
+          once: (gameObject) => {
+            gameObject.setTexture(shipyard.assetKey, `upgrade-${+level}.png`);
+            gameObject.setPosition(x, y);
+            gameObject.setDepth(4);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+          },
+        });
       } else {
         objectPool.remove(`shipyard-top-${entity}`);
         objectPool.remove(`shipyard-gray-${entity}`);
+        objectPool.remove(`shipyard-level-${entity}`);
       }
     }
   });

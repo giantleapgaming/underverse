@@ -36,6 +36,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const level = getComponentValueStrict(Level, entity).value;
           const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
             { x: prevPosition.x, y: prevPosition.y },
             tileWidth,
@@ -44,6 +45,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const harvesterObjectTopLayer = objectPool.get(`harvester-top-${entity}`, "Sprite");
           const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-${entity}`, "Sprite");
+          const levelSprite = objectPool.get(`harvester-level-${entity}`, "Sprite");
           const harvester = config.sprites[Sprites.Asteroid12];
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           harvesterObjectTopLayer.setComponent({
@@ -68,9 +70,20 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
+          levelSprite.setComponent({
+            id: `harvester-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(harvester.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`harvester-${entity}`);
           objectPool.remove(`harvester-faction-${entity}`);
+          objectPool.remove(`harvester-level-${entity}`);
         }
       }
     }
