@@ -60,11 +60,12 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
       cargoTransportObjectTopLayer.setComponent({
         id: `cargoTransport-top-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(cargoTransport.assetKey, `cargo-transport-1.png`);
+          gameObject.setTexture(cargoTransport.assetKey, `cargo-transport-2.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(151);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
+          gameObject.setScale(0.3);
           phaserScene.add.tween({
             targets: gameObject,
             x: {
@@ -87,11 +88,12 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
       cargoTransportObjectGrayLayer.setComponent({
         id: `cargoTransport-gray-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(cargoTransport.assetKey, `cargo-transport-2.png`);
+          gameObject.setTexture(cargoTransport.assetKey, `cargo-transport-1.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
-          gameObject.setDepth(151);
+          gameObject.setDepth(150);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
+          gameObject.setScale(0.3);
           const color = generateColorsFromWalletAddress(`${ownedBy}`);
           gameObject.setTint(color[0], color[1], color[2], color[3]);
           phaserScene.add.tween({
