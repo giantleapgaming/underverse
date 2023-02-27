@@ -1,4 +1,3 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
@@ -24,13 +23,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
       localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       world,
@@ -82,7 +74,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
                 <S.Weapon>
-                  <img src="/build-stations/box.png" />
+                  <img src="/build-stations/crystal.png" width="20px" height="20px" />
                   <p>
                     {+balance}/{+level}
                   </p>
@@ -90,7 +82,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {level * 1000}/{Math.floor(+fuel / 10_00_000)}
+                    {Math.floor(+fuel / 10_00_000)}/{level * 1000}
                   </p>
                 </S.Weapon>
               </S.Row>
@@ -133,24 +125,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "transport",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "cargoTransport",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
@@ -230,24 +213,15 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
                             type: "refuel",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });

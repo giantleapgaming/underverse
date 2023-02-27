@@ -7,7 +7,12 @@ export function displayOrbits(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     scenes: {
-      Main: { phaserScene },
+      Main: {
+        phaserScene,
+        maps: {
+          Main: { tileWidth },
+        },
+      },
     },
   } = phaser;
   const {
@@ -28,20 +33,25 @@ export function displayOrbits(network: NetworkLayer, phaser: PhaserLayer) {
       ?.clear();
 
     const playerCount = getComponentValueStrict(PlayerCount, entity).value;
-    const showCircle = circle ?? phaserScene.add.circle(32, 32);
+    const showCircle = circle ?? phaserScene.add.circle(tileWidth / 2, tileWidth / 2);
     !circle &&
       Object.defineProperty(showCircle, "id", {
         value: `orbit-circle-${entity}`,
         writable: true,
       });
     showCircle.setStrokeStyle(0.3, 0x2d2d36);
-    showCircle.setDisplaySize(+playerCount * 640 + 3904, +playerCount * 640 + 3904);
+    showCircle.setDisplaySize(+playerCount * 2560 + tileWidth * 61, +playerCount * 2560 + tileWidth * 61);
     const showLabel =
       label ??
-      phaserScene.add.text(32, -(1920 + +playerCount * 320), `${+playerCount * 5 + 30}`, {
-        fontSize: "24px",
-        color: "#c0c0c0",
-      });
+      phaserScene.add.text(
+        tileWidth / 2,
+        -(tileWidth * 30 + +playerCount * tileWidth * 5),
+        `${+playerCount * 5 + 30}`,
+        {
+          fontSize: "64px",
+          color: "#c0c0c0",
+        }
+      );
     !label &&
       Object.defineProperty(showCircle, "id", {
         value: `text-orbit-circle-${entity}`,

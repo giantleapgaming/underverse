@@ -1,4 +1,3 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
@@ -17,13 +16,6 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
       localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       components: { EntityType, Position, Population, Level },
@@ -72,24 +64,15 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "residential",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "humanTransport",
+                            entityID: destinationDetails,
                           });
                           setDestinationDetails();
                           setShowLine(false);

@@ -59,7 +59,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>RESIDENTIAL LVL {+level}</S.Text>
-              <img src={`/build-stations/${+factionNumber}-1-0.png`} width="100px" height="100px" />
+              <img src={`/build-stations/space-station.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -81,7 +81,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {level * 1000}/{Math.floor(+fuel / 10_00_000)}
+                    {Math.floor(+fuel / 10_00_000)}/{level * 1000}
                   </p>
                 </S.Weapon>
               </S.Row>
