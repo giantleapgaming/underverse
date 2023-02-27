@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -14,7 +14,6 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
     scenes: {
       Main: {
         objectPool,
-        phaserScene,
         config,
         maps: {
           Main: { tileWidth, tileHeight },
@@ -23,96 +22,47 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
     },
   } = phaser;
   const {
-    components: { Position, Level, Defence, Population, EntityType, Faction, OwnedBy },
+    components: { Position, Level, Defence, Population, EntityType, OwnedBy },
   } = network;
   defineSystem(
     world,
     [Has(Position), Has(EntityType), Has(Level), Has(Population), Has(OwnedBy), Has(Defence)],
     ({ entity }) => {
-      const healthBg = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `residential-health-bar-bg-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const health = phaserScene.children
-        .getChildren()
-        // @ts-ignore
-        .find((item) => item.id === `residential-health-bar-${entity}`)
-        // @ts-ignore
-        ?.clear();
-      const healthBar = health ?? phaserScene.add.graphics();
-      const healthBarBg = healthBg ?? phaserScene.add.graphics();
-      !healthBg &&
-        Object.defineProperty(healthBar, "id", {
-          value: `residential-health-bar-bg-${entity}`,
-          writable: true,
-        });
-      !health &&
-        Object.defineProperty(healthBarBg, "id", {
-          value: `residential-health-bar-${entity}`,
-          writable: true,
-        });
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.residential.id) {
-        const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
-        const factionIndex = world.entities.indexOf(ownedBy);
-        const faction = getComponentValue(Faction, factionIndex)?.value;
-        const population = getComponentValueStrict(Population, entity).value;
-        const level = getComponentValueStrict(Level, entity).value;
-        const position = getComponentValueStrict(Position, entity);
         const defence = getComponentValueStrict(Defence, entity).value;
-        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        if (+defence > 0 && faction && typeof +faction === "number") {
-          const progress = +defence / (+level * 100);
-          const endAngle = Phaser.Math.DegToRad(360 * progress);
-          healthBarBg.clear();
-          healthBar.clear();
-          healthBarBg.lineStyle(6, 0xd3d3d3, 1);
-          healthBarBg.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), 360);
-          healthBarBg.setAlpha(0.1);
-          healthBarBg.setDepth(99);
-          healthBarBg.strokePath();
-          healthBar.setAlpha(0.2);
-          healthBar.lineStyle(6, +`0x${factionData[+faction].color.split("#")[1]}`, 1);
-          healthBar.arc(x + 32, y + 32, 45, Phaser.Math.DegToRad(0), endAngle);
-          healthBar.strokePath();
-          healthBar.setDepth(100);
-          const factionObject = objectPool.get(`residential-faction-${entity}`, "Sprite");
-          const astroidObject = objectPool.get(`residential-${entity}`, "Sprite");
+        if (+defence > 0) {
+          const position = getComponentValueStrict(Position, entity);
+          const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
+          const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+          const residentialObjectTopLayer = objectPool.get(`residential-top-${entity}`, "Sprite");
+          const residentialObjectGrayLayer = objectPool.get(`residential-gray-${entity}`, "Sprite");
           const residential = config.sprites[Sprites.Asteroid12];
-          astroidObject.setComponent({
-            id: `residential-${entity}`,
+          residentialObjectTopLayer.setComponent({
+            id: `residential-top-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `${+faction + 1}-${+level}-${+population}.png`);
-              gameObject.setPosition(x + 32, y + 32);
-              gameObject.setDepth(2);
+              gameObject.setTexture(residential.assetKey, `space-station-1.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+              gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
-              phaserScene.add.tween({
-                targets: gameObject,
-                angle: 360,
-                duration: 1500000,
-                ease: "circular",
-                repeat: -1,
-                yoyo: false,
-                rotation: 360,
-              });
+              gameObject.setAngle(0);
             },
           });
-          factionObject.setComponent({
-            id: `residential-faction-${entity}`,
+          residentialObjectGrayLayer.setComponent({
+            id: `residential-gray-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture(residential.assetKey, `faction-${faction && +faction + 1}.png`);
-              gameObject.setPosition(x + 32, y + 32);
-              gameObject.setDepth(3);
+              gameObject.setTexture(residential.assetKey, `space-station-2.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+              gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setAngle(0);
             },
           });
         } else {
-          objectPool.remove(`residential-faction-${entity}`);
+          objectPool.remove(`residential-top-${entity}`);
           objectPool.remove(`residential-${entity}`);
-          healthBarBg.clear();
-          healthBar.clear();
         }
       }
     }

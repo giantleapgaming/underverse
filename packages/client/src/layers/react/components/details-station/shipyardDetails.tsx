@@ -66,7 +66,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>SHIPYARD LVL {+level}</S.Text>
-              <img src={`/build-stations/shipyard-${+factionNumber}.png`} width="100px" height="100px" />
+              <img src={`/build-stations/shipyard.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -80,7 +80,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
                 <S.Weapon>
-                  <img src="/build-stations/box.png" />
+                  <img src="/build-stations/crystal.png" width="20px" height="20px" />
                   <p>
                     {+balance}/{+level}
                   </p>
@@ -88,7 +88,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {level * 1000}/{Math.floor(+fuel / 10_00_000)}
+                    {Math.floor(+fuel / 10_00_000)}/{level * 1000}
                   </p>
                 </S.Weapon>
               </S.Row>
