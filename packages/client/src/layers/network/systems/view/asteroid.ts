@@ -30,7 +30,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const astroidObject = objectPool.get(`astroid-${entity}`, "Sprite");
-      const circle = phaserScene.add.circle(x + 32, y + 32);
+      const circle = phaserScene.add.circle(x + tileWidth / 2, y + tileWidth / 2);
       circle.setStrokeStyle(0.3, 0x2d2d36);
       circle.setDisplaySize(704, 704);
       astroidObject.setComponent({
@@ -40,7 +40,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           gameObject.setTexture(astroid.assetKey, `asteroid-${sizeCalculate(balance)}.png`);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
-          gameObject.setPosition(x + 32, y + 32);
+          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           const durationMultiplier = 0.8 + Math.random() * 0.4;
           phaserScene.add.tween({
             targets: gameObject,

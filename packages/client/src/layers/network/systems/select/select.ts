@@ -24,46 +24,67 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
   } = network;
 
   defineRxSystem(world, merge(Position.update$, ShowStationDetails.update$), () => {
-    const object = objectPool.get("select-box", "Sprite");
     const entityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const position = getComponentValue(Position, entityId);
 
     if (typeof position?.x === "number" && entityId) {
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+      const selectedBox = objectPool.get("src-select-box", "Sprite");
+      const radius = objectPool.get("src-select-box-radius", "Sprite");
       const select = config.sprites[Sprites.Select];
-      object.setComponent({
-        id: "select-box-ui",
+      selectedBox.setComponent({
+        id: "src-select-box",
         once: (gameObject) => {
-          gameObject.setTexture(select.assetKey, "yellow-circle.png");
+          gameObject.setTexture(select.assetKey, select.frame);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setOrigin(0.5, 0.5);
-          gameObject.depth = 2;
+          gameObject.setAngle(0);
+        },
+      });
+      radius.setComponent({
+        id: "src-select-box-radius",
+        once: (gameObject) => {
+          gameObject.setTexture(select.assetKey, `yellow-circle.png`);
+          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+          gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(0);
         },
       });
     } else {
-      objectPool.remove("select-box");
+      objectPool.remove("src-select-box");
+      objectPool.remove("src-select-box-radius");
     }
   });
   defineComponentSystem(world, ShowDestinationDetails, () => {
-    const object = objectPool.get("destination-select-box", "Sprite");
     const entityId = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId as EntityIndex;
     const position = getComponentValue(Position, entityId);
     if (typeof position?.x === "number" && entityId) {
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const select = config.sprites[Sprites.Select];
-      object.setComponent({
+      const selectedBox = objectPool.get("destination-select-box", "Sprite");
+      const radius = objectPool.get("destination-select-box-radius", "Sprite");
+      selectedBox.setComponent({
         id: "destination-select-box",
         once: (gameObject) => {
-          gameObject.setTexture(select.assetKey, "yellow-circle.png");
+          gameObject.setTexture(select.assetKey, select.frame);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.depth = 2;
           gameObject.setAngle(0);
         },
       });
+      radius.setComponent({
+        id: "destination-select-box-radius",
+        once: (gameObject) => {
+          gameObject.setTexture(select.assetKey, `yellow-circle.png`);
+          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(0);
+        },
+      });
     } else {
       objectPool.remove("destination-select-box");
+      objectPool.remove("destination-select-box-radius");
     }
   });
 }
