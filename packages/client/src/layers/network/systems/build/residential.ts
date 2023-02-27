@@ -3,9 +3,8 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -53,15 +52,29 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       if (faction) {
         const HoverSprite = config.sprites[Sprites.Build1];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+        const residentialObjectTopLayer = objectPool.get(`residential-top-hover`, "Sprite");
+        const residentialObjectGrayLayer = objectPool.get(`residential-gray-hover`, "Sprite");
 
-        const hoverStation = objectPool.get("build-residential-station", "Sprite");
-        hoverStation.setComponent({
-          id: `hoverStation`,
+        residentialObjectTopLayer.setComponent({
+          id: `residential-top-hover`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, `build-${+faction + 1}.png`);
-            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setTexture(HoverSprite.assetKey, `space-station-1.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(5);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.depth = 4;
+            gameObject.setAngle(0);
+          },
+        });
+        residentialObjectGrayLayer.setComponent({
+          id: `residential-gray-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `space-station-2.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+            gameObject.setDepth(4);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+            const color = generateColorsFromWalletAddress(`${address}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
             gameObject.setAngle(0);
           },
         });
@@ -75,6 +88,7 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
             gameObject.setFontSize(16);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
+            gameObject.setAngle(0);
           },
         });
         const mineral = objectPool.get("build-residential-station-text-white-m", "Sprite");
@@ -85,11 +99,14 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
             gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
             gameObject.depth = 4;
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
           },
         });
       }
     } else {
       objectPool.remove("build-residential-station");
+      objectPool.remove("residential-gray-hover");
+      objectPool.remove("residential-top-hover");
       objectPool.remove("build-residential-station-text-white");
       objectPool.remove("build-residential-station-text-white-m");
     }
