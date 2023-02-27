@@ -46,7 +46,7 @@ import {
 import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
 import { drawLine } from "../network/systems/view/draw-line";
-import { missileAttackSystem } from "../network/systems/action/missile-attack";
+import { missileAttackSystem } from "../network/systems/action/attack/missile-attack";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 import {
   systemAttack,

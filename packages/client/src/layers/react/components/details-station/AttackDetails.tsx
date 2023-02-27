@@ -193,9 +193,8 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             destinationY: destinationPosition.y,
                             sourceX: position.x,
                             sourceY: position.y,
-                            faction: +factionNumber + 1,
-                            type: "attack",
-                            entityID: destinationDetails,
+                            type: "attackMissile",
+                            entityID: selectedEntity,
                           });
                           setDestinationDetails();
                           setShowLine(false);
@@ -213,72 +212,6 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       faction={+factionNumber}
                     />
                   )}
-                  {action === "move" &&
-                    moveStationDetails &&
-                    moveStationDetails.selected &&
-                    typeof moveStationDetails.x === "number" &&
-                    typeof moveStationDetails.y === "number" && (
-                      <Move
-                        cost={Math.pow(
-                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
-                          2
-                        )}
-                        moveSystem={async () => {
-                          if (
-                            moveStationDetails.selected &&
-                            typeof moveStationDetails?.x === "number" &&
-                            typeof moveStationDetails?.y === "number"
-                          ) {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                                { x: moveStationDetails.x, y: moveStationDetails.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                                { x: position.x, y: position.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              await moveSystem({
-                                entityType: world.entities[selectedEntity],
-                                x: moveStationDetails.x,
-                                y: moveStationDetails.y,
-                                srcX: position.x,
-                                srcY: position.y,
-                              });
-                              setMoveStation(false);
-                              setShowAnimation({
-                                showAnimation: true,
-                                destinationX: moveStationDetails.x,
-                                destinationY: moveStationDetails.y,
-                                sourceX: position.x,
-                                sourceY: position.y,
-                                type: "attack",
-                                frame: `attack-${+factionNumber + 1}-${+level}.png`,
-                                faction: +factionNumber,
-                                entityID: destinationDetails,
-                              });
-                              setShowLine(false);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({
-                                error: e,
-                                system: "Move Attack",
-                                details: {
-                                  entityType: world.entities[selectedEntity],
-                                  x: moveStationDetails.x,
-                                  y: moveStationDetails.y,
-                                },
-                              });
-                            }
-                          }
-                        }}
-                      />
-                    )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
