@@ -4,9 +4,7 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -14,8 +12,8 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "../components/ProspectedComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
+import { MULTIPLIER } from "../constants.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
@@ -24,114 +22,65 @@ contract ProspectSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceGodownEntity, uint256 destinationGodownEntity) = abi.decode(arguments, (uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity) = abi.decode(arguments, (uint256, uint256));
 
     // Check if source and destination are Harvester and Asteroid respectively
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceGodownEntity) == 5,
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 5,
       "Source has to be an Harvester"
     );
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationGodownEntity) == 2,
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 2,
       "Destination has to be an Asteroid"
     );
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
         addressToEntity(msg.sender),
       "Harvester not owned by user"
     );
 
     require(
-      ProspectedComponent(getAddressById(components, ProspectedComponentID)).getValue(destinationGodownEntity) == 0,
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).getValue(destinationEntity) == 0,
       "Asteroid already Prospected"
     );
 
     require(
-      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
       "Harvester needs to be atleast Level 1"
     );
 
-    Coord memory sourceGodownPosition = getCurrentPosition(
+    Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      sourceGodownEntity
+      sourceEntity
     );
 
-    Coord memory destinationGodownPosition = getCurrentPosition(
+    Coord memory destinationPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      destinationGodownEntity
+      destinationEntity
     );
 
-    require(
-      atleastOneObstacleOnTheWay(
-        sourceGodownPosition.x,
-        sourceGodownPosition.y,
-        destinationGodownPosition.x,
-        destinationGodownPosition.y,
-        components
-      ) == false,
-      "Obstacle on the way"
-    );
-
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
-      sourceGodownPosition,
-      destinationGodownPosition
-    );
+    uint256 distanceBetweens = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
 
     //Check to see if Harvester is close enough to Asteroid (<5 units)
-    require(distanceBetweenGodowns <= 5000, "Harvester is further than 5 units distance from Asteroid");
+    require(distanceBetweens <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    uint256 prospectCost = distanceBetweenGodowns ** 2;
+    uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
+      uint256(Math.abs(destinationPosition.x));
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
-    );
-
-    require(playerCash >= prospectCost, "Not enough money to Prospect");
-
-    // uint256 distFromCenterSq = Math.sqrt(
-    //   uint256(int256(destinationGodownPosition.x) ** 2 + int256(destinationGodownPosition.y) ** 2)
-    // );
-    uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, playerCash))) %
-      uint256(Math.abs(destinationGodownPosition.x));
-
-    uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost)))) %
-      uint256(Math.abs(destinationGodownPosition.y))) *
+    uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
+      uint256(Math.abs(destinationPosition.y))) *
       MULTIPLIER *
       10;
 
-    // update player data
-    CashComponent(getAddressById(components, CashComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCash - prospectCost
-    );
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationGodownEntity, asteroidBalance);
-
-    FuelComponent(getAddressById(components, FuelComponentID)).set(destinationGodownEntity, asteroidFuel);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
-      block.timestamp
-    );
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationGodownEntity,
-      block.timestamp
-    );
-
-    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationGodownEntity, 1);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, asteroidBalance);
+    FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
+    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
   }
 
-  function executeTyped(uint256 sourceGodownEntity, uint256 destinationGodownEntity) public returns (bytes memory) {
-    return execute(abi.encode(sourceGodownEntity, destinationGodownEntity));
+  function executeTyped(uint256 sourceEntity, uint256 destinationEntity) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity));
   }
 }
