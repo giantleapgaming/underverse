@@ -76,6 +76,7 @@ import { moveHarvester } from "../network/systems/action/move/moveHarvester";
 import { moveAttackShip } from "../network/systems/action/move/moveAttackShip";
 import { mineTransport } from "../network/systems/action/transport/mineTransport";
 import { cargoTransport } from "../network/systems/action/transport/cargoTransport";
+import { humanTransport } from "../network/systems/action/transport/humanTransport";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -392,6 +393,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   mineTransport(network, context);
   fuelTransport(network, context);
   cargoTransport(network, context);
+  humanTransport(network, context);
 
   return context;
 }
