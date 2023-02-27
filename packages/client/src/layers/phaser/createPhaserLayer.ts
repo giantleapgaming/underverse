@@ -47,10 +47,6 @@ import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
 import { drawLine } from "../network/systems/view/draw-line";
 import { missileAttackSystem } from "../network/systems/action/missile-attack";
-import { harvestTransport } from "../network/systems/action/harvest-transport";
-import { populationTransport } from "../network/systems/action/population-transport";
-import { godownTransport } from "../network/systems/action/godown-transport";
-import { move } from "../network/systems/action/move";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 import {
   systemAttack,
@@ -362,10 +358,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   drawLine(network, context);
   missileAttackSystem(network, context);
-  harvestTransport(network, context);
-  populationTransport(network, context);
-  godownTransport(network, context);
-  move(network, context);
   highLightUserStations(network, context);
   highlightObstacles(network, context);
 

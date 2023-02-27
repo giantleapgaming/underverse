@@ -111,7 +111,6 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`cargoTransport-gray-${entity}`);
-              setShowLine(true, destinationX, destinationY, "move");
             },
           });
         },

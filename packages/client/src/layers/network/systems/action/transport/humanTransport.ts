@@ -107,7 +107,6 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`humanTransport-gray-${entity}`);
-              setShowLine(true, destinationX, destinationY, "move");
             },
           });
         },

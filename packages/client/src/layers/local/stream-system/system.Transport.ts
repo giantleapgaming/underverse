@@ -15,29 +15,18 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
     components: { OwnedBy, Position, Name, Faction, EntityType },
   } = network;
   const {
-    scenes: {
-      Main: {
-        maps: {
-          Main: { tileWidth, tileHeight },
-        },
-      },
-    },
-  } = phaser;
-  const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Transport"], ({ args }) => {
-    const { destinationGodownEntity, sourceGodownEntity, kgs } = args as {
-      destinationGodownEntity: BigNumber;
-      sourceGodownEntity: BigNumber;
+    const { destinationEntity, sourceEntity, kgs } = args as {
+      destinationEntity: BigNumber;
+      sourceEntity: BigNumber;
       kgs: BigNumber;
     };
     const destinationGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === destinationGodownEntity._hex
+      (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
-    const sourceGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === sourceGodownEntity._hex
-    ) as EntityIndex;
+    const sourceGodownEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
     const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
     const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
     const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
@@ -70,24 +59,15 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
       );
       const address = connectedAddress.get();
       if (ownedBy !== `${address}`) {
-        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-          { x: destPosition.x, y: destPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-          { x: srcPosition.x, y: srcPosition.y },
-          tileWidth,
-          tileHeight
-        );
         setShowAnimation({
           showAnimation: true,
           amount: +kgs,
-          destinationX,
-          destinationY,
-          sourceX,
-          sourceY,
+          destinationX: destPosition.x,
+          destinationY: destPosition.y,
+          sourceX: srcPosition.x,
+          sourceY: srcPosition.y,
           type: "transport",
+          entityID: destinationGodownEntityIndex,
         });
       }
     }
