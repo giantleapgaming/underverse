@@ -8,16 +8,14 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createAsteroids, getPlayerFuel } from "../utils.sol";
-import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createAsteroids, getPlayerFuel } from "../utils.sol";
 import "../libraries/Math.sol";
-//Consider moving sector edge update to Prospect as players will prospect immediately any asteroid that is discovered
-//This code is complex already
-import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 
@@ -29,6 +27,10 @@ contract MoveShipSystem is System {
       arguments,
       (uint256, int32, int32, int32, int32)
     );
+
+    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
     // Check if the ship being moved is owned by the user
     require(
