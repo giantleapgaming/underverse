@@ -43,8 +43,9 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
             once: (gameObject) => {
               gameObject.setTexture(residential.assetKey, `space-station-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(4);
+              gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
             },
           });
           residentialObjectGrayLayer.setComponent({
@@ -56,6 +57,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
               gameObject.setOrigin(0.5, 0.5);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setAngle(0);
             },
           });
         } else {
