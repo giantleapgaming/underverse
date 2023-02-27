@@ -95,7 +95,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {level * 1000}/{Math.floor(+fuel / 10_00_000)}
+                    {Math.floor(+fuel / 10_00_000)}/{level * 1000}
                   </p>
                 </S.Weapon>
               </S.Row>
@@ -186,25 +186,16 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
                             faction: +factionNumber + 1,
                             type: "attack",
+                            entityID: destinationDetails,
                           });
                           setDestinationDetails();
                           setShowLine(false);
@@ -261,13 +252,14 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                               setMoveStation(false);
                               setShowAnimation({
                                 showAnimation: true,
-                                destinationX,
-                                destinationY,
-                                sourceX,
-                                sourceY,
+                                destinationX: moveStationDetails.x,
+                                destinationY: moveStationDetails.y,
+                                sourceX: position.x,
+                                sourceY: position.y,
                                 type: "attack",
                                 frame: `attack-${+factionNumber + 1}-${+level}.png`,
                                 faction: +factionNumber,
+                                entityID: destinationDetails,
                               });
                               setShowLine(false);
                               showProgress();
@@ -330,11 +322,12 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.x,
                             type: "refuel",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Refuel Attack", details: selectedEntity });
