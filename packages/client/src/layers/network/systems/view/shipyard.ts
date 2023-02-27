@@ -38,7 +38,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         const shipyardObjectGrayLayer = objectPool.get(`shipyard-gray-${entity}`, "Sprite");
         const shipyard = config.sprites[Sprites.Asteroid12];
         shipyardObjectTopLayer.setComponent({
-          id: `harvester-top-${entity}`,
+          id: `shipyard-top-${entity}`,
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `shipyard-new-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
@@ -47,7 +47,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           },
         });
         shipyardObjectGrayLayer.setComponent({
-          id: `harvester-gray-${entity}`,
+          id: `shipyard-gray-${entity}`,
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `shipyard-new-2.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
