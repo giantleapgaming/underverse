@@ -46,3 +46,21 @@ export function generateColorsFromWalletAddress(walletAddress: string): number[]
 
   return colors;
 }
+
+export function calculateHealthBar(maxHealth: number, presentHealth: number): [number, number] {
+  const boxes = 20; // the number of boxes in the health bar
+  const ratio = presentHealth / maxHealth; // calculate the health ratio
+  const boxesToDisplay = Math.ceil(ratio * boxes); // calculate the number of boxes to display and round up
+
+  // determine the color based on the health level
+  let color: number;
+  if (ratio >= 0.5) {
+    color = 0x00ff00;
+  } else if (ratio >= 0.25) {
+    color = 0xffff00;
+  } else {
+    color = 0xff0000;
+  }
+
+  return [boxesToDisplay, color];
+}
