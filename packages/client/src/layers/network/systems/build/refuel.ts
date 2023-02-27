@@ -3,9 +3,8 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -56,16 +55,29 @@ export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const sprite = Sprites.BuildRefuel;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+        const refuelObjectTopLayer = objectPool.get(`refuel-top-hover`, "Sprite");
+        const refuelObjectGrayLayer = objectPool.get(`refuel-gray-hover`, "Sprite");
 
-        const hoverStation = objectPool.get("build-refuel-station", "Sprite");
-        hoverStation.setComponent({
-          id: `hoverStation`,
+        refuelObjectTopLayer.setComponent({
+          id: `refuel-top-hover`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
-            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setTexture(HoverSprite.assetKey, `fueler-2.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(4);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.depth = 4;
             gameObject.setAngle(0);
+          },
+        });
+        refuelObjectGrayLayer.setComponent({
+          id: `refuel-gray-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `fueler-1.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+            gameObject.setDepth(3);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+            const color = generateColorsFromWalletAddress(`${address}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
         });
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
@@ -88,11 +100,13 @@ export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
             gameObject.depth = 4;
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
           },
         });
       }
     } else {
-      objectPool.remove("build-refuel-station");
+      objectPool.remove("refuel-gray-hover");
+      objectPool.remove("refuel-top-hover");
       objectPool.remove("build-refuel-station-text-white");
       objectPool.remove("build-refuel-station-text-white-m");
     }
