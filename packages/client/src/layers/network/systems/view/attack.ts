@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
+import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -43,6 +43,44 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           );
           const level = getComponentValueStrict(Level, entity).value;
           const levelSprite = objectPool.get(`attack-level-${entity}`, "Sprite");
+
+          // deleting the old health bar
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`attack-health-${entity}-${i}`);
+            objectPool.remove(`attack-health-${entity}-${i}${i}`);
+          }
+          const [boxes, color] = calculateHealthBar(level * 100, +defence);
+
+          // creating the new health bar
+          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+            const healthSprite = objectPool.get(`attack-health-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `attack-health-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 256);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+          for (let i = 1; i < (boxes >= 11 ? (boxes === 20 ? 11 : boxes % 10) : 0); i++) {
+            const healthSprite = objectPool.get(`attack-health-${entity}-${i}${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `attack-health-${entity}-${i}${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 281);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
           const attackShipObjectTop1Layer = objectPool.get(`attack-top1-${entity}`, "Sprite");
           const attackShipObjectTop2Layer = objectPool.get(`attack-top2-${entity}`, "Sprite");
           const attackShipObjectGrayLayer = objectPool.get(`attack-gray-${entity}`, "Sprite");

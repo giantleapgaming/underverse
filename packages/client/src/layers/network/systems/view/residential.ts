@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
+import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -39,6 +39,44 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           const residentialObjectTopLayer = objectPool.get(`residential-top-${entity}`, "Sprite");
           const residentialObjectGrayLayer = objectPool.get(`residential-gray-${entity}`, "Sprite");
           const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
+
+          // deleting the old health bar
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`residential-health-${entity}-${i}`);
+            objectPool.remove(`residential-health-${entity}-${i}${i}`);
+          }
+          const [boxes, color] = calculateHealthBar(level * 100, +defence);
+
+          // creating the new health bar
+          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+            const healthSprite = objectPool.get(`residential-health-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `residential-health-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 256);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+          for (let i = 1; i < (boxes >= 11 ? (boxes === 20 ? 11 : boxes % 10) : 0); i++) {
+            const healthSprite = objectPool.get(`residential-health-${entity}-${i}${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `residential-health-${entity}-${i}${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 281);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
           const residential = config.sprites[Sprites.Asteroid12];
           residentialObjectTopLayer.setComponent({
             id: `residential-top-${entity}`,
