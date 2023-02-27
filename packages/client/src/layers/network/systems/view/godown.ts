@@ -50,6 +50,7 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
                 gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
                 gameObject.setDepth(6);
                 gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
               },
             });
           } else {
@@ -63,6 +64,7 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
             },
           });
           godownObjectGrayLayer.setComponent({
@@ -72,6 +74,7 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },

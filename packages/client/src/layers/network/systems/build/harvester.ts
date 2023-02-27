@@ -102,7 +102,6 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
     } else {
       objectPool.remove("harvester-gray-hover");
       objectPool.remove("harvester-top-hover");
-
       objectPool.remove("build-harvester-station-text-white");
       objectPool.remove("build-harvester-station-text-white-m");
     }

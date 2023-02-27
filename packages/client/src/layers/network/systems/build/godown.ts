@@ -3,9 +3,8 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -56,16 +55,41 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const sprite = Sprites.BuildCargo;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
-
-        const hoverStation = objectPool.get("build-godown-station", "Sprite");
-        hoverStation.setComponent({
-          id: `hoverStation`,
+        const godownObjectTop1Layer = objectPool.get(`godown-top1-hover`, "Sprite");
+        const godownObjectTop2Layer = objectPool.get(`godown-top2-hover`, "Sprite");
+        const godownObjectGrayLayer = objectPool.get(`godown-gray-hover`, "Sprite");
+        godownObjectTop1Layer.setComponent({
+          id: `godown-top1-hover`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
-            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setTexture(HoverSprite.assetKey, `cargo-1.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(6);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.depth = 4;
+            gameObject.setAlpha(0.1);
+          },
+        });
+        godownObjectTop2Layer.setComponent({
+          id: `godown-top2-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `cargo-3.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(5);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAlpha(0.1);
+          },
+        });
+
+        godownObjectGrayLayer.setComponent({
+          id: `godown-gray-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `cargo-2.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+            gameObject.setDepth(4);
+            gameObject.setAlpha(0.1);
+            gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
+            const color = generateColorsFromWalletAddress(`${address}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
         });
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
@@ -77,6 +101,7 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
             gameObject.depth = 4;
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
           },
         });
         textWhite.setComponent({
@@ -93,6 +118,9 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
       }
     } else {
       objectPool.remove("build-godown-station");
+      objectPool.remove("godown-top1-hover");
+      objectPool.remove("godown-top2-hover");
+      objectPool.remove("godown-gray-hover");
       objectPool.remove("build-godown-station-text-white");
       objectPool.remove("build-godown-station-text-white-m");
     }
