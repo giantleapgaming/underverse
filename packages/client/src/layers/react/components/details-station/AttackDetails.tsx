@@ -73,11 +73,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>ATTACK LVL {+level}</S.Text>
-              <img
-                src={`/build-stations/attack-${factionNumber && +factionNumber}-1.png`}
-                width="100px"
-                height="100px"
-              />
+              <img src={`/build-stations/attack.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>

@@ -61,7 +61,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>REFUEL LVL {+level}</S.Text>
-              <img src={`/build-stations/refuel.png`} width="100px" height="100px" />
+              <img src={`/build-stations/fueler.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>

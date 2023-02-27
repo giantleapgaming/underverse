@@ -66,7 +66,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>SHIPYARD LVL {+level}</S.Text>
-              <img src={`/build-stations/shipyard-${+factionNumber}.png`} width="100px" height="100px" />
+              <img src={`/build-stations/shipyard.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
