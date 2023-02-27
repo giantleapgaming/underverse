@@ -9,7 +9,6 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowAnimation },
-    localApi: { setShowLine },
     scenes: {
       Main: {
         objectPool,
@@ -140,7 +139,6 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`fuelTransport-gray-move-${entity}`);
-              setShowLine(true, destinationX, destinationY, "move");
             },
           });
         },

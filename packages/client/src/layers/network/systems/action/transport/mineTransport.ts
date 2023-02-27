@@ -32,7 +32,6 @@ export function mineTransport(network: NetworkLayer, phaser: PhaserLayer) {
     const destinationY = animation && animation?.destinationY;
     const type = animation && animation?.type;
     const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
-
     if (
       animation &&
       animation.showAnimation &&
@@ -111,7 +110,6 @@ export function mineTransport(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`mineTransport-gray-move-${entity}`);
-              setShowLine(true, destinationX, destinationY, "move");
             },
           });
         },

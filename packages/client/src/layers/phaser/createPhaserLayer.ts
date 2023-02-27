@@ -51,7 +51,6 @@ import { harvestTransport } from "../network/systems/action/harvest-transport";
 import { populationTransport } from "../network/systems/action/population-transport";
 import { godownTransport } from "../network/systems/action/godown-transport";
 import { move } from "../network/systems/action/move";
-import { fuelTransport } from "../network/systems/action/fuel-transport";
 import { highLightUserStations } from "../network/systems/view/highLightUserStations";
 import {
   systemAttack,
@@ -77,6 +76,7 @@ import { moveAttackShip } from "../network/systems/action/move/moveAttackShip";
 import { mineTransport } from "../network/systems/action/transport/mineTransport";
 import { cargoTransport } from "../network/systems/action/transport/cargoTransport";
 import { humanTransport } from "../network/systems/action/transport/humanTransport";
+import { fuelTransport } from "../network/systems/action/transport/fuelTransport";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -366,7 +366,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   populationTransport(network, context);
   godownTransport(network, context);
   move(network, context);
-  fuelTransport(network, context);
   highLightUserStations(network, context);
   highlightObstacles(network, context);
 
