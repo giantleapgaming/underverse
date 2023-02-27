@@ -3,9 +3,8 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -48,22 +47,33 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
 
       const address = connectedAddress.get();
       const userEntityIndex = world.entities.indexOf(address);
-
       const faction = getComponentValue(Faction, userEntityIndex)?.value;
       if (faction) {
         const sprite = Sprites.BuildHarvester;
         const HoverSprite = config.sprites[sprite];
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
-
-        const hoverStation = objectPool.get("build-harvester-station", "Sprite");
-        hoverStation.setComponent({
-          id: `hoverStation`,
+        const harvesterObjectTopLayer = objectPool.get(`harvester-top-hover`, "Sprite");
+        const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-hover`, "Sprite");
+        harvesterObjectTopLayer.setComponent({
+          id: `harvester-top-hover`,
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
-            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setTexture(HoverSprite.assetKey, `harvester-1.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(5);
+            gameObject.setAlpha(0.1);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.depth = 4;
-            gameObject.setAngle(0);
+          },
+        });
+        harvesterObjectGrayLayer.setComponent({
+          id: `harvester-gray-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `harvester-2.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+            gameObject.setDepth(4);
+            gameObject.setAlpha(0.1);
+            gameObject.setOrigin(0.5, 0.5);
+            const color = generateColorsFromWalletAddress(`${address}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
         });
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
@@ -90,7 +100,9 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
         });
       }
     } else {
-      objectPool.remove("build-harvester-station");
+      objectPool.remove("harvester-gray-hover");
+      objectPool.remove("harvester-top-hover");
+
       objectPool.remove("build-harvester-station-text-white");
       objectPool.remove("build-harvester-station-text-white-m");
     }
