@@ -111,6 +111,10 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         objectPool.remove(`shipyard-top-${entity}`);
         objectPool.remove(`shipyard-gray-${entity}`);
         objectPool.remove(`shipyard-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`shipyard-health-${entity}-${i}`);
+          objectPool.remove(`shipyard-cargo-${entity}-${i}`);
+        }
       }
     }
   });
