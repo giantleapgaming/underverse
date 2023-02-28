@@ -18,15 +18,17 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
         },
       },
     },
-    components: { Build },
-    localIds: { buildId },
+    components: { Build, ShowStationDetails },
+    localIds: { buildId, stationDetailsEntityIndex },
   } = phaser;
   const {
     network: { connectedAddress },
-    components: { Faction },
+    components: { Position },
   } = network;
   defineComponentSystem(world, Build, () => {
     const buildDetails = getComponentValue(Build, buildId);
+    const stationDetails = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+
     const canPlace = buildDetails?.canPlace;
     const xCoord = buildDetails?.x;
     const yCoord = buildDetails?.y;
@@ -43,14 +45,28 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       buildDetails.entityType === Mapping.residential.id &&
       distanceFromCenter > 15
     ) {
-      const textWhite = objectPool.get("build-residential-station-text-white", "Text");
+      const selectedStationPosition = getComponentValue(Position, stationDetails);
+      if (selectedStationPosition) {
+        const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
+          { x: selectedStationPosition.x, y: selectedStationPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        const radius = objectPool.get("select-box-radius", "Sprite");
 
-      const address = connectedAddress.get();
-      const userEntityIndex = world.entities.indexOf(address);
+        const textWhite = objectPool.get("build-residential-station-text-white", "Text");
 
-      const faction = getComponentValue(Faction, userEntityIndex)?.value;
-      if (faction) {
+        const address = connectedAddress.get();
         const HoverSprite = config.sprites[Sprites.Build1];
+        radius.setComponent({
+          id: "select-box-radius",
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
+            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileWidth / 2);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+          },
+        });
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         const residentialObjectTopLayer = objectPool.get(`residential-top-hover`, "Sprite");
         const residentialObjectGrayLayer = objectPool.get(`residential-gray-hover`, "Sprite");
@@ -109,6 +125,7 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       objectPool.remove("residential-top-hover");
       objectPool.remove("build-residential-station-text-white");
       objectPool.remove("build-residential-station-text-white-m");
+      objectPool.remove("select-box-radius");
     }
   });
 }
