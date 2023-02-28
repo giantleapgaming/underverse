@@ -36,6 +36,9 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
     const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
+    if (!isBuilding) {
+      objectPool.remove("select-box-radius-godown");
+    }
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -56,13 +59,13 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
           tileHeight
         );
 
-        const radius = objectPool.get("select-box-radius", "Sprite");
+        const radius = objectPool.get("select-box-radius-godown", "Sprite");
         const sprite = Sprites.BuildCargo;
 
         const HoverSprite = config.sprites[sprite];
 
         radius.setComponent({
-          id: "select-box-radius",
+          id: "select-box-radius-godown",
           once: (gameObject) => {
             gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
             gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileHeight / 2);
@@ -140,7 +143,6 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
       objectPool.remove("godown-gray-hover");
       objectPool.remove("build-godown-station-text-white");
       objectPool.remove("build-godown-station-text-white-m");
-      objectPool.remove("select-box-radius");
     }
   });
 }

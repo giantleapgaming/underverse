@@ -35,6 +35,9 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
     const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
+    if (!isBuilding) {
+      objectPool.remove("select-box-radius-residential");
+    }
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -52,14 +55,12 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
           tileWidth,
           tileHeight
         );
-        const radius = objectPool.get("select-box-radius", "Sprite");
-
+        const radius = objectPool.get("select-box-radius-residential", "Sprite");
         const textWhite = objectPool.get("build-residential-station-text-white", "Text");
-
         const address = connectedAddress.get();
         const HoverSprite = config.sprites[Sprites.Build1];
         radius.setComponent({
-          id: "select-box-radius",
+          id: "select-box-radius-residential",
           once: (gameObject) => {
             gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
             gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileWidth / 2);
@@ -125,7 +126,6 @@ export function buildResidentialSystem(network: NetworkLayer, phaser: PhaserLaye
       objectPool.remove("residential-top-hover");
       objectPool.remove("build-residential-station-text-white");
       objectPool.remove("build-residential-station-text-white-m");
-      objectPool.remove("select-box-radius");
     }
   });
 }
