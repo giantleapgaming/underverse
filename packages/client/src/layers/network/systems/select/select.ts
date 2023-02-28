@@ -30,7 +30,6 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
     if (typeof position?.x === "number" && entityId) {
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const selectedBox = objectPool.get("src-select-box", "Sprite");
-      const radius = objectPool.get("src-select-box-radius", "Sprite");
       const select = config.sprites[Sprites.Select];
       selectedBox.setComponent({
         id: "src-select-box",
@@ -41,18 +40,8 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setAngle(0);
         },
       });
-      radius.setComponent({
-        id: "src-select-box-radius",
-        once: (gameObject) => {
-          gameObject.setTexture(select.assetKey, `yellow-circle.png`);
-          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setAngle(0);
-        },
-      });
     } else {
       objectPool.remove("src-select-box");
-      objectPool.remove("src-select-box-radius");
     }
   });
   defineComponentSystem(world, ShowDestinationDetails, () => {
@@ -62,7 +51,6 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const select = config.sprites[Sprites.Select];
       const selectedBox = objectPool.get("destination-select-box", "Sprite");
-      const radius = objectPool.get("destination-select-box-radius", "Sprite");
       selectedBox.setComponent({
         id: "destination-select-box",
         once: (gameObject) => {
@@ -73,18 +61,8 @@ export function selectSystem(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setAngle(0);
         },
       });
-      radius.setComponent({
-        id: "destination-select-box-radius",
-        once: (gameObject) => {
-          gameObject.setTexture(select.assetKey, `yellow-circle.png`);
-          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setAngle(0);
-        },
-      });
     } else {
       objectPool.remove("destination-select-box");
-      objectPool.remove("destination-select-box-radius");
     }
   });
 }
