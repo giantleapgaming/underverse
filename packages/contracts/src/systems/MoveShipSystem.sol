@@ -53,6 +53,11 @@ contract MoveShipSystem is System {
       "Source has to be an Harvester, Attack ship or fuel carrier"
     );
 
+    require(
+      EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0,
+      "Cannot move ship while in an encounter"
+    );
+
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       sourceEntity

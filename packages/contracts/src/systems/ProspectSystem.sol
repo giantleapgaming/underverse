@@ -8,13 +8,13 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-//Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "../components/ProspectedComponent.sol";
 import { getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import { MULTIPLIER } from "../constants.sol";
 import "../libraries/Math.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
 
@@ -23,6 +23,11 @@ contract ProspectSystem is System {
 
   function execute(bytes memory arguments) public returns (bytes memory) {
     (uint256 sourceEntity, uint256 destinationEntity) = abi.decode(arguments, (uint256, uint256));
+
+    require(
+      EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 1,
+      "Ship has to be in an encounter in order to prospect"
+    );
 
     // Check if source and destination are Harvester and Asteroid respectively
 
