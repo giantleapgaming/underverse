@@ -43,11 +43,10 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
 
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
-            objectPool.remove(`harvester-health-${entity}-${i}`);
-            objectPool.remove(`harvester-health-${entity}-${i}${i}`);
+            objectPool.remove(`godown-health-${entity}-${i}`);
+            objectPool.remove(`godown-cargo-${entity}-${i}`);
           }
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
-
           // creating the new health bar
           for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
             const healthSprite = objectPool.get(`godown-health-${entity}-${i}`, "Rectangle");
@@ -63,16 +62,17 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
               },
             });
           }
-          for (let i = 1; i < (boxes >= 11 ? (boxes === 20 ? 11 : boxes % 10) : 0); i++) {
-            const healthSprite = objectPool.get(`godown-health-${entity}-${i}${i}`, "Rectangle");
+          // creating the new Cargo capacity bar
+          for (let i = 1; i < +level + 1; i++) {
+            const healthSprite = objectPool.get(`godown-cargo-${entity}-${i}`, "Rectangle");
             healthSprite.setComponent({
-              id: `godown-health-${entity}-${i}${i}`,
+              id: `godown-cargo-${entity}-${i}`,
               once: (gameObject) => {
-                gameObject.setPosition(x + i * 25, y + 281);
+                gameObject.setPosition(x + i * 30, y + 281);
                 gameObject.setDepth(10);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
-                gameObject.setFillStyle(color, 0.5);
+                gameObject.setFillStyle(balance >= i ? 0x2c8073 : 0xffffff);
                 gameObject.setSize(15, 15);
               },
             });

@@ -32,6 +32,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);
+        const balance = getComponentValueStrict(Balance, entity).value;
         const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const shipyardObjectTopLayer = objectPool.get(`shipyard-top-${entity}`, "Sprite");
@@ -40,7 +41,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         // deleting the old health bar
         for (let i = 1; i < 11; i++) {
           objectPool.remove(`shipyard-health-${entity}-${i}`);
-          objectPool.remove(`shipyard-health-${entity}-${i}${i}`);
+          objectPool.remove(`shipyard-cargo-${entity}-${i}`);
         }
         const [boxes, color] = calculateHealthBar(level * 100, +defence);
 
@@ -59,16 +60,17 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
             },
           });
         }
-        for (let i = 1; i < (boxes >= 11 ? (boxes === 20 ? 11 : boxes % 10) : 0); i++) {
-          const healthSprite = objectPool.get(`shipyard-health-${entity}-${i}${i}`, "Rectangle");
+        // creating the new Cargo capacity bar
+        for (let i = 1; i < +level + 1; i++) {
+          const healthSprite = objectPool.get(`shipyard-cargo-${entity}-${i}`, "Rectangle");
           healthSprite.setComponent({
-            id: `shipyard-health-${entity}-${i}${i}`,
+            id: `shipyard-cargo-${entity}-${i}`,
             once: (gameObject) => {
-              gameObject.setPosition(x + i * 25, y + 281);
+              gameObject.setPosition(x + i * 30, y + 281);
               gameObject.setDepth(10);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);
-              gameObject.setFillStyle(color, 0.5);
+              gameObject.setFillStyle(balance >= i ? 0x2c8073 : 0xffffff);
               gameObject.setSize(15, 15);
             },
           });

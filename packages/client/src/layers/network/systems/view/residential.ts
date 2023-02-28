@@ -43,7 +43,6 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
             objectPool.remove(`residential-health-${entity}-${i}`);
-            objectPool.remove(`residential-health-${entity}-${i}${i}`);
           }
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
 
@@ -54,20 +53,6 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
               id: `residential-health-${entity}-${i}`,
               once: (gameObject) => {
                 gameObject.setPosition(x + i * 25, y + 256);
-                gameObject.setDepth(10);
-                gameObject.setOrigin(0.5, 0.5);
-                gameObject.setAngle(0);
-                gameObject.setFillStyle(color, 0.5);
-                gameObject.setSize(15, 15);
-              },
-            });
-          }
-          for (let i = 1; i < (boxes >= 11 ? (boxes === 20 ? 11 : boxes % 10) : 0); i++) {
-            const healthSprite = objectPool.get(`residential-health-${entity}-${i}${i}`, "Rectangle");
-            healthSprite.setComponent({
-              id: `residential-health-${entity}-${i}${i}`,
-              once: (gameObject) => {
-                gameObject.setPosition(x + i * 25, y + 281);
                 gameObject.setDepth(10);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);

@@ -70,6 +70,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               },
             });
           }
+          // creating the new Cargo capacity bar
           for (let i = 1; i < +level + 1; i++) {
             const healthSprite = objectPool.get(`harvester-cargo-${entity}-${i}`, "Rectangle");
             healthSprite.setComponent({
