@@ -18,23 +18,27 @@ export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Build },
-    localIds: { buildId },
+    components: { Build, ShowStationDetails },
+    localIds: { buildId, stationDetailsEntityIndex },
   } = phaser;
 
   const {
     network: { connectedAddress },
-    components: { Faction },
+    components: { Position },
   } = network;
 
   defineComponentSystem(world, Build, () => {
     const buildDetails = getComponentValue(Build, buildId);
+    const stationDetails = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     const canPlace = buildDetails?.canPlace;
     const xCoord = buildDetails?.x;
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
     const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
+    if (!isBuilding) {
+      objectPool.remove("select-box-radius-refuel");
+    }
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -45,15 +49,26 @@ export function buildRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
       buildDetails.entityType === Mapping.refuel.id &&
       distanceFromCenter > 15
     ) {
-      const textWhite = objectPool.get("build-refuel-station-text-white", "Text");
-
-      const address = connectedAddress.get();
-      const userEntityIndex = world.entities.indexOf(address);
-
-      const faction = getComponentValue(Faction, userEntityIndex)?.value;
-      if (faction) {
-        const sprite = Sprites.BuildRefuel;
-        const HoverSprite = config.sprites[sprite];
+      const selectedStationPosition = getComponentValue(Position, stationDetails);
+      if (selectedStationPosition) {
+        const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
+          { x: selectedStationPosition.x, y: selectedStationPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        const radius = objectPool.get("select-box-radius-refuel", "Sprite");
+        const textWhite = objectPool.get("build-refuel-station-text-white", "Text");
+        const address = connectedAddress.get();
+        const HoverSprite = config.sprites[Sprites.Build1];
+        radius.setComponent({
+          id: "select-box-radius-refuel",
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
+            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileWidth / 2);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+          },
+        });
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         const refuelObjectTopLayer = objectPool.get(`refuel-top-hover`, "Sprite");
         const refuelObjectGrayLayer = objectPool.get(`refuel-gray-hover`, "Sprite");

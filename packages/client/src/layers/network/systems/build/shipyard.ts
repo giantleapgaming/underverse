@@ -36,6 +36,9 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
     const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
+    if (!isBuilding) {
+      objectPool.remove("select-box-radius-shipyard");
+    }
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -46,7 +49,6 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
       buildDetails.entityType === Mapping.shipyard.id &&
       distanceFromCenter > 15
     ) {
-      const textWhite = objectPool.get("build-shipyard-station-text-white", "Text");
       const selectedStationPosition = getComponentValue(Position, stationDetails);
       if (selectedStationPosition) {
         const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
@@ -54,16 +56,15 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
           tileWidth,
           tileHeight
         );
+        const radius = objectPool.get("select-box-radius-shipyard", "Sprite");
+        const textWhite = objectPool.get("build-shipyard-station-text-white", "Text");
         const address = connectedAddress.get();
-        const radius = objectPool.get("select-box-radius", "Sprite");
-
-        const sprite = Sprites.Shipyard1;
-        const HoverSprite = config.sprites[sprite];
+        const HoverSprite = config.sprites[Sprites.Build1];
         radius.setComponent({
-          id: "select-box-radius",
+          id: "select-box-radius-shipyard",
           once: (gameObject) => {
             gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
-            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileHeight / 2);
+            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
           },
@@ -123,7 +124,6 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
       objectPool.remove("shipyard-top-hover");
       objectPool.remove("build-shipyard-station-text-white");
       objectPool.remove("build-shipyard-station-text-white-m");
-      objectPool.remove("select-box-radius");
     }
   });
 }
