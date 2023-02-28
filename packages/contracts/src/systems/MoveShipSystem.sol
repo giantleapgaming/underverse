@@ -13,6 +13,7 @@ import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponen
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createAsteroids, getPlayerFuel } from "../utils.sol";
 import "../libraries/Math.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
@@ -96,7 +97,8 @@ contract MoveShipSystem is System {
       (distFromCenterSq > 225) &&
       (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
     ) {
-      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+      //createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+      EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, 1);
     }
 
     // update player data

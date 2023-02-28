@@ -19,6 +19,7 @@ import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMul
 import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, baseInitialfuel, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -87,6 +88,7 @@ contract BuildSystem is System {
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
     FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, initialFuel);
+    EncounterComponent(getAddressById(components, EncounterComponentID)).set(godownEntity, 0);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(

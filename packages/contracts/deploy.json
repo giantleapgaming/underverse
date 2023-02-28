@@ -18,7 +18,8 @@
     "SectorEdgeComponent",
     "ProspectedComponent",
     "PrevPositionComponent",
-    "NFTIDComponent"
+    "NFTIDComponent",
+    "EncounterComponent"
   ],
   "systems": [
     {
@@ -63,7 +64,8 @@
         "EntityTypeComponent",
         "FuelComponent",
         "PopulationComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {
@@ -182,7 +184,8 @@
         "BalanceComponent",
         "FuelComponent",
         "ProspectedComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {
