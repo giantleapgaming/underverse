@@ -34,6 +34,7 @@ uint256 constant shipyardType = 7;
 uint256 constant personType = 8;
 uint256 constant fuelCarrier = 9;
 uint256 constant barrier = 10;
+uint256 constant pirateShip = 11;
 
 struct Coordd {
   int32 x;
