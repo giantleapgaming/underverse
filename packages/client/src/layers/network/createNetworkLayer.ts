@@ -20,6 +20,7 @@ import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
 import { BigNumber } from "ethers";
+import { Mapping } from "../../utils/mapping";
 /**
  * The Network layer is the lowest layer in the client architecture.
  * Its purpose is to synchronize the client components with the contract components.
@@ -324,8 +325,22 @@ export async function createNetworkLayer(config: GameConfig) {
     });
     return (
       entitiesAtPosition?.find((b) => {
-        const item = getComponentValue(components.Position, b);
-        return item;
+        const entityType = getComponentValue(components.EntityType, b)?.value;
+        if (
+          entityType &&
+          (+entityType === Mapping.attack.id ||
+            +entityType === Mapping.godown.id ||
+            +entityType === Mapping.harvester.id ||
+            +entityType === Mapping.refuel.id ||
+            +entityType === Mapping.residential.id ||
+            +entityType === Mapping.shipyard.id)
+        ) {
+          const defence = getComponentValue(components.Defence, b)?.value;
+          return defence && +defence;
+        } else {
+          const item = getComponentValue(components.Position, b);
+          return item;
+        }
       }) ?? entitiesAtPosition[0]
     );
   }
