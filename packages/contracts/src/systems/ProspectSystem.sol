@@ -12,7 +12,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "../components/ProspectedComponent.sol";
 import { getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { MULTIPLIER } from "../constants.sol";
+import { MULTIPLIER, asteroidType, pirateShip } from "../constants.sol";
 import "../libraries/Math.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
@@ -29,16 +29,11 @@ contract ProspectSystem is System {
       "Ship has to be in an encounter in order to prospect"
     );
 
-    // Check if source and destination are Harvester and Asteroid respectively
+    // Check if source is Harvester
 
     require(
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 5,
       "Source has to be an Harvester"
-    );
-
-    require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 2,
-      "Destination has to be an Asteroid"
     );
 
     require(
@@ -72,17 +67,24 @@ contract ProspectSystem is System {
     //Check to see if Harvester is close enough to Asteroid (<5 units)
     require(distanceBetweens <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
-      uint256(Math.abs(destinationPosition.x));
+    if ((uint256(keccak256(abi.encodePacked(block.timestamp, block.number))) % 2) == 0) {
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
 
-    uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
-      uint256(Math.abs(destinationPosition.y))) *
-      MULTIPLIER *
-      10;
+      uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
+        uint256(Math.abs(destinationPosition.x));
 
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, asteroidBalance);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
-    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+      uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
+        uint256(Math.abs(destinationPosition.y))) *
+        MULTIPLIER *
+        10;
+
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, asteroidBalance);
+      FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+    } else {
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+    }
   }
 
   function executeTyped(uint256 sourceEntity, uint256 destinationEntity) public returns (bytes memory) {
