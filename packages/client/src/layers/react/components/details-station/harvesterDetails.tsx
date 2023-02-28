@@ -220,7 +220,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             destinationY: destinationPosition.y,
                             sourceX: position.x,
                             sourceY: position.y,
-                            type: "refuel",
+                            type: "fuelTransport",
                             entityID: destinationDetails,
                           });
                         } catch (e) {

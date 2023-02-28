@@ -120,8 +120,8 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             },
           });
         } else {
-          objectPool.remove(`harvester-${entity}`);
-          objectPool.remove(`harvester-faction-${entity}`);
+          objectPool.remove(`harvester-top-${entity}`);
+          objectPool.remove(`harvester-gray-${entity}`);
           objectPool.remove(`harvester-level-${entity}`);
           for (let i = 1; i < 11; i++) {
             objectPool.remove(`harvester-health-${entity}-${i}`);

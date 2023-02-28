@@ -97,6 +97,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           });
         } else {
           objectPool.remove(`residential-top-${entity}`);
+          objectPool.remove(`residential-gray-${entity}`);
           objectPool.remove(`residential-${entity}`);
           objectPool.remove(`residential-level-${entity}`);
         }
