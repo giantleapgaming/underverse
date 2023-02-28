@@ -88,7 +88,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
-      if (lineDetails.type === "prospect" || lineDetails.type === "refuel") {
+      if (lineDetails.type === "refuel") {
         const textWhite = objectPool.get("prospect-text-white", "Text");
         const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
         circle.setPosition(sourceXX + 32, sourceYY + 32);
