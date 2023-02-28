@@ -18,17 +18,18 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
-    components: { Build },
-    localIds: { buildId },
+    components: { Build, ShowStationDetails },
+    localIds: { buildId, stationDetailsEntityIndex },
   } = phaser;
 
   const {
     network: { connectedAddress },
-    components: { Faction },
+    components: { Position },
   } = network;
 
   defineComponentSystem(world, Build, () => {
     const buildDetails = getComponentValue(Build, buildId);
+    const stationDetails = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     const canPlace = buildDetails?.canPlace;
     const xCoord = buildDetails?.x;
     const yCoord = buildDetails?.y;
@@ -46,14 +47,30 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
       distanceFromCenter > 15
     ) {
       const textWhite = objectPool.get("build-godown-station-text-white", "Text");
+      const selectedStationPosition = getComponentValue(Position, stationDetails);
+      console.log(selectedStationPosition);
+      if (selectedStationPosition) {
+        const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
+          { x: selectedStationPosition.x, y: selectedStationPosition.y },
+          tileWidth,
+          tileHeight
+        );
 
-      const address = connectedAddress.get();
-      const userEntityIndex = world.entities.indexOf(address);
-
-      const faction = getComponentValue(Faction, userEntityIndex)?.value;
-      if (faction) {
+        const radius = objectPool.get("select-box-radius", "Sprite");
         const sprite = Sprites.BuildCargo;
+
         const HoverSprite = config.sprites[sprite];
+
+        radius.setComponent({
+          id: "select-box-radius",
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
+            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileHeight / 2);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+          },
+        });
+        const address = connectedAddress.get();
         const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
         const godownObjectTop1Layer = objectPool.get(`godown-top1-hover`, "Sprite");
         const godownObjectTop2Layer = objectPool.get(`godown-top2-hover`, "Sprite");
@@ -123,6 +140,7 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
       objectPool.remove("godown-gray-hover");
       objectPool.remove("build-godown-station-text-white");
       objectPool.remove("build-godown-station-text-white-m");
+      objectPool.remove("select-box-radius");
     }
   });
 }
