@@ -17,6 +17,7 @@ import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Attack"));
 
@@ -47,6 +48,12 @@ contract AttackSystem is System {
     );
 
     require(sourceEntityOffenceAmount >= amount, "Not enough torpedos in ");
+
+    require(
+      ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0) &&
+        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) == 0)),
+      "Neither source nor destination can be in an encounter"
+    );
 
     // Take current position
     Coord memory sourcePosition = getCurrentPosition(
