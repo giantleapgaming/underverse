@@ -79,22 +79,18 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
           }
 
           const godown = config.sprites[Sprites.Asteroid12];
-          if (+balance) {
-            const godownObjectTop1Layer = objectPool.get(`godown-top1-${entity}`, "Sprite");
-            godownObjectTop1Layer.setComponent({
-              id: `godown-top1-${entity}`,
-              once: (gameObject) => {
-                gameObject.setTexture(godown.assetKey, `cargo-1.png`);
-                gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-                gameObject.setDepth(6);
-                gameObject.setOrigin(0.5, 0.5);
-                gameObject.setAngle(0);
-              },
-            });
-          } else {
-            objectPool.remove(`godown-top1-${entity}`);
-          }
 
+          const godownObjectTop1Layer = objectPool.get(`godown-top1-${entity}`, "Sprite");
+          godownObjectTop1Layer.setComponent({
+            id: `godown-top1-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(godown.assetKey, `cargo-1.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+              gameObject.setDepth(6);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
           godownObjectTop2Layer.setComponent({
             id: `godown-top2-${entity}`,
             once: (gameObject) => {

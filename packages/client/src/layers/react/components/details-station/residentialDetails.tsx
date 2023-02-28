@@ -1,4 +1,3 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
@@ -19,13 +18,6 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
       localApi: { setShowLine, showProgress, setDestinationDetails, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       world,
@@ -127,7 +119,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, level, defence, population, factionNumber)}
+                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +population, factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("scrap");
@@ -172,24 +164,15 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "refuel",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "fuelTransport",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
