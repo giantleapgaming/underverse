@@ -33,8 +33,8 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         once: (gameObject) => {
           const planet = config.sprites[Sprites.Earth];
           gameObject.setTexture(planet.assetKey, planet.frame);
-          gameObject.setPosition(x + 32, y + 32);
-          gameObject.depth = 2;
+          gameObject.setPosition(x + tileHeight / 2, y + tileHeight / 2);
+          gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
           phaserScene.add.tween({
             targets: gameObject,
