@@ -15,6 +15,8 @@ import { getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMu
 import { MULTIPLIER, asteroidType, pirateShip } from "../constants.sol";
 import "../libraries/Math.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
 
@@ -67,23 +69,33 @@ contract ProspectSystem is System {
     //Check to see if Harvester is close enough to Asteroid (<5 units)
     require(distanceBetweens <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    if ((uint256(keccak256(abi.encodePacked(block.timestamp, block.number))) % 2) == 0) {
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
+    uint256 balance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
+      uint256(Math.abs(destinationPosition.x));
 
-      uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
-        uint256(Math.abs(destinationPosition.x));
+    //We randomly generate either an asteroid or pirate ship
+
+    if ((balance % 2) == 0) {
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
 
       uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
         uint256(Math.abs(destinationPosition.y))) *
         MULTIPLIER *
         10;
 
-      BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, asteroidBalance);
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance);
       FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
     } else {
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
+      //We set the prospected status to 1 in both cases as we dont want the prospect system to be called again
+      //We set defence and offence randomly and set the pirate ship to also be in an encounter
+      //so that it is not attacked by others outside the encounter
+      //We randomly set defence to balance (which itself is randomly generated) * 2
+      //We randomly set the number of missiles the pirate ship has to between 0 to 9
+      EncounterComponent(getAddressById(components, EncounterComponentID)).set(destinationEntity, 1);
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, balance * 2);
+      OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationEntity, balance % 10);
     }
   }
 

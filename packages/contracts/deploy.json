@@ -195,7 +195,10 @@
         "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent",
-        "ProspectedComponent"
+        "ProspectedComponent",
+        "DefenceComponent",
+        "EncounterComponent",
+        "OffenceComponent"
       ]
     },
     {
