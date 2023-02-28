@@ -419,3 +419,10 @@ function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
     return false;
   }
 }
+
+function createEntity(IWorld world, IUint256Component components, int32 x, int32 y) {
+  uint256 ent = world.getUniqueEntityId();
+  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+  ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
+}
