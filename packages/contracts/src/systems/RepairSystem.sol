@@ -5,16 +5,16 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getCargoSellingPrice, deleteGodown, getFactionRepairCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getFactionRepairCosts } from "../utils.sol";
 import "../libraries/Math.sol";
+import { Faction } from "../constants.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Repair"));
 
@@ -24,9 +24,6 @@ contract RepairSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     uint256 godownEntity = abi.decode(arguments, (uint256));
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) ==
         addressToEntity(msg.sender),
@@ -35,6 +32,11 @@ contract RepairSystem is System {
 
     uint256 selectedEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
     require(selectedEntityLevel >= 1, "Invalid godown entity");
+
+    require(
+      ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(godownEntity) == 0)),
+      "Entity cannot be repaired while in an encounter"
+    );
 
     Coord memory godownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
@@ -78,12 +80,6 @@ contract RepairSystem is System {
 
     // Updating defence value
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, selectedEntityLevel * 100);
-
-    //Updating timestamp
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
   function executeTyped(uint256 entity) public returns (bytes memory) {
