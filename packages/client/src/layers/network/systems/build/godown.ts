@@ -51,7 +51,6 @@ export function buildGodownSystem(network: NetworkLayer, phaser: PhaserLayer) {
     ) {
       const textWhite = objectPool.get("build-godown-station-text-white", "Text");
       const selectedStationPosition = getComponentValue(Position, stationDetails);
-      console.log(selectedStationPosition);
       if (selectedStationPosition) {
         const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
           { x: selectedStationPosition.x, y: selectedStationPosition.y },
