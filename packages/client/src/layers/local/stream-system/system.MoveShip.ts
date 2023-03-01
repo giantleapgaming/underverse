@@ -57,6 +57,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
           type:
             (+entityType === Mapping.harvester.id && "moveHarvester") ||
             (+entityType === Mapping.attack.id && "moveAttackShip") ||
+            (+entityType === Mapping.refuel.id && "moveRefueller") ||
             "move",
           entityID: sourceEntityIndex,
         });

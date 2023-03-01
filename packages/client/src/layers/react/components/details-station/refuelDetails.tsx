@@ -31,7 +31,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Fuel, Level, Defence },
+      components: { EntityType, OwnedBy, Faction, Position, Fuel, Level, Defence, Balance },
       api: { upgradeSystem, repairSystem, scrapeSystem, moveSystem, refuelSystem },
       network: { connectedAddress },
     },
@@ -46,6 +46,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
     const position = getComponentValueStrict(Position, selectedEntity);
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const level = getComponentValueStrict(Level, selectedEntity).value;
+    const balance = getComponentValueStrict(Balance, selectedEntity).value;
     const defence = getComponentValueStrict(Defence, selectedEntity).value;
     const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
@@ -83,7 +84,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {Math.floor(+fuel / 10_00_000)}/{+level * 5000}
+                    {Math.floor(+fuel / 10_00_000)}/{+level * 1000}
                   </p>
                 </S.Weapon>
               </S.Row>
@@ -101,7 +102,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                           showProgress();
                         } catch (e) {
                           setAction("");
-                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Upgrade Harvester", details: selectedEntity });
                         }
                       }}
                       faction={+factionNumber}
@@ -127,7 +128,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
-                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +fuel, +factionNumber)}
+                      scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
                         try {
                           setAction("");
@@ -142,71 +143,6 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "move" &&
-                    moveStationDetails &&
-                    moveStationDetails.selected &&
-                    typeof moveStationDetails.x === "number" &&
-                    typeof moveStationDetails.y === "number" && (
-                      <Move
-                        cost={Math.pow(
-                          distance(moveStationDetails.x, moveStationDetails.y, position.x, position.y) * +level,
-                          2
-                        )}
-                        moveSystem={async () => {
-                          if (
-                            moveStationDetails.selected &&
-                            typeof moveStationDetails?.x === "number" &&
-                            typeof moveStationDetails?.y === "number"
-                          ) {
-                            try {
-                              setAction("");
-                              sounds["confirm"].play();
-                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                                { x: moveStationDetails.x, y: moveStationDetails.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                                { x: position.x, y: position.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              await moveSystem({
-                                entityType: world.entities[selectedEntity],
-                                x: moveStationDetails.x,
-                                y: moveStationDetails.y,
-                                srcX: position.x,
-                                srcY: position.y,
-                              });
-                              setMoveStation(false);
-                              setShowAnimation({
-                                showAnimation: true,
-                                destinationX,
-                                destinationY,
-                                sourceX,
-                                sourceY,
-                                type: "move",
-                                frame: `refuel-${+level}.png`,
-                                faction: +factionNumber,
-                              });
-                              setShowLine(false);
-                              showProgress();
-                            } catch (e) {
-                              setAction("");
-                              console.log({
-                                error: e,
-                                system: "Scrap Attack",
-                                details: {
-                                  entityType: world.entities[selectedEntity],
-                                  x: moveStationDetails.x,
-                                  y: moveStationDetails.y,
-                                },
-                              });
-                            }
-                          }
-                        }}
-                      />
-                    )}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -237,27 +173,18 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "refuel",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "fuelTransport",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
-                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Fuel Transport", details: selectedEntity });
                         }
                       }}
                       playSound={() => {
@@ -278,7 +205,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                       onClick={() => {
                         setAction("move");
                         const { x, y } = position;
-                        setShowLine(true, x, y, "move");
+                        setShowLine(true, x, y, "move", 1);
                         sounds["click"].play();
                       }}
                       title="Move"

@@ -192,6 +192,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           entityType &&
           (+entityType === Mapping.harvester.id ||
             +entityType === Mapping.attack.id ||
+            +entityType === Mapping.refuel.id ||
             +entityType === Mapping.shipyard.id)
         ) {
           const level = getComponentValueStrict(Level, selectedEntity).value;
@@ -220,6 +221,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               type:
                 (+entityType === Mapping.harvester.id && "moveHarvester") ||
                 (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                (+entityType === Mapping.refuel.id && "moveRefueller") ||
                 "move",
               frame: frame,
               faction: +factionNumber,
