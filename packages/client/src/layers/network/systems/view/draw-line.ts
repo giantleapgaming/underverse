@@ -227,8 +227,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               entityType: world.entities[selectedEntity],
               x,
               y,
-              srcX: sourcePosition.x,
-              srcY: sourcePosition.y,
             });
             objectPool.remove(`fuel-text-white`);
             objectPool.remove(`prospect-text-white`);

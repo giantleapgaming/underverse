@@ -232,22 +232,10 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                             try {
                               setAction("");
                               sounds["confirm"].play();
-                              const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                                { x: moveStationDetails.x, y: moveStationDetails.y },
-                                tileWidth,
-                                tileHeight
-                              );
-                              const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                                { x: position.x, y: position.y },
-                                tileWidth,
-                                tileHeight
-                              );
                               await moveSystem({
                                 entityType: world.entities[selectedEntity],
                                 x: moveStationDetails.x,
                                 y: moveStationDetails.y,
-                                srcX: position.x,
-                                srcY: position.y,
                               });
                               setMoveStation(false);
                               setShowAnimation({
