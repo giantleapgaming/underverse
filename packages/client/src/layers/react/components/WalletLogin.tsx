@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Wallet } from "ethers";
-import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
 const WalletLogin = () => {
   const [input, setInput] = useState("");
@@ -107,21 +106,19 @@ const WalletLogin = () => {
                                 "Content-Type": "application/json",
                               },
                             });
-                            const data = await response.json();
-                            // if (data.status) {
-                              sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                              setOutput(
-                                `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
-                              );
-                              if (!allKeys.includes(wallet.privateKey)) {
-                                const newList = [...allKeys, wallet.privateKey];
-                                localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                              }
-                              setPlayGame(true);
-                              setTimeout(() => {
-                                buttonRef.current?.focus();
-                              });
-                            // }
+                            await response.json();
+                            sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                            setOutput(
+                              `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
+                            );
+                            if (!allKeys.includes(wallet.privateKey)) {
+                              const newList = [...allKeys, wallet.privateKey];
+                              localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                            }
+                            setPlayGame(true);
+                            setTimeout(() => {
+                              buttonRef.current?.focus();
+                            });
                           } catch (e) {
                             console.log(e);
                             setError("unexpected error");
@@ -234,14 +231,6 @@ const SkyBlueLines = styled.div`
   background-position: center center;
   pointer-events: all;
   overflow: hidden;
-`;
-const hue = keyframes`
- from {
-   -webkit-filter: hue-rotate(0deg);
- }
- to {
-   -webkit-filter: hue-rotate(-360deg);
- }
 `;
 
 const Title = styled.div`
