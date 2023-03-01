@@ -184,7 +184,8 @@ export async function createNetworkLayer(config: GameConfig) {
     setFalse: () => void
   ) => {
     try {
-      await systems["system.Init"].executeTyped(name, faction, 1);
+      console.log("create init", name, faction, nftID);
+      await systems["system.Init"].executeTyped(name, faction, nftID);
       setTrue();
     } catch (e) {
       console.log(e);
@@ -194,7 +195,6 @@ export async function createNetworkLayer(config: GameConfig) {
 
   async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType);
-    // return 1;
   }
 
   async function moveSystem({
