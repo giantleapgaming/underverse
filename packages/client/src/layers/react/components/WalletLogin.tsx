@@ -100,7 +100,7 @@ const WalletLogin = () => {
                           try {
                             setLoading(true);
                             setOutput(`${output} \n $ Creating new wallet please wait  \n  Loading... \n`);
-                            const response = await fetch("https://api.paperdao.money/api/drip", {
+                            const response = await fetch("https://api.giantleap.gg/api/drip", {
                               method: "POST",
                               body: JSON.stringify({ address: wallet.address }),
                               headers: {
@@ -108,7 +108,7 @@ const WalletLogin = () => {
                               },
                             });
                             const data = await response.json();
-                            if (data.status) {
+                            // if (data.status) {
                               sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
                               setOutput(
                                 `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
@@ -121,7 +121,7 @@ const WalletLogin = () => {
                               setTimeout(() => {
                                 buttonRef.current?.focus();
                               });
-                            }
+                            // }
                           } catch (e) {
                             console.log(e);
                             setError("unexpected error");
