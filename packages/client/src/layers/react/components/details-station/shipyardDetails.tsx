@@ -1,6 +1,5 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -24,13 +23,6 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
       localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       world,
@@ -131,24 +123,15 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "transport",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "mineTransport",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
@@ -199,7 +182,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
 
                   {/*  */}
                   {/*  */}
-                  {action === "prospect" && destinationDetails && isDestinationSelected && (
+                  {/* {action === "prospect" && destinationDetails && isDestinationSelected && (
                     <Prospect
                       space={
                         (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
@@ -223,7 +206,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       }}
                       distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
                     />
-                  )}
+                  )} */}
                   {action === "build" && <BuildFromShipyardLayout layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
@@ -255,24 +238,15 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                             world.entities[destinationDetails],
                             weapons
                           );
-                          const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-                            { x: destinationPosition.x, y: destinationPosition.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
                           setShowAnimation({
                             showAnimation: true,
                             amount: weapons,
-                            destinationX,
-                            destinationY,
-                            sourceX,
-                            sourceY,
-                            type: "refuel",
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "fuelTransport",
+                            entityID: destinationDetails,
                           });
                         } catch (e) {
                           console.log({ error: e, system: "Fire Attack", details: selectedEntity });
@@ -362,7 +336,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {ownedBy === connectedAddress.get() && !destinationDetails && !isDestinationSelected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <SelectButton
+              {/* <SelectButton
                 isActive={action === "prospect"}
                 name="PROSPECT"
                 onClick={() => {
@@ -370,7 +344,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                   setShowLine(true, position.x, position.y, "prospect");
                   sounds["click"].play();
                 }}
-              />
+              /> */}
               <SelectButton
                 isActive={action === "build"}
                 name="BUILD"

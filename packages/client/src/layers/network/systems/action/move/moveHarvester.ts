@@ -61,7 +61,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
       const sourceCircle = phaserScene.add.graphics();
       sourceCircle.fillStyle(0x000000, 1);
       sourceCircle.setDepth(150);
-      sourceCircle.fillCircle(sourcePixelX + tileWidth / 2, sourcePixelX + tileHeight / 2, 200);
+      sourceCircle.fillCircle(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2, 200);
       destinationCircle.fillStyle(0x000000, 1);
       destinationCircle.fillCircle(destinationPixelX + tileWidth / 2, destinationPixelY + tileHeight / 2, 200);
       destinationCircle.setDepth(150);

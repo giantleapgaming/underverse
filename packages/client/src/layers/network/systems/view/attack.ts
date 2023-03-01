@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
+import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -41,6 +41,31 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             tileWidth,
             tileHeight
           );
+          const level = getComponentValueStrict(Level, entity).value;
+          const levelSprite = objectPool.get(`attack-level-${entity}`, "Sprite");
+
+          // deleting the old health bar
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`attack-health-${entity}-${i}`);
+          }
+          const [boxes, color] = calculateHealthBar(level * 100, +defence);
+
+          // creating the new health bar
+          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+            const healthSprite = objectPool.get(`attack-health-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `attack-health-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 256);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
           const attackShipObjectTop1Layer = objectPool.get(`attack-top1-${entity}`, "Sprite");
           const attackShipObjectTop2Layer = objectPool.get(`attack-top2-${entity}`, "Sprite");
           const attackShipObjectGrayLayer = objectPool.get(`attack-gray-${entity}`, "Sprite");
@@ -78,10 +103,21 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
+          levelSprite.setComponent({
+            id: `attack-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(attackShip.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`attack-top1-${entity}`);
           objectPool.remove(`attack-top2-${entity}`);
           objectPool.remove(`attack-gray-${entity}`);
+          objectPool.remove(`attack-level-${entity}`);
         }
       }
     }

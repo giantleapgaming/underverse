@@ -1,4 +1,3 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
@@ -16,25 +15,16 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
-    scenes: {
-      Main: {
-        maps: {
-          Main: { tileWidth, tileHeight },
-        },
-      },
-    },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Attack"], ({ args }) => {
-    const { destinationGodownEntity, sourceGodownEntity, amount } = args as {
-      destinationGodownEntity: BigNumber;
-      sourceGodownEntity: BigNumber;
+    const { destinationEntity, sourceEntity, amount } = args as {
+      destinationEntity: BigNumber;
+      sourceEntity: BigNumber;
       amount: BigNumber;
     };
-    const sourceGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === sourceGodownEntity._hex
-    ) as EntityIndex;
+    const sourceGodownEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
     const destinationGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === destinationGodownEntity._hex
+      (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
     const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
     const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
@@ -83,25 +73,16 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       );
       const address = connectedAddress.get();
       if (address !== srcOwnedBy) {
-        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-          { x: destPosition.x, y: destPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-          { x: srcPosition.x, y: srcPosition.y },
-          tileWidth,
-          tileHeight
-        );
         setShowAnimation({
           showAnimation: true,
           amount: +amount,
-          destinationX,
-          destinationY,
-          sourceX,
-          sourceY,
+          destinationX: destPosition.y,
+          destinationY: destPosition.y,
+          sourceX: srcPosition.x,
+          sourceY: srcPosition.y,
           faction: +factionSrcValue,
-          type: "attack",
+          type: "attackMissile",
+          entityID: sourceGodownEntityIndex,
         });
       }
     }

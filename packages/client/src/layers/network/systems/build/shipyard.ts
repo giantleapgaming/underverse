@@ -3,9 +3,8 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
-import { convertPrice } from "../../../react/utils/priceConverter";
 import { Mapping } from "../../../../utils/mapping";
-import { factionData } from "../../../../utils/constants";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -19,23 +18,27 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
-    components: { Build },
-    localIds: { buildId },
+    components: { Build, ShowStationDetails },
+    localIds: { buildId, stationDetailsEntityIndex },
   } = phaser;
 
   const {
     network: { connectedAddress },
-    components: { Faction },
+    components: { Position },
   } = network;
 
   defineComponentSystem(world, Build, () => {
     const buildDetails = getComponentValue(Build, buildId);
+    const stationDetails = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     const canPlace = buildDetails?.canPlace;
     const xCoord = buildDetails?.x;
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
     const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
+    if (!isBuilding) {
+      objectPool.remove("select-box-radius-shipyard");
+    }
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -46,26 +49,49 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
       buildDetails.entityType === Mapping.shipyard.id &&
       distanceFromCenter > 15
     ) {
-      const textWhite = objectPool.get("build-shipyard-station-text-white", "Text");
-
-      const address = connectedAddress.get();
-      const userEntityIndex = world.entities.indexOf(address);
-
-      const faction = getComponentValue(Faction, userEntityIndex)?.value;
-      if (faction) {
-        const sprite = Sprites.Shipyard1;
-        const HoverSprite = config.sprites[sprite];
-        const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
-
-        const hoverStation = objectPool.get("build-shipyard-station", "Sprite");
-        hoverStation.setComponent({
-          id: `hoverStation`,
+      const selectedStationPosition = getComponentValue(Position, stationDetails);
+      if (selectedStationPosition) {
+        const { x: selectedPositionX, y: selectedPositionY } = tileCoordToPixelCoord(
+          { x: selectedStationPosition.x, y: selectedStationPosition.y },
+          tileWidth,
+          tileHeight
+        );
+        const radius = objectPool.get("select-box-radius-shipyard", "Sprite");
+        const textWhite = objectPool.get("build-shipyard-station-text-white", "Text");
+        const address = connectedAddress.get();
+        const HoverSprite = config.sprites[Sprites.Build1];
+        radius.setComponent({
+          id: "select-box-radius-shipyard",
           once: (gameObject) => {
-            gameObject.setTexture(HoverSprite.assetKey, HoverSprite.frame);
-            gameObject.setPosition(x + 32, y + 32);
+            gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
+            gameObject.setPosition(selectedPositionX + tileWidth / 2, selectedPositionY + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.depth = 4;
             gameObject.setAngle(0);
+          },
+        });
+        const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
+        const shipyardObjectTopLayer = objectPool.get(`shipyard-top-hover`, "Sprite");
+        const shipyardObjectGrayLayer = objectPool.get(`shipyard-gray-hover`, "Sprite");
+        shipyardObjectTopLayer.setComponent({
+          id: `shipyard-top-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `shipyard-new-1.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setDepth(5);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+          },
+        });
+        shipyardObjectGrayLayer.setComponent({
+          id: `shipyard-gray-hover`,
+          once: (gameObject) => {
+            gameObject.setTexture(HoverSprite.assetKey, `shipyard-new-2.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+            gameObject.setDepth(4);
+            gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
+            const color = generateColorsFromWalletAddress(`${address}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
         });
         const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
@@ -78,6 +104,7 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
             gameObject.setFontSize(16);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
+            gameObject.setAngle(0);
           },
         });
         const mineral = objectPool.get("build-shipyard-station-text-white-m", "Sprite");
@@ -88,11 +115,13 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
             gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
             gameObject.depth = 4;
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setAngle(0);
           },
         });
       }
     } else {
-      objectPool.remove("build-shipyard-station");
+      objectPool.remove("shipyard-gray-hover");
+      objectPool.remove("shipyard-top-hover");
       objectPool.remove("build-shipyard-station-text-white");
       objectPool.remove("build-shipyard-station-text-white-m");
     }

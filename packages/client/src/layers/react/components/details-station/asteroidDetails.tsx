@@ -44,7 +44,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
     const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
-    const level = getComponentValueStrict(Level, selectedEntity).value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
@@ -97,10 +96,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                       <img src="/build-stations/crystal.png" width="20px" height="20px" />
                       <p>MINERALS: X/X</p>
                     </S.Weapon>
-                    {/* <S.Weapon>
-                    <img src="/build-stations/hydrogen.png" />
-                    <p>{+fuel}</p>
-                  </S.Weapon> */}
                   </S.Row>
                   <S.Row
                     style={{
@@ -115,14 +110,9 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                     <S.Weapon>
                       <p>PROSPECT THIS ASTEROID WITH YOUR HARVESTER TO MINE</p>
                     </S.Weapon>
-                    {/* <S.Weapon>
-                  <img src="/build-stations/hydrogen.png" />
-                  <p>{+fuel}</p>
-                </S.Weapon> */}
                   </S.Row>
                 </>
               )}
-              {/*  */}
               <S.Column style={{ width: "100%" }}>
                 {action === "harvest" &&
                   destinationDetails &&
@@ -220,7 +210,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </S.Column>
           </S.Container>
-          {!destinationDetails && !isDestinationSelected && (
+          {+isProspected && !destinationDetails && !isDestinationSelected && (
             <S.Row style={{ marginTop: "5px" }}>
               <SelectButton
                 name="MINE"

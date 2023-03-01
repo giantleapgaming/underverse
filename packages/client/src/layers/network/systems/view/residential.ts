@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
+import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -35,8 +35,50 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
           const position = getComponentValueStrict(Position, entity);
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+          const level = getComponentValueStrict(Level, entity).value;
           const residentialObjectTopLayer = objectPool.get(`residential-top-${entity}`, "Sprite");
           const residentialObjectGrayLayer = objectPool.get(`residential-gray-${entity}`, "Sprite");
+          const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
+          const population = getComponentValueStrict(Population, entity).value;
+          // deleting the old health bar
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`residential-health-${entity}-${i}`);
+            objectPool.remove(`residential-population-${entity}-${i}`);
+          }
+          const [boxes, color] = calculateHealthBar(level * 100, +defence);
+
+          // creating the new health bar
+          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+            const healthSprite = objectPool.get(`residential-health-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `residential-health-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 256);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
+          // creating the new Population bar
+          for (let i = 1; i < +level + 1; i++) {
+            const healthSprite = objectPool.get(`residential-population-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `residential-population-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 30, y + 281);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(population >= i ? 0x2c8073 : 0xffffff);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
           const residential = config.sprites[Sprites.Asteroid12];
           residentialObjectTopLayer.setComponent({
             id: `residential-top-${entity}`,
@@ -60,9 +102,25 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
               gameObject.setAngle(0);
             },
           });
+          levelSprite.setComponent({
+            id: `residential-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(residential.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`residential-top-${entity}`);
+          objectPool.remove(`residential-gray-${entity}`);
           objectPool.remove(`residential-${entity}`);
+          objectPool.remove(`residential-level-${entity}`);
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`residential-health-${entity}-${i}`);
+            objectPool.remove(`residential-population-${entity}-${i}`);
+          }
         }
       }
     }

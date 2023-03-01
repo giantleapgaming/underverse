@@ -6,7 +6,7 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
+import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 
 export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -36,6 +36,8 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const level = getComponentValueStrict(Level, entity).value;
+          const levelSprite = objectPool.get(`refuel-level-${entity}`, "Sprite");
           const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
             { x: prevPosition.x, y: prevPosition.y },
             tileWidth,
@@ -44,6 +46,29 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const refuelObjectTopLayer = objectPool.get(`refuel-top-${entity}`, "Sprite");
           const refuelObjectGrayLayer = objectPool.get(`refuel-gray-${entity}`, "Sprite");
+
+          // deleting the old health bar
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`residential-health-${entity}-${i}`);
+          }
+          const [boxes, color] = calculateHealthBar(level * 100, +defence);
+
+          // creating the new health bar
+          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+            const healthSprite = objectPool.get(`refuel-health-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `refuel-health-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 256);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
+
           const refuel = config.sprites[Sprites.Asteroid12];
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           refuelObjectTopLayer.setComponent({
@@ -68,9 +93,20 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTint(color[0], color[1], color[2], color[3]);
             },
           });
+          levelSprite.setComponent({
+            id: `refuel-level-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(refuel.assetKey, `upgrade-${+level}.png`);
+              gameObject.setPosition(x, y);
+              gameObject.setDepth(4);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
         } else {
           objectPool.remove(`refuel-top-${entity}`);
           objectPool.remove(`refuel-gray-${entity}`);
+          objectPool.remove(`refuel-level-${entity}`);
         }
       }
     }

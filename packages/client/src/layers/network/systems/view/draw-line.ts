@@ -83,32 +83,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     if (lineDetails && lineDetails.showLine && selectedEntity && !destination && lineDetails.type !== "move") {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
-      const { x: sourceXX, y: sourceYY } = tileCoordToPixelCoord(
-        { x: sourcePosition.x, y: sourcePosition.y },
-        tileWidth,
-        tileHeight
-      );
-      if (lineDetails.type === "prospect" || lineDetails.type === "refuel") {
-        const textWhite = objectPool.get("prospect-text-white", "Text");
-        const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
-        circle.setPosition(sourceXX + 32, sourceYY + 32);
-        circle.setStrokeStyle(0.3, 0x2d2d36);
-        circle.setDisplaySize(704, 704);
-        circle.setAlpha(1);
-        textWhite.setComponent({
-          id: "white-build-text",
-          once: (gameObject) => {
-            gameObject.setPosition(pointer.worldX + 10, pointer.worldY - 30);
-            gameObject.depth = 4;
-            gameObject.setText(`H Cost - ${fuelCost}`);
-            gameObject.setFontSize(12);
-            gameObject.setFontStyle("bold");
-            gameObject.setColor("#FFFFFF");
-          },
-        });
-      } else {
-        circle.setAlpha(0);
-      }
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
       const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
       const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
