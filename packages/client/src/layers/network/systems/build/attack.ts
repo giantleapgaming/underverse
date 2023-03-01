@@ -82,7 +82,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setTexture(HoverSprite.assetKey, `attack-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-            gameObject.setDepth(7);
+            gameObject.setDepth(9);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
           },
@@ -92,7 +92,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setTexture(HoverSprite.assetKey, `attack-3.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-            gameObject.setDepth(5);
+            gameObject.setDepth(9);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
           },

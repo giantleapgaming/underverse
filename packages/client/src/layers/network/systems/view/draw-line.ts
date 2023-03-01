@@ -298,9 +298,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setTexture(attackBox.assetKey, `attack-rectangle-box-${+level}.png`);
             gameObject.setPosition(sourceX, sourceY);
-            gameObject.setDepth(1);
+            gameObject.setDepth(200);
             gameObject.setOrigin(0, 0.5);
-            gameObject.setAlpha(0.1);
             gameObject.setAngle(angle);
           },
         });

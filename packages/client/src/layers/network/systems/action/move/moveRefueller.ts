@@ -70,7 +70,7 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
         once: (gameObject) => {
           gameObject.setTexture(refueller.assetKey, `fueler-2.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-          gameObject.setDepth(151);
+          gameObject.setDepth(152);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
