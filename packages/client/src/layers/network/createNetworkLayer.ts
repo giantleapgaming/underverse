@@ -176,41 +176,16 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
-  const initSystem = async (
-    name: string,
-    faction: number,
-    nftID: number,
-    setTrue: () => void,
-    setFalse: () => void
-  ) => {
-    try {
-      console.log("create init", name, faction, nftID);
-      await systems["system.Init"].executeTyped(name, faction, nftID);
-      setTrue();
-    } catch (e) {
-      console.log(e);
-      setFalse();
-    }
+  const initSystem = async (name: string, faction: number, nftID: number) => {
+    return systems["system.Init"].executeTyped(name, faction, nftID);
   };
 
   async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType);
   }
 
-  async function moveSystem({
-    x,
-    y,
-    entityType,
-    srcX,
-    srcY,
-  }: {
-    x: number;
-    y: number;
-    entityType: EntityID;
-    srcX: number;
-    srcY: number;
-  }) {
-    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, srcX, srcY);
+  async function moveSystem({ x, y, entityType }: { x: number; y: number; entityType: EntityID }) {
+    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y);
   }
 
   async function wallSystem({
