@@ -20,6 +20,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "./components/ProspectedComponent.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "./components/EncounterComponent.sol";
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -420,9 +421,13 @@ function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
   }
 }
 
-function createEntity(IWorld world, IUint256Component components, int32 x, int32 y) {
+function createEncounterEntity(IWorld world, IUint256Component components, int32 x, int32 y, uint256 sourceEntity) {
   uint256 ent = world.getUniqueEntityId();
   PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
   ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
+  //We set the calling entity encounter ID to the newly created entity and vice versa
+  //That way we know which 2 entities belong to a specific encounter
+  EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
+  EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
 }

@@ -11,7 +11,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEntity, getPlayerFuel } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity, getPlayerFuel } from "../utils.sol";
 import "../libraries/Math.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -24,10 +24,7 @@ contract MoveShipSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) = abi.decode(
-      arguments,
-      (uint256, int32, int32, int32, int32)
-    );
+    (uint256 sourceEntity, int32 x, int32 y) = abi.decode(arguments, (uint256, int32, int32));
 
     uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
 
@@ -67,17 +64,11 @@ contract MoveShipSystem is System {
 
     Coord memory destinationPosition = Coord({ x: x, y: y });
 
-    uint256 distFromCenterSq = uint256(int256(destinationPosition.x) ** 2 + int256(destinationPosition.y) ** 2);
+    uint256 distFromCenterSq = uint256(int256(x) ** 2 + int256(y) ** 2);
     require(distFromCenterSq < 10000, "Cannot move beyond 100 orbits");
 
     require(
-      atleastOneObstacleOnTheWay(
-        sourcePosition.x,
-        sourcePosition.y,
-        destinationPosition.x,
-        destinationPosition.y,
-        components
-      ) == false,
+      atleastOneObstacleOnTheWay(sourcePosition.x, sourcePosition.y, x, y, components) == false,
       "Obstacle on the way"
     );
 
@@ -102,19 +93,17 @@ contract MoveShipSystem is System {
       (distFromCenterSq > 225) &&
       (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
     ) {
-      createEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2);
-      EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, 1);
+      createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, sourceEntity);
     }
 
     // update player data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
-
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
-  function executeTyped(uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x, y, srcX, srcY));
+  function executeTyped(uint256 sourceEntity, int32 x, int32 y) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, x, y));
   }
 }
