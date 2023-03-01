@@ -60,6 +60,12 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Population" },
     }),
 
+    NFTID: defineNumberComponent(world, {
+      id: "NFTID",
+      indexed: true,
+      metadata: { contractId: "component.NFTID" },
+    }),
+
     EntityType: defineNumberComponent(world, {
       id: "EntityType",
       indexed: true,
@@ -164,6 +170,7 @@ export async function createNetworkLayer(config: GameConfig) {
     PrevPosition: overridableComponent(components.PrevPosition),
     SectorEdge: overridableComponent(components.SectorEdge),
     Prospected: overridableComponent(components.Prospected),
+    NFTID: overridableComponent(components.NFTID),
   };
 
   // --- SETUP ----------------------------------------------------------------------
