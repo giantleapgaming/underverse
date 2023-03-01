@@ -8,7 +8,6 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
   const {
     world,
     components: { ShowAnimation },
-    localIds: { stationDetailsEntityIndex },
     sounds,
     scenes: {
       Main: {
@@ -53,7 +52,8 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const object = objectPool.get(`missile-${entity}`, "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const repeatLoop = amount - 1;
-      const angle = Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI);
+      const angle =
+        Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
       object.setComponent({
         id: "missileRelease",
         once: (gameObject) => {
