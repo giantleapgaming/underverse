@@ -27,15 +27,11 @@ contract ProspectSystem is System {
     (uint256 sourceEntity, uint256 destinationEntity) = abi.decode(arguments, (uint256, uint256));
 
     require(
-      EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 1,
-      "Ship has to be in an encounter in order to prospect"
-    );
-
-    // Check if source is Harvester
-
-    require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 5,
-      "Source has to be an Harvester"
+      (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
+        destinationEntity) &&
+        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) ==
+          sourceEntity),
+      "Source and Destination entities need to be in encounter with each other"
     );
 
     require(
