@@ -6,8 +6,8 @@ import { map, merge } from "rxjs";
 import { useState, useEffect } from "react";
 import { computedToStream } from "@latticexyz/utils";
 import { Faction } from "./Faction";
-import ImageList from "@mui/material/ImageList";
-import ImageListItem from "@mui/material/ImageListItem";
+import { Wallet } from "ethers";
+
 interface Image {
   tokenId: number;
   imageUrl: string;
@@ -17,6 +17,11 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
   const [selectFaction, setSelectFaction] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
+  const [selectedNFT, setSelectedNFT] = useState<Image | null>(null);
+  const [nftData, setNftData] = useState<Image[]>([]);
+  const params = new URLSearchParams(window.location.search);
+  const chainIdString = params.get("chainId");
+
   const {
     network: {
       api: { initSystem },
@@ -26,113 +31,154 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   useEffect(() => {
     callApi();
   }, []);
-  const [selectedImage, setSelectedImage] = useState<Image | null>(null);
 
-  const handleImageClick = (image: Image) => {
-    setSelectedImage(image);
-  };
-  const [nftData, setNftData] = useState<Image[] | null>(null);
   async function callApi() {
     try {
-      const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
-        method: "POST",
-        body: JSON.stringify({
-          address: "0xa46250A3Cae17e933CEAC10f31175CFa6b244e0E",
-          nftContract: "0x39Af9A4a49E18201FE0ED60C353039ac86B14fBD",
-          chainId: "4242",
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (data.status) {
-        setNftData(data.nftData.userWalletNftData);
+      const privateKey = sessionStorage.getItem("user-burner-wallet");
+      if (privateKey) {
+        const wallet = new Wallet(privateKey);
+        const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
+          method: "POST",
+          body: JSON.stringify({
+            address: wallet,
+            nftContract: "0x39Af9A4a49E18201FE0ED60C353039ac86B14fBD",
+            chainId: chainIdString,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        if (data.status) {
+          setNftData(data.nftData.userWalletNftData);
+        }
       }
     } catch (e) {
       console.log(e);
     }
-    return;
   }
-
   return (
-    <Container faction={!!(typeof selectFaction === "number")}>
-      {typeof selectFaction === "number" ? (
-        <>
-          <Gif>
-            <img src="/img/nameSun.gif" />
-          </Gif>
-          <Form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              sounds["click"].play();
-              if (name && selectedImage?.tokenId) {
-                try {
-                  console.log(name, selectFaction, selectedImage);
-                  await initSystem(
-                    name,
-                    selectFaction,
-                    selectedImage?.tokenId,
-                    () => {
-                      setLoading(true);
-                    },
-                    () => {
-                      setLoading(false);
+    <>
+      <Container faction={!!(typeof selectFaction === "number")}>
+        {"4242" == chainIdString ? (
+          <>
+            {typeof selectFaction === "number" ? (
+              <>
+                <Gif>
+                  <img src="/img/nameSun.gif" />
+                </Gif>
+                <Form
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    sounds["click"].play();
+                    if (name && selectedNFT && typeof selectFaction === "number") {
+                      try {
+                        setLoading(true);
+                        await initSystem(name, selectFaction, selectedNFT?.tokenId);
+                      } catch (e) {
+                        setLoading(false);
+                        console.log("Error", e);
+                      }
                     }
-                  );
-                } catch (e) {
-                  console.log("Error", e);
-                }
-              }
-            }}
-          >
-            {nftData && nftData.length > 0 && (
-              <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-                {nftData.map((item) => (
-                  <ImageListItem key={item.imageUrl}>
-                    <img
-                      src={`${item.imageUrl}?w=164&h=164&fit=crop&auto=format`}
-                      srcSet={`${item.imageUrl}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                      alt={item.imageUrl}
-                      loading="lazy"
-                      onClick={() => handleImageClick(item)}
-                      height="160"
-                    />
-                  </ImageListItem>
-                ))}
-              </ImageList>
-            )}
-            {selectedImage && selectedImage != null ? (
-              <div>
-                <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
-                <Input
-                  disabled={loading}
-                  onChange={(e) => {
-                    setName(e.target.value);
                   }}
-                  value={name}
-                />
-              </div>
+                >
+                  <div>
+                    {nftData.length ? (
+                      <S.NFTImages>
+                        {nftData.map((item) => {
+                          return (
+                            <S.SelectNft
+                              style={{
+                                position: "relative",
+                                opacity: item.imageUrl === selectedNFT?.imageUrl ? 1 : 0.5,
+                              }}
+                              onClick={() => setSelectedNFT(item)}
+                              key={item.imageUrl}
+                            >
+                              {item.imageUrl === selectedNFT?.imageUrl && (
+                                <span
+                                  style={{
+                                    position: "absolute",
+                                    inset: "0px",
+                                    fontSize: "60px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    width: "100%",
+                                  }}
+                                >
+                                  &#10003;
+                                </span>
+                              )}
+                              <img src={item.imageUrl} />
+                            </S.SelectNft>
+                          );
+                        })}
+                      </S.NFTImages>
+                    ) : (
+                      <p style={{ alignItems: "center" }}>Loading NFT</p>
+                    )}
+                    {selectedNFT && (
+                      <S.Inline>
+                        <div>
+                          <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
+                          <Input
+                            disabled={loading}
+                            onChange={(e) => {
+                              setName(e.target.value);
+                            }}
+                            value={name}
+                          />
+                        </div>
+                        <Button type="submit" disabled={loading}>
+                          {loading ? "Loading..." : "GO"}
+                        </Button>
+                      </S.Inline>
+                    )}
+                  </div>
+                </Form>
+              </>
             ) : (
-              "Please select an NFT"
+              <Faction
+                setSelectFaction={setSelectFaction}
+                clickSound={() => {
+                  sounds["click"].play();
+                }}
+              />
             )}
-            <Button type="submit" disabled={loading}>
-              {loading ? "Loading..." : "GO"}
-            </Button>
-          </Form>
-        </>
-      ) : (
-        <Faction
-          setSelectFaction={setSelectFaction}
-          clickSound={() => {
-            sounds["click"].play();
-          }}
-        />
-      )}
-    </Container>
+          </>
+        ) : (
+          <p>Chain Id not supported it will only work on lattice chain that is 4242</p>
+        )}
+      </Container>
+    </>
   );
 };
-
+const S = {
+  NFTImages: styled.div`
+    display: flex;
+    max-width: 400px;
+    flex-wrap: wrap;
+    gap: 10px;
+  `,
+  Inline: styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  `,
+  SelectNft: styled.div`
+    cursor: pointer;
+    width: 64px;
+    height: 64px;
+    &:hover {
+      background-color: #eeeeee11;
+      border-radius: 10%;
+      scale: 1.1;
+      opacity: 1 !important;
+    }
+  `,
+};
 const Form = styled.form`
   display: flex;
   justify-content: center;
