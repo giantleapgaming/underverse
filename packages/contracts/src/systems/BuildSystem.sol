@@ -6,7 +6,6 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
@@ -27,9 +26,7 @@ contract BuildSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (int32 x, int32 y, uint256 entity_type) = abi.decode(arguments, (int32, int32, uint256));
-
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+    (int32 x, int32 y, uint256 entity_type, uint256 nftID) = abi.decode(arguments, (int32, int32, uint256, uint256));
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
@@ -60,19 +57,18 @@ contract BuildSystem is System {
       }
     }
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
-      addressToEntity(msg.sender)
-    );
+    uint256[] memory result = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID);
+    require(result.length == 1, "NFT ID to Player ID mapping has to be 1:1");
+    uint256 playerID = result[0];
+
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
 
     uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
     uint256 initialFuel = baseInitialfuel;
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
-    );
+    uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
     require(playerCash >= godownCreationCost, "Insufficient in-game cash balance to create godown");
 
@@ -80,8 +76,7 @@ contract BuildSystem is System {
 
     PositionComponent(getAddressById(components, PositionComponentID)).set(godownEntity, coord);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(godownEntity, coord);
-    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(godownEntity, addressToEntity(msg.sender));
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
+    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(godownEntity, playerID);
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, offenceInitialAmount);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
@@ -95,13 +90,9 @@ contract BuildSystem is System {
       addressToEntity(msg.sender),
       playerCash - godownCreationCost
     );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
-  function executeTyped(int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
-    return execute(abi.encode(x, y, entity_type));
+  function executeTyped(int32 x, int32 y, uint256 entity_type, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(x, y, entity_type, nftID));
   }
 }
