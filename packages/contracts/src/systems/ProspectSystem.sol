@@ -87,7 +87,6 @@ contract ProspectSystem is System {
       //so that it is not attacked by others outside the encounter
       //We randomly set defence to balance (which itself is randomly generated) * 2
       //We randomly set the number of missiles the pirate ship has to between 0 to 9
-      EncounterComponent(getAddressById(components, EncounterComponentID)).set(destinationEntity, 1);
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, balance * 2);
