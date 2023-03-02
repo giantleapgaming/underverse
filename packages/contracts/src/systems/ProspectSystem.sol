@@ -17,6 +17,9 @@ import "../libraries/Math.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
 
@@ -24,7 +27,15 @@ contract ProspectSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, uint256 destinationEntity) = abi.decode(arguments, (uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256)
+    );
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     require(
       (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
@@ -94,7 +105,7 @@ contract ProspectSystem is System {
     }
   }
 
-  function executeTyped(uint256 sourceEntity, uint256 destinationEntity) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, destinationEntity));
+  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, nftID));
   }
 }
