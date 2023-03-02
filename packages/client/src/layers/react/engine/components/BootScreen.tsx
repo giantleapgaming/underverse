@@ -27,7 +27,7 @@ const Container = styled.div`
   grid-gap: 50px;
   z-index: 100;
   pointer-events: all;
-  background-image: url(/img/RoketRoatingOnSun.gif);
+  background-image: url(/img/Attack_ship_orbit.gif), url(/img/sun.png);
   background-size: auto;
   background-repeat: no-repeat;
   background-position: center center;
