@@ -29,7 +29,7 @@ import { checkNFT } from "../utils.sol";
 uint256 constant ID = uint256(keccak256("system.Init"));
 
 contract InitSystem is System {
-  mapping(address => bool) registeredPlayers;
+  mapping(uint256 => bool) registeredPlayers;
   uint256 private playerCount;
 
   constructor(IWorld _world, address _components) System(_world, _components) {}
@@ -37,16 +37,11 @@ contract InitSystem is System {
   function execute(bytes memory arguments) public returns (bytes memory) {
     (string memory name, uint256 faction, uint256 nftID) = abi.decode(arguments, (string, uint256, uint256));
 
-    require(registeredPlayers[msg.sender] == false, "Player already registered");
+    require(registeredPlayers[nftID] == false, "NFT ID already registered");
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
     CashComponent(getAddressById(components, CashComponentID)).set(addressToEntity(msg.sender), playerInitialCash);
 
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-    // Added new by Moresh to support faction
     FactionComponent(getAddressById(components, FactionComponentID)).set(addressToEntity(msg.sender), faction);
 
     NameComponent(getAddressById(components, NameComponentID)).set(addressToEntity(msg.sender), name);
@@ -65,7 +60,7 @@ contract InitSystem is System {
         block.timestamp
       );
     }
-    registeredPlayers[msg.sender] = true;
+    registeredPlayers[nftID] = true;
     playerCount += 1;
     PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).set(
       addressToEntity(msg.sender),
