@@ -40,11 +40,13 @@ contract InitSystem is System {
     require(registeredPlayers[nftID] == false, "NFT ID already registered");
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
-    CashComponent(getAddressById(components, CashComponentID)).set(addressToEntity(msg.sender), playerInitialCash);
+    uint256 playerId = world.getUniqueEntityId();
 
-    FactionComponent(getAddressById(components, FactionComponentID)).set(addressToEntity(msg.sender), faction);
+    CashComponent(getAddressById(components, CashComponentID)).set(playerId, playerInitialCash);
 
-    NameComponent(getAddressById(components, NameComponentID)).set(addressToEntity(msg.sender), name);
+    FactionComponent(getAddressById(components, FactionComponentID)).set(playerId, faction);
+
+    NameComponent(getAddressById(components, NameComponentID)).set(playerId, name);
 
     // Init called for first time.
     if (playerCount == 0) {
@@ -67,7 +69,7 @@ contract InitSystem is System {
       playerCount
     );
 
-    NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(addressToEntity(msg.sender), nftID);
+    NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(playerId, nftID);
 
     // uint256[] memory componentIds = new uint256[](8);
     // for (uint256 i = 0; i < 8; i++) {
