@@ -86,10 +86,7 @@ contract BuildSystem is System {
     EncounterComponent(getAddressById(components, EncounterComponentID)).set(godownEntity, 0);
 
     // update player data
-    CashComponent(getAddressById(components, CashComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCash - godownCreationCost
-    );
+    CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
   }
 
   function executeTyped(int32 x, int32 y, uint256 entity_type, uint256 nftID) public returns (bytes memory) {

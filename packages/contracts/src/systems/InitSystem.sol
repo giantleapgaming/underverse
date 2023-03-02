@@ -18,7 +18,7 @@ import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
-import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
+// import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { earthInitialPopulation, baseInitialBalance, godownInitialLevel, baseInitialfuel, baseInitialWeapons, baseInitialHealth } from "../constants.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
@@ -64,10 +64,10 @@ contract InitSystem is System {
     }
     registeredPlayers[nftID] = true;
     playerCount += 1;
-    PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCount
-    );
+    // PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).set(
+    //   addressToEntity(msg.sender),
+    //   playerCount
+    // );
 
     NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(playerId, nftID);
 
