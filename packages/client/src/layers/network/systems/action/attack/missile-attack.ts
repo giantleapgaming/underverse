@@ -8,7 +8,6 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
   const {
     world,
     components: { ShowAnimation },
-    localIds: { stationDetailsEntityIndex },
     sounds,
     scenes: {
       Main: {
@@ -53,7 +52,8 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const object = objectPool.get(`missile-${entity}`, "Sprite");
       const missileSprite = config.sprites[Sprites.Missile2];
       const repeatLoop = amount - 1;
-      const angle = Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI);
+      const angle =
+        Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
       object.setComponent({
         id: "missileRelease",
         once: (gameObject) => {
@@ -80,10 +80,13 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               blastObject.setComponent({
                 id: `explosion-${entity}`,
                 once: (explosionObject) => {
-                  explosionObject.setPosition(destinationPixelX + 36, destinationPixelY + 16);
+                  explosionObject.setPosition(destinationPixelX + tileWidth, destinationPixelY + tileHeight - 140);
                   explosionObject.setOrigin(0.5, 0.5);
                   explosionObject.play(Animations.Explosion);
                   sounds["explosion"].play();
+                  explosionObject.on(`animationcomplete-${Animations.Explosion}`, () => {
+                    objectPool.remove(`explosion-${entity}`);
+                  });
                 },
               });
             },
@@ -93,9 +96,9 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             onComplete: () => {
               const blastObject = objectPool.get(`missile-end-${entity}`, "Sprite");
               blastObject.setComponent({
-                id: "explosion-end",
+                id: `missile-end-${entity}`,
                 once: (explosionObject) => {
-                  explosionObject.setPosition(destinationPixelX + 36, destinationPixelY + 16);
+                  explosionObject.setPosition(destinationPixelX + tileWidth, destinationPixelY + tileHeight - 140);
                   explosionObject.setOrigin(0.5, 0.5);
                   explosionObject.play(Animations.Explosion);
                   sounds["explosion"].play();

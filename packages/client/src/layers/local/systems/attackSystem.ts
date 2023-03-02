@@ -236,10 +236,13 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
                   blastObject.setComponent({
                     id: "explosionRelease",
                     once: (explosionObject) => {
-                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setPosition(distraction.x + tileWidth, distraction.y + tileHeight - 140);
                       explosionObject.setOrigin(0.5, 0.5);
                       explosionObject.play(Animations.Explosion);
                       sounds["explosion"].play();
+                      explosionObject.on(`animationcomplete-${Animations.Explosion}`, () => {
+                        objectPool.remove("explosion");
+                      });
                     },
                   });
                 },
@@ -248,7 +251,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
                   blastObject.setComponent({
                     id: "explosionRelease",
                     once: (explosionObject) => {
-                      explosionObject.setPosition(distraction.x + 36, distraction.y + 16);
+                      explosionObject.setPosition(distraction.x + tileWidth, distraction.y + tileHeight - 120);
                       explosionObject.setOrigin(0.5, 0.5);
                       explosionObject.play(Animations.Explosion);
                       sounds["explosion"].play();

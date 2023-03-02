@@ -76,7 +76,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             once: (gameObject) => {
               gameObject.setTexture(attackShip.assetKey, `attack-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(7);
+              gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },
@@ -86,7 +86,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             once: (gameObject) => {
               gameObject.setTexture(attackShip.assetKey, `attack-3.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(5);
+              gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },
@@ -118,6 +118,9 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
           objectPool.remove(`attack-top2-${entity}`);
           objectPool.remove(`attack-gray-${entity}`);
           objectPool.remove(`attack-level-${entity}`);
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`attack-health-${entity}-${i}`);
+          }
         }
       }
     }

@@ -9,7 +9,6 @@ import { distance } from "../../utils/distance";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Transport } from "../action-system/transport";
-import { Prospect } from "../action-system/prospect";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
@@ -27,7 +26,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, prospectSystem, refuelSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem },
       network: { connectedAddress },
     },
   } = layers;
@@ -98,7 +97,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                           showProgress();
                         } catch (e) {
                           setAction("");
-                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Upgrade shipyard", details: selectedEntity });
                         }
                       }}
                       faction={+factionNumber}

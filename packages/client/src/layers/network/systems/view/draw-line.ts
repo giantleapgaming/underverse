@@ -192,6 +192,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           entityType &&
           (+entityType === Mapping.harvester.id ||
             +entityType === Mapping.attack.id ||
+            +entityType === Mapping.refuel.id ||
             +entityType === Mapping.shipyard.id)
         ) {
           const level = getComponentValueStrict(Level, selectedEntity).value;
@@ -218,6 +219,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               type:
                 (+entityType === Mapping.harvester.id && "moveHarvester") ||
                 (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                (+entityType === Mapping.refuel.id && "moveRefueller") ||
                 "move",
               frame: frame,
               faction: +factionNumber,
@@ -294,9 +296,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           once: (gameObject) => {
             gameObject.setTexture(attackBox.assetKey, `attack-rectangle-box-${+level}.png`);
             gameObject.setPosition(sourceX, sourceY);
-            gameObject.setDepth(1);
+            gameObject.setDepth(200);
             gameObject.setOrigin(0, 0.5);
-            gameObject.setAlpha(0.1);
             gameObject.setAngle(angle);
           },
         });

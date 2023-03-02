@@ -56,7 +56,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
 
           // creating the new health bar
-          for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
+          for (let i = 1; i < 11; i++) {
             const healthSprite = objectPool.get(`harvester-health-${entity}-${i}`, "Rectangle");
             healthSprite.setComponent({
               id: `harvester-health-${entity}-${i}`,
@@ -65,7 +65,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
                 gameObject.setDepth(10);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
-                gameObject.setFillStyle(color, 0.5);
+                gameObject.setFillStyle(boxes >= i ? color : 0xffffff, 0.5);
                 gameObject.setSize(15, 15);
               },
             });
@@ -76,7 +76,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             healthSprite.setComponent({
               id: `harvester-cargo-${entity}-${i}`,
               once: (gameObject) => {
-                gameObject.setPosition(x + i * 30, y + 281);
+                gameObject.setPosition(x + i * 25, y + 281);
                 gameObject.setDepth(10);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
@@ -92,7 +92,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             once: (gameObject) => {
               gameObject.setTexture(harvester.assetKey, `harvester-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(4);
+              gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },

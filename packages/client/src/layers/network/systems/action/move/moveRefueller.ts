@@ -5,7 +5,7 @@ import { PhaserLayer } from "../../../../phaser";
 import { Sprites } from "../../../../phaser/constants";
 import { NetworkLayer } from "../../../types";
 
-export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
+export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowAnimation },
@@ -40,7 +40,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
       typeof sourceY === "number" &&
       typeof destinationX === "number" &&
       typeof destinationY === "number" &&
-      type === "moveHarvester"
+      type === "moveRefueller"
     ) {
       const { x: destinationPixelX, y: destinationPixelY } = tileCoordToPixelCoord(
         { x: destinationX, y: destinationY },
@@ -54,9 +54,9 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
       );
       const angle =
         Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
-      const harvesterObjectTopLayer = objectPool.get(`harvester-top-move-${entity}`, "Sprite");
-      const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-move-${entity}`, "Sprite");
-      const harvester = config.sprites[Sprites.Asteroid12];
+      const refuellerObjectTopLayer = objectPool.get(`refueller-top-move-${entity}`, "Sprite");
+      const refuellerObjectGrayLayer = objectPool.get(`refueller-gray-move-${entity}`, "Sprite");
+      const refueller = config.sprites[Sprites.Asteroid12];
       const destinationCircle = phaserScene.add.graphics();
       const sourceCircle = phaserScene.add.graphics();
       sourceCircle.fillStyle(0x000000, 1);
@@ -65,12 +65,12 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
       destinationCircle.fillStyle(0x000000, 1);
       destinationCircle.fillCircle(destinationPixelX + tileWidth / 2, destinationPixelY + tileHeight / 2, 200);
       destinationCircle.setDepth(150);
-      harvesterObjectTopLayer.setComponent({
-        id: `harvester-top-move-${entity}`,
+      refuellerObjectTopLayer.setComponent({
+        id: `refueller-top-move-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(harvester.assetKey, `harvester-1.png`);
+          gameObject.setTexture(refueller.assetKey, `fueler-2.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-          gameObject.setDepth(155);
+          gameObject.setDepth(152);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
@@ -87,17 +87,17 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             duration: 5_000,
             onComplete: () => {
-              objectPool.remove(`harvester-top-move-${entity}`);
+              objectPool.remove(`refueller-top-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
             },
           });
         },
       });
-      harvesterObjectGrayLayer.setComponent({
-        id: `harvester-gray-move-${entity}`,
+      refuellerObjectGrayLayer.setComponent({
+        id: `refueller-gray-move-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture(harvester.assetKey, `harvester-2.png`);
+          gameObject.setTexture(refueller.assetKey, `fueler-1.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
           gameObject.setDepth(151);
           gameObject.setOrigin(0.5, 0.5);
@@ -118,7 +118,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             duration: 5_000,
             onComplete: () => {
-              objectPool.remove(`harvester-gray-move-${entity}`);
+              objectPool.remove(`refueller-gray-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
               setShowLine(true, destinationX, destinationY, "move");

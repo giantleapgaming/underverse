@@ -100,7 +100,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           showProgress();
                         } catch (e) {
                           setAction("");
-                          console.log({ error: e, system: "Upgrade Attack", details: selectedEntity });
+                          console.log({ error: e, system: "Upgrade Harvester", details: selectedEntity });
                         }
                       }}
                       faction={+factionNumber}

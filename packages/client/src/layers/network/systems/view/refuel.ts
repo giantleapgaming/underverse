@@ -49,7 +49,7 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
 
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
-            objectPool.remove(`residential-health-${entity}-${i}`);
+            objectPool.remove(`refuel-health-${entity}-${i}`);
           }
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
 
@@ -107,6 +107,9 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
           objectPool.remove(`refuel-top-${entity}`);
           objectPool.remove(`refuel-gray-${entity}`);
           objectPool.remove(`refuel-level-${entity}`);
+          for (let i = 1; i < 11; i++) {
+            objectPool.remove(`refuel-health-${entity}-${i}`);
+          }
         }
       }
     }
