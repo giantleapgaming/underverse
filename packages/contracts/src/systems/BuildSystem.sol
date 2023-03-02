@@ -57,9 +57,8 @@ contract BuildSystem is System {
       }
     }
 
-    uint256[] memory result = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID);
-    require(result.length == 1, "NFT ID to Player ID mapping has to be 1:1");
-    uint256 playerID = result[0];
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 

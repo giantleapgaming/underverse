@@ -24,22 +24,24 @@ contract MoveShipSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x, int32 y) = abi.decode(arguments, (uint256, int32, int32));
-
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+    (uint256 sourceEntity, int32 x, int32 y, uint256 nftID) = abi.decode(arguments, (uint256, int32, int32, uint256));
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
     // Check if the ship being moved is owned by the user
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
       "Ship not owned by user"
     );
 
     //Check that the ship is not a destroyed ship (Level 0)
-    uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
-    require(sourceEntityLevel >= 1, "Ship has already been destroyed");
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
+      "Ship has already been destroyed"
+    );
 
     uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       sourceEntity
@@ -103,7 +105,7 @@ contract MoveShipSystem is System {
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
-  function executeTyped(uint256 sourceEntity, int32 x, int32 y) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x, y));
+  function executeTyped(uint256 sourceEntity, int32 x, int32 y, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, x, y, nftID));
   }
 }
