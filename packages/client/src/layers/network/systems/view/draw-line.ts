@@ -34,7 +34,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       },
     },
     network: {
-      components: { Balance, Faction },
+      components: { Faction },
       api: { moveSystem, prospectSystem },
     },
   } = phaser;
@@ -198,23 +198,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             +entityType === Mapping.refuel.id ||
             +entityType === Mapping.shipyard.id)
         ) {
-          const level = getComponentValueStrict(Level, selectedEntity).value;
-          const balance = getComponentValueStrict(Balance, selectedEntity).value;
           const nftDetails = getNftId(network);
           if (nftDetails) {
             try {
-              await moveSystem({
-                entityType: world.entities[selectedEntity],
-                x,
-                y,
-                NftId: nftDetails.tokenId,
-              });
+              await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
               objectPool.remove(`fuel-text-white`);
               objectPool.remove(`prospect-text-white`);
-              const frame =
-                +entityType === Mapping.harvester.id
-                  ? `miner-f-${+level}-${+balance}.png`
-                  : `attack-${+factionNumber + 1}-${+level}.png`;
               setMoveStation(false);
               setShowAnimation({
                 showAnimation: true,
@@ -227,7 +216,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                   (+entityType === Mapping.attack.id && "moveAttackShip") ||
                   (+entityType === Mapping.refuel.id && "moveRefueller") ||
                   "move",
-                frame: frame,
                 faction: +factionNumber,
                 entityID: selectedEntity,
               });

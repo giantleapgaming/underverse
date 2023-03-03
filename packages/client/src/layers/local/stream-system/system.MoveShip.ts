@@ -5,11 +5,12 @@ import { PhaserLayer } from "../../phaser";
 import { factionData } from "../../../utils/constants";
 import { Mapping, numberMapping } from "../../../utils/mapping";
 import { colorString } from "./utils";
+import { getNftId } from "../../network/utils/getNftId";
 export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Name, Faction, EntityType, Level, Position },
+    components: { OwnedBy, Name, Faction, EntityType, Level, Position, NFTID },
     network: { connectedAddress },
   } = network;
   const {
@@ -46,8 +47,9 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
           color,
         })} station at (${x},${y}) </p>`
       );
-      const address = connectedAddress.get();
-      if (ownedBy !== `${address}`) {
+      const nftId = getNftId(network);
+      const existingNftId = getComponentValue(NFTID, ownedByIndex)?.value;
+      if (existingNftId && nftId?.tokenId === +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           destinationX: x,
