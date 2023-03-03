@@ -3,13 +3,14 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { walletAddress } from "../../utils/walletAddress";
+import { NFTImage } from "../utils/NftImage";
 import { UserAction } from "./userAction";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { OwnedBy, Faction, Name },
+      components: { OwnedBy, Name, NFTID },
       world,
     },
     phaser: {
@@ -22,11 +23,10 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
     const factionIndex = world.entities.indexOf(ownedBy);
     const name = getComponentValue(Name, factionIndex)?.value;
-    const faction = getComponentValue(Faction, factionIndex)?.value;
-
+    const NFTid = getComponentValue(NFTID, factionIndex)?.value;
     return (
       <S.Container>
-        <img src={`/ui/${faction && +faction}-1.png`} />
+        {NFTid && ownedBy && <NFTImage nftId={+NFTid} walletAddress={ownedBy} />}
         <p
           style={{ cursor: "pointer" }}
           onClick={() => {

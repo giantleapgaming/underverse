@@ -17,7 +17,9 @@
     "RankComponent",
     "SectorEdgeComponent",
     "ProspectedComponent",
-    "PrevPositionComponent"
+    "PrevPositionComponent",
+    "NFTIDComponent",
+    "EncounterComponent"
   ],
   "systems": [
     {
@@ -43,7 +45,7 @@
         "PopulationComponent",
         "FuelComponent",
         "PlayerCountComponent",
-        "SectorEdgeComponent"
+        "NFTIDComponent"
       ]
     },
     {
@@ -62,7 +64,8 @@
         "EntityTypeComponent",
         "FuelComponent",
         "PopulationComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {
@@ -181,7 +184,8 @@
         "BalanceComponent",
         "FuelComponent",
         "ProspectedComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {
@@ -191,7 +195,10 @@
         "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent",
-        "ProspectedComponent"
+        "ProspectedComponent",
+        "DefenceComponent",
+        "EncounterComponent",
+        "OffenceComponent"
       ]
     },
     {
@@ -232,7 +239,8 @@
         "FuelComponent",
         "PopulationComponent",
         "OffenceComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {

@@ -4,19 +4,22 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-//Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "../components/ProspectedComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
+import { MULTIPLIER, asteroidType, pirateShip } from "../constants.sol";
 import "../libraries/Math.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
 
@@ -24,114 +27,85 @@ contract ProspectSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceGodownEntity, uint256 destinationGodownEntity) = abi.decode(arguments, (uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256)
+    );
 
-    // Check if source and destination are Harvester and Asteroid respectively
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceGodownEntity) == 5,
-      "Source has to be an Harvester"
+      (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
+        destinationEntity) &&
+        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) ==
+          sourceEntity),
+      "Source and Destination entities need to be in encounter with each other"
     );
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationGodownEntity) == 2,
-      "Destination has to be an Asteroid"
-    );
-
-    require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceGodownEntity) ==
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
         addressToEntity(msg.sender),
       "Harvester not owned by user"
     );
 
     require(
-      ProspectedComponent(getAddressById(components, ProspectedComponentID)).getValue(destinationGodownEntity) == 0,
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).getValue(destinationEntity) == 0,
       "Asteroid already Prospected"
     );
 
     require(
-      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceGodownEntity) >= 1,
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
       "Harvester needs to be atleast Level 1"
     );
 
-    Coord memory sourceGodownPosition = getCurrentPosition(
+    Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      sourceGodownEntity
+      sourceEntity
     );
 
-    Coord memory destinationGodownPosition = getCurrentPosition(
+    Coord memory destinationPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      destinationGodownEntity
+      destinationEntity
     );
 
-    require(
-      atleastOneObstacleOnTheWay(
-        sourceGodownPosition.x,
-        sourceGodownPosition.y,
-        destinationGodownPosition.x,
-        destinationGodownPosition.y,
-        components
-      ) == false,
-      "Obstacle on the way"
-    );
-
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
-      sourceGodownPosition,
-      destinationGodownPosition
-    );
+    uint256 distanceBetweens = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
 
     //Check to see if Harvester is close enough to Asteroid (<5 units)
-    require(distanceBetweenGodowns <= 5000, "Harvester is further than 5 units distance from Asteroid");
+    require(distanceBetweens <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    uint256 prospectCost = distanceBetweenGodowns ** 2;
+    uint256 balance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
+      uint256(Math.abs(destinationPosition.x));
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
-    );
+    //We randomly generate either an asteroid or pirate ship
 
-    require(playerCash >= prospectCost, "Not enough money to Prospect");
+    if ((balance % 2) == 0) {
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
 
-    // uint256 distFromCenterSq = Math.sqrt(
-    //   uint256(int256(destinationGodownPosition.x) ** 2 + int256(destinationGodownPosition.y) ** 2)
-    // );
-    uint256 asteroidBalance = uint256(keccak256(abi.encodePacked(block.timestamp, playerCash))) %
-      uint256(Math.abs(destinationGodownPosition.x));
+      uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
+        uint256(Math.abs(destinationPosition.y))) *
+        MULTIPLIER *
+        10;
 
-    uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, prospectCost)))) %
-      uint256(Math.abs(destinationGodownPosition.y))) *
-      MULTIPLIER *
-      10;
-
-    // update player data
-    CashComponent(getAddressById(components, CashComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCash - prospectCost
-    );
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationGodownEntity, asteroidBalance);
-
-    FuelComponent(getAddressById(components, FuelComponentID)).set(destinationGodownEntity, asteroidFuel);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
-      block.timestamp
-    );
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationGodownEntity,
-      block.timestamp
-    );
-
-    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationGodownEntity, 1);
+      BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance);
+      FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+    } else {
+      //We set the prospected status to 1 in both cases as we dont want the prospect system to be called again
+      //We set defence and offence randomly and set the pirate ship to also be in an encounter
+      //so that it is not attacked by others outside the encounter
+      //We randomly set defence to balance (which itself is randomly generated) * 2
+      //We randomly set the number of missiles the pirate ship has to between 0 to 9
+      ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, balance * 2);
+      OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationEntity, balance % 10);
+    }
   }
 
-  function executeTyped(uint256 sourceGodownEntity, uint256 destinationGodownEntity) public returns (bytes memory) {
-    return execute(abi.encode(sourceGodownEntity, destinationGodownEntity));
+  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, nftID));
   }
 }

@@ -3,19 +3,21 @@ pragma solidity >=0.8.0;
 import "solecs/System.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
-import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts, getPrevPosition } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, deleteGodown, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts, getPrevPosition } from "../utils.sol";
+import { MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Attack"));
 
@@ -28,13 +30,12 @@ contract AttackSystem is System {
       (uint256, uint256, uint256)
     );
 
+    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
     uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
     require(sourceEntityLevel >= 1, "Invalid Source  entity");
-
-    // require(
-    //   LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity) >= 1,
-    //   "Invalid Destination  entity"
-    // );
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
@@ -47,6 +48,12 @@ contract AttackSystem is System {
     );
 
     require(sourceEntityOffenceAmount >= amount, "Not enough torpedos in ");
+
+    require(
+      ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0) &&
+        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) == 0)),
+      "Neither source nor destination can be in an encounter"
+    );
 
     // Take current position
     Coord memory sourcePosition = getCurrentPosition(
@@ -159,13 +166,6 @@ contract AttackSystem is System {
 
     if (totalDamage >= destinationDefenceAmount) {
       deleteGodown(destinationEntity, components);
-      // LevelComponent(getAddressById(components, LevelComponentID)).set(destinationEntity, 0);
-      // DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, 0);
-      // OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationEntity, 0);
-      // BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, 0);
-      // LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      //   .set(destinationEntity,block.timestamp);
-      // PositionComponent(getAddressById(components, PositionComponentID)).remove(destinationEntity);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
         destinationEntity,

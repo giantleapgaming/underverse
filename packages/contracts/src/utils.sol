@@ -19,6 +19,8 @@ import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import { ProspectedComponent, ID as ProspectedComponentID } from "./components/ProspectedComponent.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "./components/EncounterComponent.sol";
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -77,9 +79,6 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 }
 
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
-  //uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER * uint256((int256(x) ** 2) + (int256(y) ** 2));
-  // uint256 totalPriceRaw = (50000 * MULTIPLIER); // / Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant);
-  // uint256 godownCreationCost = totalPriceRaw * MULTIPLIER2; // 10^6
   uint256 godownCreationCost = (50000 * MULTIPLIER); // 10^6
   return godownCreationCost;
 }
@@ -201,8 +200,7 @@ function isThereAnyObstacleOnTheWay(
       if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
           .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
-        //////////////////////
-        //////////////////////
+
         if (arrayOfGodownsAtThatCoord.length > 0) {
           for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
             if (
@@ -218,8 +216,6 @@ function isThereAnyObstacleOnTheWay(
       }
       x += stepX;
       y += stepY;
-      /////////////////
-      /////////////////
     }
   }
   // return pointsArray;
@@ -264,25 +260,6 @@ function atleastOneObstacleOnTheWay(
   }
   return result;
 }
-
-// function segmentPoints(int32 x1, int32 y1, int32 x2, int32 y2) pure returns (Coordd[] memory) {
-//   Coordd[] memory points;
-//   int32 d = int32(
-//     int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
-//       int256(MULTIPLIER2)
-//   );
-//   int32 stepX = (x2 - x1 * 100) / d;
-//   int32 stepY = (y2 - y1 * 100) / d;
-//   int32 x = x1 * 100;
-//   int32 y = y1 * 100;
-//   for (int32 i = 0; i <= d; i++) {
-//       points[uint256(uint32(i))] = Coordd({x: x / 100, y: y / 100});
-//       x += stepX;
-//       y += stepY;
-//   }
-//   return points;
-// }
-//We will split the creation of the Asteroid and determining its balances into two different steps
 
 function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
   uint256 ent = world.getUniqueEntityId();
@@ -421,8 +398,6 @@ function getFactionRepairCosts(Faction faction) pure returns (uint256) {
   return 100;
 }
 
-// subtract -1 from faction val
-
 function getPlayerFuel(FuelComponent fuelComponent, uint256 entity) view returns (uint256) {
   bytes memory currentFuelBytes = fuelComponent.getRawValue(entity);
   return currentFuelBytes.length == 0 ? 0 : abi.decode(currentFuelBytes, (uint256));
@@ -434,4 +409,25 @@ function createPerson(IWorld world, IUint256Component components, int32 x, int32
   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(personID, block.timestamp);
   PositionComponent(getAddressById(components, PositionComponentID)).set(personID, Coord({ x: x, y: y }));
   LevelComponent(getAddressById(components, LevelComponentID)).set(personID, 1);
+}
+
+function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
+  IERC1155 nft = IERC1155(nftContract);
+  uint256 balance = nft.balanceOf(msg.sender, nftID);
+  if (balance > 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function createEncounterEntity(IWorld world, IUint256Component components, int32 x, int32 y, uint256 sourceEntity) {
+  uint256 ent = world.getUniqueEntityId();
+  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+  ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
+  //We set the calling entity encounter ID to the newly created entity and vice versa
+  //That way we know which 2 entities belong to a specific encounter
+  EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
+  EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
 }

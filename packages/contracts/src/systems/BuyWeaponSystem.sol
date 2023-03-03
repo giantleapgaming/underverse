@@ -10,9 +10,10 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getFactionWeaponCosts } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, MISSILE_COST, Faction } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getFactionWeaponCosts } from "../utils.sol";
+import { MULTIPLIER, MULTIPLIER2, MISSILE_COST, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuyWeapon"));
 
@@ -28,17 +29,14 @@ contract BuyWeaponSystem is System {
       "Godown not owned by user"
     );
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
-    );
-
     uint256 selectedGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
 
     require(selectedGodownLevel >= 1, "Invalid entity");
+
+    require(
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(godownEntity) == 4,
+      "Source has to be an Attack ship"
+    );
 
     uint256 godownExisitingWeaponQuantity = OffenceComponent(getAddressById(components, OffenceComponentID)).getValue(
       godownEntity
@@ -56,20 +54,6 @@ contract BuyWeaponSystem is System {
       CashComponent(getAddressById(components, CashComponentID)),
       addressToEntity(msg.sender)
     );
-
-    // UNCOMMENT BELOW FOR old formula which was : 1000 / d
-    // Coord memory godownPosition = getCurrentPosition(
-    //   PositionComponent(getAddressById(components, PositionComponentID)),
-    //   godownEntity
-    // );
-    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-    //   uint256(
-    //     (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
-    //   );
-    // uint256 totalPriceRaw = ((1000 * MULTIPLIER) * Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant)); // * buyQuantity;
-    // uint256 totalPrice = (totalPriceRaw / MULTIPLIER2) * buyQuantity; // To convert in 10^6 format
-
-    // 174928556845.36 // keep this number for ref. Its price of 1 torpedo at 15,9.
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
       addressToEntity(msg.sender)

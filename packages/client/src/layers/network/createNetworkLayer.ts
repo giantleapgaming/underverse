@@ -60,6 +60,12 @@ export async function createNetworkLayer(config: GameConfig) {
       metadata: { contractId: "component.Population" },
     }),
 
+    NFTID: defineNumberComponent(world, {
+      id: "NFTID",
+      indexed: true,
+      metadata: { contractId: "component.NFTID" },
+    }),
+
     EntityType: defineNumberComponent(world, {
       id: "EntityType",
       indexed: true,
@@ -142,6 +148,12 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Prospected" },
     }),
+
+    Encounter: defineNumberComponent(world, {
+      id: "Encounter",
+      indexed: true,
+      metadata: { contractId: "component.Encounter" },
+    }),
   };
   const componentsWithOverrides = {
     Position: overridableComponent(components.Position),
@@ -164,6 +176,8 @@ export async function createNetworkLayer(config: GameConfig) {
     PrevPosition: overridableComponent(components.PrevPosition),
     SectorEdge: overridableComponent(components.SectorEdge),
     Prospected: overridableComponent(components.Prospected),
+    NFTID: overridableComponent(components.NFTID),
+    Encounter: overridableComponent(components.Encounter),
   };
 
   // --- SETUP ----------------------------------------------------------------------
@@ -176,35 +190,16 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
-  const initSystem = async (name: string, faction: number, setTrue: () => void, setFalse: () => void) => {
-    try {
-      await systems["system.Init"].executeTyped(name, faction);
-      setTrue();
-    } catch (e) {
-      console.log(e);
-      setFalse();
-    }
+  const initSystem = async (name: string, faction: number, nftID: number) => {
+    return systems["system.Init"].executeTyped(name, faction, nftID);
   };
 
   async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType);
-    // return 1;
   }
 
-  async function moveSystem({
-    x,
-    y,
-    entityType,
-    srcX,
-    srcY,
-  }: {
-    x: number;
-    y: number;
-    entityType: EntityID;
-    srcX: number;
-    srcY: number;
-  }) {
-    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, srcX, srcY);
+  async function moveSystem({ x, y, entityType }: { x: number; y: number; entityType: EntityID }) {
+    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y);
   }
 
   async function wallSystem({
