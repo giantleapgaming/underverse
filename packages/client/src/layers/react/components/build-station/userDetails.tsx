@@ -2,15 +2,15 @@ import { getComponentValue } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import { getNftId } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
-import { NFTImage } from "../utils/NftImage";
 import { UserAction } from "./userAction";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { Name, NFTID },
+      components: { Name },
       world,
       network: { connectedAddress },
     },
@@ -19,10 +19,10 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const address = connectedAddress.get();
   const factionIndex = world.entities.indexOf(address);
   const name = getComponentValue(Name, factionIndex)?.value;
-  const NFTid = getComponentValue(NFTID, factionIndex)?.value;
+  const nftDetails = getNftId(layers.network);
   return (
     <S.Container>
-      {NFTid && address && <NFTImage nftId={+NFTid} walletAddress={address} />}
+      {nftDetails && <img src={nftDetails.imageUrl} />}
       <p
         style={{ cursor: "pointer" }}
         onClick={() => {

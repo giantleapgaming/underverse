@@ -20,7 +20,6 @@ export const Layout = ({ layers }: { layers: Layers }) => {
     sounds["click"].play();
     setBuild({ x: 0, y: 0, canPlace: true, entityType, show: false, isBuilding: true });
   };
-
   if (buildDetails || selectedEntity) {
     return null;
   } else {

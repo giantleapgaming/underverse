@@ -1,7 +1,14 @@
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { NetworkLayer } from "../../network/types";
 
-const getNftId = (network: NetworkLayer): number | undefined => {
+const getNftId = (
+  network: NetworkLayer
+):
+  | {
+      tokenId: number;
+      imageUrl: string;
+    }
+  | undefined => {
   const {
     components: { NFTID },
     walletNfts,
@@ -10,6 +17,6 @@ const getNftId = (network: NetworkLayer): number | undefined => {
     return +getComponentValueStrict(NFTID, nftId).value;
   });
   const doesExist = walletNfts.find((walletNftId) => allNftIds.includes(walletNftId.tokenId));
-  return doesExist?.tokenId;
+  return doesExist;
 };
 export { getNftId };

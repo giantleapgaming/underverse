@@ -38,9 +38,9 @@ export const registerBuild = () => {
           });
           const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
           if (doesExist) {
-            return;
-          } else {
             return { layers };
+          } else {
+            return;
           }
         })
       );
