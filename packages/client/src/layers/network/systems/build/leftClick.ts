@@ -2,6 +2,7 @@ import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
 import { getComponentValue } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
+import { getNftId } from "../../utils/getNftId";
 
 export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -23,8 +24,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
     world,
     api: { buildSystem, buildFromHarvesterSystem, buildFromShipyardSystem },
   } = network;
-
-  // on left click build the station
+  const nftId = getNftId(network);
   const leftClickSub = input.click$.subscribe(async (p) => {
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
@@ -37,17 +37,17 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
         setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
         sounds["click"].play();
         if (typeof selectedEntity === "undefined" && buildDetails.entityType == 5) {
-          await buildSystem({ x, y, entityType: buildDetails.entityType });
+          if (nftId) {
+            await buildSystem({ x, y, entityType: buildDetails.entityType, NftId: nftId });
+          }
         } else if (
           selectedEntity &&
           (buildDetails.entityType == 1 || buildDetails.entityType == 3 || buildDetails.entityType == 7)
         ) {
           const harvesterEntity = world.entities[selectedEntity];
-          console.log("harvester", harvesterEntity, x, y, buildDetails.entityType);
           await buildFromHarvesterSystem({ harvesterEntity, x, y, entityType: buildDetails.entityType });
         } else if (selectedEntity) {
           const shipyardEntity = world.entities[selectedEntity];
-          console.log("shipyard", shipyardEntity);
           await buildFromShipyardSystem({ shipyardEntity, x, y, entityType: buildDetails.entityType });
         }
         showProgress();

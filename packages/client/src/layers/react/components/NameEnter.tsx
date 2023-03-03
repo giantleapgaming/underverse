@@ -261,7 +261,7 @@ export const registerNameScreen = () => {
       } = layers;
       return merge(computedToStream(connectedAddress), NFTID.update$).pipe(
         map(() => connectedAddress.get()),
-        map((address) => {
+        map(() => {
           const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
             return +getComponentValueStrict(NFTID, nftId).value;
           });

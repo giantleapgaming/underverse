@@ -195,12 +195,22 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Init"].executeTyped(name, faction, nftID);
   };
 
-  async function buildSystem({ x, y, entityType }: { x: number; y: number; entityType: number }) {
-    return systems["system.Build"].executeTyped(x, y, entityType);
+  async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
+    return systems["system.Build"].executeTyped(x, y, entityType, NftId);
   }
 
-  async function moveSystem({ x, y, entityType }: { x: number; y: number; entityType: EntityID }) {
-    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y);
+  async function moveSystem({
+    x,
+    y,
+    entityType,
+    NftId,
+  }: {
+    x: number;
+    y: number;
+    entityType: EntityID;
+    NftId: number;
+  }) {
+    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId);
   }
 
   async function wallSystem({
@@ -231,10 +241,11 @@ export async function createNetworkLayer(config: GameConfig) {
     );
   }
 
-  async function prospectSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID) {
+  async function prospectSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, NftId: number) {
     return systems["system.Prospect"].executeTyped(
       BigNumber.from(srcGodownEntity),
-      BigNumber.from(destinationGodownEntity)
+      BigNumber.from(destinationGodownEntity),
+      NftId
     );
   }
 
