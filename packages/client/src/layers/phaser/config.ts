@@ -1592,6 +1592,16 @@ export const phaserConfig = {
           prefix: "explosion-",
           suffix: ".png",
         },
+        {
+          key: Animations.Wave,
+          assetKey: Assets.MainAtlas,
+          startFrame: 1,
+          endFrame: 7,
+          frameRate: 4,
+          repeat: 0,
+          prefix: "wave-",
+          suffix: ".png",
+        },
       ],
       tilesets: {
         Default: { assetKey: Assets.OverworldTileset, tileWidth: TILE_WIDTH, tileHeight: TILE_HEIGHT },

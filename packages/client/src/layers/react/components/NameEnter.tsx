@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
-import { getComponentEntities } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { useState, useEffect } from "react";
 import { computedToStream } from "@latticexyz/utils";
 import { Faction } from "./Faction";
 import { Wallet } from "ethers";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 
 interface Image {
   tokenId: number;
@@ -255,19 +255,22 @@ export const registerNameScreen = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name },
-          world,
+          components: { Name, NFTID },
+          walletNfts,
         },
       } = layers;
       return merge(computedToStream(connectedAddress), Name.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          if (userLinkWithAccount) return;
-          return {
-            layers,
-          };
+          const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
+            return +getComponentValueStrict(NFTID, nftId).value;
+          });
+          const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
+          if (doesExist) {
+            return;
+          } else {
+            return { layers };
+          }
         })
       );
     },

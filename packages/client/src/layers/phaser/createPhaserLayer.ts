@@ -74,6 +74,7 @@ import { cargoTransport } from "../network/systems/action/transport/cargoTranspo
 import { humanTransport } from "../network/systems/action/transport/humanTransport";
 import { fuelTransport } from "../network/systems/action/transport/fuelTransport";
 import { moveRefueller } from "../network/systems/action/move/moveRefueller";
+import { displayEncounter } from "../network/systems/view/encounter";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -352,6 +353,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayShipyardSystem(network, context);
   displayRefuelSystem(network, context);
   displayOrbits(network, context);
+  displayEncounter(network, context);
   displayWallSystem(network, context);
   //Select system for the station
   selectClickSystem(network, context);

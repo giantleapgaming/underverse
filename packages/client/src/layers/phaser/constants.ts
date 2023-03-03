@@ -439,6 +439,7 @@ export enum Sprites {
 
 export enum Animations {
   Explosion = "Explosion",
+  Wave = "Wave",
 }
 
 export const UnitTypeSprites: Record<number, Sprites> = {};

@@ -21,6 +21,7 @@ import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { GameConfig, getNetworkConfig } from "./config";
 import { BigNumber } from "ethers";
 import { Mapping } from "../../utils/mapping";
+import { getNftData } from "../react/utils/getNftData";
 /**
  * The Network layer is the lowest layer in the client architecture.
  * Its purpose is to synchronize the client components with the contract components.
@@ -344,13 +345,12 @@ export async function createNetworkLayer(config: GameConfig) {
     const entityIndex = getEntityIndexAtPosition(x, y) as EntityIndex;
     return entityIndex ? world.entities[entityIndex] : undefined;
   }
-
+  const walletNfts = await getNftData(network.connectedAddress.get());
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
     components: {
       ...components,
-      ...componentsWithOverrides,
     },
     txQueue,
     systems,
@@ -382,6 +382,7 @@ export async function createNetworkLayer(config: GameConfig) {
       getEntityIndexAtPosition,
       getEntityIdAtPosition,
     },
+    walletNfts,
   };
 
   return context;
