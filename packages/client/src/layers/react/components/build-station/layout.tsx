@@ -1,4 +1,4 @@
-import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentValue } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
@@ -6,11 +6,6 @@ import { UserDetails } from "./userDetails";
 
 export const Layout = ({ layers }: { layers: Layers }) => {
   const {
-    network: {
-      components: { Faction },
-      world,
-      network: { connectedAddress },
-    },
     phaser: {
       sounds,
       components: { Build, ShowStationDetails },
@@ -18,8 +13,6 @@ export const Layout = ({ layers }: { layers: Layers }) => {
       localIds: { buildId, stationDetailsEntityIndex },
     },
   } = layers;
-  const entityIndex = world.entities.indexOf(connectedAddress.get());
-  const factionNumber = getComponentValueStrict(Faction, entityIndex).value;
   const buildDetails = getComponentValue(Build, buildId)?.isBuilding;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
 

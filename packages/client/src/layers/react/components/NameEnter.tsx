@@ -255,11 +255,11 @@ export const registerNameScreen = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, NFTID },
+          components: { NFTID },
           walletNfts,
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), Name.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$).pipe(
         map(() => connectedAddress.get()),
         map((address) => {
           const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
