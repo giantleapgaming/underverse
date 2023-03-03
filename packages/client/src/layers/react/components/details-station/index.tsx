@@ -1,5 +1,5 @@
 import { registerUIComponent } from "../../engine";
-import { getComponentEntities } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../../types";
 import { DetailsLayout } from "./layoutDetails";
@@ -25,15 +25,15 @@ export const registerDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, Cash, Fuel },
-          world,
+          components: { Cash, Fuel, NFTID },
+          walletNfts,
         },
         phaser: {
           components: { ShowStationDetails, ShowDestinationDetails, MoveStation, ShowHighLight },
         },
       } = layers;
       return merge(
-        Name.update$,
+        NFTID.update$,
         Cash.update$,
         ShowStationDetails.update$,
         ShowDestinationDetails.update$,
@@ -42,13 +42,13 @@ export const registerDetails = () => {
         Fuel.update$
       ).pipe(
         map(() => connectedAddress.get()),
-        map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          if (userLinkWithAccount) {
-            return {
-              layers,
-            };
+        map(() => {
+          const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
+            return +getComponentValueStrict(NFTID, nftId).value;
+          });
+          const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
+          if (doesExist) {
+            return { layers };
           } else {
             return;
           }
