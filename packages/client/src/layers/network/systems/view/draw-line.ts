@@ -6,6 +6,7 @@ import { PhaserLayer } from "../../../phaser";
 import { segmentPoints, getObstacleList } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
 import { Sprites } from "../../../phaser/constants";
+import { getNftId } from "../../utils/getNftId";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -150,12 +151,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
       if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
-        if (!+isProspected) {
+        const nftDetails = getNftId(network);
+
+        if (!+isProspected && nftDetails) {
           try {
             sounds["confirm"].play();
             setShowLine(false);
             showProgress();
-            await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity]);
+            await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
             objectPool.remove(`prospect-text-white`);
             setShowLine(false);
           } catch (e) {
@@ -197,38 +200,42 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         ) {
           const level = getComponentValueStrict(Level, selectedEntity).value;
           const balance = getComponentValueStrict(Balance, selectedEntity).value;
-          try {
-            await moveSystem({
-              entityType: world.entities[selectedEntity],
-              x,
-              y,
-            });
-            objectPool.remove(`fuel-text-white`);
-            objectPool.remove(`prospect-text-white`);
-            const frame =
-              +entityType === Mapping.harvester.id
-                ? `miner-f-${+level}-${+balance}.png`
-                : `attack-${+factionNumber + 1}-${+level}.png`;
-            setMoveStation(false);
-            setShowAnimation({
-              showAnimation: true,
-              destinationX: x,
-              destinationY: y,
-              sourceX: sourcePosition.x,
-              sourceY: sourcePosition.y,
-              type:
-                (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                "move",
-              frame: frame,
-              faction: +factionNumber,
-              entityID: selectedEntity,
-            });
-            showProgress();
-            setShowLine(false);
-          } catch (e) {
-            console.log(e);
+          const nftDetails = getNftId(network);
+          if (nftDetails) {
+            try {
+              await moveSystem({
+                entityType: world.entities[selectedEntity],
+                x,
+                y,
+                NftId: nftDetails.tokenId,
+              });
+              objectPool.remove(`fuel-text-white`);
+              objectPool.remove(`prospect-text-white`);
+              const frame =
+                +entityType === Mapping.harvester.id
+                  ? `miner-f-${+level}-${+balance}.png`
+                  : `attack-${+factionNumber + 1}-${+level}.png`;
+              setMoveStation(false);
+              setShowAnimation({
+                showAnimation: true,
+                destinationX: x,
+                destinationY: y,
+                sourceX: sourcePosition.x,
+                sourceY: sourcePosition.y,
+                type:
+                  (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                  (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                  (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                  "move",
+                frame: frame,
+                faction: +factionNumber,
+                entityID: selectedEntity,
+              });
+              showProgress();
+              setShowLine(false);
+            } catch (e) {
+              console.log(e);
+            }
           }
         }
       }
