@@ -12,8 +12,10 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getPlayerFuel } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getPlayerFuel, checkNFT } from "../utils.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Harvest"));
 
@@ -21,23 +23,30 @@ contract HarvestSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256, uint256)
+    );
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     // Check if source and destination are asteroid and harvester respectively
 
-    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      sourceEntity
+    require(
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 2,
+      "Source has to be an Asteroid"
     );
-    require(sourceEntityType == 2, "Source has to be an Asteroid");
-
-    uint256 destinationEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      destinationEntity
-    );
-    require(destinationEntityType == 5, "Destination has to be a Harvester");
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) ==
-        addressToEntity(msg.sender),
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 5,
+      "Destination has to be a Harvester"
+    );
+
+    require(
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) == playerID,
       "Destination  not owned by user"
     );
 
@@ -95,17 +104,17 @@ contract HarvestSystem is System {
 
     FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, fuel - totalTransportCost);
 
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
     // update  data
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
   }
 
-  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, destinationEntity, kgs));
+  function executeTyped(
+    uint256 sourceEntity,
+    uint256 destinationEntity,
+    uint256 kgs,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, kgs, nftID));
   }
 }

@@ -46,8 +46,7 @@ contract ProspectSystem is System {
     );
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
       "Harvester not owned by user"
     );
 
