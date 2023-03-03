@@ -7,7 +7,7 @@ uint256 constant MISSILE_COST = 1000;
 uint256 constant actionDelayInSeconds = 0;
 uint256 constant godownCreationCost = 20000 * MULTIPLIER;
 uint256 constant playerInitialCash = 300000 * MULTIPLIER;
-uint256 constant offenceInitialAmount = 0;
+uint256 constant offenceInitialAmount = 10;
 uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
 uint256 constant godownInitialStorage = 1000;
@@ -34,6 +34,7 @@ uint256 constant shipyardType = 7;
 uint256 constant personType = 8;
 uint256 constant fuelCarrier = 9;
 uint256 constant barrier = 10;
+uint256 constant pirateShip = 11;
 
 struct Coordd {
   int32 x;
@@ -100,3 +101,5 @@ uint256 constant usaBuild = 95;
 uint256 constant usaScrap = 95;
 uint256 constant usaIncome = 95;
 uint256 constant usaSell = 95;
+
+address constant nftContract = 0x39Af9A4a49E18201FE0ED60C353039ac86B14fBD;

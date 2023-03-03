@@ -12,8 +12,7 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getPlayerFuel } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getPlayerFuel } from "../utils.sol";
 import "../libraries/Math.sol";
 
 uint256 constant ID = uint256(keccak256("system.Harvest"));
@@ -36,42 +35,14 @@ contract HarvestSystem is System {
     );
     require(destinationEntityType == 5, "Destination has to be a Harvester");
 
-    // Commenting out source to be owned by user
-    //require(
-    //  OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-    //    addressToEntity(msg.sender),
-    //  "Source  not owned by user"
-    //);
-
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) ==
         addressToEntity(msg.sender),
       "Destination  not owned by user"
     );
 
-    //require(sourceEntity != destinationEntity, "Source and destination  cannot be same");
-
-    // Commenting out time delay requirement
-    //uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-    //  .getValue(addressToEntity(msg.sender));
-
-    //require(
-    //  playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-    //  "Need 0 seconds of delay between actions"
-    //);
-
-    //uint256 sourceLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-    //  sourceEntity
-    //);
-    //require(sourceLevel >= 1, "Invalid source  entity");
-
     uint256 destinationLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity);
     require(destinationLevel >= 1, "Invalid destination  entity");
-
-    // uint256 destinationLevel = getEntityLevel(
-    //   LevelComponent(getAddressById(components, LevelComponentID)),
-    //   destinationEntity
-    // );
 
     uint256 sourceBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity);
 
@@ -122,18 +93,7 @@ contract HarvestSystem is System {
 
     require(fuel >= totalTransportCost, "Not enough Fuel to transport product");
 
-    // uint256 playerCash = getPlayerCash(
-    //   CashComponent(getAddressById(components, CashComponentID)),
-    //   addressToEntity(msg.sender)
-    // );
-
-    // update player data
-    // CashComponent(getAddressById(components, CashComponentID)).set(
-    //   addressToEntity(msg.sender),
-    //   playerCash - totalTransportCost
-    // );
-
-    FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, fuel - totalTransportCost);
+    FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, fuel - totalTransportCost);
 
     LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
       addressToEntity(msg.sender),
@@ -143,11 +103,6 @@ contract HarvestSystem is System {
     // update  data
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationEntity,
-      block.timestamp
-    );
   }
 
   function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) public returns (bytes memory) {

@@ -8,16 +8,15 @@ import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createAsteroids, getPlayerFuel } from "../utils.sol";
-import { MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity, getPlayerFuel } from "../utils.sol";
 import "../libraries/Math.sol";
-//Consider moving sector edge update to Prospect as players will prospect immediately any asteroid that is discovered
-//This code is complex already
-import { SectorEdgeComponent, ID as SectorEdgeComponentID } from "../components/SectorEdgeComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 
@@ -25,21 +24,24 @@ contract MoveShipSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) = abi.decode(
-      arguments,
-      (uint256, int32, int32, int32, int32)
-    );
+    (uint256 sourceEntity, int32 x, int32 y, uint256 nftID) = abi.decode(arguments, (uint256, int32, int32, uint256));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     // Check if the ship being moved is owned by the user
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
       "Ship not owned by user"
     );
 
     //Check that the ship is not a destroyed ship (Level 0)
-    uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
-    require(sourceEntityLevel >= 1, "Ship has already been destroyed");
+    require(
+      LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
+      "Ship has already been destroyed"
+    );
 
     uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       sourceEntity
@@ -48,6 +50,11 @@ contract MoveShipSystem is System {
     require(
       sourceEntityType == 4 || sourceEntityType == 5 || sourceEntityType == 9,
       "Source has to be an Harvester, Attack ship or fuel carrier"
+    );
+
+    require(
+      EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0,
+      "Cannot move ship while in an encounter"
     );
 
     Coord memory sourcePosition = getCurrentPosition(
@@ -59,17 +66,11 @@ contract MoveShipSystem is System {
 
     Coord memory destinationPosition = Coord({ x: x, y: y });
 
-    uint256 distFromCenterSq = uint256(int256(destinationPosition.x) ** 2 + int256(destinationPosition.y) ** 2);
+    uint256 distFromCenterSq = uint256(int256(x) ** 2 + int256(y) ** 2);
     require(distFromCenterSq < 10000, "Cannot move beyond 100 orbits");
 
     require(
-      atleastOneObstacleOnTheWay(
-        sourcePosition.x,
-        sourcePosition.y,
-        destinationPosition.x,
-        destinationPosition.y,
-        components
-      ) == false,
+      atleastOneObstacleOnTheWay(sourcePosition.x, sourcePosition.y, x, y, components) == false,
       "Obstacle on the way"
     );
 
@@ -94,18 +95,17 @@ contract MoveShipSystem is System {
       (distFromCenterSq > 225) &&
       (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
     ) {
-      createAsteroids(world, components, destinationPosition.x + 2, destinationPosition.y + 2, 0, 0);
+      createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, sourceEntity);
     }
 
     // update player data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
-
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates
-  function executeTyped(uint256 sourceEntity, int32 x, int32 y, int32 srcX, int32 srcY) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x, y, srcX, srcY));
+  function executeTyped(uint256 sourceEntity, int32 x, int32 y, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, x, y, nftID));
   }
 }

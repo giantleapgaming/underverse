@@ -9,19 +9,17 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Name, Faction, EntityType, Level },
+    components: { OwnedBy, Name, Faction, EntityType, Level, Position },
     network: { connectedAddress },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.MoveShip"], ({ args }) => {
-    const { x, y, sourceEntity, srcX, srcY } = args as {
+    const { x, y, sourceEntity } = args as {
       x: number;
       y: number;
       sourceEntity: BigNumber;
-      srcX: number;
-      srcY: number;
     };
     const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
     const ownedBy = getComponentValue(OwnedBy, sourceEntityIndex)?.value;
@@ -29,6 +27,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const entityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
+    const position = getComponentValue(Position, sourceEntityIndex);
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     if (
       faction &&
@@ -36,7 +35,8 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       typeof +faction === "number" &&
       typeof +entityType === "number" &&
       level &&
-      typeof +faction === "number"
+      typeof +faction === "number" &&
+      position
     ) {
       const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
@@ -52,8 +52,8 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
           showAnimation: true,
           destinationX: x,
           destinationY: y,
-          sourceX: srcX,
-          sourceY: srcY,
+          sourceX: position.x,
+          sourceY: position.y,
           type:
             (+entityType === Mapping.harvester.id && "moveHarvester") ||
             (+entityType === Mapping.attack.id && "moveAttackShip") ||

@@ -11,8 +11,11 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { getCurrentPosition, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, zeroCoord, baseInitialfuel, barrier } from "../constants.sol";
+import { godownInitialLevel, barrier } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildWall"));
 
@@ -24,6 +27,10 @@ contract BuildWallSystem is System {
       arguments,
       (uint256, int32, int32, int32, int32)
     );
+
+    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
     //Check if source entity owned by user,
 
