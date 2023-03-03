@@ -47,7 +47,10 @@ export const Transport = ({
       </div>
       {+space > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>TOTAL COST {+selected && convertPrice(Math.pow(distance * +selected, 2) * factionData[faction]?.transport)}</S.Text>
+          <S.Text>
+            TOTAL COST{" "}
+            {+selected && convertPrice((Math.pow(distance * +selected, 2) * factionData[faction]?.transport) / 10)}
+          </S.Text>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {

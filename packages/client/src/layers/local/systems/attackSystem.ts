@@ -50,8 +50,8 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const destitution = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
         graphics.clear();
         graphics.lineStyle(2, 0xeeeeee, 1);
-        const x1 = source.x + 32,
-          y1 = source.y + 32,
+        const x1 = source.x + tileWidth / 2,
+          y1 = source.y + tileHeight / 2,
           x2 = pointer.worldX,
           y2 = pointer.worldY; // coordinates of the start and end points
         const valuesX = Position.values.x;
@@ -90,7 +90,7 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
               id: `blocking-station-attack-${i}`,
               once: (gameObject) => {
                 gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
-                gameObject.setPosition(showBLockingCord.x + 32, showBLockingCord.y + 32);
+                gameObject.setPosition(showBLockingCord.x + tileWidth / 2, showBLockingCord.y + tileHeight / 2);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.depth = 2;
                 gameObject.setAngle(0);
@@ -211,18 +211,18 @@ export function attackSystem(network: NetworkLayer, phaser: PhaserLayer) {
             id: "missileRelease",
             once: (gameObject) => {
               gameObject.setTexture(missileSprite.assetKey, `missile-${faction && +faction}.png`);
-              gameObject.setPosition(source.x + 32, source.y + 32);
+              gameObject.setPosition(source.x + tileWidth / 2, source.y + tileHeight / 2);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
               phaserScene.add.tween({
                 targets: gameObject,
                 x: {
                   from: gameObject.x,
-                  to: distraction.x + 32,
+                  to: distraction.x + tileWidth / 2,
                 },
                 y: {
                   from: gameObject.y,
-                  to: distraction.y + 32,
+                  to: distraction.y + tileHeight / 2,
                 },
                 repeat: repeatLoop,
                 yoyo: false,
