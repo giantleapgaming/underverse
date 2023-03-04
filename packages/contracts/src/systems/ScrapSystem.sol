@@ -5,16 +5,19 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getCargoSellingPrice, deleteGodown, getFactionScrapCosts } from "../utils.sol";
-import { actionDelayInSeconds, offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getCargoSellingPrice, deleteGodown, getFactionScrapCosts } from "../utils.sol";
+import { Faction } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { checkNFT } from "../utils.sol";
+import { nftContract } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Scrap"));
 
@@ -22,15 +25,12 @@ contract ScrapSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    uint256 godownEntity = abi.decode(arguments, (uint256));
+    (uint256 godownEntity, uint256 nftID) = abi.decode(arguments, (uint256, uint256));
 
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
-    );
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) ==
@@ -75,23 +75,12 @@ contract ScrapSystem is System {
       addressToEntity(msg.sender),
       playerCash + totalScrapValue
     );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
 
     // Deleting godown
     deleteGodown(godownEntity, components);
-    //   LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, 0);
-    //   DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, 0);
-    //   OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
-    //   BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
-    //   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-    //     .set(godownEntity,block.timestamp);
-    //   PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
   }
 
-  function executeTyped(uint256 entity) public returns (bytes memory) {
-    return execute(abi.encode(entity));
+  function executeTyped(uint256 entity, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(entity, nftID));
   }
 }
