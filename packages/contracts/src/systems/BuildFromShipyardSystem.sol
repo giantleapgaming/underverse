@@ -26,18 +26,18 @@ contract BuildFromShipyardSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 ShipyardEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
+    (uint256 ShipyardEntity, int32 x, int32 y, uint256 entity_type, uint256 nftID) = abi.decode(
       arguments,
-      (uint256, int32, int32, uint256)
+      (uint256, int32, int32, uint256, uint256)
     );
-
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(ShipyardEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(ShipyardEntity) == playerID,
       "Shipyard not owned by user"
     );
 
@@ -87,24 +87,13 @@ contract BuildFromShipyardSystem is System {
       "Obstacle on the way"
     );
 
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(ShipyardEntity, balanceShipyard - 2);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      ShipyardEntity,
-      block.timestamp
-    );
 
     uint256 buildEntity = world.getUniqueEntityId();
 
     PositionComponent(getAddressById(components, PositionComponentID)).set(buildEntity, buildPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(buildEntity, buildPosition);
-    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(buildEntity, addressToEntity(msg.sender));
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(buildEntity, block.timestamp);
+    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(buildEntity, playerID);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(buildEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(buildEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(buildEntity, entity_type);
@@ -117,7 +106,13 @@ contract BuildFromShipyardSystem is System {
 
   //Input parameters are Shipyard, Build location and what you want to build
 
-  function executeTyped(uint256 ShipyardEntity, int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
-    return execute(abi.encode(ShipyardEntity, x, y, entity_type));
+  function executeTyped(
+    uint256 ShipyardEntity,
+    int32 x,
+    int32 y,
+    uint256 entity_type,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(ShipyardEntity, x, y, entity_type, nftID));
   }
 }
