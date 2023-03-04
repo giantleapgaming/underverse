@@ -23,20 +23,20 @@ contract BuildWallSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x1, int32 y1, int32 x2, int32 y2) = abi.decode(
+    (uint256 sourceEntity, int32 x1, int32 y1, int32 x2, int32 y2, uint256 nftID) = abi.decode(
       arguments,
-      (uint256, int32, int32, int32, int32)
+      (uint256, int32, int32, int32, int32, uint256)
     );
 
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
-
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     //Check if source entity owned by user,
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
       "Ship not owned by user"
     );
 
@@ -116,10 +116,6 @@ contract BuildWallSystem is System {
         Coord memory coord = Coord({ x: i, y: y1 });
         uint256 barrierEntity = world.getUniqueEntityId();
         PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
-        LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-          barrierEntity,
-          block.timestamp
-        );
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
         DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
@@ -137,10 +133,6 @@ contract BuildWallSystem is System {
         Coord memory coord = Coord({ x: x1, y: i });
         uint256 barrierEntity = world.getUniqueEntityId();
         PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
-        LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-          barrierEntity,
-          block.timestamp
-        );
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
         DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
@@ -148,14 +140,16 @@ contract BuildWallSystem is System {
     }
 
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - wallLength);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
-  function executeTyped(uint256 sourceEntity, int32 x1, int32 y1, int32 x2, int32 y2) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x1, y1, x2, y2));
+  function executeTyped(
+    uint256 sourceEntity,
+    int32 x1,
+    int32 y1,
+    int32 x2,
+    int32 y2,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, x1, y1, x2, y2, nftID));
   }
 }
