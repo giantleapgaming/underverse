@@ -3,7 +3,7 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
-import { Animations, Sprites } from "../../../phaser/constants";
+import { Animations } from "../../../phaser/constants";
 
 export function displayEncounter(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -23,9 +23,9 @@ export function displayEncounter(network: NetworkLayer, phaser: PhaserLayer) {
   defineSystem(world, [Has(Position), Has(Encounter), Not(Balance), Has(Level)], ({ entity }) => {
     const position = getComponentValueStrict(Position, entity);
     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-    const astroidObject = objectPool.get(`astroid-${entity}`, "Sprite");
+    const astroidObject = objectPool.get(`encounter-${entity}`, "Sprite");
     astroidObject.setComponent({
-      id: `astroid-${entity}`,
+      id: `encounter-${entity}`,
       once: (gameObject) => {
         gameObject.play(Animations.Wave);
         gameObject.setOrigin(0.5, 0.5);

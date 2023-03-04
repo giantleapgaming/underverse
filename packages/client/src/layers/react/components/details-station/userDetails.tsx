@@ -3,7 +3,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { walletAddress } from "../../utils/walletAddress";
-import { NFTImage } from "../utils/NftImage";
 import { UserAction } from "./userAction";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
@@ -26,7 +25,6 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const NFTid = getComponentValue(NFTID, factionIndex)?.value;
     return (
       <S.Container>
-        {NFTid && ownedBy && <NFTImage nftId={+NFTid} walletAddress={ownedBy} />}
         <p
           style={{ cursor: "pointer" }}
           onClick={() => {

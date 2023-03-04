@@ -101,7 +101,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
@@ -149,15 +148,15 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           setShowLine(true, x, y, "transport");
         }
       }
-      if (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "prospect") {
+      if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
         const nftDetails = getNftId(network);
-
         if (!+isProspected && nftDetails) {
           try {
             sounds["confirm"].play();
             setShowLine(false);
             showProgress();
+            console.log(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
             await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
             objectPool.remove(`prospect-text-white`);
             setShowLine(false);

@@ -41,7 +41,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           method: "POST",
           body: JSON.stringify({
             address: wallet.address,
-            nftContract: "0x39Af9A4a49E18201FE0ED60C353039ac86B14fBD",
+            nftContract: "0x61dbb18038c96df35e5f42cea18858f127eb1a89",
             chainId: chainIdString,
           }),
           headers: {
@@ -60,7 +60,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   return (
     <>
       <Container faction={!!(typeof selectFaction === "number")}>
-        {"4242" == chainIdString ? (
+        {"4242" == chainIdString || "100" == chainIdString ? (
           <>
             {typeof selectFaction === "number" ? (
               <>

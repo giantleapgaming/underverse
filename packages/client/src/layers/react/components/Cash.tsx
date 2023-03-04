@@ -1,22 +1,30 @@
 import { registerUIComponent } from "../engine";
-import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import { convertPrice } from "../../react/utils/priceConverter";
 import { Highlight } from "./details-station/highlight";
 import { Mapping } from "../../../utils/mapping";
+import { getNftId } from "../../network/utils/getNftId";
 
 const Cash = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       network: { connectedAddress },
-      components: { Cash, Position, EntityType, OwnedBy, Population, Level },
-      world,
+      components: { Cash, Position, EntityType, OwnedBy, Population, Level, NFTID },
     },
   } = layers;
-  const ownedByEntity = world.entities.indexOf(connectedAddress.get());
-  const cash = getComponentValue(Cash, ownedByEntity)?.value;
+  const nftDetails = getNftId(layers.network);
+  if (!nftDetails) {
+    return null;
+  }
+  const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+    return nftIdValue && +nftIdValue === nftDetails.tokenId;
+  });
+  const cash = getComponentValue(Cash, ownedByIndex)?.value;
+
   let totalPopulation = 0;
   let totalLevel = 0;
   [...getComponentEntities(Position)].forEach((entity) => {
@@ -77,8 +85,8 @@ export const registerCashDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Name, Cash, Position },
-          world,
+          components: { NFTID, Cash, Position },
+          walletNfts,
         },
         phaser: {
           components: { ShowHighLight, ShowCircle },
@@ -86,22 +94,23 @@ export const registerCashDetails = () => {
       } = layers;
       return merge(
         computedToStream(connectedAddress),
-        Name.update$,
+        NFTID.update$,
         ShowHighLight.update$,
         ShowCircle.update$,
         Cash.update$,
         Position.update$
       ).pipe(
         map(() => connectedAddress.get()),
-        map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          if (userLinkWithAccount) {
-            return {
-              layers,
-            };
+        map(() => {
+          const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
+            return +getComponentValueStrict(NFTID, nftId).value;
+          });
+          const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
+          if (doesExist) {
+            return { layers };
+          } else {
+            return;
           }
-          return;
         })
       );
     },

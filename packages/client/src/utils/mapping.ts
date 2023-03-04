@@ -8,6 +8,8 @@ export const Mapping = {
   shipyard: { id: 7 },
   refuel: { id: 9 },
   wall: { id: 10 },
+  pirateShip: { id: 11 },
+  unprospected: { id: 12 },
 };
 export const numberMapping: { [key: number]: { id: number; name: string; frameName: string } } = {
   1: {
@@ -54,5 +56,15 @@ export const numberMapping: { [key: number]: { id: number; name: string; frameNa
     id: 10,
     name: "Wall",
     frameName: "wall",
+  },
+  11: {
+    id: 11,
+    name: "pirateShip",
+    frameName: "pirateShip",
+  },
+  12: {
+    id: 12,
+    name: "unprospected",
+    frameName: "unprospected",
   },
 };

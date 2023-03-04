@@ -20,7 +20,7 @@ export const useNFTData = (walletAddress: string): { allNfts: Image[] } => {
         method: "POST",
         body: JSON.stringify({
           address: walletAddress,
-          nftContract: "0x39Af9A4a49E18201FE0ED60C353039ac86B14fBD",
+          nftContract: "0x61dbb18038c96df35e5f42cea18858f127eb1a89",
           chainId: chainIdString,
         }),
         headers: {

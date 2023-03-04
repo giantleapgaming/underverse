@@ -361,6 +361,7 @@ export async function createNetworkLayer(config: GameConfig) {
             +entityType === Mapping.harvester.id ||
             +entityType === Mapping.refuel.id ||
             +entityType === Mapping.residential.id ||
+            +entityType === Mapping.unprospected.id ||
             +entityType === Mapping.shipyard.id)
         ) {
           const defence = getComponentValue(components.Defence, b)?.value;

@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import { registerUIComponent } from "../engine";
-import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 
@@ -54,23 +54,17 @@ export const registerProgressBar = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { LastUpdatedTime },
-          world,
         },
         phaser: {
           components: { Progress },
           localIds: { progressId },
         },
       } = layers;
-      return merge(LastUpdatedTime.update$, Progress.update$).pipe(
+      return merge(Progress.update$).pipe(
         map(() => connectedAddress.get()),
-        map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(LastUpdatedTime)].find(
-            (entity) => entities[entity] === address
-          );
+        map(() => {
           const showProgressBar = getComponentValue(Progress, progressId)?.value;
-          if (userLinkWithAccount && showProgressBar) {
+          if (showProgressBar) {
             return { layers };
           }
           return;
