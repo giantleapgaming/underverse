@@ -25,18 +25,18 @@ contract BuildFromHarvesterSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) = abi.decode(
+    (uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type, uint256 nftID) = abi.decode(
       arguments,
-      (uint256, int32, int32, uint256)
+      (uint256, int32, int32, uint256, uint256)
     );
-
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(harvesterEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(harvesterEntity) == playerID,
       "Harvester not owned by user"
     );
 
@@ -89,24 +89,13 @@ contract BuildFromHarvesterSystem is System {
       "Obstacle on the way"
     );
 
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(harvesterEntity, balanceHarvester - 2);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      harvesterEntity,
-      block.timestamp
-    );
 
     uint256 buildEntity = world.getUniqueEntityId();
 
     PositionComponent(getAddressById(components, PositionComponentID)).set(buildEntity, buildPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(buildEntity, buildPosition);
-    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(buildEntity, addressToEntity(msg.sender));
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(buildEntity, block.timestamp);
+    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(buildEntity, playerID);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(buildEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(buildEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(buildEntity, entity_type);
@@ -118,7 +107,13 @@ contract BuildFromHarvesterSystem is System {
 
   //Input parameters are harvester, asteroid, build location and what you want to build
 
-  function executeTyped(uint256 harvesterEntity, int32 x, int32 y, uint256 entity_type) public returns (bytes memory) {
-    return execute(abi.encode(harvesterEntity, x, y, entity_type));
+  function executeTyped(
+    uint256 harvesterEntity,
+    int32 x,
+    int32 y,
+    uint256 entity_type,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(harvesterEntity, x, y, entity_type, nftID));
   }
 }
