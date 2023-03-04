@@ -13,9 +13,11 @@ import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponen
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 //Importing Entity Type
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2 } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, checkNFT } from "../utils.sol";
+import { MULTIPLIER, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Refuel"));
 
@@ -23,7 +25,10 @@ contract RefuelSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256, uint256)
+    );
 
     //Use this system to refuel all kinds of ships and harvest fuel from asteroids
     // We do not prevent from refuelling others,
@@ -33,6 +38,11 @@ contract RefuelSystem is System {
     uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       sourceEntity
     );
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     //We check that the source is either owned by you or is an Asteroid
     //If it is an unprospected Asteroid its balance will be 0 and it will now allow you to refuel
@@ -44,8 +54,7 @@ contract RefuelSystem is System {
       );
     } else {
       require(
-        (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-          addressToEntity(msg.sender)),
+        (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID),
         "Source not owned by user or is not an Asteroid"
       );
     }
@@ -103,24 +112,17 @@ contract RefuelSystem is System {
 
     require(distanceBetween <= 5000, "Fuel Source is further than 5 units distance from target ship");
 
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
     // update fuel data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceFuel - kgs);
     FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, destinationFuel + kgs);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationEntity,
-      block.timestamp
-    );
   }
 
-  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, destinationEntity, kgs));
+  function executeTyped(
+    uint256 sourceEntity,
+    uint256 destinationEntity,
+    uint256 kgs,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, kgs, nftID));
   }
 }
