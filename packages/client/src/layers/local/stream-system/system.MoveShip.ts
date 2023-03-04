@@ -11,7 +11,6 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     world,
     systemCallStreams,
     components: { OwnedBy, Name, Faction, EntityType, Level, Position, NFTID },
-    network: { connectedAddress },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
@@ -49,7 +48,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
       );
       const nftId = getNftId(network);
       const existingNftId = getComponentValue(NFTID, ownedByIndex)?.value;
-      if (existingNftId && nftId?.tokenId === +existingNftId) {
+      if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           destinationX: x,
