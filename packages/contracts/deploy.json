@@ -69,16 +69,6 @@
       ]
     },
     {
-      "name": "BuySystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "BalanceComponent"
-      ]
-    },
-    {
       "name": "SellSystem",
       "writeAccess": [
         "CashComponent",
