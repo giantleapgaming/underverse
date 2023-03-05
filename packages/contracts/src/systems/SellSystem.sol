@@ -10,32 +10,29 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getCargoSellingPrice, getFactionSellCosts } from "../utils.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getCargoSellingPrice, getFactionSellCosts } from "../utils.sol";
+import { Faction } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { nftContract } from "../constants.sol";
+import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Sell"));
-
-// uint256 constant MULTIPLIER_CONSTANT = 100000;
 
 contract SellSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 godownEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256));
+    (uint256 godownEntity, uint256 kgs, uint256 nftID) = abi.decode(arguments, (uint256, uint256, uint256));
+
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) == playerID,
       "Godown not owned by user"
-    );
-
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
     );
 
     uint256 godownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
@@ -52,48 +49,22 @@ contract SellSystem is System {
       godownEntity
     );
 
-    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-    //   ((uint256(int256(godownPosition.x)) * uint256(int256(godownPosition.x))) +
-    //     (uint256(int256(godownPosition.y)) * uint256(int256(godownPosition.y))));
-
-    // BELOW LOGIC IS CORRECT. JUST MOVING INTO UTILS COMMON FUNC.
-    // uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-    //   uint256(
-    //     (int256(godownPosition.x) * int256(godownPosition.x)) + (int256(godownPosition.y) * int256(godownPosition.y))
-    //   );
-    // uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
-    //   10);
-    // uint256 totalPrice = totalPriceRaw * MULTIPLIER2; // 10^6
-
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
-      addressToEntity(msg.sender)
-    );
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionSellCosts(Faction(userFaction));
 
     uint256 totalPrice = (getCargoSellingPrice(godownPosition.x, godownPosition.y, kgs) * factionCostPercent) / 100;
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
-    );
+    uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
     // update player data
-    CashComponent(getAddressById(components, CashComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCash + totalPrice
-    );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
+    CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash + totalPrice);
 
     // update godown data
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, selectedGodownBalance - kgs);
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
   }
 
-  function executeTyped(uint256 godownEntity, uint256 kgs) public returns (bytes memory) {
-    return execute(abi.encode(godownEntity, kgs));
+  function executeTyped(uint256 godownEntity, uint256 kgs, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(godownEntity, kgs, nftID));
   }
 }
