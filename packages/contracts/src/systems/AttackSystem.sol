@@ -25,21 +25,21 @@ contract AttackSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, uint256 destinationEntity, uint256 amount) = abi.decode(
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 amount, uint256 nftID) = abi.decode(
       arguments,
-      (uint256, uint256, uint256)
+      (uint256, uint256, uint256, uint256)
     );
 
-    uint256 nftID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getValue(addressToEntity(msg.sender));
-
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
     require(sourceEntityLevel >= 1, "Invalid Source  entity");
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
       "Source not owned by user"
     );
 
@@ -142,9 +142,7 @@ contract AttackSystem is System {
       "Attack point is behind the attacker"
     );
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
-      addressToEntity(msg.sender)
-    );
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionAttackCosts(Faction(userFaction));
 
@@ -158,7 +156,6 @@ contract AttackSystem is System {
       sourceEntity,
       sourceEntityOffenceAmount - amount
     );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
 
     uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
       destinationEntity
@@ -171,20 +168,15 @@ contract AttackSystem is System {
         destinationEntity,
         destinationDefenceAmount - totalDamage
       );
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-        destinationEntity,
-        block.timestamp
-      );
     }
-
-    // update player data
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
-  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 amount) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, destinationEntity, amount));
+  function executeTyped(
+    uint256 sourceEntity,
+    uint256 destinationEntity,
+    uint256 amount,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, amount, nftID));
   }
 }
