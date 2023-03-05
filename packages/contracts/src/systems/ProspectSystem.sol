@@ -80,7 +80,10 @@ contract ProspectSystem is System {
 
     //We randomly generate either an asteroid or pirate ship
 
-    if ((balance % 2) == 0) {
+    if (
+      //  (balance % 2) == 0)
+      distanceBetweens <= 5000
+    ) {
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
 
       uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
@@ -91,6 +94,8 @@ contract ProspectSystem is System {
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance);
       FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
+      //Exit Encounter: Allow further moves
+      EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, 0);
     } else {
       //We set the prospected status to 1 in both cases as we dont want the prospect system to be called again
       //We set defence and offence randomly and set the pirate ship to also be in an encounter

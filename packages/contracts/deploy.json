@@ -167,7 +167,6 @@
     {
       "name": "MoveShipSystem",
       "writeAccess": [
-        "LastUpdatedTimeComponent",
         "PositionComponent",
         "EntityTypeComponent",
         "LevelComponent",
@@ -182,13 +181,13 @@
       "name": "ProspectSystem",
       "writeAccess": [
         "CashComponent",
-        "LastUpdatedTimeComponent",
         "BalanceComponent",
         "FuelComponent",
         "ProspectedComponent",
         "DefenceComponent",
         "EncounterComponent",
-        "OffenceComponent"
+        "OffenceComponent",
+        "EntityTypeComponent"
       ]
     },
     {
