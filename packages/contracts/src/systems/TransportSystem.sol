@@ -11,8 +11,12 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerFuel, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction, Coordd } from "../constants.sol";
+import { MULTIPLIER, MULTIPLIER2, Faction, Coordd } from "../constants.sol";
 import "../libraries/Math.sol";
+import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { checkNFT } from "../utils.sol";
+import { nftContract } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Transport"));
 
@@ -22,20 +26,20 @@ contract TransportSystem is System {
   //Coordd[] private superPoints;
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) = abi.decode(arguments, (uint256, uint256, uint256));
-
-    require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) ==
-        addressToEntity(msg.sender),
-      "Source  not owned by user"
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 kgs, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256, uint256)
     );
 
-    // We do not prevent transportation of goods to third parties, this will allow trading
-    // require(
-    //   OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) ==
-    //     addressToEntity(msg.sender),
-    //   "Destination  not owned by user"
-    // );
+    require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
+    require(
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
+      "Source  not owned by user"
+    );
 
     require(sourceEntity != destinationEntity, "Source and destination  cannot be same");
 
@@ -43,16 +47,6 @@ contract TransportSystem is System {
       LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
       "Invalid source  entity"
     );
-    // }
-
-    // uint256 destinationLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-    //   destinationEntity
-    // );
-    // No need to check this at contract level, users are not dumb
-    // require(
-    //   LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity) >= 1,
-    //   "Invalid destination  entity"
-    // );
 
     uint256 sourceBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity);
 
@@ -89,11 +83,7 @@ contract TransportSystem is System {
       "Obstacle on the way"
     );
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
-      addressToEntity(msg.sender)
-    );
-
-    // uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 totalTransportCost = (((getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) *
       kgs) ** 2) * getFactionTransportCosts(Faction(userFaction))) / 1000;
@@ -102,27 +92,17 @@ contract TransportSystem is System {
 
     require(sourceEntityFuel >= totalTransportCost, "Not enough money to transport product");
 
-    // update player data
-
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
-
-    // update  data
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
-
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(sourceEntity, block.timestamp);
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      destinationEntity,
-      block.timestamp
-    );
   }
 
-  function executeTyped(uint256 sourceEntity, uint256 destinationEntity, uint256 kgs) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, destinationEntity, kgs));
+  function executeTyped(
+    uint256 sourceEntity,
+    uint256 destinationEntity,
+    uint256 kgs,
+    uint256 nftID
+  ) public returns (bytes memory) {
+    return execute(abi.encode(sourceEntity, destinationEntity, kgs, nftID));
   }
 }
