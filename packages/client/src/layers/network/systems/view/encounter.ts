@@ -4,6 +4,7 @@ import { defineSystem, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Animations } from "../../../phaser/constants";
+import { Mapping } from "../../../../utils/mapping";
 
 export function displayEncounter(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -18,20 +19,25 @@ export function displayEncounter(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Level, Balance, Encounter },
+    components: { Position, Level, Balance, Encounter, EntityType },
   } = network;
   defineSystem(world, [Has(Position), Has(Encounter), Not(Balance), Has(Level)], ({ entity }) => {
     const position = getComponentValueStrict(Position, entity);
     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-    const astroidObject = objectPool.get(`encounter-${entity}`, "Sprite");
-    astroidObject.setComponent({
-      id: `encounter-${entity}`,
-      once: (gameObject) => {
-        gameObject.play(Animations.Wave);
-        gameObject.setOrigin(0.5, 0.5);
-        gameObject.setDepth(1);
-        gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-      },
-    });
+    const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
+    if (+entityTypeNumber === Mapping.unprospected.id) {
+      const astroidObject = objectPool.get(`encounter-${entity}`, "Sprite");
+      astroidObject.setComponent({
+        id: `encounter-${entity}`,
+        once: (gameObject) => {
+          gameObject.play(Animations.Wave);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setDepth(1);
+          gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+        },
+      });
+    } else {
+      objectPool.remove(`encounter-${entity}`);
+    }
   });
 }
