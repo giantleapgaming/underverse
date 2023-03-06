@@ -110,7 +110,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                                   &#10003;
                                 </span>
                               )}
-                              <img src={item.imageUrl} />
+                              <img src={item.imageUrl} width={64} height={64} />
                             </S.SelectNft>
                           );
                         })}
