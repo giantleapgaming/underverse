@@ -33,8 +33,7 @@ contract ScrapSystem is System {
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) ==
-        addressToEntity(msg.sender),
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(godownEntity) == playerID,
       "Godown not owned by user"
     );
 
@@ -54,9 +53,7 @@ contract ScrapSystem is System {
     uint256 cargoSellingPrice = getCargoSellingPrice(godownPosition.x, godownPosition.y, selectedGodownBalance);
     uint256 defenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(godownEntity);
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(
-      addressToEntity(msg.sender)
-    );
+    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionScrapCosts(Faction(userFaction));
 
@@ -65,16 +62,10 @@ contract ScrapSystem is System {
         (defenceAmount / (selectedEntityLevel * 100)))
     ) / 4) * factionCostPercent) / 100;
 
-    uint256 playerCash = getPlayerCash(
-      CashComponent(getAddressById(components, CashComponentID)),
-      addressToEntity(msg.sender)
-    );
+    uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
     // Updating player data
-    CashComponent(getAddressById(components, CashComponentID)).set(
-      addressToEntity(msg.sender),
-      playerCash + totalScrapValue
-    );
+    CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash + totalScrapValue);
 
     // Deleting godown
     deleteGodown(godownEntity, components);
