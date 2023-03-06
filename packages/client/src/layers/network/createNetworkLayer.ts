@@ -192,7 +192,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
   const initSystem = async (name: string, faction: number, nftID: number) => {
-    return systems["system.Init"].executeTyped(name, faction, nftID, { type: 2, gasPrice: undefined });
+    return systems["system.Init"].executeTyped(name, faction, nftID);
   };
 
   async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
