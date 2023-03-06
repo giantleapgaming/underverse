@@ -56,6 +56,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
         Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
       const harvesterObjectTopLayer = objectPool.get(`harvester-top-move-${entity}`, "Sprite");
       const harvesterObjectGrayLayer = objectPool.get(`harvester-gray-move-${entity}`, "Sprite");
+      const harvesterObjectBottomLayer = objectPool.get(`harvester-bottom-move-${entity}`, "Sprite");
       const harvester = config.sprites[Sprites.Asteroid12];
       const destinationCircle = phaserScene.add.graphics();
       const sourceCircle = phaserScene.add.graphics();
@@ -119,6 +120,38 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`harvester-gray-move-${entity}`);
+              destinationCircle.clear();
+              sourceCircle.clear();
+              setShowLine(true, destinationX, destinationY, "move");
+            },
+          });
+        },
+      });
+      harvesterObjectBottomLayer.setComponent({
+        id: `harvester-bottom-move-${entity}`,
+        once: (gameObject) => {
+          gameObject.setTexture(harvester.assetKey, `harvester-3.png`);
+          gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
+          gameObject.setDepth(152);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(angle);
+          const color = generateColorsFromWalletAddress(`${ownedBy}`);
+          gameObject.setTint(color[0], color[1], color[2], color[3]);
+          phaserScene.add.tween({
+            targets: gameObject,
+            x: {
+              from: gameObject.x,
+              to: destinationPixelX + tileWidth / 2,
+            },
+            y: {
+              from: gameObject.y,
+              to: destinationPixelY + tileWidth / 2,
+            },
+            yoyo: false,
+            repeat: 0,
+            duration: 5_000,
+            onComplete: () => {
+              objectPool.remove(`harvester-bottom-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
               setShowLine(true, destinationX, destinationY, "move");
