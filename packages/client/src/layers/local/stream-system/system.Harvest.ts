@@ -3,15 +3,15 @@ import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
 import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
+import { getNftId } from "../../network/utils/getNftId";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
 export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    network: { connectedAddress },
     systemCallStreams,
-    components: { OwnedBy, Position, Name, Faction, EntityType },
+    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
@@ -56,8 +56,9 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
           destPosition?.x
         },${destPosition?.y})</p>`
       );
-      const address = connectedAddress.get();
-      if (ownedBy !== `${address}`) {
+      const nftId = getNftId(network);
+      const existingNftId = getComponentValue(NFTID, sourceGodownEntityIndex)?.value;
+      if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           destinationX: destPosition.x,

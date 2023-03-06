@@ -60,7 +60,6 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
         const textWhite = objectPool.get("build-attack-station-text-white", "Text");
 
-        const address = connectedAddress.get();
         const HoverSprite = config.sprites[Sprites.Build1];
         radius.setComponent({
           id: "select-box-radius-attack",
@@ -105,6 +104,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setDepth(6);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
+            const address = connectedAddress.get();
             const color = generateColorsFromWalletAddress(`${address}`);
             gameObject.setTint(color[0], color[1], color[2], color[3]);
           },

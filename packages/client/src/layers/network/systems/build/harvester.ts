@@ -49,7 +49,6 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
       buildDetails.entityType === Mapping.harvester.id
     ) {
       const textWhite = objectPool.get("build-harvester-station-text-white", "Text");
-      const address = connectedAddress.get();
       const sprite = Sprites.BuildHarvester;
       const HoverSprite = config.sprites[sprite];
       const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
@@ -73,6 +72,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setDepth(4);
           gameObject.setAlpha(0.1);
           gameObject.setOrigin(0.5, 0.5);
+          const address = connectedAddress.get();
           const color = generateColorsFromWalletAddress(`${address}`);
           gameObject.setTint(color[0], color[1], color[2], color[3]);
         },

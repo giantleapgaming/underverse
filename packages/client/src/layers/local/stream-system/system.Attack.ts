@@ -3,6 +3,7 @@ import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
 import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
+import { getNftId } from "../../network/utils/getNftId";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
@@ -10,8 +11,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    network: { connectedAddress },
-    components: { OwnedBy, Position, Name, Faction, EntityType },
+    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
@@ -56,23 +56,24 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       srcPosition &&
       destPosition
     ) {
-      const srccolor = factionData[+factionSrcValue]?.color;
-      const destcolor = factionData[+factionDestValue]?.color;
+      const srcColor = factionData[+factionSrcValue]?.color;
+      const destColor = factionData[+factionDestValue]?.color;
       const srcStationName = numberMapping[+srcEntityType].name;
       const destStationName = numberMapping[+destEntityType].name;
       setLogs(
-        `<p>${colorString({ name: srcName, color: srccolor })} ${colorString({
+        `<p>${colorString({ name: srcName, color: srcColor })} ${colorString({
           name: srcStationName,
-          color: srccolor,
+          color: srcColor,
         })} station at ${srcPosition?.x},${srcPosition?.y} attacked ${colorString({
           name: destName,
-          color: destcolor,
-        })} ${colorString({ name: destStationName, color: destcolor })} station at ${destPosition?.x},${
+          color: destColor,
+        })} ${colorString({ name: destStationName, color: destColor })} station at ${destPosition?.x},${
           destPosition?.y
-        } using ${colorString({ name: `${+amount}`, color: srccolor })}  missiles</p>`
+        } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
       );
-      const address = connectedAddress.get();
-      if (address !== srcOwnedBy) {
+      const nftId = getNftId(network);
+      const existingNftId = getComponentValue(NFTID, srcOwnedByIndex)?.value;
+      if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           amount: +amount,

@@ -1,51 +1,39 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
 import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
+import { getNftId } from "../../network/utils/getNftId";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
 export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    network: { connectedAddress },
     systemCallStreams,
-    components: { OwnedBy, Position, Name, Faction, EntityType },
+    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
   } = network;
-  const {
-    scenes: {
-      Main: {
-        maps: {
-          Main: { tileWidth, tileHeight },
-        },
-      },
-    },
-  } = phaser;
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Refuel"], ({ args }) => {
-    const { destinationGodownEntity, sourceGodownEntity, kgs } = args as {
-      destinationGodownEntity: BigNumber;
-      sourceGodownEntity: BigNumber;
+    const { destinationEntity, sourceEntity, kgs } = args as {
+      destinationEntity: BigNumber;
+      sourceEntity: BigNumber;
       kgs: BigNumber;
     };
-    const destinationGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === destinationGodownEntity._hex
+    const destinationEntityIndex = world.entities.findIndex(
+      (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
-    const sourceGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === sourceGodownEntity._hex
-    ) as EntityIndex;
-    const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
-    const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
-    const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
+    const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
+    const destPosition = getComponentValue(Position, destinationEntityIndex);
+    const srcPosition = getComponentValue(Position, sourceEntityIndex);
+    const ownedBy = getComponentValue(OwnedBy, destinationEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
-    const destEntityType = getComponentValue(EntityType, destinationGodownEntityIndex)?.value;
-    const sourceEntityType = getComponentValue(EntityType, sourceGodownEntityIndex)?.value;
+    const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
+    const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
 
     if (
       faction &&
@@ -68,26 +56,18 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
           destPosition?.x
         },${destPosition?.y})</p>`
       );
-      const address = connectedAddress.get();
-      if (ownedBy !== `${address}`) {
-        const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-          { x: destPosition.x, y: destPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
-          { x: srcPosition.x, y: srcPosition.y },
-          tileWidth,
-          tileHeight
-        );
+      const nftId = getNftId(network);
+      const existingNftId = getComponentValue(NFTID, destinationEntity)?.value;
+      if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           amount: +kgs,
-          destinationX,
-          destinationY,
-          sourceX,
-          sourceY,
-          type: "refuel",
+          destinationX: destPosition.y,
+          destinationY: destPosition.x,
+          sourceX: srcPosition.x,
+          sourceY: srcPosition.y,
+          type: "fuelTransport",
+          entityID: sourceEntityIndex,
         });
       }
     }

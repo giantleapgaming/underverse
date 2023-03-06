@@ -9,7 +9,6 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     components: { ShowAnimation },
-    localApi: { setShowLine },
     scenes: {
       Main: {
         objectPool,

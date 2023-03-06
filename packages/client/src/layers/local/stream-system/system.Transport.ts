@@ -1,18 +1,17 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";
 import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
+import { getNftId } from "../../network/utils/getNftId";
 import { PhaserLayer } from "../../phaser";
 import { colorString } from "./utils";
 
 export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    network: { connectedAddress },
     systemCallStreams,
-    components: { OwnedBy, Position, Name, Faction, EntityType },
+    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
@@ -23,18 +22,18 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
       sourceEntity: BigNumber;
       kgs: BigNumber;
     };
-    const destinationGodownEntityIndex = world.entities.findIndex(
+    const destinationEntityIndex = world.entities.findIndex(
       (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
-    const sourceGodownEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
-    const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
-    const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
-    const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
+    const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
+    const destPosition = getComponentValue(Position, destinationEntityIndex);
+    const srcPosition = getComponentValue(Position, sourceEntityIndex);
+    const ownedBy = getComponentValue(OwnedBy, destinationEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
-    const destEntityType = getComponentValue(EntityType, destinationGodownEntityIndex)?.value;
-    const sourceEntityType = getComponentValue(EntityType, sourceGodownEntityIndex)?.value;
+    const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
+    const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
 
     if (
       faction &&
@@ -57,8 +56,9 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
           destPosition?.x
         },${destPosition?.y})</p>`
       );
-      const address = connectedAddress.get();
-      if (ownedBy !== `${address}`) {
+      const nftId = getNftId(network);
+      const existingNftId = getComponentValue(NFTID, destinationEntity)?.value;
+      if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({
           showAnimation: true,
           amount: +kgs,
@@ -66,8 +66,8 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
           destinationY: destPosition.y,
           sourceX: srcPosition.x,
           sourceY: srcPosition.y,
-          type: "transport",
-          entityID: destinationGodownEntityIndex,
+          type: "cargoTransport",
+          entityID: sourceEntityIndex,
         });
       }
     }

@@ -21,5 +21,7 @@ export const FactionImg = ({ layers }: { layers: Layers }) => {
     } else {
       return null;
     }
+  } else {
+    return null;
   }
 };

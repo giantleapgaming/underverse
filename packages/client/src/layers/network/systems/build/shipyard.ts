@@ -58,7 +58,6 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
         );
         const radius = objectPool.get("select-box-radius-shipyard", "Sprite");
         const textWhite = objectPool.get("build-shipyard-station-text-white", "Text");
-        const address = connectedAddress.get();
         const HoverSprite = config.sprites[Sprites.Build1];
         radius.setComponent({
           id: "select-box-radius-shipyard",
@@ -90,6 +89,7 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
             gameObject.setDepth(4);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);
+            const address = connectedAddress.get();
             const color = generateColorsFromWalletAddress(`${address}`);
             gameObject.setTint(color[0], color[1], color[2], color[3]);
           },
