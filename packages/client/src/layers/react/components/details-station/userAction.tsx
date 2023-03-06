@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { EntityID, getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { EntityID, getComponentValue } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { FactionImg } from "./FactionImg";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";

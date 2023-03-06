@@ -9,6 +9,7 @@ import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
 import { Refuel } from "../action-system/refuel";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 
 export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -23,11 +24,11 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Level, Defence, Population, Fuel },
       api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem },
-      network: { connectedAddress },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
   if (selectedEntity) {
+    const isOwner = isOwnedBy(layers);
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
     const entityIndex = world.entities.indexOf(ownedBy);
@@ -77,18 +78,22 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
               </S.Row>
-              {ownedBy === connectedAddress.get() && (
+              {isOwner && (
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
                     <Upgrade
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
                           showProgress();
-                          const tx = await upgradeSystem(world.entities[selectedEntity]);
+                          const tx = await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           await tx.wait();
                         } catch (e) {
                           setAction("");
@@ -105,10 +110,14 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("attack");
                           sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity]);
+                          await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("repair");
@@ -121,10 +130,14 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                     <Scrap
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +population, factionNumber)}
                       scrapSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("scrap");
                           sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity]);
+                          await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
@@ -153,6 +166,10 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           setDestinationDetails();
@@ -162,7 +179,8 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                           await refuelSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,
@@ -186,7 +204,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
               )}
             </S.Column>
-            {ownedBy === connectedAddress.get() && (
+            {isOwner && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
                   <S.SideButton

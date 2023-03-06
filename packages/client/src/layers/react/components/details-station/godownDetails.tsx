@@ -12,6 +12,7 @@ import { Sell } from "../action-system/sell";
 import { Upgrade } from "../action-system/upgrade";
 import { Refuel } from "../action-system/refuel";
 import { SelectButton } from "./Button";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 
 export const GodownDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("attack");
@@ -26,11 +27,11 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
       api: { upgradeSystem, sellSystem, repairSystem, scrapeSystem, refuelSystem },
-      network: { connectedAddress },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
   if (selectedEntity) {
+    const isOwner = isOwnedBy(layers);
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
     const entityIndex = world.entities.indexOf(ownedBy);
@@ -81,17 +82,21 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
               </S.Row>
-              {ownedBy === connectedAddress.get() && (
+              {isOwner && (
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
                     <Upgrade
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity]);
+                          await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -107,10 +112,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity]);
+                          await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -123,10 +132,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                     <Scrap
                       scrapCost={scrapPrice(position.x, position.y, level, defence, balance, +factionNumber)}
                       scrapSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity]);
+                          await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
@@ -143,10 +156,14 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                         sounds["click"].play();
                       }}
                       sell={async (amount: number) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await sellSystem(world.entities[selectedEntity], amount);
+                          await sellSystem(world.entities[selectedEntity], amount, nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -176,6 +193,10 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           setDestinationDetails();
@@ -185,7 +206,8 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                           await refuelSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,
@@ -209,7 +231,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
               )}
             </S.Column>
-            {ownedBy === connectedAddress.get() && (
+            {isOwner && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
                   <S.SideButton
@@ -266,7 +288,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
               </div>
             )}
           </S.Container>
-          {ownedBy === connectedAddress.get() && (
+          {isOwner && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
               <SelectButton
                 name="SELL"

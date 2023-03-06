@@ -6,6 +6,7 @@ import { Mapping } from "../../../../utils/mapping";
 import { Rapture } from "../action-system/rapture";
 import { SelectButton } from "./Button";
 import { distance } from "../../utils/distance";
+import { getNftId } from "../../../network/utils/getNftId";
 
 export const PlanetDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("rapture");
@@ -57,12 +58,17 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                     <Rapture
                       space={(destinationPopulation && level && +level - +destinationPopulation) || 0}
                       rapture={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           await raptureSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,

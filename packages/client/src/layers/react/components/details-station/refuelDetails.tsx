@@ -1,4 +1,3 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
@@ -6,39 +5,31 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { repairPrice } from "../../utils/repairPrice";
 import { scrapPrice } from "../../utils/scrapPrice";
-import { distance } from "../../utils/distance";
-import { Move } from "../action-system/move";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 
 export const RefuelDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setMoveStation },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Fuel, Level, Defence, Balance },
-      api: { upgradeSystem, repairSystem, scrapeSystem, moveSystem, refuelSystem },
-      network: { connectedAddress },
+      api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
 
   if (selectedEntity) {
+    const isOwner = isOwnedBy(layers);
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
     const entityIndex = world.entities.indexOf(ownedBy);
@@ -75,12 +66,6 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                     {+defence}/{level && +level * 100}
                   </p>
                 </S.Weapon>
-                {/* <S.Weapon>
-                  <img src="/build-stations/box.png" />
-                  <p>
-                    {+fuel}/{+level * 5000}
-                  </p>
-                </S.Weapon> */}
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
@@ -88,17 +73,21 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                   </p>
                 </S.Weapon>
               </S.Row>
-              {ownedBy === connectedAddress.get() && (
+              {isOwner && (
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
                     <Upgrade
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity]);
+                          await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -114,10 +103,14 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity]);
+                          await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -130,10 +123,14 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                     <Scrap
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity]);
+                          await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
@@ -162,6 +159,10 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           setDestinationDetails();
@@ -171,7 +172,8 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                           await refuelSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,
@@ -195,83 +197,80 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
               )}
             </S.Column>
-            {ownedBy === connectedAddress.get() &&
-              !destinationDetails &&
-              !isDestinationSelected &&
-              !moveStationDetails?.selected && (
-                <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
-                  <S.Column>
-                    <S.SideButton
-                      onClick={() => {
-                        setAction("move");
-                        const { x, y } = position;
-                        setShowLine(true, x, y, "move", 1);
-                        sounds["click"].play();
-                      }}
-                      title="Move"
-                    >
-                      <S.Img
-                        src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
-                    <S.SideButton
-                      onClick={() => {
-                        setAction("upgrade");
-                        setShowLine(false);
-                        sounds["click"].play();
-                      }}
-                      title="Upgrade"
-                    >
-                      <S.Img
-                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
-                    <S.SideButton
-                      onClick={() => {
-                        setAction("refuel");
-                        setShowLine(true, position.x, position.y, "refuel");
-                        sounds["click"].play();
-                      }}
-                      title="Refuel"
-                    >
-                      <S.Img
-                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
-                  </S.Column>
-                  <S.Column>
-                    <S.SideButton
-                      onClick={() => {
-                        setShowLine(false);
-                        setAction("repair");
-                        sounds["click"].play();
-                      }}
-                      title="Repair"
-                    >
-                      <S.Img
-                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
-                    <S.SideButton
-                      onClick={() => {
-                        setShowLine(false);
-                        setAction("scrap");
-                        sounds["click"].play();
-                      }}
-                      title="Scrap"
-                    >
-                      <S.Img
-                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                        width="40px"
-                      />
-                    </S.SideButton>
-                  </S.Column>
-                </div>
-              )}
+            {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
+              <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
+                <S.Column>
+                  <S.SideButton
+                    onClick={() => {
+                      setAction("move");
+                      const { x, y } = position;
+                      setShowLine(true, x, y, "move", 1);
+                      sounds["click"].play();
+                    }}
+                    title="Move"
+                  >
+                    <S.Img
+                      src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
+                      width="40px"
+                    />
+                  </S.SideButton>
+                  <S.SideButton
+                    onClick={() => {
+                      setAction("upgrade");
+                      setShowLine(false);
+                      sounds["click"].play();
+                    }}
+                    title="Upgrade"
+                  >
+                    <S.Img
+                      src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                      width="40px"
+                    />
+                  </S.SideButton>
+                  <S.SideButton
+                    onClick={() => {
+                      setAction("refuel");
+                      setShowLine(true, position.x, position.y, "refuel");
+                      sounds["click"].play();
+                    }}
+                    title="Refuel"
+                  >
+                    <S.Img
+                      src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                      width="40px"
+                    />
+                  </S.SideButton>
+                </S.Column>
+                <S.Column>
+                  <S.SideButton
+                    onClick={() => {
+                      setShowLine(false);
+                      setAction("repair");
+                      sounds["click"].play();
+                    }}
+                    title="Repair"
+                  >
+                    <S.Img
+                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                      width="40px"
+                    />
+                  </S.SideButton>
+                  <S.SideButton
+                    onClick={() => {
+                      setShowLine(false);
+                      setAction("scrap");
+                      sounds["click"].play();
+                    }}
+                    title="Scrap"
+                  >
+                    <S.Img
+                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                      width="40px"
+                    />
+                  </S.SideButton>
+                </S.Column>
+              </div>
+            )}
           </S.Container>
         </div>
       );
