@@ -22,7 +22,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const nftDetails = getNftId(layers.network);
   return (
     <S.Container>
-      {nftDetails && <img src={nftDetails.imageUrl} />}
+      {nftDetails && <img src={nftDetails.imageUrl} width={64} height={64} />}
       <p
         style={{ cursor: "pointer" }}
         onClick={() => {

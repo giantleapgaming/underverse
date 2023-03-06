@@ -14,7 +14,7 @@ import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
 import { BuildWall } from "../build-station/buildWall";
-import { isOwnedBy } from "../../../network/utils/getNftId";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -93,10 +93,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity]);
+                          await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -114,6 +118,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           : +balance) || 0
                       }
                       transport={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           setDestinationDetails();
@@ -123,7 +131,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           await transportSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,
@@ -152,10 +161,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity]);
+                          await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           showProgress();
                         } catch (e) {
                           setAction("");
@@ -168,10 +181,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     <Scrap
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           setAction("");
                           sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity]);
+                          await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                           setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                           showProgress();
                         } catch (e) {
@@ -202,6 +219,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
+                        const nftDetails = getNftId(layers.network);
+                        if (!nftDetails) {
+                          return;
+                        }
                         try {
                           sounds["confirm"].play();
                           setDestinationDetails();
@@ -211,7 +232,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           await refuelSystem(
                             world.entities[selectedEntity],
                             world.entities[destinationDetails],
-                            weapons
+                            weapons,
+                            nftDetails.tokenId
                           );
                           setShowAnimation({
                             showAnimation: true,

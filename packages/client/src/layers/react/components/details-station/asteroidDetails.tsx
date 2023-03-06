@@ -1,10 +1,10 @@
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Mapping } from "../../../../utils/mapping";
+import { getNftId } from "../../../network/utils/getNftId";
 import { distance } from "../../utils/distance";
 import { Harvest } from "../action-system/harvest";
 import { Refuel } from "../action-system/refuel";
@@ -18,13 +18,6 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
       localApi: { setShowLine, showProgress, setShowAnimation, setDestinationDetails },
-      scenes: {
-        Main: {
-          maps: {
-            Main: { tileWidth, tileHeight },
-          },
-        },
-      },
     },
     network: {
       world,
@@ -45,6 +38,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
     const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     if (entityType && +entityType === Mapping.astroid.id) {
@@ -130,30 +124,34 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                             : +balance) || 0
                         }
                         harvest={async (amount) => {
-                          try {
-                            sounds["confirm"].play();
-                            setShowLine(false);
-                            setAction("");
-                            setDestinationDetails();
-                            showProgress();
-                            await harvestSystem(
-                              world.entities[selectedEntity],
-                              world.entities[destinationDetails],
-                              amount
-                            );
-                            setShowAnimation({
-                              showAnimation: true,
-                              destinationX: destinationPosition.x,
-                              destinationY: destinationPosition.y,
-                              sourceX: position.x,
-                              sourceY: position.y,
-                              type: "mineTransport",
-                              entityID: destinationDetails,
-                            });
-                            setShowLine(false);
-                            showProgress();
-                          } catch (e) {
-                            console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                          const nftDetails = getNftId(layers.network);
+                          if (nftDetails) {
+                            try {
+                              sounds["confirm"].play();
+                              setShowLine(false);
+                              setAction("");
+                              setDestinationDetails();
+                              showProgress();
+                              await harvestSystem(
+                                world.entities[selectedEntity],
+                                world.entities[destinationDetails],
+                                amount,
+                                nftDetails.tokenId
+                              );
+                              setShowAnimation({
+                                showAnimation: true,
+                                destinationX: destinationPosition.x,
+                                destinationY: destinationPosition.y,
+                                sourceX: position.x,
+                                sourceY: position.y,
+                                type: "mineTransport",
+                                entityID: destinationDetails,
+                              });
+                              setShowLine(false);
+                              showProgress();
+                            } catch (e) {
+                              console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                            }
                           }
                         }}
                         distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
@@ -182,24 +180,32 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                         : +fuel) || 0
                     }
                     refuel={async (weapons) => {
-                      try {
-                        sounds["confirm"].play();
-                        setDestinationDetails();
-                        setShowLine(false);
-                        setAction("");
-                        showProgress();
-                        await refuelSystem(world.entities[selectedEntity], world.entities[destinationDetails], weapons);
-                        setShowAnimation({
-                          showAnimation: true,
-                          destinationX: destinationPosition.x,
-                          destinationY: destinationPosition.y,
-                          sourceX: position.x,
-                          sourceY: position.y,
-                          type: "fuelTransport",
-                          entityID: destinationDetails,
-                        });
-                      } catch (e) {
-                        console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                      const nftDetails = getNftId(layers.network);
+                      if (nftDetails) {
+                        try {
+                          sounds["confirm"].play();
+                          setDestinationDetails();
+                          setShowLine(false);
+                          setAction("");
+                          showProgress();
+                          await refuelSystem(
+                            world.entities[selectedEntity],
+                            world.entities[destinationDetails],
+                            weapons,
+                            nftDetails.tokenId
+                          );
+                          setShowAnimation({
+                            showAnimation: true,
+                            destinationX: destinationPosition.x,
+                            destinationY: destinationPosition.y,
+                            sourceX: position.x,
+                            sourceY: position.y,
+                            type: "fuelTransport",
+                            entityID: destinationDetails,
+                          });
+                        } catch (e) {
+                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
+                        }
                       }
                     }}
                     playSound={() => {

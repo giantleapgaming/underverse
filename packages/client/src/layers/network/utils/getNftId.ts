@@ -48,3 +48,27 @@ export const isOwnedBy = (layers: Layers) => {
   }
   return;
 };
+export const isOwnedByIndex = (layers: Layers, index: number) => {
+  const {
+    network: {
+      world,
+      components: { OwnedBy, NFTID },
+    },
+  } = layers;
+
+  if (index) {
+    const owner = getComponentValue(OwnedBy, index)?.value;
+    if (!owner) {
+      return false;
+    }
+    const ownedNftId = world.entities.indexOf(owner);
+    const nftId = getNftId(layers.network);
+    const existingNftId = getComponentValue(NFTID, ownedNftId)?.value;
+    if (existingNftId && nftId?.tokenId === +existingNftId) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  return;
+};

@@ -6,7 +6,7 @@ import { PhaserLayer } from "../../../phaser";
 import { segmentPoints, getObstacleList } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
 import { Sprites } from "../../../phaser/constants";
-import { getNftId } from "../../utils/getNftId";
+import { getNftId, isOwnedByIndex } from "../../utils/getNftId";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -35,12 +35,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
     network: {
       components: { Faction },
-      api: { moveSystem, prospectSystem },
     },
   } = phaser;
   const {
     components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, PrevPosition },
     utils: { getEntityIndexAtPosition },
+    api: { moveSystem, prospectSystem },
     network: { connectedAddress },
   } = network;
   const graphics = phaserScene.add.graphics();
@@ -124,8 +124,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
       }
       if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
-        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        if (connectedAddress.get() === ownedBy) {
+        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "harvest");
         }
@@ -156,7 +155,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             sounds["confirm"].play();
             setShowLine(false);
             showProgress();
-            console.log(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
             await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
             objectPool.remove(`prospect-text-white`);
             setShowLine(false);
