@@ -130,8 +130,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
       }
       if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
-        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        if (connectedAddress.get() === ownedBy) {
+        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "rapture");
         }
@@ -141,8 +140,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         (+entityType === Mapping.godown.id || +entityType === Mapping.shipyard.id) &&
         lineDetails.type === "transport"
       ) {
-        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        if (connectedAddress.get() === ownedBy) {
+        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
           setDestinationDetails(stationEntity);
           setShowLine(true, x, y, "transport");
         }
