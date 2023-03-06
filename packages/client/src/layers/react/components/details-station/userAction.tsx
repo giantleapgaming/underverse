@@ -2,12 +2,10 @@ import styled from "styled-components";
 import { EntityID, getComponentValue } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { FactionImg } from "./FactionImg";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideFactionImage?: boolean }) => {
   const {
     network: {
-      components: { Position, OwnedBy },
       network: { connectedAddress },
     },
     phaser: {
@@ -15,12 +13,7 @@ export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideF
       localApi: { setShowHighLight },
       components: { ShowHighLight },
       scenes: {
-        Main: {
-          camera,
-          maps: {
-            Main: { tileHeight, tileWidth },
-          },
-        },
+        Main: { camera },
       },
       sounds,
     },
@@ -50,17 +43,6 @@ export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideF
             onClick={() => {
               sounds["click"].play();
               camera.centerOn(0, -1);
-              // const allPositionEntities = [...getComponentEntities(Position)];
-              // allPositionEntities.find((entity) => {
-              //   const position = getComponentValueStrict(Position, entity);
-              //   const ownedBy = getComponentValue(OwnedBy, entity)?.value;
-              //   if (ownedBy === userEntityId) {
-              //     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-              //     camera.centerOn(x, y);
-              //     camera.setZoom(2);
-              //   }
-              //   return ownedBy === userEntityId;
-              // });
             }}
           />
         </div>

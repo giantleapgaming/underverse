@@ -1,39 +1,38 @@
 import styled from "styled-components";
 import { EntityID, getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
-import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const UserAction = ({ layers }: { layers: Layers }) => {
   const {
     network: {
-      world,
-      components: { Faction, Position, OwnedBy },
       network: { connectedAddress },
+      components: { NFTID, Faction },
+      walletNfts,
     },
     phaser: {
       localIds: { stationDetailsEntityIndex },
       localApi: { setShowHighLight },
       components: { ShowHighLight },
       scenes: {
-        Main: {
-          camera,
-          maps: {
-            Main: { tileHeight, tileWidth },
-          },
-        },
+        Main: { camera },
       },
       sounds,
     },
   } = layers;
   const userEntityId = connectedAddress.get() as EntityID;
-  const factionIndex = world.entities.indexOf(userEntityId);
-  const faction = getComponentValue(Faction, factionIndex)?.value;
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
-
+  const nftId = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nft = +getComponentValueStrict(NFTID, nftId).value;
+    return walletNfts.some((walletNft) => {
+      return walletNft.tokenId === nft;
+    });
+  });
+  if (!nftId) return null;
+  const faction = getComponentValueStrict(Faction, nftId).value;
   if (userEntityId) {
     return (
       <S.Container>
-        <img src={`/faction/${faction && +faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />
+        <img src={`/faction/${+faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}
@@ -53,17 +52,6 @@ export const UserAction = ({ layers }: { layers: Layers }) => {
             onClick={() => {
               sounds["click"].play();
               camera.centerOn(0, -1);
-              // const allPositionEntities = [...getComponentEntities(Position)];
-              // allPositionEntities.find((entity) => {
-              //   const position = getComponentValueStrict(Position, entity);
-              //   const ownedBy = getComponentValue(OwnedBy, entity)?.value;
-              //   if (ownedBy === userEntityId) {
-              //     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-              //     camera.centerOn(x, y);
-              //     camera.setZoom(2);
-              //   }
-              //   return ownedBy === userEntityId;
-              // });
             }}
           />
         </div>

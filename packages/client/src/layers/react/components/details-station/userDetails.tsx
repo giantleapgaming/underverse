@@ -2,6 +2,7 @@ import { getComponentValue } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
 import { UserAction } from "./userAction";
 
@@ -9,8 +10,9 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { OwnedBy, Name, NFTID },
+      components: { OwnedBy, Name },
       world,
+      network: { connectedAddress },
     },
     phaser: {
       localIds: { stationDetailsEntityIndex },
@@ -22,22 +24,28 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
     const factionIndex = world.entities.indexOf(ownedBy);
     const name = getComponentValue(Name, factionIndex)?.value;
-    const NFTid = getComponentValue(NFTID, factionIndex)?.value;
+    const nftDetails = getNftId(layers.network);
+    const isOwner = isOwnedBy(layers);
     return (
       <S.Container>
+        {nftDetails && isOwner && <img src={nftDetails.imageUrl} width={64} height={64} />}
         <p
           style={{ cursor: "pointer" }}
           onClick={() => {
             setCopy(true);
-            navigator.clipboard.writeText(`${ownedBy}`);
+            navigator.clipboard.writeText(`${connectedAddress.get()}`);
             setTimeout(() => {
               setCopy(false);
             }, 1000);
           }}
         >
-          {copy ? "Copy" : walletAddress(`${ownedBy}`)}
-          <br />
-          <span style={{ color: "white" }}>{name} </span>
+          {isOwner && (
+            <>
+              {copy ? "Copy" : walletAddress(`${connectedAddress.get()}`)}
+              <br />
+            </>
+          )}
+          <span style={{ color: "white" }}>{name}</span>
         </p>
         <UserAction layers={layers} />
       </S.Container>

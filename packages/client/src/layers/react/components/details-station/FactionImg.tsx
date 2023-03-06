@@ -1,10 +1,10 @@
-import { getComponentValue } from "@latticexyz/recs";
+import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 
 export const FactionImg = ({ layers }: { layers: Layers }) => {
   const {
     network: {
-      components: { OwnedBy, Faction },
+      components: { Faction, OwnedBy },
       world,
     },
     phaser: {
@@ -15,13 +15,11 @@ export const FactionImg = ({ layers }: { layers: Layers }) => {
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
   if (selectedEntity) {
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
-    const factionIndex = world.entities.indexOf(ownedBy);
-    const faction = getComponentValue(Faction, factionIndex)?.value;
-
-    return (
-      <img src={`/faction/${faction && +faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />
-    );
-  } else {
-    return null;
+    if (ownedBy) {
+      const faction = getComponentValueStrict(Faction, world.entities.indexOf(ownedBy))?.value;
+      return <img src={`/faction/${+faction}.png`} width={"30px"} height={"30px"} style={{ marginTop: "-5px" }} />;
+    } else {
+      return null;
+    }
   }
 };

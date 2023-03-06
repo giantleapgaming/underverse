@@ -2,7 +2,7 @@ import { getComponentEntities, getComponentValue, getComponentValueStrict } from
 import { Layers } from "../../../types";
 import { NetworkLayer } from "../../network/types";
 
-const getNftId = (
+export const getNftId = (
   network: NetworkLayer
 ):
   | {
@@ -20,7 +20,6 @@ const getNftId = (
   const doesExist = walletNfts.find((walletNftId) => allNftIds.includes(walletNftId.tokenId));
   return doesExist;
 };
-export { getNftId };
 
 export const isOwnedBy = (layers: Layers) => {
   const {
