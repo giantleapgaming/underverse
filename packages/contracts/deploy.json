@@ -19,7 +19,13 @@
     "ProspectedComponent",
     "PrevPositionComponent",
     "NFTIDComponent",
-    "EncounterComponent"
+    "EncounterComponent",
+    "Attribute1Component",
+    "Attribute2Component",
+    "Attribute3Component",
+    "Attribute4Component",
+    "Attribute5Component",
+    "Attribute6Component"
   ],
   "systems": [
     {
@@ -45,7 +51,13 @@
         "PopulationComponent",
         "FuelComponent",
         "PlayerCountComponent",
-        "NFTIDComponent"
+        "NFTIDComponent",
+        "Attribute1Component",
+        "Attribute2Component",
+        "Attribute3Component",
+        "Attribute4Component",
+        "Attribute5Component",
+        "Attribute6Component"
       ]
     },
     {
