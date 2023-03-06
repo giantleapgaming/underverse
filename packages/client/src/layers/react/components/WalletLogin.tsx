@@ -1,212 +1,193 @@
-import { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import { useRef, useState } from "react";
+import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
+import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
 const WalletLogin = () => {
-  const [input, setInput] = useState("");
   const [output, setOutput] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
   const pkRef = useRef<HTMLInputElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const [input, setInput] = useState("");
   const allKeys = JSON.parse(localStorage.getItem("all-underverse-pk") ?? "[]");
-  const [privateKey, setPrivetKey] = useState({ show: false, input: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [playGame, setPlayGame] = useState(false);
 
-  useEffect(() => {
-    if (!playGame) {
-      inputRef?.current?.focus();
-      pkRef?.current?.focus();
-    }
-  }, [privateKey]);
-
   return (
-    <Container
-      onClick={() => {
-        if (!playGame) {
-          inputRef?.current?.focus();
-          pkRef?.current?.focus();
-        }
-      }}
-    >
-      <SkyBlueLines>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (playGame) {
-              window.location.reload();
-              return;
-            }
-          }}
-        >
-          <WalletText>
-            <div>
-              <Title>
-                <P style={{ margin: "0px" }}>WELCOME TO THE</P>
-                <h1 style={{ fontWeight: "bold", fontStyle: "italic", fontSize: "80px" }}>UNDERVERSE</h1>
-              </Title>
-              <div>
-                <P style={{ fontWeight: "bold", marginBottom: "20px", fontSize: "18px" }}>
-                  Create a New Account
-                  <br />
-                  or Use Existing
-                </P>
-              </div>
-              <div>
-                <P>
-                  i. Import Wallet <br />
-                  Private Key
-                </P>
-                <P style={{ marginBottom: "25px" }}>
-                  n. Create New
-                  <br /> Wallet
-                </P>
-              </div>
-
-              {!!allKeys.length && (
-                <>
-                  <P style={{ marginBottom: "10px" }}>Existing Account/s</P>
-                  {allKeys.map((pk: string, index: number) => {
-                    const wallet = new Wallet(pk);
-                    const address = wallet.address;
-                    return <CopyAddress address={address} index={index} />;
-                  })}
-                </>
-              )}
+    <Container>
+      <RotatingGreenAsteroid src="../img/greenAsteroid.png" />
+      <RotatingOrangeAsteroid src="/img/orangeAsteroid.png" />
+      <RotatingResidential src="../img/residential.png" />
+      <RotatingBlueAsteroid src="../img/blueAsteroid.png" />
+      <RotatingHarvester src="/img/harvester.png" />
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (playGame) {
+            window.location.reload();
+            return;
+          }
+        }}
+      >
+        <WalletText>
+          <div>
+            <p style={{ margin: "0px", color: "wheat", marginBottom: "20px" }}>WELCOME TO</p>
+            <img src="/img/title.png" />
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+                gap: "10px",
+                marginBottom: "50px",
+              }}
+            >
+              <img
+                onClick={async () => {
+                  const wallet = Wallet.createRandom();
+                  try {
+                    setLoading(true);
+                    const response = await fetch("https://api.giantleap.gg/api/drip", {
+                      method: "POST",
+                      body: JSON.stringify({ address: wallet.address }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    });
+                    await response.json();
+                    sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                    if (!allKeys.includes(wallet.privateKey)) {
+                      const newList = [...allKeys, wallet.privateKey];
+                      localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                    }
+                    window.location.reload();
+                  } catch (e) {
+                    console.log(e);
+                    setError("unexpected error");
+                    setLoading(false);
+                  }
+                }}
+                src="../img/createAccount.png"
+                style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "10px" }}
+              />
+              <p
+                style={{
+                  fontSize: "20px",
+                  color: "#fffdd5",
+                  fontFamily: "sans-serif",
+                  fontWeight: "bolder",
+                  marginTop: "10px",
+                }}
+              >
+                USE EXISTING <br /> ACCOUNT
+              </p>
             </div>
-          </WalletText>
-          <TerminalOutput>{output}</TerminalOutput>
-          <InputBox>
-            {!playGame && !loading && <div style={{ marginRight: "10px", fontWeight: "bold" }}>INPUT |</div>}
-            <div>
-              {!privateKey.show && !playGame && !loading && (
-                <Input
-                  ref={inputRef}
-                  value={input}
-                  onKeyDown={async (e) => {
-                    setError("");
-                    if (e.key === "Enter") {
-                      switch (input) {
-                        case "i": {
-                          setOutput(`${output} \n $ Enter the private key which as xDAI in it \n `);
-                          setInput("");
-                          setPrivetKey({ show: true, input: "" });
-                          return;
-                        }
-                        case "n": {
-                          const wallet = Wallet.createRandom();
-                          try {
-                            setLoading(true);
-                            setOutput(`${output} \n $ Creating new wallet please wait  \n  Loading... \n`);
-                            const response = await fetch("https://api.giantleap.gg/api/drip", {
-                              method: "POST",
-                              body: JSON.stringify({ address: wallet.address }),
-                              headers: {
-                                "Content-Type": "application/json",
-                              },
-                            });
-                            await response.json();
-                            sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                            setOutput(
-                              `${output} \n $ New wallet address - ${wallet.address} \n \n $ Press Enter to play the game`
-                            );
-                            if (!allKeys.includes(wallet.privateKey)) {
-                              const newList = [...allKeys, wallet.privateKey];
-                              localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                            }
-                            setPlayGame(true);
-                            setTimeout(() => {
-                              buttonRef.current?.focus();
-                            });
-                          } catch (e) {
-                            console.log(e);
-                            setError("unexpected error");
-                            setLoading(false);
-                          }
-                          return;
-                        }
-                      }
-                      if (typeof +input === "number") {
-                        const getWalletIndex = +input;
-                        const privateKey = allKeys[getWalletIndex - 1];
-                        if (privateKey) {
-                          const wallet = new Wallet(privateKey);
-                          const address = wallet.address;
-                          sessionStorage.setItem("user-burner-wallet", privateKey);
-                          setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                          setPlayGame(true);
-                          setTimeout(() => {
-                            buttonRef.current?.focus();
-                          });
-                        } else {
-                          setError("Please Enter a valid Input");
-                        }
-                        return;
-                      }
-                    }
-                  }}
-                  onChange={(e) => setInput(e.target.value)}
-                />
-              )}
-              {privateKey.show && (
-                <Input
-                  ref={pkRef}
-                  value={privateKey.input}
-                  onKeyDown={(e) => {
-                    setError("");
+            {!!allKeys.length && (
+              <>
+                {allKeys.map((pk: string, index: number) => {
+                  const wallet = new Wallet(pk);
+                  const address = wallet.address;
+                  return (
+                    <>
+                      <CopyAddress address={address} index={index} pk={pk} />
+                    </>
+                  );
+                })}
+              </>
+            )}
+          </div>
+        </WalletText>
+        <TerminalOutput>{output}</TerminalOutput>
 
-                    if (e.key === "Enter") {
-                      try {
-                        const wallet = new Wallet(privateKey.input);
-                        const address = wallet.address;
-                        sessionStorage.setItem("user-burner-wallet", privateKey.input);
-                        setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                        if (!allKeys.includes(wallet.privateKey)) {
-                          const newList = [...allKeys, privateKey.input];
-                          localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                        }
-                        setPrivetKey({ show: false, input: "" });
-                        setPlayGame(true);
-                        setTimeout(() => {
-                          buttonRef.current?.focus();
-                        });
-                      } catch (e) {
-                        setError("Enter a valid private key");
+        <InputBox>
+          <p
+            style={{
+              fontFamily: "sans-serif",
+              letterSpacing: "1",
+              marginBottom: "4px",
+            }}
+          >
+            Import Wallet Private Key{" "}
+          </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginLeft: "60px",
+              marginBottom: "150px",
+            }}
+          >
+            {!playGame && !loading && <div>INPUT/</div>}
+            <div>
+              <Input
+                ref={pkRef}
+                value={input}
+                onKeyDown={(e) => {
+                  setError("");
+                  if (e.key === "Enter") {
+                    try {
+                      const wallet = new Wallet(input);
+                      const address = wallet.address;
+                      sessionStorage.setItem("user-burner-wallet", input);
+                      setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
+                      if (!allKeys.includes(wallet.privateKey)) {
+                        const newList = [...allKeys, input];
+                        localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
                       }
+                      setInput("");
+                      setPlayGame(true);
+                      setTimeout(() => {
+                        buttonRef.current?.focus();
+                      });
+                    } catch (e) {
+                      setError("Enter a valid private key");
                     }
-                  }}
-                  onChange={(e) => setPrivetKey({ show: true, input: e.target.value })}
-                />
-              )}
+                  }
+                }}
+                onChange={(e) => setInput(e.target.value)}
+              />
               {error && <Error>{error}</Error>}
               <Button ref={buttonRef} hidden={!playGame} type="submit">
                 Enter &crarr;{" "}
               </Button>
             </div>
-          </InputBox>
-        </form>
-      </SkyBlueLines>
+          </div>
+        </InputBox>
+      </form>
     </Container>
   );
 };
 
-const CopyAddress = ({ address, index }: { address: string; index: number }) => {
+const CopyAddress = ({ address, index, pk }: { address: string; index: number; pk: string }) => {
   const [copy, setCopy] = useState(false);
   return (
-    <P
-      style={{ cursor: "pointer" }}
-      key={address}
-      onClick={() => {
-        setCopy(true);
-        navigator.clipboard.writeText(`${address}`);
-        setTimeout(() => {
-          setCopy(false);
-        }, 1000);
-      }}
-    >
-      {index + 1}. {copy ? "Copied" : address}
-    </P>
+    <>
+      <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px", cursor: "pointer" }} key={address}>
+        <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}>{index + 1}</span>
+        <AccountMenu>{copy ? "Copied" : walletAddressLoginDisplay(address)}</AccountMenu>
+        <img
+          onClick={() => {
+            sessionStorage.setItem("user-burner-wallet", pk);
+            window.location.reload();
+          }}
+          src="/img/accBorderMenu.png"
+          style={{}}
+        />
+        <img
+          src="/img/copy.png"
+          style={{ marginTop: "-85px", marginLeft: "10px", cursor: "pointer" }}
+          onClick={() => {
+            setCopy(true);
+            navigator.clipboard.writeText(`${address}`);
+            setTimeout(() => {
+              setCopy(false);
+            }, 1000);
+          }}
+        />
+      </div>
+    </>
   );
 };
 const Container = styled.div`
@@ -219,23 +200,85 @@ const Container = styled.div`
   background-position: center center;
   pointer-events: all;
   overflow-y: auto;
+  max-height: 100vh;
 `;
 
-const SkyBlueLines = styled.div`
-  width: 100%;
-  height: 100%;
-  z-index: 70;
-  background-image: url("/img/BGblueLines.png");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center center;
-  pointer-events: all;
-  overflow: hidden;
+const rotateAnimation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+const RotatingGreenAsteroid = styled.img`
+  position: absolute;
+  right: 10%;
+  top: 10%;
+  animation: ${rotateAnimation} 10s linear infinite;
 `;
 
-const Title = styled.div`
-  color: #fffdd5;
-  z-index: 60;
+const RotatingOrangeAsteroid = styled.img`
+  position: absolute;
+  left: 15%;
+  top: 30%;
+  animation: ${rotateAnimation} 18s linear infinite;
+`;
+
+const upDownAnimation = keyframes`
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(15%);
+  }
+`;
+
+const RotatingResidential = styled.img`
+  position: absolute;
+  bottom: 25%;
+  left: 7%;
+  width: 150px;
+  animation: ${upDownAnimation} 2s linear infinite alternate;
+  transition: transform 0.2s ease-in-out;
+  &:hover {
+    transform: translateY(100%);
+  }
+`;
+
+const moveLeftRightAnimation = keyframes`
+  0% {
+    transform: translateX(-30%);
+  }
+  50% {
+    transform: translateX(30%);
+  }
+  100%{
+    transform: translateX(-30%);
+  }
+`;
+
+const RotatingBlueAsteroid = styled.img`
+  position: absolute;
+  bottom: 50%;
+  right: 17%;
+  width: 100px;
+  animation: ${moveLeftRightAnimation} 10s linear infinite;
+  transition: transform 10s ease-in-out;
+  &:hover {
+    transform: translateX(30%);
+  }
+`;
+
+const RotatingHarvester = styled.img`
+  position: absolute;
+  bottom: 15%;
+  right: 6%;
+  animation: ${upDownAnimation} 1s linear infinite alternate;
+  transition: transform 0.1s ease-in-out;
+  &:hover {
+    transform: translateY(100%);
+  }
 `;
 
 const WalletText = styled.div`
@@ -244,16 +287,22 @@ const WalletText = styled.div`
   justify-content: center;
   text-align: center;
   gap: 50px;
-  margin: 60px auto 0;
+  margin: 20px auto;
   z-index: 100;
   letter-spacing: 1;
 `;
-const P = styled.p`
+
+const AccountMenu = styled.div`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
   color: #fffdd5;
-  margin-top: 10px;
   font-weight: 300;
-  font-size: 16px;
-  margin-bottom: 10px;
+  font-size: 10px;
+  top: 30px;
+  left: 40px;
 `;
 const Error = styled.p`
   color: #ef0909;
@@ -273,22 +322,23 @@ const TerminalOutput = styled.div`
 
 const InputBox = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
   font-size: 16px;
   color: #fffdd5;
+  font-weight: 600;
 `;
 const Input = styled.input`
-  margin-top: 30px;
-  margin-right: 10px;
   font-size: 16px;
   border: none;
   outline: none;
-  margin: 0;
+  margin: 0 auto;
   background-color: transparent;
   color: #fffdd5;
   font-weight: 600;
-  width: 300px;
 `;
 const Button = styled.button`
   font-size: 18px;
