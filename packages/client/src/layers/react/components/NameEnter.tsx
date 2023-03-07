@@ -2,10 +2,9 @@ import styled from "styled-components";
 import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { computedToStream } from "@latticexyz/utils";
 import { Faction } from "./Faction";
-import { Wallet } from "ethers";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { Nft } from "./Nft";
 
@@ -15,108 +14,76 @@ interface Image {
 }
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
+  const [step, setStep] = useState(1);
   const [name, setName] = useState("");
-  const [selectFaction, setSelectFaction] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
   const [selectedNFT, setSelectedNFT] = useState<Image | undefined>();
-  const [nftData, setNftData] = useState<Image[]>([]);
   const params = new URLSearchParams(window.location.search);
   const chainIdString = params.get("chainId");
 
   const {
     network: {
       api: { initSystem },
+      network: { connectedAddress },
     },
     phaser: { sounds },
   } = layers;
-  useEffect(() => {
-    callApi();
-  }, []);
 
-  async function callApi() {
-    try {
-      const privateKey = sessionStorage.getItem("user-burner-wallet");
-      if (privateKey) {
-        const wallet = new Wallet(privateKey);
-        const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
-          method: "POST",
-          body: JSON.stringify({
-            address: wallet.address,
-            nftContract: "0x5e42fCbB2583CcaD0BaAfb92078b156bd661B93C",
-            chainId: chainIdString,
-          }),
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await response.json();
-        if (data.status) {
-          setNftData(data.nftData.userWalletNftData);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }
-  console.log("nftData.length: ", nftData.length, { nftData });
   return (
     <>
-      <Container faction={!!(typeof selectFaction === "number")}>
+      <Container>
         {"4242" == chainIdString || "100" == chainIdString ? (
           <>
-            {typeof selectFaction === "number" ? (
-              <>
-                <Form
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    sounds["click"].play();
-                    if (name && selectedNFT && typeof selectFaction === "number") {
-                      try {
-                        setLoading(true);
-                        await initSystem(name, selectFaction, selectedNFT?.tokenId);
-                      } catch (e) {
-                        setLoading(false);
-                        console.log("Error", e);
-                      }
-                    }
-                  }}
-                >
-                  <div>
-                    {nftData.length ? (
-                      <Nft
-                        setSelectNft={setSelectedNFT}
-                        nftData={nftData}
-                        selectedNFT={selectedNFT}
-                        clickSound={() => {
-                          sounds["click"].play();
-                        }}
-                      />
-                    ) : (
-                      <p style={{ alignItems: "center" }}>no NFT</p>
-                    )}
-                    {selectedNFT && (
-                      <S.Inline>
-                        <div>
-                          <Input
-                            disabled={loading}
-                            onChange={(e) => {
-                              setName(e.target.value);
-                            }}
-                            value={name}
-                            placeholder="ENTER NAME"
-                          />
-                        </div>
-                        <Button type="submit" disabled={loading}>
-                          {loading ? "Loading..." : "GO"}
-                        </Button>
-                      </S.Inline>
-                    )}
-                  </div>
-                </Form>
-              </>
-            ) : (
+            {step === 1 && (
+              <Form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  sounds["click"].play();
+                  setStep(2);
+                }}
+              >
+                <div>
+                  <Nft
+                    setSelectNft={setSelectedNFT}
+                    selectedNFT={selectedNFT}
+                    clickSound={() => {
+                      sounds["click"].play();
+                    }}
+                    address={connectedAddress.get()}
+                  />
+                  {selectedNFT && (
+                    <S.Inline>
+                      <div>
+                        <Input
+                          disabled={loading}
+                          onChange={(e) => {
+                            setName(e.target.value);
+                          }}
+                          value={name}
+                          placeholder="ENTER NAME"
+                        />
+                      </div>
+                      <Button type="submit" disabled={loading}>
+                        {loading ? "Loading..." : "GO"}
+                      </Button>
+                    </S.Inline>
+                  )}
+                </div>
+              </Form>
+            )}
+            {step === 2 && (
               <Faction
-                setSelectFaction={setSelectFaction}
+                setSelectFaction={async (selectFaction) => {
+                  if (name && selectedNFT && typeof selectFaction === "number") {
+                    try {
+                      setLoading(true);
+                      await initSystem(name, selectFaction, selectedNFT?.tokenId);
+                    } catch (e) {
+                      setLoading(false);
+                      console.log("Error", e);
+                    }
+                  }
+                }}
                 clickSound={() => {
                   sounds["click"].play();
                 }}
@@ -154,7 +121,7 @@ const Form = styled.form`
   z-index: 200;
 `;
 
-const Container = styled.div<{ faction: boolean }>`
+const Container = styled.div`
   width: 100%;
   height: 100vh;
   z-index: 50;
@@ -164,7 +131,6 @@ const Container = styled.div<{ faction: boolean }>`
   justify-content: center;
   align-items: center;
   background-image: url("/img/bgWithoutSkyLines.png");
-  /* background-image: ${({ faction }) => (faction ? "url(/img/bgUv.png)" : "url(/img/bgWithoutSkyLines.png)")}; */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

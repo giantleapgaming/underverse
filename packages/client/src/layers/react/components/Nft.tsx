@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useNFTData } from "../hooks/useAllNFT";
 
 interface Image {
   tokenId: number;
@@ -10,69 +11,78 @@ export const Nft = ({
   setSelectNft,
   selectedNFT,
   clickSound,
-  nftData,
+  address,
 }: {
   setSelectNft: (image: Image) => void;
   selectedNFT?: Image;
   clickSound: () => void;
-  nftData: Image[];
+  address?: string;
 }) => {
-  console.log("selectedNFT: ", selectedNFT);
-  return (
-    <div>
-      <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
-        <S.ButtonImg src="/button/greenButton.png" />
-        <p>Balance</p>
+  const { error, loading, allNfts } = useNFTData(address);
+  if (error) {
+    return <div>Error</div>;
+  }
+  if (loading) {
+    return <div>Loading NFT Details</div>;
+  }
+  if (allNfts && allNfts.length) {
+    return (
+      <div>
+        <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
+          <S.ButtonImg src="/button/greenButton.png" />
+          <p>Balance</p>
+        </div>
+        <S.DeployText>MINE</S.DeployText>
+        <S.Container>
+          <img src="/img/title.png" style={{ margin: "20px 0" }} />
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "14px",
+              fontFamily: "sans-serif",
+              letterSpacing: "1",
+              fontWeight: "600",
+              color: "wheat",
+              padding: "0",
+              margin: "10px 0",
+            }}
+          >
+            {allNfts.length} UNDERVERSE NFTS DETECTED
+          </p>
+          <p
+            style={{
+              textAlign: "center",
+              fontSize: "25px",
+              fontFamily: "sans-serif",
+              letterSpacing: "1.2",
+              fontWeight: "600",
+              color: "wheat",
+              padding: "0",
+              margin: "10px 0",
+            }}
+          >
+            SELECT YOUR GAME PROFILE
+          </p>
+          <S.NftSelectionContainer>
+            {allNfts.map((data, index) => (
+              <S.NftSelect
+                selectedNFT={data.tokenId === selectedNFT?.tokenId}
+                key={`index-${index}`}
+                onClick={() => {
+                  setSelectNft(data);
+                  clickSound();
+                }}
+              >
+                <S.Img src={data.imageUrl} />
+              </S.NftSelect>
+            ))}
+          </S.NftSelectionContainer>
+        </S.Container>
       </div>
-      <S.DeployText>MINE</S.DeployText>
-
-      <S.Container>
-        <img src="/img/title.png" style={{ margin: "20px 0" }} />
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "14px",
-            fontFamily: "sans-serif",
-            letterSpacing: "1",
-            fontWeight: "600",
-            color: "wheat",
-            padding: "0",
-            margin: "10px 0",
-          }}
-        >
-          {nftData.length} UNDERVERSE NFTS DETECTED
-        </p>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "25px",
-            fontFamily: "sans-serif",
-            letterSpacing: "1.2",
-            fontWeight: "600",
-            color: "wheat",
-            padding: "0",
-            margin: "10px 0",
-          }}
-        >
-          SELECT YOUR GAME PROFILE
-        </p>
-        <S.NftSelectionContainer>
-          {nftData.map((data, index) => (
-            <S.NftSelect
-              selectedNFT={data.tokenId === selectedNFT?.tokenId}
-              key={`index-${index}`}
-              onClick={() => {
-                setSelectNft(data);
-                clickSound();
-              }}
-            >
-              <S.Img src={data.imageUrl} />
-            </S.NftSelect>
-          ))}
-        </S.NftSelectionContainer>
-      </S.Container>
-    </div>
-  );
+    );
+  } else {
+    return <div>SHow the no Nft UI</div>;
+  }
 };
 
 const S = {
