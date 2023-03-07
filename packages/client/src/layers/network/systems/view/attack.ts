@@ -78,6 +78,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setScale(0.5);
               gameObject.setAngle(angle);
             },
           });
@@ -89,6 +90,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
+              gameObject.setScale(0.5);
             },
           });
           attackShipObjectGrayLayer.setComponent({
@@ -101,6 +103,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setAngle(angle);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setScale(0.5);
             },
           });
           levelSprite.setComponent({

@@ -57,6 +57,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
       const attackShipObjectTop1Layer = objectPool.get(`attack-top1-move-${entity}`, "Sprite");
       const attackShipObjectTop2Layer = objectPool.get(`attack-top2-move-${entity}`, "Sprite");
       const attackShipObjectGrayLayer = objectPool.get(`attack-gray-move-${entity}`, "Sprite");
+      const attackShipObjectFlame = objectPool.get(`attack-flame-move-${entity}`, "Sprite");
       const attackShip = config.sprites[Sprites.Asteroid12];
       const destinationCircle = phaserScene.add.graphics();
       const sourceCircle = phaserScene.add.graphics();
@@ -69,6 +70,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
       attackShipObjectTop1Layer.setComponent({
         id: `attack-top1-move-${entity}`,
         once: (gameObject) => {
+          gameObject.setScale(0.5);
           gameObject.setTexture(attackShip.assetKey, `attack-1.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(152);
@@ -98,6 +100,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
       attackShipObjectTop2Layer.setComponent({
         id: `attack-top2-move-${entity}`,
         once: (gameObject) => {
+          gameObject.setScale(0.5);
           gameObject.setTexture(attackShip.assetKey, `attack-3.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(152);
@@ -124,9 +127,40 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
           });
         },
       });
+      attackShipObjectFlame.setComponent({
+        id: `attack-flame-move${entity}`,
+        once: (gameObject) => {
+          gameObject.setScale(0.5);
+          gameObject.setTexture(attackShip.assetKey, `attack-4.png`);
+          gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
+          gameObject.setDepth(152);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(angle);
+          phaserScene.add.tween({
+            targets: gameObject,
+            x: {
+              from: gameObject.x,
+              to: destinationPixelX + tileWidth / 2,
+            },
+            y: {
+              from: gameObject.y,
+              to: destinationPixelY + tileHeight / 2,
+            },
+            yoyo: false,
+            repeat: 0,
+            duration: 5_000,
+            onComplete: () => {
+              objectPool.remove(`attack-flame-move-${entity}`);
+              destinationCircle.clear();
+              sourceCircle.clear();
+            },
+          });
+        },
+      });
       attackShipObjectGrayLayer.setComponent({
         id: `attack-gray-move-${entity}`,
         once: (gameObject) => {
+          gameObject.setScale(0.5);
           gameObject.setTexture(attackShip.assetKey, `attack-2.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
           gameObject.setDepth(151);

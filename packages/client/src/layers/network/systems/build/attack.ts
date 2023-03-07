@@ -79,6 +79,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         attackShipObjectTop1Layer.setComponent({
           id: `attack-top1-hover`,
           once: (gameObject) => {
+            gameObject.setScale(0.5);
             gameObject.setTexture(HoverSprite.assetKey, `attack-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setDepth(9);
@@ -89,6 +90,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         attackShipObjectTop2Layer.setComponent({
           id: `attack-top2-hover`,
           once: (gameObject) => {
+            gameObject.setScale(0.5);
             gameObject.setTexture(HoverSprite.assetKey, `attack-3.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setDepth(9);
@@ -99,6 +101,7 @@ export function buildAttackSystem(network: NetworkLayer, phaser: PhaserLayer) {
         attackShipObjectGrayLayer.setComponent({
           id: `attack-gray-hover`,
           once: (gameObject) => {
+            gameObject.setScale(0.5);
             gameObject.setTexture(HoverSprite.assetKey, `attack-2.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
             gameObject.setDepth(6);

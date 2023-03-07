@@ -57,6 +57,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
       harvesterObjectTopLayer.setComponent({
         id: `harvester-top-hover`,
         once: (gameObject) => {
+          gameObject.setScale(0.5);
           gameObject.setTexture(HoverSprite.assetKey, `harvester-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(5);
@@ -67,6 +68,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
       harvesterObjectGrayLayer.setComponent({
         id: `harvester-gray-hover`,
         once: (gameObject) => {
+          gameObject.setScale(0.5);
           gameObject.setTexture(HoverSprite.assetKey, `harvester-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
           gameObject.setDepth(4);
