@@ -14,13 +14,15 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       },
     },
   } = phaser;
-  for (let i = 1; i < 7; i++) {
+  for (let i = 1; i < 11; i++) {
     const circle = phaserScene.add.circle(tileWidth / 2, tileWidth / 2);
     const label = phaserScene.add.text(tileWidth / 2, -(i * 5 * tileWidth - tileWidth / 2), `${i * 5}`, {
-      fontSize: "64px",
+      fontSize: "100px",
       color: "#c0c0c0",
     });
-    circle.setStrokeStyle(0.3, 0x2d2d36);
+    if (i == 3) {
+      circle.setStrokeStyle(3, 0x2d2d36);
+    } else circle.setStrokeStyle(0.3, 0x2d2d36);
     circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
     label.setOrigin(0.5, 0.5);
     label.setDepth(20);
