@@ -38,9 +38,9 @@ async function bootGame() {
     const devMode = params.get("dev") === "true";
     const initialBlockNumberString = params.get("initialBlockNumber");
     const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
-
+    const snapshotServiceUrl = params.get("snapshot") ?? "https://ecs-snapshot.testnet-mud-services.linfra.xyz";
     let networkLayerConfig;
-    if (worldAddress && privateKey && chainIdString && jsonRpc) {
+    if (worldAddress && privateKey && chainIdString && jsonRpc && snapshotServiceUrl) {
       networkLayerConfig = {
         worldAddress,
         privateKey,
@@ -50,6 +50,7 @@ async function bootGame() {
         checkpointUrl,
         devMode,
         initialBlockNumber,
+        snapshotServiceUrl,
       };
     }
 
