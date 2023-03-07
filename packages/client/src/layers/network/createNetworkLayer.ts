@@ -221,7 +221,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
   const initSystem = async (name: string, faction: number, nftID: number) => {
-    return systems["system.Init"].executeTyped(name, faction, nftID);
+    return systems["system.Init"].executeTyped(name, faction, nftID, { type: 2, gasPrice: undefined });
   };
 
   async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
@@ -239,7 +239,10 @@ export async function createNetworkLayer(config: GameConfig) {
     entityType: EntityID;
     NftId: number;
   }) {
-    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId);
+    return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   async function wallSystem({
@@ -257,11 +260,17 @@ export async function createNetworkLayer(config: GameConfig) {
     y2: number;
     nftId: number;
   }) {
-    return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2, nftId);
+    return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2, nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   async function upgradeSystem(godownEntity: EntityID, nftId: number) {
-    return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity), nftId);
+    return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity), nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   async function harvestSystem(
@@ -274,7 +283,8 @@ export async function createNetworkLayer(config: GameConfig) {
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       kgsToTransfer,
-      nftId
+      nftId,
+      { type: 2, gasPrice: undefined }
     );
   }
 
@@ -282,7 +292,8 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Prospect"].executeTyped(
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
-      NftId
+      NftId,
+      { type: 2, gasPrice: undefined }
     );
   }
 
@@ -296,7 +307,8 @@ export async function createNetworkLayer(config: GameConfig) {
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       people,
-      nftId
+      nftId,
+      { type: 2, gasPrice: undefined }
     );
   }
 
@@ -310,20 +322,24 @@ export async function createNetworkLayer(config: GameConfig) {
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       kgs,
-      nftId
+      nftId,
+      { type: 2, gasPrice: undefined }
     );
   }
 
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number, nftId: number) {
-    return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs, nftId);
+    return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   async function repairSystem(godownEntity: EntityID, nftId: number) {
-    return systems["system.Repair"].executeTyped(BigNumber.from(godownEntity), nftId);
+    return systems["system.Repair"].executeTyped(BigNumber.from(godownEntity), nftId, { type: 2, gasPrice: undefined });
   }
 
   async function scrapeSystem(godownEntity: EntityID, nftId: number) {
-    return systems["system.Scrap"].executeTyped(BigNumber.from(godownEntity), nftId);
+    return systems["system.Scrap"].executeTyped(BigNumber.from(godownEntity), nftId, { type: 2, gasPrice: undefined });
   }
 
   const attackSystem = async (
@@ -336,12 +352,16 @@ export async function createNetworkLayer(config: GameConfig) {
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       kgsToTransfer,
-      nftId
+      nftId,
+      { type: 2, gasPrice: undefined }
     );
   };
 
   const sellSystem = async (godownEntity: EntityID, kgs: number, nftId: number) => {
-    return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs, nftId);
+    return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   };
 
   async function refuelSystem(
@@ -354,7 +374,8 @@ export async function createNetworkLayer(config: GameConfig) {
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
       kgs,
-      nftIds
+      nftIds,
+      { type: 2, gasPrice: undefined }
     );
   }
 
@@ -371,7 +392,10 @@ export async function createNetworkLayer(config: GameConfig) {
     entityType: number;
     nftId: number;
   }) {
-    return systems["system.BuildFromHarvester"].executeTyped(BigNumber.from(harvesterEntity), x, y, entityType, nftId);
+    return systems["system.BuildFromHarvester"].executeTyped(BigNumber.from(harvesterEntity), x, y, entityType, nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   async function buildFromShipyardSystem({
@@ -387,7 +411,10 @@ export async function createNetworkLayer(config: GameConfig) {
     entityType: number;
     nftId: number;
   }) {
-    return systems["system.BuildFromShipyard"].executeTyped(BigNumber.from(shipyardEntity), x, y, entityType, nftId);
+    return systems["system.BuildFromShipyard"].executeTyped(BigNumber.from(shipyardEntity), x, y, entityType, nftId, {
+      type: 2,
+      gasPrice: undefined,
+    });
   }
 
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
