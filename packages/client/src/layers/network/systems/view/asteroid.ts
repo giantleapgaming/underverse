@@ -37,6 +37,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           gameObject.setTexture(astroid.assetKey, `asteroid-${sizeCalculate(balance)}.png`);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
+          gameObject.setScale(sizeCalculate(balance) / 10);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           const durationMultiplier = 0.8 + Math.random() * 0.4;
           phaserScene.add.tween({
@@ -54,7 +55,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
   });
 }
 
-function sizeCalculate(num: number) {
+function sizeCalculate(num: number): number {
   if (num >= 0 && num <= 10) {
     return 1;
   } else if (num > 10 && num <= 25) {
@@ -72,4 +73,5 @@ function sizeCalculate(num: number) {
   } else if (num > 75 && num <= 85) {
     return 8;
   }
+  return 9;
 }
