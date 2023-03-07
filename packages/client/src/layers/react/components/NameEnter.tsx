@@ -128,7 +128,7 @@ const Container = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   background-image: url("/img/bgWithoutSkyLines.png");
   background-size: cover;

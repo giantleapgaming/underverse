@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { useNFTData } from "../hooks/useAllNFT";
+import { NoNFT } from "./NoNFT";
 
 interface Image {
   tokenId: number;
@@ -32,7 +33,7 @@ export const Nft = ({
           <S.ButtonImg src="/button/greenButton.png" />
           <p>Balance</p>
         </div>
-        <S.DeployText>MINE</S.DeployText>
+        <S.DeployText>{address?.toString().substring(0, 6)}</S.DeployText>
         <S.Container>
           <img src="/img/title.png" style={{ margin: "20px 0" }} />
           <p
@@ -81,7 +82,7 @@ export const Nft = ({
       </div>
     );
   } else {
-    return <div>SHow the no Nft UI</div>;
+    return <NoNFT address={address} />;
   }
 };
 
@@ -103,8 +104,8 @@ const S = {
 
   DeployText: styled.p`
     position: absolute;
-    top: 35px;
-    right: 55px;
+    top: 6px;
+    right: 20px;
     font-size: 16;
     font-weight: bold;
   `,
