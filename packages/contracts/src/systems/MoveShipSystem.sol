@@ -16,7 +16,7 @@ import "../libraries/Math.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
-import { checkNFT } from "../utils.sol";
+import { checkNFT, validMove } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 
@@ -38,6 +38,8 @@ contract MoveShipSystem is System {
     );
 
     //Check that the ship is not a destroyed ship (Level 0)
+    //This is now being checked in the valid Move function
+
     require(
       LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
       "Ship has already been destroyed"
@@ -84,6 +86,10 @@ contract MoveShipSystem is System {
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
     require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to transport product");
+
+    //Dog fight move validity checks
+
+    require(validMove(components, sourceEntity, x, y), "Destination out of movement arc");
 
     // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
     // The greater the distance from center the higher the probability that the second condition will be satisfied

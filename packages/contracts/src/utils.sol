@@ -432,3 +432,71 @@ function createEncounterEntity(IWorld world, IUint256Component components, int32
   EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
   EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
 }
+
+function validMove(IUint256Component components, uint256 sourceEntity, int32 x, int32 y) view returns (bool) {
+  uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
+
+  if (sourceEntityLevel < 1) {
+    return false;
+  }
+
+  Coord memory sourceEntityPosition = getCurrentPosition(
+    PositionComponent(getAddressById(components, PositionComponentID)),
+    sourceEntity
+  );
+
+  Coord memory destinationPosition = Coord({ x: x, y: y });
+
+  // distance the value that you get below is multiplied by MULTIPLIER
+  uint256 moveDistance = getDistanceBetweenCoordinatesWithMultiplier(sourceEntityPosition, destinationPosition);
+
+  require(
+    moveDistance <= (5000 + (sourceEntityLevel * MULTIPLIER2)),
+    "Can only attack upto a certain distance based on your level"
+  );
+
+  //Now we check if the attack coordinate is less than certain units (dictated by your level) away from a line
+  //that is drawn from the previous position to current position of the attacker
+  // The distance of the attack point to the line connecting the two points
+  //We check if the attack point is less than a certain distaince from the heading line
+  //The greater this distance the more wider your shooting arc, which means higher level ships become more powerful at shooting
+
+  Coord memory sourcePrevPosition = getPrevPosition(
+    PrevPositionComponent(getAddressById(components, PrevPositionComponentID)),
+    sourceEntity
+  );
+
+  int256 checkCalc = (
+    Math.abs(
+      (sourceEntityPosition.y - sourcePrevPosition.y) *
+        x -
+        (sourceEntityPosition.x - sourcePrevPosition.x) *
+        y +
+        sourceEntityPosition.x *
+        sourcePrevPosition.y -
+        sourceEntityPosition.y *
+        sourcePrevPosition.x
+    )
+  ) /
+    (
+      Math.sqrtInt(
+        (sourceEntityPosition.y - sourcePrevPosition.y) *
+          (sourceEntityPosition.y - sourcePrevPosition.y) +
+          (sourceEntityPosition.x - sourcePrevPosition.x) *
+          (sourceEntityPosition.x - sourcePrevPosition.x)
+      )
+    );
+
+  if (checkCalc <= int256(sourceEntityLevel)) {
+    return false;
+  }
+
+  //We also want to ensure that the attack point is in the direction the ship was heading and not on the back side of the ship
+  //It is possible for the attack point to be at the right distance but on the other side of the ship, we want to prevent attacks on points behind you
+  //You should only be able to attack points which are ahead of you and in the attack arc
+  //To do this we will find distance from prev position and compare it to distance from current position to ensure that it is greater
+
+  if (getDistanceBetweenCoordinatesWithMultiplier(sourcePrevPosition, destinationPosition) < moveDistance) {
+    return false;
+  }
+}
