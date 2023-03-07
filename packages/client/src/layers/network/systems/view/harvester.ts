@@ -95,6 +95,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
+              gameObject.setScale(0.5);
             },
           });
           harvesterObjectGrayLayer.setComponent({
@@ -107,6 +108,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setAngle(angle);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setScale(0.5);
             },
           });
           levelSprite.setComponent({
@@ -117,6 +119,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);
+              gameObject.setScale(0.5);
             },
           });
         } else {
