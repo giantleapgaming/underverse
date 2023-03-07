@@ -96,13 +96,13 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                     {selectedNFT && (
                       <S.Inline>
                         <div>
-                          <p style={{ marginLeft: "34px", color: "#05f4f9", marginBottom: "5px" }}>Enter Name</p>
                           <Input
                             disabled={loading}
                             onChange={(e) => {
                               setName(e.target.value);
                             }}
                             value={name}
+                            placeholder="ENTER NAME"
                           />
                         </div>
                         <Button type="submit" disabled={loading}>
@@ -155,7 +155,7 @@ const Form = styled.form`
 
 const Container = styled.div<{ faction: boolean }>`
   width: 100%;
-  height: 100%;
+  height: 100vh;
   z-index: 50;
   position: absolute;
   display: flex;
@@ -179,7 +179,6 @@ const Button = styled.button`
   font-weight: 800;
   border-radius: 50%;
   background: transparent;
-  margin-top: 29px;
   cursor: pointer;
 `;
 
@@ -193,6 +192,14 @@ const Input = styled.input`
   border: none;
   outline: none;
   width: 160px;
+
+  ::placeholder {
+    font-family: sans-serif;
+    font-weight: bold;
+    text-align: center;
+    font-size: 16px;
+    color: #05f4f9;
+  }
 `;
 
 export const registerNameScreen = () => {

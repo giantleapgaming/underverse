@@ -20,7 +20,7 @@ export const Nft = ({
   console.log("selectedNFT: ", selectedNFT);
   return (
     <S.Container>
-      <img src="/img/title.png" />
+      <img src="/img/title.png" style={{ margin: "20px 0" }} />
 
       <p
         style={{
@@ -72,12 +72,6 @@ const S = {
   Container: styled.div`
     width: 100%;
     height: 100%;
-    z-index: 50;
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-    pointer-events: all;
-    overflow-y: auto;
   `,
 
   Img: styled.img`
@@ -90,16 +84,19 @@ const S = {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    border: ${({ selectedNFT }) => {
-      return selectedNFT ? "1px solid red" : "1px solid blue";
+    background-image: ${({ selectedNFT }) => {
+      return selectedNFT ? "url(/img/BlueBorderNFT.png)" : "url(/img/WhiteBorderNFT.png)";
     }};
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 
     &:hover {
-      border-radius: 10%;
-      scale: 1.1;
-      border: 1px solid red;
+      border-radius: 2%;
+      scale: 1.05;
     }
   `,
   NftSelectionContainer: styled.div`
