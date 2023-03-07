@@ -58,6 +58,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       console.log(e);
     }
   }
+  console.log("nftData.length: ", nftData.length, { nftData });
   return (
     <>
       <Container faction={!!(typeof selectFaction === "number")}>
@@ -227,7 +228,7 @@ export const registerNameScreen = () => {
           });
           const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
           if (doesExist) {
-            return { layers };
+            return;
           } else {
             return { layers };
           }
