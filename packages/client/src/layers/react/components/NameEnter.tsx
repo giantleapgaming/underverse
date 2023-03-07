@@ -149,8 +149,8 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 7px;
-  position: absolute;
-  bottom: 20px;
+  /* position: absolute;
+  bottom: 20px; */
   z-index: 200;
 `;
 
