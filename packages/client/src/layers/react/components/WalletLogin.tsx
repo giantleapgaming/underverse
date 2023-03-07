@@ -11,6 +11,7 @@ const WalletLogin = () => {
   const allKeys = JSON.parse(localStorage.getItem("all-underverse-pk") ?? "[]");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [enterInputKey, setEnterInputKey] = useState(false);
   const [playGame, setPlayGame] = useState(false);
 
   return (
@@ -69,7 +70,7 @@ const WalletLogin = () => {
                   }
                 }}
                 src="../img/createAccount.png"
-                style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "10px" }}
+                style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "15px" }}
               />
               <p
                 style={{
@@ -77,7 +78,8 @@ const WalletLogin = () => {
                   color: "#fffdd5",
                   fontFamily: "sans-serif",
                   fontWeight: "bolder",
-                  marginTop: "10px",
+                  marginTop: "20px",
+                  marginBottom: "20px",
                 }}
               >
                 USE EXISTING <br /> ACCOUNT
@@ -98,61 +100,69 @@ const WalletLogin = () => {
             )}
           </div>
         </WalletText>
-        <TerminalOutput>{output}</TerminalOutput>
 
         <InputBox>
-          <p
-            style={{
-              fontFamily: "sans-serif",
-              letterSpacing: "1",
-              marginBottom: "4px",
+          <P
+            onClick={() => {
+              setEnterInputKey(!enterInputKey);
             }}
           >
             Import Wallet Private Key{" "}
-          </p>
+          </P>
           <div
             style={{
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
               marginLeft: "60px",
-              marginBottom: "150px",
+              marginBottom: "40px",
+              flexDirection: "column",
             }}
           >
-            {!playGame && !loading && <div>INPUT/</div>}
-            <div>
-              <Input
-                ref={pkRef}
-                value={input}
-                onKeyDown={(e) => {
-                  setError("");
-                  if (e.key === "Enter") {
-                    try {
-                      const wallet = new Wallet(input);
-                      const address = wallet.address;
-                      sessionStorage.setItem("user-burner-wallet", input);
-                      setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                      if (!allKeys.includes(wallet.privateKey)) {
-                        const newList = [...allKeys, input];
-                        localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+                gap: "10px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                {!playGame && !loading && enterInputKey && <div>INPUT/</div>}
+                <Input ref={pkRef} value={input} onChange={(e) => setInput(e.target.value)} />
+              </div>
+              <div>
+                {enterInputKey && (
+                  <Button
+                    type="submit"
+                    onClick={() => {
+                      setError("");
+                      try {
+                        const wallet = new Wallet(input);
+                        const address = wallet.address;
+                        sessionStorage.setItem("user-burner-wallet", input);
+                        setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
+                        if (!allKeys.includes(wallet.privateKey)) {
+                          const newList = [...allKeys, input];
+                          localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                        }
+                        setInput("");
+                        setPlayGame(true);
+                        setTimeout(() => {
+                          buttonRef.current?.focus();
+                        });
+                      } catch (e) {
+                        setError("Enter a valid private key");
                       }
-                      setInput("");
-                      setPlayGame(true);
-                      setTimeout(() => {
-                        buttonRef.current?.focus();
-                      });
-                    } catch (e) {
-                      setError("Enter a valid private key");
-                    }
-                  }
-                }}
-                onChange={(e) => setInput(e.target.value)}
-              />
-              {error && <Error>{error}</Error>}
-              <Button ref={buttonRef} hidden={!playGame} type="submit">
-                Enter &crarr;{" "}
-              </Button>
+                    }}
+                  >
+                    SUBMIT
+                  </Button>
+                )}
+              </div>
             </div>
+            {error && enterInputKey && <Error>{error}</Error>}
           </div>
         </InputBox>
       </form>
@@ -297,7 +307,17 @@ const WalletText = styled.div`
   z-index: 100;
   letter-spacing: 1;
 `;
+const P = styled.p`
+  font-family: sans-serif;
+  letter-spacing: 1;
+  margin-bottom: 10px;
 
+  &:hover {
+    color: #00ffe6;
+    cursor: pointer;
+    scale: 1.05;
+  }
+`;
 const AccountMenu = styled.div`
   position: absolute;
   display: flex;
@@ -306,8 +326,8 @@ const AccountMenu = styled.div`
   width: 100%;
   color: #fffdd5;
   font-weight: 300;
-  font-size: 10px;
-  top: 30px;
+  font-size: 20px;
+  top: 20px;
   left: 40px;
 `;
 const Error = styled.p`
@@ -316,14 +336,6 @@ const Error = styled.p`
   font-weight: 600;
   font-size: 20px;
   margin-bottom: 20px;
-`;
-const TerminalOutput = styled.div`
-  color: #fffdd5;
-  font-weight: 300;
-  font-size: 16px;
-  margin-bottom: 10px;
-  white-space: pre-line;
-  text-align: center;
 `;
 
 const InputBox = styled.div`
@@ -342,17 +354,22 @@ const Input = styled.input`
   border: none;
   outline: none;
   margin: 0 auto;
+  margin-left: 10px;
   background-color: transparent;
   color: #fffdd5;
   font-weight: 600;
 `;
 const Button = styled.button`
   font-size: 18px;
+  padding: 0;
   color: #fffdd5;
   font-weight: bold;
   background: none;
   outline: none;
   border: none;
   cursor: pointer;
+  &:hover {
+    scale: 1.1;
+  }
 `;
 export default WalletLogin;
