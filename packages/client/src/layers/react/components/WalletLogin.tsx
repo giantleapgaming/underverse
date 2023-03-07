@@ -217,6 +217,37 @@ const rotateAnimation = keyframes`
     transform: rotate(360deg);
   }
 `;
+
+const antiRotateAnimation = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+`;
+
+const upDownAnimation = keyframes`
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(15%);
+  }
+`;
+
+const moveLeftRightAnimation = keyframes`
+  0% {
+    transform: translateX(-10%);
+  }
+  50% {
+    transform: translateX(10%);
+  }
+  100%{
+    transform: translateX(-10%);
+  }
+`;
+
 const RotatingGreenAsteroid = styled.img`
   position: absolute;
   right: 10%;
@@ -231,36 +262,15 @@ const RotatingOrangeAsteroid = styled.img`
   animation: ${rotateAnimation} 18s linear infinite;
 `;
 
-const upDownAnimation = keyframes`
-  from {
-    transform: translateY(0%);
-  }
-  to {
-    transform: translateY(15%);
-  }
-`;
-
 const RotatingResidential = styled.img`
   position: absolute;
   bottom: 25%;
   left: 7%;
   width: 150px;
-  animation: ${upDownAnimation} 2s linear infinite alternate;
-  transition: transform 0.2s ease-in-out;
+  animation: ${moveLeftRightAnimation} 7s linear infinite alternate;
+  transition: transform 0.3s ease-in-out;
   &:hover {
     transform: translateY(100%);
-  }
-`;
-
-const moveLeftRightAnimation = keyframes`
-  0% {
-    transform: translateX(-30%);
-  }
-  50% {
-    transform: translateX(30%);
-  }
-  100%{
-    transform: translateX(-30%);
   }
 `;
 
@@ -269,7 +279,7 @@ const RotatingBlueAsteroid = styled.img`
   bottom: 50%;
   right: 17%;
   width: 100px;
-  animation: ${moveLeftRightAnimation} 10s linear infinite;
+  animation: ${antiRotateAnimation} 20s linear infinite;
   transition: transform 10s ease-in-out;
   &:hover {
     transform: translateX(30%);

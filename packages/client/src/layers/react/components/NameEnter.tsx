@@ -7,6 +7,7 @@ import { computedToStream } from "@latticexyz/utils";
 import { Faction } from "./Faction";
 import { Wallet } from "ethers";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { Nft } from "./Nft";
 
 interface Image {
   tokenId: number;
@@ -17,7 +18,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
   const [selectFaction, setSelectFaction] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
-  const [selectedNFT, setSelectedNFT] = useState<Image | null>(null);
+  const [selectedNFT, setSelectedNFT] = useState<Image | undefined>();
   const [nftData, setNftData] = useState<Image[]>([]);
   const params = new URLSearchParams(window.location.search);
   const chainIdString = params.get("chainId");
@@ -64,9 +65,6 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
           <>
             {typeof selectFaction === "number" ? (
               <>
-                <Gif>
-                  <img src="/img/nameSun.gif" />
-                </Gif>
                 <Form
                   onSubmit={async (e) => {
                     e.preventDefault();
@@ -84,39 +82,16 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 >
                   <div>
                     {nftData.length ? (
-                      <S.NFTImages>
-                        {nftData.map((item) => {
-                          return (
-                            <S.SelectNft
-                              style={{
-                                position: "relative",
-                                opacity: item.imageUrl === selectedNFT?.imageUrl ? 1 : 0.5,
-                              }}
-                              onClick={() => setSelectedNFT(item)}
-                              key={item.imageUrl}
-                            >
-                              {item.imageUrl === selectedNFT?.imageUrl && (
-                                <span
-                                  style={{
-                                    position: "absolute",
-                                    inset: "0px",
-                                    fontSize: "60px",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                    width: "100%",
-                                  }}
-                                >
-                                  &#10003;
-                                </span>
-                              )}
-                              <img src={item.imageUrl} width={64} height={64} />
-                            </S.SelectNft>
-                          );
-                        })}
-                      </S.NFTImages>
+                      <Nft
+                        setSelectNft={setSelectedNFT}
+                        nftData={nftData}
+                        selectedNFT={selectedNFT}
+                        clickSound={() => {
+                          sounds["click"].play();
+                        }}
+                      />
                     ) : (
-                      <p style={{ alignItems: "center" }}>Loading NFT</p>
+                      <p style={{ alignItems: "center" }}>no NFT</p>
                     )}
                     {selectedNFT && (
                       <S.Inline>
@@ -167,17 +142,6 @@ const S = {
     justify-content: center;
     gap: 10px;
   `,
-  SelectNft: styled.div`
-    cursor: pointer;
-    width: 64px;
-    height: 64px;
-    &:hover {
-      background-color: #eeeeee11;
-      border-radius: 10%;
-      scale: 1.1;
-      opacity: 1 !important;
-    }
-  `,
 };
 const Form = styled.form`
   display: flex;
@@ -189,18 +153,6 @@ const Form = styled.form`
   z-index: 200;
 `;
 
-const Gif = styled.div`
-  z-index: 100;
-  width: 200px;
-  height: 100%;
-  display: flex;
-  bottom: 200;
-  margin: auto auto;
-  position: absolute;
-  align-items: flex-end;
-  justify-content: center;
-`;
-
 const Container = styled.div<{ faction: boolean }>`
   width: 100%;
   height: 100%;
@@ -210,7 +162,8 @@ const Container = styled.div<{ faction: boolean }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: ${({ faction }) => (faction ? "url(/img/bgUv.png)" : "url(/img/bgWithoutSkyLines.png)")};
+  background-image: url("/img/bgWithoutSkyLines.png");
+  /* background-image: ${({ faction }) => (faction ? "url(/img/bgUv.png)" : "url(/img/bgWithoutSkyLines.png)")}; */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -267,7 +220,7 @@ export const registerNameScreen = () => {
           });
           const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
           if (doesExist) {
-            return;
+            return { layers };
           } else {
             return { layers };
           }
