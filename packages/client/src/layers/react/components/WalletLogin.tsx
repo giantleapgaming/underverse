@@ -183,7 +183,7 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
         />
         <img
           src="/img/copy.png"
-          style={{ marginTop: "-85px", marginLeft: "10px", cursor: "pointer" }}
+          style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "60px" }}
           onClick={() => {
             setCopy(true);
             navigator.clipboard.writeText(`${address}`);
