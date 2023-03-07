@@ -166,14 +166,20 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
     <>
       <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px", cursor: "pointer" }} key={address}>
         <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}>{index + 1}</span>
-        <AccountMenu>{copy ? "Copied" : walletAddressLoginDisplay(address)}</AccountMenu>
+        <AccountMenu
+          onClick={() => {
+            sessionStorage.setItem("user-burner-wallet", pk);
+            window.location.reload();
+          }}
+        >
+          {copy ? "Copied" : walletAddressLoginDisplay(address)}
+        </AccountMenu>
         <img
           onClick={() => {
             sessionStorage.setItem("user-burner-wallet", pk);
             window.location.reload();
           }}
           src="/img/accBorderMenu.png"
-          style={{}}
         />
         <img
           src="/img/copy.png"
