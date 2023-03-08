@@ -90,7 +90,7 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
         once: (gameObject) => {
           gameObject.setTexture(cargoTransport.assetKey, `cargo-transport-1.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
-          gameObject.setDepth(150);
+          gameObject.setDepth(153);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setAngle(angle);
           gameObject.setScale(0.3);

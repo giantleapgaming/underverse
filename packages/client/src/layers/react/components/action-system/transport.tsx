@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
 import { factionData } from "../../../../utils/constants";
 
 export const Transport = ({
@@ -48,7 +47,9 @@ export const Transport = ({
       {+space > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.Text>
-            TOTAL COST {+selected && `H ${(Math.pow(distance * +selected, 2) * factionData[faction]?.transport) / 10}`}
+            TOTAL COST{" "}
+            {+selected &&
+              `H ${((Math.pow(distance * +selected, 2) * factionData[faction]?.transport) / 10).toFixed(0)}`}
           </S.Text>
           <S.InlinePointer
             onClick={() => {
