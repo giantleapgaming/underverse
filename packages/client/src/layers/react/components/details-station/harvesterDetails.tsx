@@ -93,7 +93,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
@@ -118,7 +118,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           : +balance) || 0
                       }
                       transport={async (weapons) => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
@@ -161,7 +161,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                       repairSystem={async () => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
@@ -181,7 +181,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     <Scrap
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
@@ -219,7 +219,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }

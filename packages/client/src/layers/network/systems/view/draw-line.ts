@@ -41,7 +41,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, PrevPosition },
     utils: { getEntityIndexAtPosition },
     api: { moveSystem, prospectSystem },
-    network: { connectedAddress },
   } = network;
   const graphics = phaserScene.add.graphics();
   const circle = phaserScene.add.circle();
@@ -147,7 +146,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       }
       if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
-        const nftDetails = getNftId(network);
+        const nftDetails = getNftId({ network, phaser });
         if (!+isProspected && nftDetails) {
           try {
             sounds["confirm"].play();
@@ -193,7 +192,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             +entityType === Mapping.refuel.id ||
             +entityType === Mapping.shipyard.id)
         ) {
-          const nftDetails = getNftId(network);
+          const nftDetails = getNftId({ network, phaser });
           if (nftDetails) {
             try {
               await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });

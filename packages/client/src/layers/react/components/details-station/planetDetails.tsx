@@ -58,7 +58,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                     <Rapture
                       space={(destinationPopulation && level && +level - +destinationPopulation) || 0}
                       rapture={async (weapons) => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }

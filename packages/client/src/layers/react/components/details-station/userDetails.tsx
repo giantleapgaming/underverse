@@ -24,7 +24,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
     const factionIndex = world.entities.indexOf(ownedBy);
     const name = getComponentValue(Name, factionIndex)?.value;
-    const nftDetails = getNftId(layers.network);
+    const nftDetails = getNftId(layers);
     const isOwner = isOwnedBy(layers);
     return (
       <S.Container>

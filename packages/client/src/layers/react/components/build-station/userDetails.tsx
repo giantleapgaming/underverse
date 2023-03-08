@@ -19,7 +19,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const address = connectedAddress.get();
   const factionIndex = world.entities.indexOf(address);
   const name = getComponentValue(Name, factionIndex)?.value;
-  const nftDetails = getNftId(layers.network);
+  const nftDetails = getNftId(layers);
   return (
     <S.Container>
       {nftDetails && <img src={nftDetails.imageUrl} width={64} height={64} />}

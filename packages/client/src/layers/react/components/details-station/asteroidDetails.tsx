@@ -124,7 +124,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                             : +balance) || 0
                         }
                         harvest={async (amount) => {
-                          const nftDetails = getNftId(layers.network);
+                          const nftDetails = getNftId(layers);
                           if (nftDetails) {
                             try {
                               sounds["confirm"].play();
@@ -180,7 +180,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                         : +fuel) || 0
                     }
                     refuel={async (weapons) => {
-                      const nftDetails = getNftId(layers.network);
+                      const nftDetails = getNftId(layers);
                       if (nftDetails) {
                         try {
                           sounds["confirm"].play();

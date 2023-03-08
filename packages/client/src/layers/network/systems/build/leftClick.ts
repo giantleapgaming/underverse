@@ -25,7 +25,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
     api: { buildSystem, buildFromHarvesterSystem, buildFromShipyardSystem },
   } = network;
   const leftClickSub = input.click$.subscribe(async (p) => {
-    const nftDetails = getNftId(network);
+    const nftDetails = getNftId({ network, phaser });
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const buildDetails = getComponentValue(Build, buildId);

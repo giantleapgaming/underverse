@@ -15,7 +15,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
       components: { Cash, Position, EntityType, OwnedBy, Population, Level, NFTID },
     },
   } = layers;
-  const nftDetails = getNftId(layers.network);
+  const nftDetails = getNftId(layers);
   if (!nftDetails) {
     return null;
   }

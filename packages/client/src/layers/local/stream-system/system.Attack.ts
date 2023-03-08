@@ -71,7 +71,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
           destPosition?.y
         } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
       );
-      const nftId = getNftId(network);
+      const nftId = getNftId({ network, phaser });
       const existingNftId = getComponentValue(NFTID, srcOwnedByIndex)?.value;
       if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({

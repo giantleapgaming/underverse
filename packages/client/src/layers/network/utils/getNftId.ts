@@ -1,9 +1,8 @@
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../types";
-import { NetworkLayer } from "../../network/types";
 
 export const getNftId = (
-  network: NetworkLayer
+  layer: Layers
 ):
   | {
       tokenId: number;
@@ -11,9 +10,11 @@ export const getNftId = (
     }
   | undefined => {
   const {
-    components: { NFTID },
-    walletNfts,
-  } = network;
+    network: {
+      components: { NFTID },
+      walletNfts,
+    },
+  } = layer;
   const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
     return +getComponentValueStrict(NFTID, nftId).value;
   });
@@ -37,7 +38,7 @@ export const isOwnedBy = (layers: Layers) => {
   if (selectedEntity) {
     const owner = getComponentValueStrict(OwnedBy, selectedEntity).value;
     const ownedNftId = world.entities.indexOf(owner);
-    const nftId = getNftId(layers.network);
+    const nftId = getNftId(layers);
     const existingNftId = getComponentValue(NFTID, ownedNftId)?.value;
     if (existingNftId && nftId?.tokenId === +existingNftId) {
       return true;
@@ -61,7 +62,7 @@ export const isOwnedByIndex = (layers: Layers, index: number) => {
       return false;
     }
     const ownedNftId = world.entities.indexOf(owner);
-    const nftId = getNftId(layers.network);
+    const nftId = getNftId(layers);
     const existingNftId = getComponentValue(NFTID, ownedNftId)?.value;
     if (existingNftId && nftId?.tokenId === +existingNftId) {
       return true;

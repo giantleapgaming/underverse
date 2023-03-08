@@ -56,7 +56,7 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
           srcPosition?.y
         }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`
       );
-      const nftId = getNftId(network);
+      const nftId = getNftId({ network, phaser });
       const existingNftId = getComponentValue(NFTID, destinationEntity)?.value;
       if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({

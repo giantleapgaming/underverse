@@ -56,7 +56,7 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
           destPosition?.x
         },${destPosition?.y})</p>`
       );
-      const nftId = getNftId(network);
+      const nftId = getNftId({ network, phaser });
       const existingNftId = getComponentValue(NFTID, sourceGodownEntityIndex)?.value;
       if (existingNftId && nftId?.tokenId != +existingNftId) {
         setShowAnimation({

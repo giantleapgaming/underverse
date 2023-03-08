@@ -93,7 +93,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           defence={+defence}
                           level={+level}
                           upgradeSystem={async () => {
-                            const nftDetails = getNftId(layers.network);
+                            const nftDetails = getNftId(layers);
                             if (!nftDetails) {
                               return;
                             }
@@ -116,7 +116,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           defence={+defence}
                           level={+level}
                           buyWeaponSystem={async (kgs: number) => {
-                            const nftDetails = getNftId(layers.network);
+                            const nftDetails = getNftId(layers);
                             if (!nftDetails) {
                               return;
                             }
@@ -139,7 +139,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           level={+level}
                           repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
                           repairSystem={async () => {
-                            const nftDetails = getNftId(layers.network);
+                            const nftDetails = getNftId(layers);
                             if (!nftDetails) {
                               return;
                             }
@@ -159,7 +159,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                         <Scrap
                           scrapCost={scrapPrice(position.x, position.y, +level, +defence, +offence, +factionNumber)}
                           scrapSystem={async () => {
-                            const nftDetails = getNftId(layers.network);
+                            const nftDetails = getNftId(layers);
                             if (!nftDetails) {
                               return;
                             }
@@ -180,7 +180,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                   {action === "attack" && isDestinationSelected && (
                     <Attack
                       onFire={async (weapons) => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
@@ -237,7 +237,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           : +fuel) || 0
                       }
                       refuel={async (weapons) => {
-                        const nftDetails = getNftId(layers.network);
+                        const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
                         }
