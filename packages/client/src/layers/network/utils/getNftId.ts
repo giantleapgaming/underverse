@@ -14,7 +14,16 @@ export const getNftId = (
       components: { NFTID },
       walletNfts,
     },
+    phaser: {
+      components: { SelectedNftID },
+      localIds: { nftId },
+    },
   } = layer;
+  const selectedNft = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
+  if (selectedNft) {
+    const doesExist = walletNfts.find((walletNftId) => walletNftId.tokenId === selectedNft);
+    return doesExist;
+  }
   const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
     return +getComponentValueStrict(NFTID, nftId).value;
   });
