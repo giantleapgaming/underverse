@@ -138,8 +138,6 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setOrigin(0.5, 0.2);
           gameObject.setAngle(angle);
           gameObject.setScale(0.8);
-          const color = generateColorsFromWalletAddress(`${ownedBy}`);
-          gameObject.setTint(color[0], color[1], color[2], color[3]);
           phaserScene.add.tween({
             targets: gameObject,
             x: {
