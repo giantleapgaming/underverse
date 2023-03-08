@@ -99,6 +99,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     stationDetailsEntityIndex,
     modalIndex,
     showCircleIndex,
+    nftId,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -153,8 +154,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
     setComponent(components.TransportCords, modalIndex, { x, y });
   };
 
-  const setNftId = (nftId: number) => {
-    setComponent(components.SelectedNftID, nftId, { selectedNftID: nftId });
+  const setNftId = (selectedNftId: number) => {
+    setComponent(components.SelectedNftID, nftId, { selectedNftID: selectedNftId });
   };
   const setBuildWall = ({
     sourcePositionX,

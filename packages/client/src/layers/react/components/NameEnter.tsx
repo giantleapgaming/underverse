@@ -23,10 +23,10 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       sounds,
       localApi: { setNftId },
       components: { SelectedNftID },
-      localIds: { stationDetailsEntityIndex },
+      localIds: { nftId },
     },
   } = layers;
-  const selectedId = getComponentValue(SelectedNftID, stationDetailsEntityIndex)?.selectedNftID;
+  const selectedId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
   return (
     <>
       <Container>
@@ -183,20 +183,21 @@ export const registerNameScreen = () => {
       const {
         network: {
           components: { NFTID },
+          network: { connectedAddress },
         },
         phaser: {
           components: { SelectedNftID },
-          localIds: { stationDetailsEntityIndex },
+          localIds: { nftId },
         },
       } = layers;
       return merge(NFTID.update$, SelectedNftID.update$).pipe(
+        map(() => connectedAddress.get()),
         map(() => {
-          const nftId = getComponentValue(SelectedNftID, stationDetailsEntityIndex)?.selectedNftID;
+          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
           const allNftsEntityIds = [...getComponentEntities(NFTID)];
-          console.log(nftId, allNftsEntityIds);
           const doesNftExist = allNftsEntityIds.some((entityId) => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
-            return selectedNft === nftId;
+            return selectedNft === selectedNftId;
           });
           if (doesNftExist) {
             return;
