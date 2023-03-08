@@ -10,14 +10,16 @@ import { Nft } from "./Nft";
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
+  const [reactNftId, setReactNftId] = useState<number>();
   const [loading, setLoading] = useState(false);
   const params = new URLSearchParams(window.location.search);
   const chainIdString = params.get("chainId");
-
+  const [displayName, setDisplayName] = useState("");
   const {
     network: {
       api: { initSystem },
       network: { connectedAddress },
+      components: { Name, NFTID },
     },
     phaser: {
       sounds,
@@ -37,35 +39,51 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 onSubmit={async (e) => {
                   e.preventDefault();
                   sounds["click"].play();
-                  setStep(2);
+                  if (reactNftId) {
+                    setNftId(reactNftId);
+                    setStep(2);
+                  }
                 }}
               >
                 <div>
                   <Nft
                     setSelectNft={(selectNft) => {
-                      console.log(selectNft);
                       if (selectNft?.tokenId) {
-                        setNftId(selectNft?.tokenId);
+                        const allNameEntities = [...getComponentEntities(Name)];
+                        allNameEntities.find((entity) => {
+                          const name = getComponentValueStrict(Name, entity)?.value;
+                          const nftId = getComponentValueStrict(NFTID, entity).value;
+                          if (+nftId === selectNft?.tokenId) {
+                            setDisplayName(name);
+                          }
+                        });
+                        setReactNftId(selectNft?.tokenId);
                       }
                     }}
-                    selectedNFT={selectedId}
+                    selectedNFT={reactNftId}
                     clickSound={() => {
                       sounds["click"].play();
                     }}
                     address={connectedAddress.get()}
                   />
-                  {selectedId && (
+                  {typeof reactNftId === "number" && (
                     <S.Inline>
-                      <div>
-                        <Input
-                          disabled={loading}
-                          onChange={(e) => {
-                            setName(e.target.value);
-                          }}
-                          value={name}
-                          placeholder="ENTER NAME"
-                        />
-                      </div>
+                      {displayName ? (
+                        <div>
+                          <Input disabled value={displayName} />
+                        </div>
+                      ) : (
+                        <div>
+                          <Input
+                            disabled={loading}
+                            onChange={(e) => {
+                              setName(e.target.value);
+                            }}
+                            value={name}
+                            placeholder="ENTER NAME"
+                          />
+                        </div>
+                      )}
                       <Button type="submit" disabled={loading}>
                         <img src="/button/enterNameBtn.png" />
                       </Button>
