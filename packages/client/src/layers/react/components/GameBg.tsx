@@ -1,8 +1,7 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
-import { getComponentEntities } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValueStrict, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
-import { computedToStream } from "@latticexyz/utils";
 
 const Bg = () => {
   return <Container></Container>;
@@ -35,22 +34,28 @@ export const registerBgScreen = () => {
     (layers) => {
       const {
         network: {
+          components: { NFTID },
           network: { connectedAddress },
-          components: { Name },
-          world,
+        },
+        phaser: {
+          components: { SelectedNftID },
+          localIds: { nftId },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), Name.update$).pipe(
+      return merge(NFTID.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
-        map((address) => {
-          const entities = world.entities;
-          const userLinkWithAccount = [...getComponentEntities(Name)].find((entity) => entities[entity] === address);
-          if (userLinkWithAccount) {
-            return {
-              layers,
-            };
+        map(() => {
+          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
+          const allNftsEntityIds = [...getComponentEntities(NFTID)];
+          const doesNftExist = allNftsEntityIds.some((entityId) => {
+            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
+            return +selectedNft === selectedNftId;
+          });
+          if (doesNftExist) {
+            return { layers };
+          } else {
+            return;
           }
-          return;
         })
       );
     },
