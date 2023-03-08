@@ -194,10 +194,10 @@ export const registerNameScreen = () => {
           const allNftsEntityIds = [...getComponentEntities(NFTID)];
           const doesNftExist = allNftsEntityIds.some((entityId) => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
-            return selectedNft === selectedNftId;
+            return +selectedNft === selectedNftId;
           });
           if (doesNftExist) {
-            return { layers };
+            return;
           } else {
             return { layers };
           }
