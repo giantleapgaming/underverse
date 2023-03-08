@@ -11,7 +11,7 @@ import { getNftId } from "../../network/utils/getNftId";
 const Cash = ({ layers }: { layers: Layers }) => {
   const {
     network: {
-      network: { connectedAddress },
+      world,
       components: { Cash, Position, EntityType, OwnedBy, Population, Level, NFTID },
     },
   } = layers;
@@ -30,12 +30,8 @@ const Cash = ({ layers }: { layers: Layers }) => {
   [...getComponentEntities(Position)].forEach((entity) => {
     const entityType = getComponentValue(EntityType, entity)?.value;
     const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
-    if (
-      entityType &&
-      +entityType === Mapping.residential.id &&
-      OwnedByEntityId &&
-      OwnedByEntityId === connectedAddress.get()
-    ) {
+    const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
+    if (entityType && +entityType === Mapping.residential.id && ownedByIndex && ownedByIndex === positionOwnedByIndex) {
       const population = getComponentValue(Population, entity)?.value;
       const level = getComponentValue(Level, entity)?.value;
       if (population && level) {
@@ -62,7 +58,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
             <img src="/build-stations/users.png" />
             <p>
-              {totalLevel}/{totalPopulation}
+              {totalPopulation} / {totalLevel}
             </p>
           </div>
         )}

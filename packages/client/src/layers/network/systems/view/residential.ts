@@ -69,7 +69,7 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
             healthSprite.setComponent({
               id: `residential-population-${entity}-${i}`,
               once: (gameObject) => {
-                gameObject.setPosition(x + i * 30, y + 281);
+                gameObject.setPosition(x + i * 25, y + 281);
                 gameObject.setDepth(10);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
