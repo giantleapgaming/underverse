@@ -120,7 +120,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
             repeat: 0,
             duration: 5_000,
             onComplete: () => {
-              objectPool.remove(`attack2-top-move-${entity}`);
+              objectPool.remove(`attack-top2-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
             },
