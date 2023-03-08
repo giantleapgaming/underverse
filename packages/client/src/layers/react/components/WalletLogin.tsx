@@ -174,26 +174,23 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
   const [copy, setCopy] = useState(false);
   return (
     <>
-      <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px", cursor: "pointer" }} key={address}>
+      <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px" }} key={address}>
         <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}>{index + 1}</span>
-        <AccountMenu
-          onClick={() => {
-            sessionStorage.setItem("user-burner-wallet", pk);
-            window.location.reload();
-          }}
-        >
-          {copy ? "Copied" : walletAddressLoginDisplay(address)}
+        <AccountMenu>
+          <p
+            onClick={() => {
+              sessionStorage.setItem("user-burner-wallet", pk);
+              window.location.reload();
+            }}
+            style={{ cursor: "pointer" }}
+          >
+            {copy ? "Copied" : walletAddressLoginDisplay(address)}
+          </p>
         </AccountMenu>
-        <img
-          onClick={() => {
-            sessionStorage.setItem("user-burner-wallet", pk);
-            window.location.reload();
-          }}
-          src="/img/accBorderMenu.png"
-        />
+        <img src="/img/accBorderMenu.png" />
         <img
           src="/img/copy.png"
-          style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "60px" }}
+          style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "60px", zIndex: 10 }}
           onClick={() => {
             setCopy(true);
             navigator.clipboard.writeText(`${address}`);
@@ -339,6 +336,7 @@ const AccountMenu = styled.div`
   font-size: 20px;
   top: 20px;
   left: 40px;
+  z-index: 5;
 `;
 const Error = styled.p`
   color: #ef0909;
