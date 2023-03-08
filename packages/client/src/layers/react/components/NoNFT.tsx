@@ -121,6 +121,18 @@ export const NoNFT = ({ address }: { address?: string }) => {
             {privateKey ? `${privateKey}` : `Click here to show your private key.`}
           </S.Span>
         </S.Description>
+        <S.DiscordImg
+          onClick={() => {
+            window.open("https://discord.com/invite/2YxDpucg8Y", "_blank");
+          }}
+          style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "10px" }}
+        >
+          <img src="/img/discordLogo.png" />
+          <div style={{ fontSize: "12px", fontFamily: "sans-serif", fontWeight: "600", color: "wheat" }}>
+            <p>Have questions?</p>
+            <p>Reach out on Discord.</p>
+          </div>
+        </S.DiscordImg>
       </S.Container>
     </div>
   );
@@ -140,6 +152,13 @@ const S = {
   ButtonImg: styled.img`
     margin: auto;
     width: 100%;
+    cursor: pointer;
+  `,
+
+  DiscordImg: styled.div`
+    position: absolute;
+    bottom: 40;
+    right: 20;
     cursor: pointer;
   `,
 
