@@ -67,7 +67,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                         />
                       </div>
                       <Button type="submit" disabled={loading}>
-                        {loading ? "Loading..." : "GO"}
+                        <img src="/button/enterNameBtn.png" />
                       </Button>
                     </S.Inline>
                   )}
@@ -140,12 +140,8 @@ const Container = styled.div`
 `;
 
 const Button = styled.button`
-  border: 2px #05f4f9 solid;
-  font-size: 20px;
-  color: #05f4f9;
-  padding: 10px 20px;
-  font-weight: 800;
-  border-radius: 50%;
+  outline: none;
+  border: none;
   background: transparent;
   cursor: pointer;
 `;
@@ -166,6 +162,7 @@ const Input = styled.input`
     font-weight: bold;
     text-align: center;
     font-size: 16px;
+    padding: 10px;
     color: #05f4f9;
   }
 `;
@@ -200,7 +197,7 @@ export const registerNameScreen = () => {
             return selectedNft === selectedNftId;
           });
           if (doesNftExist) {
-            return;
+            return { layers };
           } else {
             return { layers };
           }
