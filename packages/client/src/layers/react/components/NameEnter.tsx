@@ -3,21 +3,14 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { useState } from "react";
-import { computedToStream } from "@latticexyz/utils";
 import { Faction } from "./Faction";
-import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Nft } from "./Nft";
-
-interface Image {
-  tokenId: number;
-  imageUrl: string;
-}
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedNFT, setSelectedNFT] = useState<Image | undefined>();
   const params = new URLSearchParams(window.location.search);
   const chainIdString = params.get("chainId");
 
@@ -26,9 +19,14 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       api: { initSystem },
       network: { connectedAddress },
     },
-    phaser: { sounds },
+    phaser: {
+      sounds,
+      localApi: { setNftId },
+      components: { SelectedNftID },
+      localIds: { stationDetailsEntityIndex },
+    },
   } = layers;
-
+  const selectedId = getComponentValue(SelectedNftID, stationDetailsEntityIndex)?.selectedNftID;
   return (
     <>
       <Container>
@@ -44,14 +42,19 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
               >
                 <div>
                   <Nft
-                    setSelectNft={setSelectedNFT}
-                    selectedNFT={selectedNFT}
+                    setSelectNft={(selectNft) => {
+                      console.log(selectNft);
+                      if (selectNft?.tokenId) {
+                        setNftId(selectNft?.tokenId);
+                      }
+                    }}
+                    selectedNFT={selectedId}
                     clickSound={() => {
                       sounds["click"].play();
                     }}
                     address={connectedAddress.get()}
                   />
-                  {selectedNFT && (
+                  {selectedId && (
                     <S.Inline>
                       <div>
                         <Input
@@ -74,10 +77,10 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
             {step === 2 && (
               <Faction
                 setSelectFaction={async (selectFaction) => {
-                  if (name && selectedNFT && typeof selectFaction === "number") {
+                  if (name && selectedId && typeof selectFaction === "number") {
                     try {
                       setLoading(true);
-                      await initSystem(name, selectFaction, selectedNFT?.tokenId);
+                      await initSystem(name, selectFaction, selectedId);
                     } catch (e) {
                       setLoading(false);
                       console.log("Error", e);
@@ -116,8 +119,6 @@ const Form = styled.form`
   justify-content: center;
   align-items: center;
   gap: 7px;
-  /* position: absolute;
-  bottom: 20px; */
   z-index: 200;
 `;
 
@@ -181,19 +182,23 @@ export const registerNameScreen = () => {
     (layers) => {
       const {
         network: {
-          network: { connectedAddress },
           components: { NFTID },
-          walletNfts,
+        },
+        phaser: {
+          components: { SelectedNftID },
+          localIds: { stationDetailsEntityIndex },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$).pipe(
-        map(() => connectedAddress.get()),
+      return merge(NFTID.update$, SelectedNftID.update$).pipe(
         map(() => {
-          const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
-            return +getComponentValueStrict(NFTID, nftId).value;
+          const nftId = getComponentValue(SelectedNftID, stationDetailsEntityIndex)?.selectedNftID;
+          const allNftsEntityIds = [...getComponentEntities(NFTID)];
+          console.log(nftId, allNftsEntityIds);
+          const doesNftExist = allNftsEntityIds.some((entityId) => {
+            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
+            return selectedNft === nftId;
           });
-          const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
-          if (doesExist) {
+          if (doesNftExist) {
             return;
           } else {
             return { layers };

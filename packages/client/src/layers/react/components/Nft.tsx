@@ -15,7 +15,7 @@ export const Nft = ({
   address,
 }: {
   setSelectNft: (image: Image) => void;
-  selectedNFT?: Image;
+  selectedNFT?: number;
   clickSound: () => void;
   address?: string;
 }) => {
@@ -67,7 +67,7 @@ export const Nft = ({
           <S.NftSelectionContainer>
             {allNfts.map((data, index) => (
               <S.NftSelect
-                selectedNFT={data.tokenId === selectedNFT?.tokenId}
+                selectedNFT={data.tokenId === selectedNFT}
                 key={`index-${index}`}
                 onClick={() => {
                   setSelectNft(data);

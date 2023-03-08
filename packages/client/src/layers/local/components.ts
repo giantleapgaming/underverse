@@ -217,3 +217,13 @@ export const BuildWall = (world: World) => {
     { id: "BuildWall" }
   );
 };
+
+export const SelectedNftID = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      selectedNftID: Type.Number,
+    },
+    { id: "SelectedNftID" }
+  );
+};

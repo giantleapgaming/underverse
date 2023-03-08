@@ -20,6 +20,7 @@ import {
   ShowHighLight,
   ObstacleHighlight,
   BuildWall,
+  SelectedNftID,
 } from "../local/components";
 
 import {
@@ -88,6 +89,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const progressId = createEntity(world);
   const buildId = createEntity(world);
   const stationDetailsEntityIndex = createEntity(world);
+  const nftId = createEntity(world);
   const modalIndex = createEntity(world);
   const showCircleIndex = createEntity(world);
 
@@ -116,6 +118,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ShowHighLight: ShowHighLight(world),
     ObstacleHighlight: ObstacleHighlight(world),
     BuildWall: BuildWall(world),
+    SelectedNftID: SelectedNftID(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -148,6 +151,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
   };
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
+  };
+
+  const setNftId = (nftId: number) => {
+    setComponent(components.SelectedNftID, nftId, { selectedNftID: nftId });
   };
   const setBuildWall = ({
     sourcePositionX,
@@ -324,6 +331,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setShowHighLight,
       setObstacleHighlight,
       setBuildWall,
+      setNftId,
     },
     sounds,
   };
