@@ -104,8 +104,8 @@ const S = {
 
   DeployText: styled.p`
     position: absolute;
-    top: 6px;
-    right: 20px;
+    top: 35px;
+    right: 50px;
     font-size: 16;
     font-weight: bold;
   `,

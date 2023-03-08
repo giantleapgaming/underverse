@@ -74,8 +74,8 @@ export const NoNFT = ({ address }: { address?: string }) => {
           </div>
         </S.AddressBox>
         <S.RecheckNFT>
-          <img src="/button/greenButton.png" />
-          <img src="/img/copy.png" />
+          <img src="/button/recheckNFTbtn.png" />
+          <img src="/img/refresh.png" />
         </S.RecheckNFT>
         <S.Description>
           We recommend adding your in-game
@@ -105,8 +105,8 @@ const S = {
 
   DeployText: styled.p`
     position: absolute;
-    top: 6px;
-    right: 20px;
+    top: 35px;
+    right: 50px;
     font-size: 16;
     font-weight: bold;
   `,
