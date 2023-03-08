@@ -3,11 +3,33 @@ import styled from "styled-components";
 
 export const NoNFT = ({ address }: { address?: string }) => {
   const [copy, setCopy] = useState(false);
+  const [privateKey, setPrivateKey] = useState<string>("");
   return (
     <div>
       <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
-        <S.ButtonImg src="/button/greenButton.png" />
-        <S.DeployText>{address?.toString().substring(0, 6)}</S.DeployText>
+        <S.ButtonImg
+          onClick={() => {
+            try {
+              sessionStorage.removeItem("user-burner-wallet");
+              window.location.reload();
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+          src="/button/greenButton.png"
+        />
+        <S.DeployText
+          onClick={() => {
+            try {
+              sessionStorage.removeItem("user-burner-wallet");
+              window.location.reload();
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        >
+          {address?.toString().substring(0, 6)}
+        </S.DeployText>
       </div>
       <S.Container>
         <img src="/img/title.png" style={{ margin: "20px 0" }} />
@@ -37,7 +59,7 @@ export const NoNFT = ({ address }: { address?: string }) => {
             margin: "10px 0",
           }}
         >
-          <a href="https://www.example.com" target="_blank" style={{ color: "wheat" }}>
+          <a href="https://giantleap.gg/mint" target="_blank" style={{ color: "wheat" }}>
             GRAB AN NFT HERE
           </a>
           ,
@@ -74,13 +96,30 @@ export const NoNFT = ({ address }: { address?: string }) => {
           </div>
         </S.AddressBox>
         <S.RecheckNFT>
-          <img src="/button/recheckNFTbtn.png" />
-          <img src="/button/refresh.png" />
+          <S.Button type="button" onClick={() => window.location.reload()}>
+            <img src="/button/recheckNFTbtn.png" />
+          </S.Button>
+          <S.Button type="button" onClick={() => window.location.reload()}>
+            <img src="/button/refresh.png" />
+          </S.Button>
         </S.RecheckNFT>
         <S.Description>
           We recommend adding your in-game
           <br /> account to MetaMask.
-          <br /> <S.Span>Click here to show your private key.</S.Span>
+          <br />{" "}
+          <S.Span
+            onClick={() => {
+              try {
+                const data = sessionStorage.getItem("user-burner-wallet");
+                console.log(data);
+                data ? setPrivateKey(data) : setPrivateKey("");
+              } catch (e) {
+                console.log(e);
+              }
+            }}
+          >
+            {privateKey ? `${privateKey}` : `Click here to show your private key.`}
+          </S.Span>
         </S.Description>
       </S.Container>
     </div>
@@ -101,6 +140,14 @@ const S = {
   ButtonImg: styled.img`
     margin: auto;
     width: 100%;
+    cursor: pointer;
+  `,
+
+  Button: styled.button`
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
   `,
 
   DeployText: styled.p`
@@ -109,6 +156,7 @@ const S = {
     right: 16px;
     font-size: 16;
     font-weight: bold;
+    cursor: pointer;
   `,
   AddressBox: styled.div`
     display: flex;
@@ -137,6 +185,7 @@ const S = {
   `,
   Span: styled.span`
     &:hover {
+      font-size: 16px;
       color: #00ffe6;
       cursor: pointer;
       scale: 2;

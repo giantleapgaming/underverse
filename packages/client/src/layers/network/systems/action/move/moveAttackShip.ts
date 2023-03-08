@@ -130,11 +130,11 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
       attackShipObjectFlame.setComponent({
         id: `attack-flame-move${entity}`,
         once: (gameObject) => {
-          gameObject.setScale(0.5);
           gameObject.setTexture(attackShip.assetKey, `attack-4.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-          gameObject.setDepth(152);
-          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setDepth(150);
+          gameObject.setOrigin(0.5, 0.2);
+          gameObject.setScale(0.8);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
             targets: gameObject,

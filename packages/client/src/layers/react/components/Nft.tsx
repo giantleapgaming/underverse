@@ -33,7 +33,18 @@ export const Nft = ({
           <S.ButtonImg src="/button/greenButton.png" />
           <p>Balance</p>
         </div>
-        <S.DeployText>{address?.toString().substring(0, 6)}</S.DeployText>
+        <S.DeployText
+          onClick={() => {
+            try {
+              sessionStorage.removeItem("user-burner-wallet");
+              window.location.reload();
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+        >
+          {address?.toString().substring(0, 6)}
+        </S.DeployText>
         <S.Container>
           <img src="/img/title.png" style={{ margin: "20px 0" }} />
           <p
@@ -108,6 +119,7 @@ const S = {
     right: 50px;
     font-size: 16;
     font-weight: bold;
+    cursor: pointer;
   `,
   NftSelect: styled.div<{ selectedNFT: boolean }>`
     cursor: pointer;
