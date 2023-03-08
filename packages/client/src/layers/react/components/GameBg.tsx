@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
-import { getComponentEntities, getComponentValueStrict, getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 
 const Bg = () => {
@@ -14,12 +13,13 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-image: url(/img/game-bg.png);
+  background-image: url("/img/game-bg.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
   z-index: -100;
   opacity: 0.3;
+  position: relative;
 `;
 
 export const registerBgScreen = () => {
@@ -43,19 +43,8 @@ export const registerBgScreen = () => {
         },
       } = layers;
       return merge(NFTID.update$, SelectedNftID.update$).pipe(
-        map(() => connectedAddress.get()),
         map(() => {
-          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
-          const allNftsEntityIds = [...getComponentEntities(NFTID)];
-          const doesNftExist = allNftsEntityIds.some((entityId) => {
-            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
-            return +selectedNft === selectedNftId;
-          });
-          if (doesNftExist) {
-            return { layers };
-          } else {
-            return;
-          }
+          return { layers };
         })
       );
     },
