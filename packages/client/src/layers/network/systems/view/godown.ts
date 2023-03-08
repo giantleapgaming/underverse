@@ -86,9 +86,19 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
             once: (gameObject) => {
               gameObject.setTexture(godown.assetKey, `cargo-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(6);
-              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setDepth(5);
               gameObject.setAngle(0);
+              gameObject.setOrigin(0.5, 0.5);
+            },
+          });
+          godownObjectGrayLayer.setComponent({
+            id: `godown-gray-${entity}`,
+            once: (gameObject) => {
+              gameObject.setTexture(godown.assetKey, `cargo-3.png`);
+              gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
+              gameObject.setDepth(6);
+              gameObject.setAngle(0);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
           godownObjectTop2Layer.setComponent({
@@ -97,20 +107,10 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTexture(godown.assetKey, `cargo-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
-              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
-            },
-          });
-          godownObjectGrayLayer.setComponent({
-            id: `godown-gray-${entity}`,
-            once: (gameObject) => {
-              gameObject.setTexture(godown.assetKey, `cargo-3.png`);
-              gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
-              gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
-              gameObject.setAngle(0);
             },
           });
           levelSprite.setComponent({
