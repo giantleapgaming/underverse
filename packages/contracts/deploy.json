@@ -255,6 +255,12 @@
         "BalanceComponent",
         "EntityTypeComponent"
       ]
+    },
+    {
+      "name": "TransferEntitySystem",
+      "writeAccess": [
+        "OwnedByComponent"
+      ]
     }
   ]
 }
