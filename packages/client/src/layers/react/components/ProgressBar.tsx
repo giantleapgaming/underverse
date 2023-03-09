@@ -3,6 +3,7 @@ import { registerUIComponent } from "../engine";
 import { getComponentValue } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
+import { computedToStream } from "@latticexyz/utils";
 
 const ProgressBarCmp = ({ layers }: { layers: Layers }) => {
   const {
@@ -60,7 +61,7 @@ export const registerProgressBar = () => {
           localIds: { progressId },
         },
       } = layers;
-      return merge(Progress.update$).pipe(
+      return merge(computedToStream(connectedAddress), Progress.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const showProgressBar = getComponentValue(Progress, progressId)?.value;

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { registerUIComponent } from "../engine";
 import { map, merge } from "rxjs";
+import { computedToStream } from "@latticexyz/utils";
 
 const Bg = () => {
   return <Container></Container>;
@@ -42,7 +43,7 @@ export const registerBgScreen = () => {
           localIds: { nftId },
         },
       } = layers;
-      return merge(NFTID.update$, SelectedNftID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => {
           return { layers };
         })

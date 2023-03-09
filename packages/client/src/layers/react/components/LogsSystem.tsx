@@ -3,6 +3,7 @@ import { getComponentEntities, getComponentValue, getComponentValueStrict } from
 import { map, merge } from "rxjs";
 import { Layers } from "../../../types";
 import styled from "styled-components";
+import { computedToStream } from "@latticexyz/utils";
 
 const LogBox = ({ layers }: { layers: Layers }) => {
   const {
@@ -54,7 +55,7 @@ export const registerLogs = () => {
           components: { Logs },
         },
       } = layers;
-      return merge(NFTID.update$, Logs.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, Logs.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {

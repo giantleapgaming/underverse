@@ -215,7 +215,6 @@ export const registerNameScreen = () => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
             return +selectedNft === selectedNftId;
           });
-          console.log(doesNftExist);
           if (doesNftExist) {
             return;
           } else {
