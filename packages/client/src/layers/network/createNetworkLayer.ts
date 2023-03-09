@@ -241,7 +241,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
@@ -262,14 +262,14 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2, nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
   async function upgradeSystem(godownEntity: EntityID, nftId: number) {
     return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity), nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
@@ -326,7 +326,7 @@ export async function createNetworkLayer(config: GameConfig) {
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number, nftId: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
@@ -355,7 +355,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const sellSystem = async (godownEntity: EntityID, kgs: number, nftId: number) => {
     return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   };
 
@@ -388,7 +388,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildFromHarvester"].executeTyped(BigNumber.from(harvesterEntity), x, y, entityType, nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
@@ -407,7 +407,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildFromShipyard"].executeTyped(BigNumber.from(shipyardEntity), x, y, entityType, nftId, {
       type: 2,
-      gasPrice: undefined,
+      gasPrice: 85000000000,
     });
   }
 
