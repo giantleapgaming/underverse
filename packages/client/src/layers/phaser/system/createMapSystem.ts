@@ -14,7 +14,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       },
     },
   } = phaser;
-  for (let i = 1; i < 21; i++) {
+  for (let i = 1; i < 11; i++) {
     const circle = phaserScene.add.circle(tileWidth / 2, tileWidth / 2);
     // const label = phaserScene.add.text(tileWidth / 2, -(i * 5 * tileWidth - tileWidth / 2), `${i * 5}`, {
     //   fontSize: "100px",
@@ -24,7 +24,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       circle.setStrokeStyle(0, 0x2d2d36);
     } else if (i === 3) {
       circle.setStrokeStyle(3, 0x2d2d36);
-    } else if (i === 20) {
+    } else if (i === 10) {
       circle.setStrokeStyle(2, 0x2d2d36);
     } else circle.setStrokeStyle(0, 0x2d2d36);
     circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
