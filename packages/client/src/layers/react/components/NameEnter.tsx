@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Faction } from "./Faction";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Nft } from "./Nft";
+import { computedToStream } from "@latticexyz/utils";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [step, setStep] = useState(1);
@@ -205,7 +206,7 @@ export const registerNameScreen = () => {
           localIds: { nftId },
         },
       } = layers;
-      return merge(NFTID.update$, SelectedNftID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
@@ -214,6 +215,7 @@ export const registerNameScreen = () => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
             return +selectedNft === selectedNftId;
           });
+          console.log(doesNftExist);
           if (doesNftExist) {
             return;
           } else {
