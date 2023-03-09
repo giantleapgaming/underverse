@@ -261,6 +261,12 @@
       "writeAccess": [
         "OwnedByComponent"
       ]
+    },
+    {
+      "name": "TransferCashSystem",
+      "writeAccess": [
+        "CashComponent"
+      ]
     }
   ]
 }
