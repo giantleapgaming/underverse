@@ -11,16 +11,22 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
+    components: { OwnedBy, Position, Name, Faction, EntityType },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Attack"], ({ args }) => {
-    const { destinationEntity, sourceEntity, amount } = args as {
+    const {
+      destinationEntity,
+      sourceEntity,
+      amount,
+      nftID: transportedNftId,
+    } = args as {
       destinationEntity: BigNumber;
       sourceEntity: BigNumber;
       amount: BigNumber;
+      nftID: BigNumber;
     };
     const sourceGodownEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
     const destinationGodownEntityIndex = world.entities.findIndex(
@@ -54,7 +60,8 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       typeof +srcEntityType === "number" &&
       typeof +destEntityType === "number" &&
       srcPosition &&
-      destPosition
+      destPosition &&
+      transportedNftId?._hex
     ) {
       const srcColor = factionData[+factionSrcValue]?.color;
       const destColor = factionData[+factionDestValue]?.color;
@@ -72,12 +79,11 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
         } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
       );
       const nftId = getNftId({ network, phaser });
-      const existingNftId = getComponentValue(NFTID, srcOwnedByIndex)?.value;
-      if (existingNftId && nftId?.tokenId != +existingNftId) {
+      if (nftId?.tokenId != +transportedNftId._hex) {
         setShowAnimation({
           showAnimation: true,
           amount: +amount,
-          destinationX: destPosition.y,
+          destinationX: destPosition.x,
           destinationY: destPosition.y,
           sourceX: srcPosition.x,
           sourceY: srcPosition.y,
