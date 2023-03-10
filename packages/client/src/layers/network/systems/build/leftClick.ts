@@ -64,7 +64,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
             }
             showProgress();
           } catch (e: any) {
-            throw new Error(e?.reason || e.message);
+            throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
           }
         },
         {

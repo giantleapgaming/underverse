@@ -104,7 +104,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                           setLoading(true);
                           await initSystem(name, selectFaction, selectedId);
                         } catch (e: any) {
-                          throw new Error(e?.reason || e.message);
+                          throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                         }
                       },
                       {

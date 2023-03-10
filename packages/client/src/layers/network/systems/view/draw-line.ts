@@ -158,7 +158,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                 objectPool.remove(`prospect-text-white`);
                 await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
               } catch (e: any) {
-                throw new Error(e?.reason || e.message);
+                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
               }
             },
             {
@@ -227,7 +227,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                   setShowLine(false);
                   await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
                 } catch (e: any) {
-                  throw new Error(e?.reason || e.message);
+                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                 }
               },
               {

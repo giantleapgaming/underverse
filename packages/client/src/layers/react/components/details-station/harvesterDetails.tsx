@@ -105,7 +105,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                               await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                               showProgress();
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {
@@ -154,7 +154,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                                 nftDetails.tokenId
                               );
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {
@@ -188,7 +188,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                               sounds["confirm"].play();
                               await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {
@@ -216,7 +216,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                               await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                               setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {
@@ -277,7 +277,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                                 nftDetails.tokenId
                               );
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {

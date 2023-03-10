@@ -149,7 +149,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                                     nftDetails.tokenId
                                   );
                                 } catch (e: any) {
-                                  throw new Error(e?.reason || e.message);
+                                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                                 }
                               },
                               {
@@ -211,7 +211,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                                 nftDetails.tokenId
                               );
                             } catch (e: any) {
-                              throw new Error(e?.reason || e.message);
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
                           },
                           {
