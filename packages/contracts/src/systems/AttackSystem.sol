@@ -107,30 +107,30 @@ contract AttackSystem is System {
     //We check if the attack point is less than a certain distaince from the heading line
     //The greater this distance the more wider your shooting arc, which means higher level ships become more powerful at shooting
 
-    require(
-      (
-        Math.abs(
-          (sourcePosition.y - sourcePrevPosition.y) *
-            destinationPosition.x -
-            (sourcePosition.x - sourcePrevPosition.x) *
-            destinationPosition.y +
-            sourcePosition.x *
-            sourcePrevPosition.y -
-            sourcePosition.y *
-            sourcePrevPosition.x
-        )
-      ) /
-        (
-          Math.sqrtInt(
-            (sourcePosition.y - sourcePrevPosition.y) *
-              (sourcePosition.y - sourcePrevPosition.y) +
-              (sourcePosition.x - sourcePrevPosition.x) *
-              (sourcePosition.x - sourcePrevPosition.x)
-          )
-        ) <=
-        int256(sourceEntityLevel),
-      "Attack coordinate is out of shooting arc"
-    );
+    // require(
+    //   (
+    //     Math.abs(
+    //       (sourcePosition.y - sourcePrevPosition.y) *
+    //         destinationPosition.x -
+    //         (sourcePosition.x - sourcePrevPosition.x) *
+    //         destinationPosition.y +
+    //         sourcePosition.x *
+    //         sourcePrevPosition.y -
+    //         sourcePosition.y *
+    //         sourcePrevPosition.x
+    //     )
+    //   ) /
+    //     (
+    //       Math.sqrtInt(
+    //         (sourcePosition.y - sourcePrevPosition.y) *
+    //           (sourcePosition.y - sourcePrevPosition.y) +
+    //           (sourcePosition.x - sourcePrevPosition.x) *
+    //           (sourcePosition.x - sourcePrevPosition.x)
+    //       )
+    //     ) <=
+    //     int256(sourceEntityLevel),
+    //   "Attack coordinate is out of shooting arc"
+    // );
 
     //We also want to ensure that the attack point is in the direction the ship was heading and not on the back side of the ship
     //It is possible for the attack point to be at the right distance but on the other side of the ship, we want to prevent attacks on points behind you
