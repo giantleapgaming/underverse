@@ -11,29 +11,35 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Position, Name, Faction, EntityType, NFTID },
+    components: { OwnedBy, Position, Name, Faction, EntityType },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Harvest"], ({ args }) => {
-    const { destinationEntity, sourceEntity, kgs } = args as {
+    const {
+      destinationEntity,
+      sourceEntity,
+      kgs,
+      nftID: transportedNftId,
+    } = args as {
       sourceEntity: BigNumber;
       destinationEntity: BigNumber;
       kgs: BigNumber;
+      nftID: BigNumber;
     };
-    const destinationGodownEntityIndex = world.entities.findIndex(
+    const destinationEntityIndex = world.entities.findIndex(
       (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
-    const sourceGodownEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
-    const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
-    const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
-    const ownedBy = getComponentValue(OwnedBy, destinationGodownEntityIndex)?.value;
+    const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
+    const destPosition = getComponentValue(Position, destinationEntityIndex);
+    const srcPosition = getComponentValue(Position, sourceEntityIndex);
+    const ownedBy = getComponentValue(OwnedBy, destinationEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
-    const destEntityType = getComponentValue(EntityType, destinationGodownEntityIndex)?.value;
-    const sourceEntityType = getComponentValue(EntityType, sourceGodownEntityIndex)?.value;
+    const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
+    const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
 
     if (
       faction &&
@@ -43,7 +49,8 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
       typeof +destEntityType === "number" &&
       typeof +sourceEntityType === "number" &&
       destPosition &&
-      srcPosition
+      srcPosition &&
+      transportedNftId?._hex
     ) {
       const color = factionData[+faction]?.color;
       const srcStationName = numberMapping[+destEntityType].name;
@@ -57,16 +64,15 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
         },${destPosition?.y})</p>`
       );
       const nftId = getNftId({ network, phaser });
-      const existingNftId = getComponentValue(NFTID, sourceGodownEntityIndex)?.value;
-      if (existingNftId && nftId?.tokenId != +existingNftId) {
+      if (nftId?.tokenId != +transportedNftId._hex) {
         setShowAnimation({
           showAnimation: true,
           destinationX: destPosition.x,
           destinationY: destPosition.y,
           sourceX: srcPosition.x,
           sourceY: srcPosition.y,
-          type: "harvest",
-          entityID: destinationGodownEntityIndex,
+          type: "mineTransport",
+          entityID: destinationEntityIndex,
         });
       }
     }
