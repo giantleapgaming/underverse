@@ -95,9 +95,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                             try {
                               setAction("");
                               sounds["confirm"].play();
-                              showProgress();
-                              const tx = await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                              await tx.wait();
+                              await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
@@ -129,7 +127,6 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                               setAction("attack");
                               sounds["confirm"].play();
                               await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                              showProgress();
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
@@ -156,9 +153,8 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                             try {
                               setAction("scrap");
                               sounds["confirm"].play();
-                              await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                               setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
-                              showProgress();
+                              await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
@@ -203,12 +199,6 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                               setShowLine(false);
                               setAction("");
                               showProgress();
-                              await refuelSystem(
-                                world.entities[selectedEntity],
-                                world.entities[destinationDetails],
-                                weapons,
-                                nftDetails.tokenId
-                              );
                               setShowAnimation({
                                 showAnimation: true,
                                 amount: weapons,
@@ -219,6 +209,12 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                                 type: "fuelTransport",
                                 entityID: destinationDetails,
                               });
+                              await refuelSystem(
+                                world.entities[selectedEntity],
+                                world.entities[destinationDetails],
+                                weapons,
+                                nftDetails.tokenId
+                              );
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }

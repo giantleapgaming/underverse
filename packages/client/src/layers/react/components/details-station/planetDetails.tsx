@@ -7,6 +7,7 @@ import { Rapture } from "../action-system/rapture";
 import { SelectButton } from "./Button";
 import { distance } from "../../utils/distance";
 import { getNftId } from "../../../network/utils/getNftId";
+import { toast } from "sonner";
 
 export const PlanetDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("rapture");
@@ -62,31 +63,38 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          sounds["confirm"].play();
-                          await raptureSystem(
-                            world.entities[selectedEntity],
-                            world.entities[destinationDetails],
-                            weapons,
-                            nftDetails.tokenId
-                          );
-                          setShowAnimation({
-                            showAnimation: true,
-                            amount: weapons,
-                            destinationX: destinationPosition.x,
-                            destinationY: destinationPosition.y,
-                            sourceX: position.x,
-                            sourceY: position.y,
-                            type: "humanTransport",
-                            entityID: destinationDetails,
-                          });
-                          setDestinationDetails();
-                          setShowLine(false);
-                          setAction("rapture");
-                          showProgress();
-                        } catch (e) {
-                          console.log({ error: e, system: "Fire Attack", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              sounds["confirm"].play();
+                              setDestinationDetails();
+                              setShowLine(false);
+                              setShowAnimation({
+                                showAnimation: true,
+                                amount: weapons,
+                                destinationX: destinationPosition.x,
+                                destinationY: destinationPosition.y,
+                                sourceX: position.x,
+                                sourceY: position.y,
+                                type: "humanTransport",
+                                entityID: destinationDetails,
+                              });
+                              await raptureSystem(
+                                world.entities[selectedEntity],
+                                world.entities[destinationDetails],
+                                weapons,
+                                nftDetails.tokenId
+                              );
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                       playSound={() => {
                         sounds["click"].play();
