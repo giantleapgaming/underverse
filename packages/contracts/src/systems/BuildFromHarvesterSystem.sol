@@ -18,6 +18,7 @@ import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../
 import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownInitialBalance, initialEntityPopulation, baseInitialfuel, offenceInitialAmount, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
+import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildFromHarvester"));
 
@@ -103,6 +104,7 @@ contract BuildFromHarvesterSystem is System {
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(buildEntity, initialEntityPopulation);
     FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(buildEntity, offenceInitialAmount);
+    EncounterComponent(getAddressById(components, EncounterComponentID)).set(buildEntity, 0);
   }
 
   //Input parameters are harvester, asteroid, build location and what you want to build
