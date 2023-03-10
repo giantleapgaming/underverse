@@ -61,7 +61,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setTexture(HoverSprite.assetKey, `harvester-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(5);
-          gameObject.setAlpha(0.1);
+          gameObject.setAlpha(0.5);
           gameObject.setOrigin(0.5, 0.5);
         },
       });

@@ -49,7 +49,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 <div>
                   <Nft
                     setSelectNft={(selectNft) => {
-                      if (selectNft?.tokenId) {
+                      if (typeof selectNft?.tokenId === "number") {
                         const allNameEntities = [...getComponentEntities(Name)];
                         allNameEntities.find((entity) => {
                           const name = getComponentValueStrict(Name, entity)?.value;

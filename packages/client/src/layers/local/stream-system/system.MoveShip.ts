@@ -10,7 +10,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     systemCallStreams,
-    components: { OwnedBy, Name, Faction, EntityType, Level, Position, NFTID },
+    components: { OwnedBy, Name, Faction, EntityType, Level, PrevPosition, NFTID },
   } = network;
   const {
     localApi: { setLogs, setShowAnimation },
@@ -27,7 +27,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const entityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
-    const position = getComponentValue(Position, sourceEntityIndex);
+    const position = getComponentValue(PrevPosition, sourceEntityIndex);
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     if (
       faction &&

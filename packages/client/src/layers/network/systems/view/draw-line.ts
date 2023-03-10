@@ -44,7 +44,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   } = network;
   const graphics = phaserScene.add.graphics();
   const circle = phaserScene.add.circle();
-  graphics.lineStyle(1, 0xffffff, 1);
+  graphics.lineStyle(8, 0xffffff, 1);
 
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
@@ -72,7 +72,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setPosition(pointer.worldX + 10, pointer.worldY - 30);
           gameObject.depth = 4;
           gameObject.setText(`H Cost - ${fuelCost}`);
-          gameObject.setFontSize(12);
+          gameObject.setFontSize(24);
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
         },
@@ -195,7 +195,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           const nftDetails = getNftId({ network, phaser });
           if (nftDetails) {
             try {
-              await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
               objectPool.remove(`fuel-text-white`);
               objectPool.remove(`prospect-text-white`);
               setMoveStation(false);
@@ -215,6 +214,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               });
               showProgress();
               setShowLine(false);
+              await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
             } catch (e) {
               console.log(e);
             }
@@ -245,7 +245,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     graphics.clear();
-    graphics.lineStyle(2, 0xeeeeee, 1);
+    graphics.lineStyle(8, 0xeeeeee, 1);
     if (
       lineDetails?.showLine &&
       selectedEntity &&
@@ -294,8 +294,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         objectPool.remove(`attack-rectangle-box`);
       }
       const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-      const dotSize = 4;
-      const gapSize = 8;
+      const dotSize = 20;
+      const gapSize = 40;
       const angle = Math.atan2(y2 - y1, x2 - x1);
       graphics.moveTo(x1, y1);
       for (let i = 0; i < lineLength; i += dotSize + gapSize) {
