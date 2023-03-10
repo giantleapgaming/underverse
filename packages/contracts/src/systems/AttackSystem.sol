@@ -137,10 +137,10 @@ contract AttackSystem is System {
     //You should only be able to attack points which are ahead of you and in the attack arc
     //To do this we will find distance from prev position and compare it to distance from current position to ensure that it is greater
 
-    require(
-      getDistanceBetweenCoordinatesWithMultiplier(sourcePrevPosition, destinationPosition) > distance,
-      "Attack point is behind the attacker"
-    );
+    // require(
+    //   getDistanceBetweenCoordinatesWithMultiplier(sourcePrevPosition, destinationPosition) > distance,
+    //   "Attack point is behind the attacker"
+    // );
 
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
