@@ -7,6 +7,7 @@ import { Faction } from "./Faction";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Nft } from "./Nft";
 import { computedToStream } from "@latticexyz/utils";
+import { toast } from "sonner";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [step, setStep] = useState(1);
@@ -49,7 +50,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 <div>
                   <Nft
                     setSelectNft={(selectNft) => {
-                      if (typeof selectNft?.tokenId === "number") {
+                      if (selectNft?.tokenId) {
                         const allNameEntities = [...getComponentEntities(Name)];
                         allNameEntities.find((entity) => {
                           const name = getComponentValueStrict(Name, entity)?.value;
@@ -97,13 +98,21 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
               <Faction
                 setSelectFaction={async (selectFaction) => {
                   if (name && selectedId && typeof selectFaction === "number") {
-                    try {
-                      setLoading(true);
-                      await initSystem(name, selectFaction, selectedId);
-                    } catch (e) {
-                      setLoading(false);
-                      console.log("Error", e);
-                    }
+                    toast.promise(
+                      async () => {
+                        try {
+                          setLoading(true);
+                          await initSystem(name, selectFaction, selectedId);
+                        } catch (e: any) {
+                          throw new Error(e?.reason || e.message);
+                        }
+                      },
+                      {
+                        loading: "Transaction in progress",
+                        success: `Transaction successful`,
+                        error: (e) => e.message,
+                      }
+                    );
                   }
                 }}
                 clickSound={() => {

@@ -70,9 +70,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
         {
           loading: "Transaction in progress",
           success: `Transaction successful`,
-          error: (e) => {
-            return e.message;
-          },
+          error: (e) => e.message,
         }
       );
     }
