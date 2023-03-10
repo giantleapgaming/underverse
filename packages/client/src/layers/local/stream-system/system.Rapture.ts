@@ -17,10 +17,16 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
     localApi: { setLogs, setShowAnimation },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Rapture"], ({ args }) => {
-    const { destinationEntity, sourceEntity, peopleTransported } = args as {
+    const {
+      destinationEntity,
+      sourceEntity,
+      peopleTransported,
+      nftID: transportedNftId,
+    } = args as {
       destinationEntity: BigNumber;
       sourceEntity: BigNumber;
       peopleTransported: BigNumber;
+      nftID: BigNumber;
     };
     const destinationEntityIndex = world.entities.findIndex(
       (entity) => entity === destinationEntity._hex
@@ -43,7 +49,8 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
       typeof +destEntityType === "number" &&
       typeof +sourceEntityType === "number" &&
       destPosition &&
-      srcPosition
+      srcPosition &&
+      transportedNftId?._hex
     ) {
       const color = factionData[+faction]?.color;
       const srcStationName = numberMapping[+destEntityType].name;
@@ -57,8 +64,7 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
         }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`
       );
       const nftId = getNftId({ network, phaser });
-      const existingNftId = getComponentValue(NFTID, destinationEntity)?.value;
-      if (existingNftId && nftId?.tokenId != +existingNftId) {
+      if (nftId?.tokenId != +transportedNftId?._hex) {
         setShowAnimation({
           showAnimation: true,
           amount: +peopleTransported,
