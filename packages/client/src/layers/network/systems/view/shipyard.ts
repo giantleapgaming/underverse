@@ -32,7 +32,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
         const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);
         const balance = getComponentValueStrict(Balance, entity).value;
-        const levelSprite = objectPool.get(`residential-level-${entity}`, "Sprite");
+        const levelSprite = objectPool.get(`shipyard-level-${entity}`, "Sprite");
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const shipyardObjectTopLayer = objectPool.get(`shipyard-top-${entity}`, "Sprite");
         const shipyardObjectGrayLayer = objectPool.get(`shipyard-gray-${entity}`, "Sprite");
