@@ -36,7 +36,7 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x + 64, y + 12);
+            gameObject.setPosition(x + 198, y + 108);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
           },
@@ -49,7 +49,7 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x + 64, y + 12);
+            gameObject.setPosition(x + 198, y + 108);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
           },

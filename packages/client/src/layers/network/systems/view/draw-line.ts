@@ -252,7 +252,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     circle.setAlpha(0);
     objectPool.remove(`fuel-text-white`);
     objectPool.remove(`prospect-text-white`);
-    objectPool.remove(`attack-rectangle-box`);
+    objectPool.remove(`attack-region`);
   });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
@@ -287,7 +287,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const x2 = destinationX;
       const y2 = destinationY;
       if (lineDetails.type === "attack") {
-        const rect = objectPool.get(`attack-rectangle-box`, "Sprite");
+        const rect = objectPool.get(`attack-region`, "Sprite");
         const attackBox = config.sprites[Sprites.Select];
         const prevPosition = getComponentValueStrict(PrevPosition, selectedEntity);
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
@@ -299,17 +299,18 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI);
 
         rect.setComponent({
-          id: `attack-rectangle-box`,
+          id: `attack-region`,
           once: (gameObject) => {
-            gameObject.setTexture(attackBox.assetKey, `attack-rectangle-box-${+level}.png`);
-            gameObject.setPosition(sourceX, sourceY);
+            gameObject.setTexture(attackBox.assetKey, `attack-region-${+level}.png`);
+            gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
             gameObject.setDepth(200);
-            gameObject.setOrigin(0, 0.5);
-            gameObject.setAngle(angle);
+            gameObject.setOrigin(0.5, 0.5);
+
+            // gameObject.setAngle(angle);
           },
         });
       } else {
-        objectPool.remove(`attack-rectangle-box`);
+        objectPool.remove(`attack-region`);
       }
       const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
       const dotSize = 20;
