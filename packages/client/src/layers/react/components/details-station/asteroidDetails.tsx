@@ -17,7 +17,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
       sounds,
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { setShowLine, showProgress, setShowAnimation, setDestinationDetails },
+      localApi: { setShowLine, setShowAnimation, setDestinationDetails },
     },
     network: {
       world,
