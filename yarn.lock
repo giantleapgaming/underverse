@@ -11832,6 +11832,11 @@ solidity-comments-extractor@^0.0.7:
   version "6.5.0"
   resolved "https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
 
+sonner@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/sonner/-/sonner-0.2.0.tgz#11491f82e0081c7447e8ce69a921631ad0ad0e78"
+  integrity sha512-wxOkuIRoyF7nsXbz7JcpexGtSw58C9XZik6kVtKNxKpEEnfFsGyR08HQMabqEzAd0a8ARNuDH06UnEit4tvO+w==
+
 sort-keys@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/sort-keys/-/sort-keys-2.0.0.tgz#658535584861ec97d730d6cf41822e1f56684128"

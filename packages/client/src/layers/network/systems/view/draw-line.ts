@@ -7,6 +7,7 @@ import { segmentPoints, getObstacleList } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
 import { Sprites } from "../../../phaser/constants";
 import { getNftId, isOwnedByIndex } from "../../utils/getNftId";
+import { toast } from "sonner";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -194,30 +195,41 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         ) {
           const nftDetails = getNftId({ network, phaser });
           if (nftDetails) {
-            try {
-              objectPool.remove(`fuel-text-white`);
-              objectPool.remove(`prospect-text-white`);
-              setMoveStation(false);
-              setShowAnimation({
-                showAnimation: true,
-                destinationX: x,
-                destinationY: y,
-                sourceX: sourcePosition.x,
-                sourceY: sourcePosition.y,
-                type:
-                  (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                  (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                  (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                  "move",
-                faction: +factionNumber,
-                entityID: selectedEntity,
-              });
-              showProgress();
-              setShowLine(false);
-              await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
-            } catch (e) {
-              console.log(e);
-            }
+            toast.promise(
+              async () => {
+                try {
+                  objectPool.remove(`fuel-text-white`);
+                  objectPool.remove(`prospect-text-white`);
+                  setMoveStation(false);
+                  setShowAnimation({
+                    showAnimation: true,
+                    destinationX: x,
+                    destinationY: y,
+                    sourceX: sourcePosition.x,
+                    sourceY: sourcePosition.y,
+                    type:
+                      (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                      (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                      (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                      "move",
+                    faction: +factionNumber,
+                    entityID: selectedEntity,
+                  });
+                  showProgress();
+                  setShowLine(false);
+                  await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
+                } catch (e: any) {
+                  throw new Error(e?.reason || e.message);
+                }
+              },
+              {
+                loading: "Transaction in progress",
+                success: `Transaction successful`,
+                error: (e) => {
+                  return e.message;
+                },
+              }
+            );
           }
         }
       }

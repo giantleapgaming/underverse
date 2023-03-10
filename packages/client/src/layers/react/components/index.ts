@@ -6,6 +6,7 @@ import { registerProgressBar } from "./ProgressBar";
 import { registerBuild } from "./build-station/index";
 import { registerCashDetails } from "./Cash";
 import { registerDetails } from "./details-station";
+import { registerTostScreen } from "./toast";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -16,4 +17,5 @@ export function registerUIComponents() {
   registerBuild();
   registerDetails();
   registerCashDetails();
+  registerTostScreen();
 }
