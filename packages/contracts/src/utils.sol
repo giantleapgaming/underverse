@@ -429,6 +429,6 @@ function createEncounterEntity(IWorld world, IUint256Component components, int32
   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, unprospected);
   //We set the calling entity encounter ID to the newly created entity and vice versa
   //That way we know which 2 entities belong to a specific encounter
-  EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
-  EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
+  // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
+  // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
 }

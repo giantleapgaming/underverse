@@ -67,7 +67,7 @@ contract MoveShipSystem is System {
     Coord memory destinationPosition = Coord({ x: x, y: y });
 
     uint256 distFromCenterSq = uint256(int256(x) ** 2 + int256(y) ** 2);
-    require(distFromCenterSq < 10000, "Cannot move beyond 100 orbits");
+    require(distFromCenterSq < 5000, "Cannot move beyond 100 orbits");
 
     require(
       atleastOneObstacleOnTheWay(sourcePosition.x, sourcePosition.y, x, y, components) == false,
@@ -93,7 +93,7 @@ contract MoveShipSystem is System {
     if (
       (sourceEntityType == 5) &&
       (distFromCenterSq > 225) &&
-      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 10000)
+      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 5000)
     ) {
       createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, sourceEntity);
     }

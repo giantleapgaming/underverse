@@ -37,13 +37,13 @@ contract ProspectSystem is System {
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
-    require(
-      (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
-        destinationEntity) &&
-        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) ==
-          sourceEntity),
-      "Source and Destination entities need to be in encounter with each other"
-    );
+    // require(
+    //   (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
+    //     destinationEntity) &&
+    //     (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) ==
+    //       sourceEntity),
+    //   "Source and Destination entities need to be in encounter with each other"
+    // );
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
@@ -77,6 +77,8 @@ contract ProspectSystem is System {
 
     uint256 balance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
       uint256(Math.abs(destinationPosition.x));
+
+    balance = balance / 2;
 
     //We randomly generate either an asteroid or pirate ship
 
