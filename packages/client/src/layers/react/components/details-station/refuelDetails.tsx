@@ -10,6 +10,7 @@ import { Scrap } from "../action-system/scrap";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
+import { toast } from "sonner";
 
 export const RefuelDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -84,15 +85,22 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          setAction("");
-                          sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                          showProgress();
-                        } catch (e) {
-                          setAction("");
-                          console.log({ error: e, system: "Upgrade Harvester", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              setAction("");
+                              sounds["confirm"].play();
+                              await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                       faction={+factionNumber}
                     />
@@ -107,15 +115,22 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          setAction("");
-                          sounds["confirm"].play();
-                          await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                          showProgress();
-                        } catch (e) {
-                          setAction("");
-                          console.log({ error: e, system: "Repair Attack", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              setAction("");
+                              sounds["confirm"].play();
+                              await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                     />
                   )}
@@ -127,16 +142,23 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          setAction("");
-                          sounds["confirm"].play();
-                          await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                          setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
-                          showProgress();
-                        } catch (e) {
-                          setAction("");
-                          console.log({ error: e, system: "Scrap Attack", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              setAction("");
+                              sounds["confirm"].play();
+                              setComponent(ShowStationDetails, stationDetailsEntityIndex, { entityId: undefined });
+                              await scrapeSystem(world.entities[selectedEntity], nftDetails.tokenId);
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                     />
                   )}
@@ -163,31 +185,39 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          sounds["confirm"].play();
-                          setDestinationDetails();
-                          setShowLine(false);
-                          setAction("");
-                          showProgress();
-                          await refuelSystem(
-                            world.entities[selectedEntity],
-                            world.entities[destinationDetails],
-                            weapons,
-                            nftDetails.tokenId
-                          );
-                          setShowAnimation({
-                            showAnimation: true,
-                            amount: weapons,
-                            destinationX: destinationPosition.x,
-                            destinationY: destinationPosition.y,
-                            sourceX: position.x,
-                            sourceY: position.y,
-                            type: "fuelTransport",
-                            entityID: destinationDetails,
-                          });
-                        } catch (e) {
-                          console.log({ error: e, system: "Fuel Transport", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              sounds["confirm"].play();
+                              setDestinationDetails();
+                              setShowLine(false);
+                              setAction("");
+                              setShowAnimation({
+                                showAnimation: true,
+                                amount: weapons,
+                                destinationX: destinationPosition.x,
+                                destinationY: destinationPosition.y,
+                                sourceX: position.x,
+                                sourceY: position.y,
+                                type: "fuelTransport",
+                                entityID: destinationDetails,
+                              });
+                              await refuelSystem(
+                                world.entities[selectedEntity],
+                                world.entities[destinationDetails],
+                                weapons,
+                                nftDetails.tokenId
+                              );
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                       playSound={() => {
                         sounds["click"].play();
