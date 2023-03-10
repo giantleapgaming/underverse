@@ -435,6 +435,7 @@ export enum Sprites {
   FactionHarvester4,
   FactionHarvester5,
   FactionHarvester6,
+  HightLightCircle,
 }
 
 export enum Animations {

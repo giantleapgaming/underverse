@@ -100,7 +100,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           id: `shipyard-level-${entity}`,
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `upgrade-${+level}.png`);
-            gameObject.setPosition(x, y);
+            gameObject.setPosition(x, y + 12);
             gameObject.setDepth(4);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAngle(0);

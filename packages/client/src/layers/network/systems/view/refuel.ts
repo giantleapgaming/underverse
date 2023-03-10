@@ -97,7 +97,7 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
             id: `refuel-level-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(refuel.assetKey, `upgrade-${+level}.png`);
-              gameObject.setPosition(x, y);
+              gameObject.setPosition(x, y + 12);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);

@@ -1580,6 +1580,10 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "faction-miner-6",
         },
+        [Sprites.HightLightCircle]: {
+          assetKey: Assets.MainAtlas,
+          frame: "highlight-circle",
+        },
       },
       animations: [
         {

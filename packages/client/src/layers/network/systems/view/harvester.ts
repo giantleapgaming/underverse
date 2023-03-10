@@ -115,7 +115,7 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             id: `harvester-level-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(harvester.assetKey, `upgrade-${+level}.png`);
-              gameObject.setPosition(x, y);
+              gameObject.setPosition(x + 54, y + 64);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);

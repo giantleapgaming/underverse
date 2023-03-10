@@ -4,7 +4,7 @@ import { merge } from "rxjs";
 import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
-const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
+// const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
 
 export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -36,7 +36,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
       const factionNumber = getComponentValue(Faction, factionIndex)?.value;
       if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const Sprite = stationColor[+factionNumber] as Sprites.View1;
+        const Sprite = Sprites.HightLightCircle;
         const stationBackground = config.sprites[Sprite];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
         const showSelected = allShowCircleEntity?.includes(factionIndex);
@@ -44,10 +44,10 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
           circle.setComponent({
             id: `circle-${entity}`,
             once: (gameObject) => {
-              gameObject.setPosition(x + 64, y + 12);
+              gameObject.setPosition(x + 198, y + 108);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setVisible(showSelected);
-              gameObject.setTexture(stationBackground.assetKey, stationBackground.frame);
+              gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
             },
           });
         } else {
