@@ -42,7 +42,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           objectPool.remove(`shipyard-health-${entity}-${i}`);
           objectPool.remove(`shipyard-cargo-${entity}-${i}`);
         }
-        const [boxes, color] = calculateHealthBar(level * 100, +defence);
+        const [boxes, color] = calculateHealthBar(+level * 100, +defence);
 
         // creating the new health bar
         for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {

@@ -17,7 +17,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      localApi: { setShowLine, setDestinationDetails, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
     },
