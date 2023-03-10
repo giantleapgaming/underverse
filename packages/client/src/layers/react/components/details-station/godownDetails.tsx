@@ -20,7 +20,7 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, showProgress, setDestinationDetails, setShowAnimation },
+      localApi: { setShowLine, setDestinationDetails, setShowAnimation },
       components: { ShowStationDetails, ShowDestinationDetails },
       localIds: { stationDetailsEntityIndex },
     },

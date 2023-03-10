@@ -70,7 +70,7 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
       if (nftId?.tokenId != +transportedNftId._hex) {
         setShowAnimation({
           showAnimation: true,
-          amount: +kgs,
+          amount: +kgs._hex,
           destinationX: destPosition.x,
           destinationY: destPosition.y,
           sourceX: srcPosition.x,

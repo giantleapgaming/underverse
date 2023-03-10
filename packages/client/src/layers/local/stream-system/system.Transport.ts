@@ -56,7 +56,10 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
       const srcStationName = numberMapping[+destEntityType].name;
       const destStationName = numberMapping[+sourceEntityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} moved ${colorString({ name: `${+kgs}`, color })} mt from  ${colorString({
+        `<p>${colorString({ name, color })} moved ${colorString({
+          name: `${+kgs._hex}`,
+          color,
+        })} mt from  ${colorString({
           name: srcStationName,
           color,
         })} (${srcPosition?.x},${srcPosition?.y}) to ${colorString({ name: destStationName, color })} (${
