@@ -15,27 +15,25 @@ export function systemProspect(network: NetworkLayer, phaser: PhaserLayer) {
     localApi: { setLogs },
   } = phaser;
   defineRxSystem(world, systemCallStreams["system.Prospect"], ({ args }) => {
-    const { destinationGodownEntity, sourceGodownEntity } = args as {
-      destinationGodownEntity: BigNumber;
-      sourceGodownEntity: BigNumber;
+    const { destinationEntity, sourceEntity } = args as {
+      destinationEntity: BigNumber;
+      sourceEntity: BigNumber;
     };
-    const destinationGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === destinationGodownEntity._hex
+    const destinationEntityIndex = world.entities.findIndex(
+      (entity) => entity === destinationEntity._hex
     ) as EntityIndex;
-    const sourceGodownEntityIndex = world.entities.findIndex(
-      (entity) => entity === sourceGodownEntity._hex
-    ) as EntityIndex;
-    const destPosition = getComponentValue(Position, destinationGodownEntityIndex);
-    const srcPosition = getComponentValue(Position, sourceGodownEntityIndex);
-    const ownedBy = getComponentValue(OwnedBy, sourceGodownEntityIndex)?.value;
+    const sourceEntityIndex = world.entities.findIndex((entity) => entity === sourceEntity._hex) as EntityIndex;
+    const destPosition = getComponentValue(Position, destinationEntityIndex);
+    const srcPosition = getComponentValue(Position, sourceEntityIndex);
+    const ownedBy = getComponentValue(OwnedBy, sourceEntityIndex)?.value;
     const ownedByIndex = world.entities.findIndex((entity) => entity === ownedBy) as EntityIndex;
     const name = getComponentValue(Name, ownedByIndex)?.value;
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
-    const destEntityType = getComponentValue(EntityType, destinationGodownEntityIndex)?.value;
-    const sourceEntityType = getComponentValue(EntityType, sourceGodownEntityIndex)?.value;
+    const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
+    const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
 
-    const destBalance = getComponentValue(Balance, destinationGodownEntityIndex)?.value;
-    const destFuel = getComponentValue(Fuel, destinationGodownEntityIndex)?.value;
+    const destBalance = getComponentValue(Balance, destinationEntityIndex)?.value;
+    const destFuel = getComponentValue(Fuel, destinationEntityIndex)?.value;
 
     if (
       faction &&

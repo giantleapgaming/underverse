@@ -149,16 +149,24 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
         const nftDetails = getNftId({ network, phaser });
         if (!+isProspected && nftDetails) {
-          try {
-            sounds["confirm"].play();
-            setShowLine(false);
-            showProgress();
-            await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
-            objectPool.remove(`prospect-text-white`);
-            setShowLine(false);
-          } catch (e) {
-            console.log({ error: e, system: "Prospect", details: selectedEntity });
-          }
+          toast.promise(
+            async () => {
+              try {
+                sounds["confirm"].play();
+                setShowLine(false);
+                showProgress();
+                objectPool.remove(`prospect-text-white`);
+                await prospectSystem(world.entities[selectedEntity], world.entities[stationEntity], nftDetails.tokenId);
+              } catch (e: any) {
+                throw new Error(e?.reason || e.message);
+              }
+            },
+            {
+              loading: "Transaction in progress",
+              success: `Transaction successful`,
+              error: (e) => e.message,
+            }
+          );
         }
       }
       if (

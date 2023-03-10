@@ -5,7 +5,7 @@ import { Toaster } from "sonner";
 import { Layers } from "../../../types";
 
 const Toast = ({ layers }: { layers: Layers }) => {
-  return <Toaster expand={true} richColors visibleToasts={5} duration={7000} />;
+  return <Toaster expand={true} richColors visibleToasts={5} duration={7000} theme="dark" />;
 };
 
 export const registerTostScreen = () => {

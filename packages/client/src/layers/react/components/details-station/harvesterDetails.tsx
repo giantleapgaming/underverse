@@ -15,7 +15,7 @@ import { SelectButton } from "./Button";
 import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
 import { BuildWall } from "../build-station/buildWall";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
-
+import { toast } from "sonner";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -97,15 +97,23 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        try {
-                          setAction("");
-                          sounds["confirm"].play();
-                          await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
-                          showProgress();
-                        } catch (e) {
-                          setAction("");
-                          console.log({ error: e, system: "Upgrade Harvester", details: selectedEntity });
-                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              setAction("");
+                              sounds["confirm"].play();
+                              await upgradeSystem(world.entities[selectedEntity], nftDetails.tokenId);
+                              showProgress();
+                            } catch (e: any) {
+                              throw new Error(e?.reason || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
                       }}
                       faction={+factionNumber}
                     />
