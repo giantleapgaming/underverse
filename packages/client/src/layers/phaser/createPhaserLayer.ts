@@ -62,6 +62,7 @@ import {
   systemSell,
   systemUpgrade,
   systemProspect,
+  systemRefuel,
 } from "../local/stream-system";
 import { highlightObstacles } from "../network/systems/view/highlightObstacles";
 import { systemTransport } from "../local/stream-system/system.Transport";
@@ -391,7 +392,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   systemRapture(network, context);
   systemMoveShip(network, context);
   systemProspect(network, context);
-
+  systemRefuel(network, context);
   //-----animations---------------------------------------
   moveHarvester(network, context);
   moveAttackShip(network, context);

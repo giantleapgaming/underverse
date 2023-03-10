@@ -64,16 +64,17 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
         },${destPosition?.y})</p>`
       );
       const nftId = getNftId({ network, phaser });
+      console.log("nftId?.tokenId", nftId?.tokenId, +transportedNftId._hex);
       if (nftId?.tokenId != +transportedNftId._hex) {
         setShowAnimation({
           showAnimation: true,
           amount: +kgs,
-          destinationX: destPosition.y,
-          destinationY: destPosition.x,
+          destinationX: destPosition.x,
+          destinationY: destPosition.y,
           sourceX: srcPosition.x,
           sourceY: srcPosition.y,
           type: "fuelTransport",
-          entityID: sourceEntityIndex,
+          entityID: destinationEntityIndex,
         });
       }
     }
