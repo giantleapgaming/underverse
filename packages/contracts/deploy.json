@@ -223,7 +223,8 @@
         "FuelComponent",
         "PopulationComponent",
         "OffenceComponent",
-        "PrevPositionComponent"
+        "PrevPositionComponent",
+        "EncounterComponent"
       ]
     },
     {
