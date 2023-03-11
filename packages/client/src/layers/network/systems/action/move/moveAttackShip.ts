@@ -20,6 +20,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
+    sounds,
   } = phaser;
   const {
     components: { OwnedBy },
@@ -168,6 +169,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setAngle(angle);
           const color = generateColorsFromWalletAddress(`${ownedBy}`);
           gameObject.setTint(color[0], color[1], color[2], color[3]);
+          sounds["move-attack"].play();
           phaserScene.add.tween({
             targets: gameObject,
             x: {

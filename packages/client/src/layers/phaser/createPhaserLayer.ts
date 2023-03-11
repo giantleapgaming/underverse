@@ -288,7 +288,15 @@ export async function createPhaserLayer(network: NetworkLayer) {
   // --- PHASER ENGINE SETUP --------------------------------------------------------
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   world.registerDisposer(disposePhaser);
-  const soundKeys = ["click", "confirm", "explosion", "missile-launch", "ship-launching"];
+  const soundKeys = [
+    "click",
+    "confirm",
+    "explosion",
+    "missile-launch",
+    "ship-launching",
+    "move-harvester",
+    "move-attack",
+  ];
   const soundKeysMp3 = ["bg"];
   const sounds: Record<string, Phaser.Sound.BaseSound> = {};
 
@@ -310,7 +318,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     await asyncFileLoader(loader);
     sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: true, volume: 0.06 });
   }
-  sounds["bg"].play();
+  // sounds["bg"].play();
   // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
     world,

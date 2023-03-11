@@ -20,6 +20,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
         },
       },
     },
+    sounds,
   } = phaser;
   const {
     components: { OwnedBy },
@@ -137,6 +138,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setOrigin(0.5, 0.2);
           gameObject.setAngle(angle);
           gameObject.setScale(0.8);
+          sounds["move-harvester"].play();
           phaserScene.add.tween({
             targets: gameObject,
             x: {
