@@ -318,7 +318,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     await asyncFileLoader(loader);
     sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: true, volume: 0.06 });
   }
-  // sounds["bg"].play();
+  sounds["bg"].play();
   // --- LAYER CONTEXT --------------------------------------------------------------
   const context = {
     world,
