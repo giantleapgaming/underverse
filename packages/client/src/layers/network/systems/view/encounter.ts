@@ -19,9 +19,9 @@ export function displayEncounter(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Level, Balance, Encounter, EntityType },
+    components: { Position, EntityType },
   } = network;
-  defineSystem(world, [Has(Position), Has(Encounter), Not(Balance), Has(Level)], ({ entity }) => {
+  defineSystem(world, [Has(Position), Has(EntityType)], ({ entity }) => {
     const position = getComponentValueStrict(Position, entity);
     const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
