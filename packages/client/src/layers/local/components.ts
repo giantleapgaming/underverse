@@ -90,6 +90,7 @@ export const ShowAnimation = (world: World) => {
       faction: Type.OptionalNumber,
       type: Type.OptionalString,
       frame: Type.OptionalString,
+      systemStream: Type.Boolean,
     },
     { id: "ShowAnimation" }
   );

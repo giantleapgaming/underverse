@@ -185,7 +185,9 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
               objectPool.remove(`attack-gray-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
-              setShowLine(true, destinationX, destinationY, "move");
+              if (!animation?.systemStream) {
+                setShowLine(true, destinationX, destinationY, "move");
+              }
             },
           });
         },

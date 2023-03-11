@@ -124,7 +124,6 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
               objectPool.remove(`harvester-gray-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
-              setShowLine(true, destinationX, destinationY, "move");
             },
           });
         },
@@ -155,7 +154,9 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
               objectPool.remove(`harvester-bottom-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
-              setShowLine(true, destinationX, destinationY, "move");
+              if (!animation?.systemStream) {
+                setShowLine(true, destinationX, destinationY, "move");
+              }
             },
           });
         },

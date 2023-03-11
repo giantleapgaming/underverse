@@ -121,7 +121,9 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
               objectPool.remove(`refueller-gray-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
-              setShowLine(true, destinationX, destinationY, "move");
+              if (!animation?.systemStream) {
+                setShowLine(true, destinationX, destinationY, "move");
+              }
             },
           });
         },

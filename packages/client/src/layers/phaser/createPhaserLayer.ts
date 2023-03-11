@@ -210,6 +210,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     type,
     frame,
     entityID,
+    systemStream,
   }: {
     amount?: number;
     destinationX?: number;
@@ -221,6 +222,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     type?: string;
     frame?: string;
     entityID: EntityIndex;
+    systemStream?: boolean;
   }) => {
     setComponent(components.ShowAnimation, entityID, {
       amount,
@@ -232,6 +234,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       faction,
       type,
       frame,
+      systemStream: systemStream ? true : false,
     });
   };
 

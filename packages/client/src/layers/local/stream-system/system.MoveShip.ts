@@ -61,6 +61,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
             (+entityType === Mapping.refuel.id && "moveRefueller") ||
             "move",
           entityID: sourceEntityIndex,
+          systemStream: true,
         });
       }
     }
