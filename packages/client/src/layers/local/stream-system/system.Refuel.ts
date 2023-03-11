@@ -77,6 +77,7 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
           sourceY: srcPosition.y,
           type: "fuelTransport",
           entityID: destinationEntityIndex,
+          systemStream: true,
         });
       }
     }

@@ -74,6 +74,7 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
           sourceY: srcPosition.y,
           type: "humanTransport",
           entityID: destinationEntity,
+          systemStream: true,
         });
       }
     }

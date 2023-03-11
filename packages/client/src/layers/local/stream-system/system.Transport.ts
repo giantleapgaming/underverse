@@ -77,6 +77,7 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
           sourceY: srcPosition.y,
           type: "cargoTransport",
           entityID: sourceEntityIndex,
+          systemStream: true,
         });
       }
     }

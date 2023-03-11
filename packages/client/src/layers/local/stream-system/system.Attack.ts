@@ -90,6 +90,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
           faction: +factionSrcValue,
           type: "attackMissile",
           entityID: sourceGodownEntityIndex,
+          systemStream: true,
         });
       }
     }

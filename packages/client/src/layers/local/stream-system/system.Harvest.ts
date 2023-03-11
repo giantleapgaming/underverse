@@ -73,6 +73,7 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
           sourceY: srcPosition.y,
           type: "mineTransport",
           entityID: destinationEntityIndex,
+          systemStream: true,
         });
       }
     }
