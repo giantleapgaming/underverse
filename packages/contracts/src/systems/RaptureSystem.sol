@@ -27,8 +27,10 @@ contract RaptureSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceGodownEntity, uint256 destinationGodownEntity, uint256 peopleTransported, uint256 nftID) = abi
-      .decode(arguments, (uint256, uint256, uint256, uint256));
+    (uint256 sourceEntity, uint256 destinationEntity, uint256 peopleTransported, uint256 nftID) = abi.decode(
+      arguments,
+      (uint256, uint256, uint256, uint256)
+    );
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
@@ -38,31 +40,31 @@ contract RaptureSystem is System {
     // Check if source and destination are planet and residential station respectively
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceGodownEntity) == 6,
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 6,
       "Source has to be a Planet"
     );
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationGodownEntity) == 3,
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 3,
       "Destination has to be a residential station"
     );
 
     require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationGodownEntity) == playerID,
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) == playerID,
       "Destination station not owned by user"
     );
 
     uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-      destinationGodownEntity
+      destinationEntity
     );
     require(destinationGodownLevel >= 1, "Invalid destination godown entity");
 
     uint256 sourcePopulation = PopulationComponent(getAddressById(components, PopulationComponentID)).getValue(
-      sourceGodownEntity
+      sourceEntity
     );
 
     uint256 destinationPopulation = PopulationComponent(getAddressById(components, PopulationComponentID)).getValue(
-      destinationGodownEntity
+      destinationEntity
     );
 
     require(
@@ -77,12 +79,12 @@ contract RaptureSystem is System {
 
     Coord memory sourceGodownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      sourceGodownEntity
+      sourceEntity
     );
 
     Coord memory destinationGodownPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
-      destinationGodownEntity
+      destinationEntity
     );
 
     require(
@@ -112,11 +114,11 @@ contract RaptureSystem is System {
 
     // update godown data
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(
-      sourceGodownEntity,
+      sourceEntity,
       sourcePopulation - peopleTransported
     );
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(
-      destinationGodownEntity,
+      destinationEntity,
       destinationPopulation + peopleTransported
     );
 
@@ -128,11 +130,11 @@ contract RaptureSystem is System {
   }
 
   function executeTyped(
-    uint256 sourceGodownEntity,
-    uint256 destinationGodownEntity,
+    uint256 sourceEntity,
+    uint256 destinationEntity,
     uint256 peopleTransported,
     uint256 nftID
   ) public returns (bytes memory) {
-    return execute(abi.encode(sourceGodownEntity, destinationGodownEntity, peopleTransported, nftID));
+    return execute(abi.encode(sourceEntity, destinationEntity, peopleTransported, nftID));
   }
 }
