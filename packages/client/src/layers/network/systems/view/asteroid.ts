@@ -58,19 +58,19 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
 function spriteBasedOnBalance(num: number): number {
   if (num >= 0 && num <= 10) {
     return 1;
-  } else if (num > 10 && num <= 25) {
+  } else if (num > 10 && num <= 15) {
     return 2;
-  } else if (num > 25 && num <= 35) {
+  } else if (num > 15 && num <= 20) {
     return 3;
-  } else if (num > 35 && num <= 45) {
+  } else if (num > 20 && num <= 25) {
     return 4;
-  } else if (num > 45 && num <= 55) {
+  } else if (num > 25 && num <= 30) {
     return 5;
-  } else if (num > 55 && num <= 65) {
+  } else if (num > 30 && num <= 35) {
     return 6;
-  } else if (num > 65 && num <= 75) {
+  } else if (num > 35 && num <= 40) {
     return 7;
-  } else if (num > 75 && num <= 85) {
+  } else if (num > 40 && num <= 45) {
     return 8;
   }
   return 9;
