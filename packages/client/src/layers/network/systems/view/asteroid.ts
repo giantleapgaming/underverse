@@ -34,7 +34,10 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
         id: `astroid-${entity}`,
         once: (gameObject) => {
           const astroid = config.sprites[Sprites.Asteroid12];
-          gameObject.setTexture(astroid.assetKey, `asteroid-${spriteBasedOnBalance(balance)}.png`);
+          gameObject.setTexture(
+            astroid.assetKey,
+            `asteroid-${spriteBasedOnBalance(Math.floor(Math.random() * 9) + 1)}.png`
+          );
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
           gameObject.setScale(size(balance));
