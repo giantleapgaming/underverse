@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, getComponentValue, getComponentValueStrict, Has } from "@latticexyz/recs";
+import { defineSystem, getComponentValueStrict, Has } from "@latticexyz/recs";
 import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
@@ -23,10 +23,10 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
   const {
     components: { Position, Level, EntityType, OwnedBy, Defence, Balance },
   } = network;
-  defineSystem(world, [Has(Position), Has(Balance), Has(EntityType), Has(Level)], ({ entity }) => {
-    const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
+  defineSystem(world, [Has(Position), Has(Balance), Has(EntityType), Has(Level), Has(Defence)], ({ entity }) => {
+    const entityTypeNumber = getComponentValueStrict(EntityType, entity)?.value;
     if (entityTypeNumber && +entityTypeNumber === Mapping.shipyard.id) {
-      const defence = getComponentValue(Defence, entity)?.value;
+      const defence = getComponentValueStrict(Defence, entity)?.value;
       if (defence && +defence > 0) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const level = getComponentValueStrict(Level, entity).value;

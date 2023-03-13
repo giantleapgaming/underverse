@@ -87,9 +87,12 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             once: (gameObject) => {
               gameObject.setTexture(attackShip.assetKey, `attack-3.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
-              gameObject.setDepth(9);
+              gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
+              gameObject.setScale(0.5);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
               gameObject.setScale(0.5);
             },
           });
