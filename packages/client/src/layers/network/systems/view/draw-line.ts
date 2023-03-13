@@ -105,87 +105,91 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
-      if (
-        defence &&
-        entityType &&
-        lineDetails.type === "attack" &&
-        (+entityType === Mapping.attack.id ||
-          +entityType === Mapping.godown.id ||
-          +entityType === Mapping.harvester.id ||
-          +entityType === Mapping.residential.id ||
-          +entityType === Mapping.refuel.id ||
-          +entityType === Mapping.shipyard.id)
-      ) {
-        const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
-        const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
-        if (ownedBy && selectedOwnedBy && selectedEntity !== stationEntity) {
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "attack");
-          return;
-        }
-      }
-      if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
-        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "harvest");
-        }
-      }
-      if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
-        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "rapture");
-        }
-      }
-      if (
-        entityType &&
-        (+entityType === Mapping.godown.id || +entityType === Mapping.shipyard.id) &&
-        lineDetails.type === "transport"
-      ) {
-        if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "transport");
-        }
-      }
-      if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {
-        const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
-        const nftDetails = getNftId({ network, phaser });
-        if (!+isProspected && nftDetails) {
-          if (obstacleHighlight.length) {
-            toast.promise(
-              async () => {
-                try {
-                  sounds["confirm"].play();
-                  setShowLine(false);
-                  showProgress();
-                  objectPool.remove(`prospect-text-white`);
-                  await prospectSystem(
-                    world.entities[selectedEntity],
-                    world.entities[stationEntity],
-                    nftDetails.tokenId
-                  );
-                } catch (e: any) {
-                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                }
-              },
-              {
-                loading: "Transaction in progress",
-                success: `Transaction successful`,
-                error: (e) => e.message,
-              }
-            );
-          } else {
-            toast.error("Obstacle on the way");
+      if (!obstacleHighlight.length) {
+        if (
+          defence &&
+          entityType &&
+          lineDetails.type === "attack" &&
+          (+entityType === Mapping.attack.id ||
+            +entityType === Mapping.godown.id ||
+            +entityType === Mapping.harvester.id ||
+            +entityType === Mapping.residential.id ||
+            +entityType === Mapping.refuel.id ||
+            +entityType === Mapping.shipyard.id)
+        ) {
+          const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
+          const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
+          if (ownedBy && selectedOwnedBy && selectedEntity !== stationEntity) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "attack");
+            return;
           }
         }
-      }
-      if (
-        entityType &&
-        +entityType !== Mapping.planet.id &&
-        +entityType !== Mapping.astroid.id &&
-        lineDetails.type === "refuel"
-      ) {
-        setDestinationDetails(stationEntity);
-        setShowLine(true, x, y, "refuel");
+        if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
+          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "harvest");
+          }
+        }
+        if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
+          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "rapture");
+          }
+        }
+        if (
+          entityType &&
+          (+entityType === Mapping.godown.id || +entityType === Mapping.shipyard.id) &&
+          lineDetails.type === "transport"
+        ) {
+          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "transport");
+          }
+        }
+        if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {
+          const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
+          const nftDetails = getNftId({ network, phaser });
+          if (!+isProspected && nftDetails) {
+            if (!obstacleHighlight.length) {
+              toast.promise(
+                async () => {
+                  try {
+                    sounds["confirm"].play();
+                    setShowLine(false);
+                    showProgress();
+                    objectPool.remove(`prospect-text-white`);
+                    await prospectSystem(
+                      world.entities[selectedEntity],
+                      world.entities[stationEntity],
+                      nftDetails.tokenId
+                    );
+                  } catch (e: any) {
+                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                  }
+                },
+                {
+                  loading: "Transaction in progress",
+                  success: `Transaction successful`,
+                  error: (e) => e.message,
+                }
+              );
+            } else {
+              toast.error("Obstacle on the way");
+            }
+          }
+        }
+        if (
+          entityType &&
+          +entityType !== Mapping.planet.id &&
+          +entityType !== Mapping.astroid.id &&
+          lineDetails.type === "refuel"
+        ) {
+          setDestinationDetails(stationEntity);
+          setShowLine(true, x, y, "refuel");
+        }
+      } else {
+        toast.error("Obstacle on the way");
       }
     }
     if (
@@ -212,7 +216,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         ) {
           const nftDetails = getNftId({ network, phaser });
           if (nftDetails) {
-            if (obstacleHighlight.length) {
+            if (!obstacleHighlight.length) {
               toast.promise(
                 async () => {
                   try {
