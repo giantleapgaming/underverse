@@ -134,8 +134,8 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setTexture(attackShip.assetKey, `attack-4.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(151);
-          gameObject.setOrigin(0.5, 0.02);
-          gameObject.setScale(0.8);
+          gameObject.setOrigin(0.5, 0);
+          gameObject.setScale(0.6);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
             targets: gameObject,
