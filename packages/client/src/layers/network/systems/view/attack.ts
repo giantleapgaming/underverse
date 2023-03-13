@@ -110,10 +110,11 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             id: `attack-level-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(attackShip.assetKey, `upgrade-${+level}.png`);
-              gameObject.setPosition(x, y + 12);
+              gameObject.setPosition(x + 54, y + 64);
               gameObject.setDepth(4);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);
+              gameObject.setScale(0.5);
             },
           });
         } else {
