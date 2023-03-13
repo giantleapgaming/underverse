@@ -103,7 +103,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
-    console.log(lineDetails, selectedEntity, stationEntity);
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;

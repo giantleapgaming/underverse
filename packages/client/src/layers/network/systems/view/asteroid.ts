@@ -21,12 +21,11 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
     },
   } = phaser;
   const {
-    components: { Position, Level, Balance, EntityType, Fuel },
+    components: { Position, Level, Balance, EntityType },
   } = network;
   defineSystem(world, [Has(Position), Has(EntityType), Has(Balance), Has(Level)], ({ entity }) => {
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
     const balance = getComponentValueStrict(Balance, entity).value;
-    const fuel = getComponentValueStrict(Fuel, entity).value;
     if (+entityTypeNumber === Mapping.astroid.id) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
