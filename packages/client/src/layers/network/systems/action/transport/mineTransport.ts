@@ -77,7 +77,7 @@ export function mineTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`mineTransport-top-move-${entity}`);
             },
@@ -107,7 +107,7 @@ export function mineTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`mineTransport-gray-move-${entity}`);
             },

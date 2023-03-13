@@ -78,7 +78,7 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`fuelTransport-top1-move-${entity}`);
             },
@@ -106,7 +106,7 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`fuelTransport-top2-move-${entity}`);
             },
@@ -136,7 +136,7 @@ export function fuelTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`fuelTransport-gray-move-${entity}`);
             },

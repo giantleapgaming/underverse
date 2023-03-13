@@ -89,7 +89,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`attack-top1-move-${entity}`);
               destinationCircle.clear();
@@ -119,7 +119,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`attack-top2-move-${entity}`);
               destinationCircle.clear();
@@ -149,7 +149,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`attack-flame-move-${entity}`);
               destinationCircle.clear();
@@ -182,7 +182,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 5_000,
+            duration: 3_000,
             onComplete: () => {
               objectPool.remove(`attack-gray-move-${entity}`);
               destinationCircle.clear();
