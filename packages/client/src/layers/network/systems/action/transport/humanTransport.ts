@@ -74,7 +74,7 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`humanTransport-top-${entity}`);
             },
@@ -103,7 +103,7 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`humanTransport-gray-${entity}`);
             },

@@ -85,7 +85,7 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`refueller-top-move-${entity}`);
               destinationCircle.clear();
@@ -116,7 +116,7 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`refueller-gray-move-${entity}`);
               destinationCircle.clear();

@@ -78,7 +78,7 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`cargoTransport-top-${entity}`);
             },
@@ -108,7 +108,7 @@ export function cargoTransport(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`cargoTransport-gray-${entity}`);
             },

@@ -88,7 +88,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`harvester-top-move-${entity}`);
               destinationCircle.clear();
@@ -120,7 +120,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`harvester-gray-move-${entity}`);
               destinationCircle.clear();
@@ -151,7 +151,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
             },
             yoyo: false,
             repeat: 0,
-            duration: 3_000,
+            duration: 5_000,
             onComplete: () => {
               objectPool.remove(`harvester-bottom-move-${entity}`);
               destinationCircle.clear();
