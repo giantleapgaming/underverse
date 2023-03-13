@@ -8,6 +8,7 @@ import { distance } from "../../../react/utils/distance";
 import { Sprites } from "../../../phaser/constants";
 import { getNftId, isOwnedByIndex } from "../../utils/getNftId";
 import { toast } from "sonner";
+import { getDistance } from "../../utils/getDistance";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -39,7 +40,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, PrevPosition },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level },
     utils: { getEntityIndexAtPosition },
     api: { moveSystem, prospectSystem },
   } = network;
@@ -119,16 +120,27 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         ) {
           const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;
           const selectedOwnedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
+          const position = getComponentValueStrict(Position, selectedEntity);
+          const level = getComponentValueStrict(Level, selectedEntity).value;
           if (ownedBy && selectedOwnedBy && selectedEntity !== stationEntity) {
-            setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "attack");
-            return;
+            if (getDistance(position.x, position?.y, x, y) <= +level + 5) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "attack");
+              return;
+            } else {
+              toast.error("Can only attack upto a certain distance based on your level");
+            }
           }
         }
         if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-            setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "harvest");
+            const position = getComponentValueStrict(Position, selectedEntity);
+            if (getDistance(position.x, position?.y, x, y) <= 5) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "harvest");
+            } else {
+              toast.error("If source is Asteroid, destination has to be a Harvester");
+            }
           }
         }
         if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
@@ -185,73 +197,78 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           +entityType !== Mapping.astroid.id &&
           lineDetails.type === "refuel"
         ) {
-          setDestinationDetails(stationEntity);
-          setShowLine(true, x, y, "refuel");
+          const position = getComponentValueStrict(Position, selectedEntity);
+          if (getDistance(position.x, position?.y, x, y) <= 5) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "refuel");
+          } else {
+            toast.error("Fuel Source is further than 5 units distance from target ship");
+          }
+        } else {
+          toast.error("Obstacle on the way");
         }
-      } else {
-        toast.error("Obstacle on the way");
       }
-    }
-    if (
-      lineDetails &&
-      lineDetails.showLine &&
-      !stationEntity &&
-      lineDetails.type === "move" &&
-      selectedEntity &&
-      lineDetails.action
-    ) {
-      const sourcePosition = getComponentValue(Position, selectedEntity);
-      if (sourcePosition) {
-        const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
-        const entityIndex = world.entities.indexOf(ownedBy);
-        const factionNumber = getComponentValue(Faction, entityIndex)?.value;
-        const entityType = getComponentValue(EntityType, selectedEntity)?.value;
-        if (
-          factionNumber &&
-          entityType &&
-          (+entityType === Mapping.harvester.id ||
-            +entityType === Mapping.attack.id ||
-            +entityType === Mapping.refuel.id ||
-            +entityType === Mapping.shipyard.id)
-        ) {
-          const nftDetails = getNftId({ network, phaser });
-          if (nftDetails) {
-            if (!obstacleHighlight.length) {
-              toast.promise(
-                async () => {
-                  try {
-                    objectPool.remove(`fuel-text-white`);
-                    objectPool.remove(`prospect-text-white`);
-                    setMoveStation(false);
-                    setShowAnimation({
-                      showAnimation: true,
-                      destinationX: x,
-                      destinationY: y,
-                      sourceX: sourcePosition.x,
-                      sourceY: sourcePosition.y,
-                      type:
-                        (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                        (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                        (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                        "move",
-                      faction: +factionNumber,
-                      entityID: selectedEntity,
-                    });
-                    showProgress();
-                    setShowLine(false);
-                    await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
-                  } catch (e: any) {
-                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+      if (
+        lineDetails &&
+        lineDetails.showLine &&
+        !stationEntity &&
+        lineDetails.type === "move" &&
+        selectedEntity &&
+        lineDetails.action
+      ) {
+        const sourcePosition = getComponentValue(Position, selectedEntity);
+        if (sourcePosition) {
+          const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
+          const entityIndex = world.entities.indexOf(ownedBy);
+          const factionNumber = getComponentValue(Faction, entityIndex)?.value;
+          const entityType = getComponentValue(EntityType, selectedEntity)?.value;
+          if (
+            factionNumber &&
+            entityType &&
+            (+entityType === Mapping.harvester.id ||
+              +entityType === Mapping.attack.id ||
+              +entityType === Mapping.refuel.id ||
+              +entityType === Mapping.shipyard.id)
+          ) {
+            const nftDetails = getNftId({ network, phaser });
+            if (nftDetails) {
+              if (!obstacleHighlight.length) {
+                toast.promise(
+                  async () => {
+                    try {
+                      objectPool.remove(`fuel-text-white`);
+                      objectPool.remove(`prospect-text-white`);
+                      setMoveStation(false);
+                      setShowAnimation({
+                        showAnimation: true,
+                        destinationX: x,
+                        destinationY: y,
+                        sourceX: sourcePosition.x,
+                        sourceY: sourcePosition.y,
+                        type:
+                          (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                          (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                          (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                          "move",
+                        faction: +factionNumber,
+                        entityID: selectedEntity,
+                      });
+                      showProgress();
+                      setShowLine(false);
+                      await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
+                    } catch (e: any) {
+                      throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                    }
+                  },
+                  {
+                    loading: "Transaction in progress",
+                    success: `Transaction successful`,
+                    error: (e) => e.message,
                   }
-                },
-                {
-                  loading: "Transaction in progress",
-                  success: `Transaction successful`,
-                  error: (e) => e.message,
-                }
-              );
-            } else {
-              toast.error("Obstacle on the way");
+                );
+              } else {
+                toast.error("Obstacle on the way");
+              }
             }
           }
         }
@@ -306,15 +323,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       if (lineDetails.type === "attack") {
         const rect = objectPool.get(`attack-region`, "Sprite");
         const attackBox = config.sprites[Sprites.Select];
-        const prevPosition = getComponentValueStrict(PrevPosition, selectedEntity);
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
-          { x: prevPosition.x, y: prevPosition.y },
-          tileWidth,
-          tileHeight
-        );
-        const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI);
-
         rect.setComponent({
           id: `attack-region`,
           once: (gameObject) => {
@@ -322,8 +331,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
             gameObject.setDepth(200);
             gameObject.setOrigin(0.5, 0.5);
-
-            // gameObject.setAngle(angle);
           },
         });
       } else {
