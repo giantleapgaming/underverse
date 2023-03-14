@@ -1,14 +1,13 @@
 import styled from "styled-components";
-import { convertPrice } from "../../utils/priceConverter";
 
-export const Scrap = ({ scrapSystem, scrapCost }: { scrapSystem: () => void; scrapCost: number }) => {
+export const Scrap = ({ scrapSystem }: { scrapSystem: () => void; scrapCost: number }) => {
   return (
     <S.Details>
       <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <S.Cost>
           SCRAP FOR
           <br />
-          {convertPrice(+scrapCost)}
+          HARVESTER
         </S.Cost>
       </div>
       <S.InlinePointer onClick={scrapSystem}>
