@@ -8,13 +8,11 @@ export function rightClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer
       Main: { input },
     },
     localApi: { setBuild },
-    sounds,
   } = phaser;
 
   // on right click stop build
   const rightClickSub = input.rightClick$.subscribe(() => {
     setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
-    sounds["click"].play();
   });
 
   world.registerDisposer(() => rightClickSub?.unsubscribe());
