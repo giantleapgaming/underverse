@@ -45,7 +45,7 @@ export const Weapon = ({
             })}
           </div>
           <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-            <S.OtherDetails>COST {+selected > 0 ? convertPrice(+selected * 1000 * factionData[faction]?.weapon) : "--:--"}</S.OtherDetails>
+            <S.OtherDetails>COST {+selected > 0 ? convertPrice(+selected * 5000 * factionData[faction]?.weapon) : "--:--"}</S.OtherDetails>
             <S.InlinePointer
               onClick={() => {
                 buyWeaponSystem(+selected);
