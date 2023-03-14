@@ -28,7 +28,7 @@ export function systemScraped(network: NetworkLayer, phaser: PhaserLayer) {
       const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
-        `<p>${colorString({ name, color })}  scrapped the ${colorString({ name: stationName, color })} station at (${
+        `<p>${colorString({ name, color })}  scrapped the ${colorString({ name: stationName, color })} ship at (${
           position?.x
         },${position?.y})</p>`
       );

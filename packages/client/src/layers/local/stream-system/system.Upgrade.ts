@@ -36,7 +36,7 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
       const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} upgraded ${colorString({ name: stationName, color })} station at (${
+        `<p>${colorString({ name, color })} upgraded ${colorString({ name: stationName, color })} ship at (${
           position?.x
         },${position?.y}) from level ${colorString({ name: `${+level - 1}`, color: "#ffffff" })} to ${colorString({
           name: `${+level}`,

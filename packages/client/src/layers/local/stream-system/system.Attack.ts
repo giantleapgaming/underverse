@@ -71,10 +71,10 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name: srcName, color: srcColor })} ${colorString({
           name: srcStationName,
           color: srcColor,
-        })} station at ${srcPosition?.x},${srcPosition?.y} attacked ${colorString({
+        })} Ship at ${srcPosition?.x},${srcPosition?.y} attacked ${colorString({
           name: destName,
           color: destColor,
-        })} ${colorString({ name: destStationName, color: destColor })} station at ${destPosition?.x},${
+        })} ${colorString({ name: destStationName, color: destColor })} Ship at ${destPosition?.x},${
           destPosition?.y
         } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
       );
