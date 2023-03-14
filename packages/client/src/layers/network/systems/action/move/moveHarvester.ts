@@ -138,7 +138,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setOrigin(0.5, 0.2);
           gameObject.setAngle(angle);
           gameObject.setScale(0.8);
-          sounds["move-harvester"].play();
+          !animation?.systemStream && sounds["move-harvester"].play();
           phaserScene.add.tween({
             targets: gameObject,
             x: {

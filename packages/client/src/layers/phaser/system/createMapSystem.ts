@@ -28,8 +28,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       circle.setStrokeStyle(2, 0x2d2d36);
     } else circle.setStrokeStyle(0, 0x2d2d36);
     circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
-    // label.setOrigin(0.5, 0.5);
-    // label.setDepth(20);
   }
 
   input.pointermove$.subscribe(({ pointer }) => {
