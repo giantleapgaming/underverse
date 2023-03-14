@@ -21,11 +21,12 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
     },
   } = phaser;
   const {
-    components: { Position, Level, Balance, EntityType },
+    components: { Position, Level, Balance, EntityType, Fuel },
   } = network;
-  defineSystem(world, [Has(Position), Has(EntityType), Has(Balance), Has(Level)], ({ entity }) => {
+  defineSystem(world, [Has(Position), Has(EntityType), Has(Balance), Has(Level), Has(Fuel)], ({ entity }) => {
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
     const balance = getComponentValueStrict(Balance, entity).value;
+    const fuel = getComponentValueStrict(Fuel, entity).value;
     if (+entityTypeNumber === Mapping.astroid.id) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
@@ -36,7 +37,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           const astroid = config.sprites[Sprites.Asteroid12];
           gameObject.setTexture(
             astroid.assetKey,
-            `asteroid-${spriteBasedOnDistance(position.x ** 2 + position.y ** 2)}.png`
+            `asteroid-${+balance ? spriteBasedOnDistance(position.x ** 2 + position.y ** 2) : 12}.png`
           );
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
