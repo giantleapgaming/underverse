@@ -57,6 +57,7 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
         Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
       const refuellerObjectTopLayer = objectPool.get(`refueller-top-move-${entity}`, "Sprite");
       const refuellerObjectGrayLayer = objectPool.get(`refueller-gray-move-${entity}`, "Sprite");
+      const refuellerShipObjectFlame = objectPool.get(`refueller-flame-move-${entity}`, "Sprite");
       const refueller = config.sprites[Sprites.Asteroid12];
       const destinationCircle = phaserScene.add.graphics();
       const sourceCircle = phaserScene.add.graphics();
@@ -89,6 +90,36 @@ export function moveRefueller(network: NetworkLayer, phaser: PhaserLayer) {
             duration: 5_000,
             onComplete: () => {
               objectPool.remove(`refueller-top-move-${entity}`);
+              destinationCircle.clear();
+              sourceCircle.clear();
+            },
+          });
+        },
+      });
+      refuellerShipObjectFlame.setComponent({
+        id: `refueller-flame-move${entity}`,
+        once: (gameObject) => {
+          gameObject.setTexture(refueller.assetKey, `fueler-3.png`);
+          gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
+          gameObject.setDepth(151);
+          gameObject.setOrigin(0.3, 0);
+          gameObject.setScale(1);
+          gameObject.setAngle(angle);
+          phaserScene.add.tween({
+            targets: gameObject,
+            x: {
+              from: gameObject.x,
+              to: destinationPixelX + tileWidth / 2,
+            },
+            y: {
+              from: gameObject.y,
+              to: destinationPixelY + tileHeight / 2,
+            },
+            yoyo: false,
+            repeat: 0,
+            duration: 5_000,
+            onComplete: () => {
+              objectPool.remove(`refueller-flame-move-${entity}`);
               destinationCircle.clear();
               sourceCircle.clear();
             },
