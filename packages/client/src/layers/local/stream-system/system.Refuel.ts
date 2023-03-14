@@ -40,6 +40,7 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
     const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
+    console.log(BigInt(+kgs).toString());
 
     if (
       faction &&
@@ -55,9 +56,20 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
       const color = factionData[+faction]?.color;
       const srcStationName = numberMapping[+destEntityType].name;
       const destStationName = numberMapping[+sourceEntityType].name;
+      const numDigits = kgs.toString().length;
+      let roundedNumber;
+      if (numDigits === 8) {
+        roundedNumber = kgs.toString().substring(0, 2);
+      } else if (numDigits === 9) {
+        roundedNumber = kgs.toString().substring(0, 3);
+      } else if (numDigits === 10) {
+        roundedNumber = kgs.toString().substring(0, 4);
+      } else if (numDigits === 11) {
+        roundedNumber = kgs.toString().substring(0, 5);
+      }
       setLogs(
         `<p>${colorString({ name, color })} moved ${colorString({
-          name: `${+kgs._hex}`,
+          name: `${roundedNumber}`,
           color,
         })} mt from  ${colorString({
           name: srcStationName,
