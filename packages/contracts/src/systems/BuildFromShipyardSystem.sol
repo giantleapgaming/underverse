@@ -99,7 +99,13 @@ contract BuildFromShipyardSystem is System {
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(buildEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(buildEntity, godownInitialBalance);
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(buildEntity, initialEntityPopulation);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
+
+    if (entity_type == 9) {
+      FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel * 5);
+    } else {
+      FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
+    }
+
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(buildEntity, offenceInitialAmount);
     EncounterComponent(getAddressById(components, EncounterComponentID)).set(buildEntity, 0);
   }

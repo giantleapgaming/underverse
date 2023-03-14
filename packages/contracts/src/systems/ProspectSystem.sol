@@ -75,8 +75,14 @@ contract ProspectSystem is System {
     //Check to see if Harvester is close enough to Asteroid (<5 units)
     require(distanceBetweens <= 5000, "Harvester is further than 5 units distance from Asteroid");
 
-    uint256 balance = uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
-      uint256(Math.abs(destinationPosition.x));
+    uint256 balance;
+    if (destinationPosition.x == 0) {
+      balance = 0;
+    } else {
+      balance =
+        uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens))) %
+        uint256(Math.abs(destinationPosition.x));
+    }
 
     balance = balance / 2;
 
@@ -88,10 +94,17 @@ contract ProspectSystem is System {
     ) {
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, asteroidType);
 
-      uint256 asteroidFuel = ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
-        uint256(Math.abs(destinationPosition.y))) *
-        MULTIPLIER *
-        10;
+      uint256 asteroidFuel;
+
+      if (destinationPosition.y == 0) {
+        asteroidFuel = 0;
+      } else {
+        asteroidFuel =
+          ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
+            uint256(Math.abs(destinationPosition.y))) *
+          MULTIPLIER *
+          10;
+      }
 
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance);
       FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel);

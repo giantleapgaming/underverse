@@ -83,7 +83,7 @@ contract MoveShipSystem is System {
 
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
-    require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to transport product");
+    require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to make this move");
 
     // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
     // The greater the distance from center the higher the probability that the second condition will be satisfied
