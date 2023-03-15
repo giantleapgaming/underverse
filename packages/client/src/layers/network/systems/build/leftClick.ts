@@ -1,5 +1,5 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
-import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { toast } from "sonner";
 import { NetworkLayer } from "../..";
 import { Mapping } from "../../../../utils/mapping";
@@ -25,7 +25,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
   const {
     world,
     api: { buildSystem, buildFromHarvesterSystem, buildFromShipyardSystem },
-    components: { Position },
+    components: { Position, NFTID, Cash, Balance },
   } = network;
   const leftClickSub = input.click$.subscribe(async (p) => {
     const nftDetails = getNftId({ network, phaser });
@@ -36,6 +36,21 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
     if (buildDetails && buildDetails?.canPlace && buildDetails.show && nftDetails) {
       sounds["click"].play();
       if (typeof selectedEntity === "undefined" && buildDetails.entityType == Mapping.harvester.id) {
+        const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+          const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+          return nftIdValue && +nftIdValue === nftDetails.tokenId;
+        });
+        const cash = getComponentValue(Cash, ownedByIndex)?.value;
+
+        if (cash && +cash / 10_00_000 < 50_000) {
+          toast.error("Insufficient in-game cash balance to create godown");
+          return;
+        }
+        const distSq = x ** 2 + y ** 2;
+        if (!(distSq < 225 && distSq > 9)) {
+          toast.error("You Can only build between 3 to 15 units from earth");
+          return;
+        }
         toast.promise(
           async () => {
             try {
@@ -62,6 +77,11 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
               buildDetails.entityType == Mapping.residential.id ||
               buildDetails.entityType == Mapping.shipyard.id)
           ) {
+            const balance = selectedEntity && getComponentValue(Balance, selectedEntity)?.value;
+            if (balance && +balance < 2) {
+              toast.error("Need atleast 2 minerals to build anything");
+              return;
+            }
             toast.promise(
               async () => {
                 try {
@@ -86,6 +106,11 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
               }
             );
           } else if (selectedEntity) {
+            const balance = selectedEntity && getComponentValue(Balance, selectedEntity)?.value;
+            if (balance && +balance < 2) {
+              toast.error("Need atleast 2 minerals to build anything");
+              return;
+            }
             toast.promise(
               async () => {
                 try {

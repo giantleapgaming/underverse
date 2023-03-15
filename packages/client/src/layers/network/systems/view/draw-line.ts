@@ -40,7 +40,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, Fuel },
     utils: { getEntityIndexAtPosition },
     api: { moveSystem, prospectSystem },
   } = network;
@@ -74,7 +74,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setPosition(pointer.worldX + 10, pointer.worldY - 30);
           gameObject.depth = 4;
           gameObject.setText(`H Cost - ${fuelCost}`);
-          gameObject.setFontSize(24);
+          gameObject.setFontSize(100);
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
         },
@@ -132,17 +132,17 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             }
           }
         }
+
         if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
             const position = getComponentValueStrict(Position, selectedEntity);
             if (getDistance(position.x, position?.y, x, y) <= 5) {
               setDestinationDetails(stationEntity);
               setShowLine(true, x, y, "harvest");
-            } else {
-              toast.error("Mine Source is further than 5 units distance from target ship");
             }
           }
         }
+
         if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
             setDestinationDetails(stationEntity);
@@ -151,7 +151,9 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
         if (
           entityType &&
-          (+entityType === Mapping.godown.id || +entityType === Mapping.shipyard.id) &&
+          (+entityType === Mapping.godown.id ||
+            +entityType === Mapping.shipyard.id ||
+            +entityType === Mapping.harvester.id) &&
           lineDetails.type === "transport"
         ) {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
@@ -159,36 +161,33 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             setShowLine(true, x, y, "transport");
           }
         }
+
         if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {
           const isProspected = getComponentValueStrict(Prospected, stationEntity).value;
           const nftDetails = getNftId({ network, phaser });
           if (!+isProspected && nftDetails) {
-            if (!obstacleHighlight.length) {
-              toast.promise(
-                async () => {
-                  try {
-                    sounds["confirm"].play();
-                    setShowLine(false);
-                    showProgress();
-                    objectPool.remove(`prospect-text-white`);
-                    await prospectSystem(
-                      world.entities[selectedEntity],
-                      world.entities[stationEntity],
-                      nftDetails.tokenId
-                    );
-                  } catch (e: any) {
-                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                  }
-                },
-                {
-                  loading: "Transaction in progress",
-                  success: `Transaction successful`,
-                  error: (e) => e.message,
+            toast.promise(
+              async () => {
+                try {
+                  sounds["confirm"].play();
+                  setShowLine(false);
+                  showProgress();
+                  objectPool.remove(`prospect-text-white`);
+                  await prospectSystem(
+                    world.entities[selectedEntity],
+                    world.entities[stationEntity],
+                    nftDetails.tokenId
+                  );
+                } catch (e: any) {
+                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                 }
-              );
-            } else {
-              toast.error("Obstacle on the way");
-            }
+              },
+              {
+                loading: "Transaction in progress",
+                success: `Transaction successful`,
+                error: (e) => e.message,
+              }
+            );
           }
         }
         if (
@@ -205,6 +204,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             toast.error("Fuel Source is further than 5 units distance from target ship");
           }
         }
+      } else {
+        toast.error("Obstacle on the way");
       }
     }
     if (
@@ -221,17 +222,23 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const entityIndex = world.entities.indexOf(ownedBy);
         const factionNumber = getComponentValue(Faction, entityIndex)?.value;
         const entityType = getComponentValue(EntityType, selectedEntity)?.value;
-        if (
-          factionNumber &&
-          entityType &&
-          (+entityType === Mapping.harvester.id ||
-            +entityType === Mapping.attack.id ||
-            +entityType === Mapping.refuel.id ||
-            +entityType === Mapping.shipyard.id)
-        ) {
-          const nftDetails = getNftId({ network, phaser });
-          if (nftDetails) {
-            if (!obstacleHighlight.length) {
+        if (!obstacleHighlight.length) {
+          if (
+            factionNumber &&
+            entityType &&
+            (+entityType === Mapping.harvester.id ||
+              +entityType === Mapping.attack.id ||
+              +entityType === Mapping.refuel.id ||
+              +entityType === Mapping.shipyard.id)
+          ) {
+            const nftDetails = getNftId({ network, phaser });
+            if (nftDetails) {
+              const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+              const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
+              if (+fuel / 10_00_000 < fuelCost) {
+                toast.error("Not Enough Fuel to Move Ship");
+                return;
+              }
               toast.promise(
                 async () => {
                   try {
@@ -265,10 +272,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                   error: (e) => e.message,
                 }
               );
-            } else {
-              toast.error("Obstacle on the way");
             }
           }
+        } else {
+          toast.error("Obstacle on the way");
         }
       }
     }
