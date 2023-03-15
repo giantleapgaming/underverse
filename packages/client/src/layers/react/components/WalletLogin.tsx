@@ -175,7 +175,7 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
   return (
     <>
       <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px" }} key={address}>
-        <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}>{index + 1}</span>
+        <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}></span>
         <AccountMenu>
           <p
             onClick={() => {
