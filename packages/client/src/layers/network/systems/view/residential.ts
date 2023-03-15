@@ -122,6 +122,15 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
             objectPool.remove(`residential-population-${entity}-${i}`);
           }
         }
+      } else {
+        objectPool.remove(`residential-top-${entity}`);
+        objectPool.remove(`residential-gray-${entity}`);
+        objectPool.remove(`residential-${entity}`);
+        objectPool.remove(`residential-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`residential-health-${entity}-${i}`);
+          objectPool.remove(`residential-population-${entity}-${i}`);
+        }
       }
     }
   );

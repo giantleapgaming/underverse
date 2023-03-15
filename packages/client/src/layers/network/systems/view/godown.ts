@@ -133,6 +133,15 @@ export function displayGodownSystem(network: NetworkLayer, phaser: PhaserLayer) 
             objectPool.remove(`godown-cargo-${entity}-${i}`);
           }
         }
+      } else {
+        objectPool.remove(`godown-top1-${entity}`);
+        objectPool.remove(`godown-top2-${entity}`);
+        objectPool.remove(`godown-gray-${entity}`);
+        objectPool.remove(`godown-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`godown-health-${entity}-${i}`);
+          objectPool.remove(`godown-cargo-${entity}-${i}`);
+        }
       }
     }
   );

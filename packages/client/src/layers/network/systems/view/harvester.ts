@@ -31,7 +31,6 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
         const defence = getComponentValueStrict(Defence, entity).value;
-
         if (+defence > 0) {
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
@@ -130,6 +129,14 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
             objectPool.remove(`harvester-health-${entity}-${i}`);
             objectPool.remove(`harvester-cargo-${entity}-${i}`);
           }
+        }
+      } else {
+        objectPool.remove(`harvester-top-${entity}`);
+        objectPool.remove(`harvester-gray-${entity}`);
+        objectPool.remove(`harvester-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`harvester-health-${entity}-${i}`);
+          objectPool.remove(`harvester-cargo-${entity}-${i}`);
         }
       }
     }

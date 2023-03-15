@@ -129,6 +129,14 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             objectPool.remove(`attack-health-${entity}-${i}`);
           }
         }
+      } else {
+        objectPool.remove(`attack-top1-${entity}`);
+        objectPool.remove(`attack-top2-${entity}`);
+        objectPool.remove(`attack-gray-${entity}`);
+        objectPool.remove(`attack-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`attack-health-${entity}-${i}`);
+        }
       }
     }
   );

@@ -111,6 +111,13 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
             objectPool.remove(`refuel-health-${entity}-${i}`);
           }
         }
+      } else {
+        objectPool.remove(`refuel-top-${entity}`);
+        objectPool.remove(`refuel-gray-${entity}`);
+        objectPool.remove(`refuel-level-${entity}`);
+        for (let i = 1; i < 11; i++) {
+          objectPool.remove(`refuel-health-${entity}-${i}`);
+        }
       }
     }
   );
