@@ -1185,23 +1185,23 @@
 					}
 				},
 				{
-					"filename": "asteroid-1.png",
+					"filename": "earth.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
-						"w": 512,
+						"w": 520,
 						"h": 512
 					},
 					"spriteSourceSize": {
 						"x": 0,
 						"y": 0,
-						"w": 512,
+						"w": 520,
 						"h": 512
 					},
 					"frame": {
 						"x": 1539,
 						"y": 7175,
-						"w": 512,
+						"w": 520,
 						"h": 512
 					},
 					"anchor": {
@@ -1285,7 +1285,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-2.png",
+					"filename": "asteroid-1.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1299,7 +1299,7 @@
 						"h": 512
 					},
 					"frame": {
-						"x": 2053,
+						"x": 2061,
 						"y": 7175,
 						"w": 512,
 						"h": 512
@@ -1335,7 +1335,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-3.png",
+					"filename": "asteroid-2.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1460,7 +1460,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-4.png",
+					"filename": "asteroid-3.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1474,7 +1474,7 @@
 						"h": 512
 					},
 					"frame": {
-						"x": 2567,
+						"x": 2575,
 						"y": 7055,
 						"w": 512,
 						"h": 512
@@ -1535,7 +1535,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-5.png",
+					"filename": "asteroid-4.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1560,7 +1560,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-6.png",
+					"filename": "asteroid-5.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1585,7 +1585,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-7.png",
+					"filename": "asteroid-6.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1599,7 +1599,7 @@
 						"h": 512
 					},
 					"frame": {
-						"x": 3081,
+						"x": 3089,
 						"y": 6919,
 						"w": 512,
 						"h": 512
@@ -1610,7 +1610,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-8.png",
+					"filename": "asteroid-7.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -1685,7 +1685,7 @@
 					}
 				},
 				{
-					"filename": "explosion-5.png",
+					"filename": "explosion-4.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1693,16 +1693,16 @@
 						"h": 556
 					},
 					"spriteSourceSize": {
-						"x": 93,
-						"y": 118,
-						"w": 387,
-						"h": 370
+						"x": 132,
+						"y": 154,
+						"w": 312,
+						"h": 290
 					},
 					"frame": {
-						"x": 3595,
+						"x": 3603,
 						"y": 6149,
-						"w": 387,
-						"h": 370
+						"w": 312,
+						"h": 290
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -1760,7 +1760,7 @@
 					}
 				},
 				{
-					"filename": "explosion-4.png",
+					"filename": "explosion-5.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -1768,16 +1768,16 @@
 						"h": 556
 					},
 					"spriteSourceSize": {
-						"x": 132,
-						"y": 154,
-						"w": 312,
-						"h": 290
+						"x": 93,
+						"y": 118,
+						"w": 387,
+						"h": 370
 					},
 					"frame": {
 						"x": 3595,
-						"y": 6521,
-						"w": 312,
-						"h": 290
+						"y": 6441,
+						"w": 387,
+						"h": 370
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -1799,7 +1799,7 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 3595,
+						"x": 3603,
 						"y": 6813,
 						"w": 256,
 						"h": 256
@@ -1824,7 +1824,7 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 3595,
+						"x": 3603,
 						"y": 7071,
 						"w": 256,
 						"h": 256
@@ -2035,7 +2035,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-9.png",
+					"filename": "asteroid-8.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2135,7 +2135,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-10.png",
+					"filename": "asteroid-9.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2160,7 +2160,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-11.png",
+					"filename": "asteroid-10.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2260,32 +2260,7 @@
 					}
 				},
 				{
-					"filename": "asteroid-12-assets/asteroid-12.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 512,
-						"h": 512
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 512,
-						"h": 512
-					},
-					"frame": {
-						"x": 6149,
-						"y": 2051,
-						"w": 512,
-						"h": 512
-					},
-					"anchor": {
-						"x": 0.677852,
-						"y": 0.397351
-					}
-				},
-				{
-					"filename": "asteroid-12.png",
+					"filename": "asteroid-11.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2360,7 +2335,32 @@
 					}
 				},
 				{
-					"filename": "asteroid-13.png",
+					"filename": "asteroid-12-assets/asteroid-12.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 512,
+						"h": 512
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 512,
+						"h": 512
+					},
+					"frame": {
+						"x": 6663,
+						"y": 2051,
+						"w": 512,
+						"h": 512
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "asteroid-12.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2435,6 +2435,31 @@
 					}
 				},
 				{
+					"filename": "asteroid-13.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 512,
+						"h": 512
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 512,
+						"h": 512
+					},
+					"frame": {
+						"x": 7177,
+						"y": 2051,
+						"w": 512,
+						"h": 512
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
 					"filename": "ore-transport-1.png",
 					"rotated": false,
 					"trimmed": false,
@@ -2449,8 +2474,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7177,
-						"y": 2051,
+						"x": 7322,
+						"y": 2565,
 						"w": 256,
 						"h": 256
 					},
@@ -2474,8 +2499,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7322,
-						"y": 2309,
+						"x": 7580,
+						"y": 2565,
 						"w": 256,
 						"h": 256
 					},
@@ -2499,7 +2524,7 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7435,
+						"x": 7691,
 						"y": 2051,
 						"w": 256,
 						"h": 256
@@ -2524,8 +2549,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7322,
-						"y": 2567,
+						"x": 7838,
+						"y": 2309,
 						"w": 256,
 						"h": 256
 					},
@@ -2549,8 +2574,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7580,
-						"y": 2309,
+						"x": 7949,
+						"y": 2051,
 						"w": 256,
 						"h": 256
 					},
@@ -2574,8 +2599,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7693,
-						"y": 2051,
+						"x": 7838,
+						"y": 2567,
 						"w": 256,
 						"h": 256
 					},
@@ -2599,35 +2624,10 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7580,
-						"y": 2567,
-						"w": 256,
-						"h": 256
-					},
-					"anchor": {
-						"x": 0.677852,
-						"y": 0.397351
-					}
-				},
-				{
-					"filename": "earth.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 1,
-						"y": 1,
-						"w": 255,
-						"h": 255
-					},
-					"frame": {
-						"x": 7838,
+						"x": 8096,
 						"y": 2309,
-						"w": 255,
-						"h": 255
+						"w": 256,
+						"h": 256
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -2640,6 +2640,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:6f39101f379f7ef03260b3d70323573c:e618e68d169181b26e4e56e35b83728f:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:621c1d703ce87f08ccd2a1a44c000645:557322186c539fffb24085775e4ed9c8:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }
