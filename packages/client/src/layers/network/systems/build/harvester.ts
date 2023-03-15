@@ -62,6 +62,7 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(5);
           gameObject.setAlpha(0.5);
+          gameObject.setAngle(0);
           gameObject.setOrigin(0.5, 0.5);
         },
       });
@@ -73,10 +74,11 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
           gameObject.setDepth(4);
           gameObject.setAlpha(0.1);
-          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(0);
           const address = connectedAddress.get();
           const color = generateColorsFromWalletAddress(`${address}`);
           gameObject.setTint(color[0], color[1], color[2], color[3]);
+          gameObject.setOrigin(0.5, 0.5);
         },
       });
       const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
