@@ -129,6 +129,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               return;
             } else {
               toast.error("Can only attack upto a certain distance based on your level");
+              return;
             }
           }
         }
@@ -202,10 +203,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             setShowLine(true, x, y, "refuel");
           } else {
             toast.error("Fuel Source is further than 5 units distance from target ship");
+            return;
           }
         }
       } else {
         toast.error("Obstacle on the way");
+        return;
       }
     }
     if (
@@ -276,6 +279,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           }
         } else {
           toast.error("Obstacle on the way");
+          return;
         }
       }
     }

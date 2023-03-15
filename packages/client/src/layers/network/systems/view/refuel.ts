@@ -68,17 +68,17 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
               },
             });
           }
-
           const refuel = config.sprites[Sprites.Asteroid12];
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
+
           refuelObjectTopLayer.setComponent({
             id: `refuel-top-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(refuel.assetKey, `fueler-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(4);
-              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
           refuelObjectGrayLayer.setComponent({
@@ -87,10 +87,10 @@ export function displayRefuelSystem(network: NetworkLayer, phaser: PhaserLayer) 
               gameObject.setTexture(refuel.assetKey, `fueler-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
               gameObject.setDepth(3);
-              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
           levelSprite.setComponent({
