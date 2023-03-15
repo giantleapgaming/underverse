@@ -37,37 +37,39 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 const factionNumber = getComponentValue(Faction, nameEntity)?.value;
                 const faction = factionData.find((f) => f.factionNumber === (factionNumber && +factionNumber));
                 return (
-                  <S.Player key={nameEntity}>
-                    <S.CheckBox
-                      type="checkbox"
-                      className={exists ? "checked" : ""}
-                      checked={exists}
-                      onChange={() => {
-                        if (!exists) {
-                          const list = [...selectedEntities, nameEntity];
-                          shouldShowCircle(list);
-                        } else {
-                          const newList = [...selectedEntities];
-                          newList.splice(indexOf, 1);
-                          shouldShowCircle(newList);
-                        }
-                      }}
-                    ></S.CheckBox>
-                    <S.PLayerName style={{ color: faction?.color }}>
-                      {owner ? "Owned" : name?.value}
-                      <br />
-                      <S.Cash style={{ color: "white" }}>
-                        {cash &&
-                          new Intl.NumberFormat("en-US", {
-                            style: "currency",
-                            currency: "USD",
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                          }).format(+cash / 1_000_000)}
-                        <span style={{ color: faction?.color }}>({faction?.name})</span>
-                      </S.Cash>
-                    </S.PLayerName>
-                  </S.Player>
+                  <div key={nameEntity} style={{ height: "40px" }}>
+                    <S.Player>
+                      <S.CheckBox
+                        type="checkbox"
+                        className={exists ? "checked" : ""}
+                        checked={exists}
+                        onChange={() => {
+                          if (!exists) {
+                            const list = [...selectedEntities, nameEntity];
+                            shouldShowCircle(list);
+                          } else {
+                            const newList = [...selectedEntities];
+                            newList.splice(indexOf, 1);
+                            shouldShowCircle(newList);
+                          }
+                        }}
+                      />
+                      <S.PLayerName style={{ color: faction?.color }}>
+                        {owner ? "Owned" : name?.value}
+                        <br />
+                        <S.Cash style={{ color: "white" }}>
+                          {cash &&
+                            new Intl.NumberFormat("en-US", {
+                              style: "currency",
+                              currency: "USD",
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 0,
+                            }).format(+cash / 1_000_000)}
+                          <span style={{ color: faction?.color }}>({faction?.name})</span>
+                        </S.Cash>
+                      </S.PLayerName>
+                    </S.Player>
+                  </div>
                 );
               })}
             </S.List>
@@ -121,12 +123,11 @@ const S = {
     align-items: center;
     overflow-x: hidden;
     justify-content: flex-start;
+    height: 100px;
   `,
   CheckBox: styled.input`
-    /* removing default appearance */
     -webkit-appearance: none;
     appearance: none;
-    /* creating a custom design */
     width: 2.3em;
     height: 2.3em;
     border-radius: 0.12em;
@@ -134,7 +135,6 @@ const S = {
     border: 0.4em solid #00fde4;
     outline: none;
     cursor: pointer;
-
     :checked {
       background-image: url("/ui/check.png");
       position: relative;
