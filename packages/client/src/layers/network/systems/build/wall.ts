@@ -93,8 +93,13 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             destinationPositionX,
             destinationPositionY
           );
+          if (sourcePositionX === destinationPositionX) {
+            toast.error("Start and end point of the wall cannot be same");
+            return;
+          }
           if (allPossiblePosition) {
             toast.error("End point of wall is further than 5 units away from Harvester");
+            return;
           }
           if (balance && +balance < allCords.length) {
             toast.error("Not enough material in harvester to build");
@@ -121,6 +126,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
                 });
                 setBuildWall({});
                 objectPool.remove("wall-balance-harvester");
+                objectPool.remove("wall-balance-harvester-image");
               } catch (e: any) {
                 throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
               }
@@ -140,6 +146,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     setBuildWall({});
     objectPool.remove("build-wall");
     objectPool.remove("wall-balance-harvester");
+    objectPool.remove("wall-balance-harvester-image");
   });
 
   defineComponentSystem(world, BuildWall, () => {
@@ -220,7 +227,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             destinationPositionX,
             destinationPositionY
           );
-
+          const HoverSprite = config.sprites[Sprites.Build1];
           const textWhite = objectPool.get("wall-balance-harvester", "Text");
           textWhite.setComponent({
             id: "wall-balance-harvester",
@@ -230,11 +237,26 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
                 destinationTilePositionY + tileWidth + tileHeight / 2
               );
               gameObject.setDepth(4);
-              gameObject.setText(`Ore - ${allCords.length * 2}`);
+              gameObject.setText(`${allCords.length}`);
               gameObject.setFontSize(100);
               gameObject.setFontStyle("bold");
               gameObject.setColor("#ffffff");
               gameObject.setOrigin(0.5, 0.5);
+            },
+          });
+          const mineral = objectPool.get("wall-balance-harvester-image", "Sprite");
+          mineral.setComponent({
+            id: "wall-balance-harvester-image",
+            once: (gameObject) => {
+              gameObject.setPosition(
+                destinationTilePositionX + tileWidth - 95,
+                destinationTilePositionY + tileWidth + tileHeight / 2 - 10
+              );
+              gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
+              gameObject.depth = 4;
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+              gameObject.setScale(2);
             },
           });
           objectPool.groups.Sprite.getChildren().forEach((gameObject) => {
