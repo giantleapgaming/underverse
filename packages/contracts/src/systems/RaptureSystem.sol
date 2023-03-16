@@ -70,11 +70,21 @@ contract RaptureSystem is System {
 
     if (
       (sourceEntityType == 13) &&
+      (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) != playerID)
+    ) {
+      require(
+        (destinationEntityType == 13),
+        "If Source is a People carrier not owned by you can only rapture to a People carrier owned by you"
+      );
+    }
+
+    if (
+      (sourceEntityType == 13) &&
       (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID)
     ) {
       require(
-        destinationEntityType == 3,
-        "If Source is a People carrier owned by you can transport to Habitat owned by you"
+        (destinationEntityType == 13) || (destinationEntityType == 3),
+        "If Source is a People carrier owned by you can rapture to a People carrier or Hab owned by you"
       );
     }
 
@@ -121,6 +131,8 @@ contract RaptureSystem is System {
     );
 
     uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
+
+    require(totalTransportCost < 25, "You have to be at less than 5 units away");
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
