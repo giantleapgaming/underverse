@@ -4,13 +4,14 @@ import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Sprites } from "../../../phaser/constants";
+import { getNftId } from "../../utils/getNftId";
+import { toast } from "sonner";
 
 export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     scenes: {
       Main: {
         input,
-        phaserScene,
         objectPool,
         config,
         maps: {
@@ -21,15 +22,13 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { BuildWall, ShowStationDetails },
     localIds: { buildId, stationDetailsEntityIndex },
     localApi: { setBuildWall },
+    sounds,
   } = phaser;
   const {
     world,
     components: { Position, Balance },
     api: { wallSystem },
   } = network;
-  const graphics = phaserScene.add.graphics();
-  graphics.lineStyle(30, 0xffffff, 1);
-  const circle = phaserScene.add.circle();
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
     const { worldX, worldY } = pointer;
@@ -81,28 +80,52 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
           type &&
           typeof sourcePositionY == "number" &&
           typeof sourcePositionX == "number" &&
-          allPossiblePosition
+          allPossiblePosition &&
+          typeof destinationPositionX == "number" &&
+          typeof destinationPositionY == "number"
         ) {
-          setBuildWall({
-            ...buildDetails,
-            destinationPositionX: sourceX,
-            destinationPositionY: sourceY,
-            stopBuildWall: true,
-          });
-          try {
-            await wallSystem({
-              entityType: world.entities[selectedEntity],
-              x1: sourcePositionX,
-              y1: sourcePositionY,
-              x2: sourceX,
-              y2: sourceY,
-            });
-            setBuildWall({});
-            graphics.clear();
-            objectPool.remove("balance-harvester");
-          } catch (e) {
-            console.log(e);
+          const balance = getComponentValue(Balance, selectedEntity)?.value;
+          const allCords = getCoordinatesBetweenPoints(
+            sourcePositionX,
+            sourcePositionY,
+            destinationPositionX,
+            destinationPositionY
+          );
+          if (balance && +balance < allCords.length) {
+            toast.error("Not enough material in harvester to build");
+            return;
           }
+
+          if (!(sourcePositionX === destinationPositionX || sourcePositionY === destinationPositionY)) {
+            toast.error("Wall can be made only horizontal or vertical");
+            return;
+          }
+          const nftDetails = getNftId({ network, phaser });
+          if (!nftDetails) return;
+          toast.promise(
+            async () => {
+              try {
+                sounds["confirm"].play();
+                await wallSystem({
+                  entityType: world.entities[selectedEntity],
+                  x1: sourcePositionX,
+                  y1: sourcePositionY,
+                  x2: sourceX,
+                  y2: sourceY,
+                  nftId: nftDetails.tokenId,
+                });
+                setBuildWall({});
+                objectPool.remove("wall-balance-harvester");
+              } catch (e: any) {
+                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+              }
+            },
+            {
+              loading: "Transaction in progress",
+              success: `Transaction successful`,
+              error: (e) => e.message,
+            }
+          );
         }
       }
     }
@@ -110,28 +133,20 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   const rightClick = input.rightClick$.subscribe(() => {
     setBuildWall({});
-    graphics.clear();
-    circle.setAlpha(0);
     objectPool.remove("build-wall");
-    objectPool.remove("balance-harvester");
+    objectPool.remove("wall-balance-harvester");
   });
 
   defineComponentSystem(world, BuildWall, () => {
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     if (selectedEntity) {
       const position = getComponentValue(Position, selectedEntity);
-      const balance = getComponentValue(Balance, selectedEntity)?.value;
-
       if (position) {
         const { x: selectedDetailsPositionX, y: selectedDetailsPositionY } = tileCoordToPixelCoord(
           { x: position.x, y: position.y },
           tileWidth,
           tileHeight
         );
-        circle.setPosition(selectedDetailsPositionX + 32, selectedDetailsPositionY + 32);
-        circle.setStrokeStyle(0.3, 0x2d2d36);
-        circle.setDisplaySize(704, 704);
-        circle.setAlpha(1);
         const buildDetails = getComponentValue(BuildWall, buildId);
         const sourcePositionX = buildDetails?.sourcePositionX;
         const sourcePositionY = buildDetails?.sourcePositionY;
@@ -141,6 +156,20 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
         const stopBuildWall = buildDetails?.stopBuildWall;
         const type = buildDetails?.type === "buildWall";
         if (showBuildWall && type) {
+          const radius = objectPool.get("built-wall-harvester-wall", "Sprite");
+          const HoverSprite = config.sprites[Sprites.Asteroid12];
+          radius.setComponent({
+            id: "built-wall-harvester-wall",
+            once: (gameObject) => {
+              gameObject.setTexture(HoverSprite.assetKey, `yellow-circle.png`);
+              gameObject.setPosition(
+                selectedDetailsPositionX + tileWidth / 2,
+                selectedDetailsPositionY + tileHeight / 2
+              );
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(0);
+            },
+          });
           const showHover = buildDetails?.showHover;
           const hoverX = buildDetails?.hoverX;
           const hoverY = buildDetails?.hoverY;
@@ -154,16 +183,17 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
               once: (gameObject) => {
                 gameObject.setTexture(HoverSprite.assetKey, `wall.png`);
                 gameObject.setPosition(x, y);
+                gameObject.setDepth(4);
+                gameObject.setAngle(180);
                 gameObject.setOrigin(0.5, 0.5);
-                gameObject.depth = 4;
-                gameObject.setAngle(0);
               },
             });
-            graphics.clear();
             return;
           } else {
             objectPool.remove("build-wall");
           }
+        } else {
+          objectPool.remove("built-wall-harvester-wall");
         }
         if (
           typeof sourcePositionX === "number" &&
@@ -174,46 +204,64 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
           !stopBuildWall &&
           type
         ) {
-          graphics.clear();
-          graphics.lineStyle(30, 0xeeeeee, 1);
-          const { x: sourceTilePositionX, y: sourceTilePositionY } = tileCoordToPixelCoord(
-            { x: sourcePositionX, y: sourcePositionY },
-            tileWidth,
-            tileHeight
-          );
           const { x: destinationTilePositionX, y: destinationTilePositionY } = tileCoordToPixelCoord(
             { x: destinationPositionX, y: destinationPositionY },
             tileWidth,
             tileHeight
           );
-          const textWhite = objectPool.get("balance-harvester", "Text");
+          const allCords = getCoordinatesBetweenPoints(
+            sourcePositionX,
+            sourcePositionY,
+            destinationPositionX,
+            destinationPositionY
+          );
+
+          const textWhite = objectPool.get("wall-balance-harvester", "Text");
           textWhite.setComponent({
-            id: "balance-harvester",
+            id: "wall-balance-harvester",
             once: (gameObject) => {
-              gameObject.setPosition(destinationTilePositionX + 10, destinationTilePositionY + 30);
-              gameObject.depth = 4;
-              gameObject.setText(`Ore - ${balance && +balance}`);
-              gameObject.setFontSize(12);
+              gameObject.setPosition(
+                destinationTilePositionX + tileWidth,
+                destinationTilePositionY + tileWidth + tileHeight / 2
+              );
+              gameObject.setDepth(4);
+              gameObject.setText(`Ore - ${allCords.length * 2}`);
+              gameObject.setFontSize(100);
               gameObject.setFontStyle("bold");
               gameObject.setColor("#ffffff");
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
-          const x1 = sourceTilePositionX;
-          const y1 = sourceTilePositionY;
-          const x2 = destinationTilePositionX;
-          const y2 = destinationTilePositionY;
-          const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
-          const dotSize = 10;
-          const gapSize = 30;
-          const angle = Math.atan2(y2 - y1, x2 - x1);
-          graphics.moveTo(x1, y1);
-          for (let i = 0; i < lineLength; i += dotSize + gapSize) {
-            graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
-            graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
-          }
-          x1 === x2 || y1 === y2 ? graphics.lineStyle(30, 0xffffff, 1) : graphics.lineStyle(30, 0xff0000, 1);
-          graphics.lineTo(x2, y2);
-          graphics.strokePath();
+          objectPool.groups.Sprite.getChildren().forEach((gameObject) => {
+            if (gameObject.name.startsWith("wall-build-")) {
+              objectPool.remove(gameObject.name);
+            }
+          });
+          allCords.forEach(([cordX, cordY], i) => {
+            const { x, y } = tileCoordToPixelCoord({ x: cordX, y: cordY }, tileWidth, tileHeight);
+            const astroidObject = objectPool.get(`wall-build-${i}`, "Sprite");
+            const attack = config.sprites[Sprites.Asteroid12];
+            astroidObject.setComponent({
+              id: `wall-build-${i}`,
+              once: (gameObject) => {
+                gameObject.setTexture(attack.assetKey, `wall.png`);
+                gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+                gameObject.setDepth(1);
+                gameObject.setAngle(90);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setName(`wall-build-${i}`);
+                if (!(sourcePositionX === destinationPositionX || sourcePositionY === destinationPositionY)) {
+                  gameObject.setTint(0xff0000);
+                }
+              },
+            });
+          });
+        } else {
+          objectPool.groups.Sprite.getChildren().forEach((gameObject) => {
+            if (gameObject.name.startsWith("wall-build-")) {
+              objectPool.remove(gameObject.name);
+            }
+          });
         }
       }
     }
@@ -221,4 +269,42 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
   world.registerDisposer(() => hoverSub?.unsubscribe());
   world.registerDisposer(() => click?.unsubscribe());
   world.registerDisposer(() => rightClick?.unsubscribe());
+}
+
+function getCoordinatesBetweenPoints(x1: number, y1: number, x2: number, y2: number): [number, number][] {
+  const coordinates: [number, number][] = [];
+
+  // Calculate the deltas and directions for the x and y axes
+  const dx = Math.abs(x2 - x1);
+  const dy = Math.abs(y2 - y1);
+  const sx = x1 < x2 ? 1 : -1;
+  const sy = y1 < y2 ? 1 : -1;
+
+  // Calculate the initial error term
+  let err = dx - dy;
+
+  // Add the starting point to the coordinates array
+  coordinates.push([x1, y1]);
+
+  // Loop until we reach the destination point
+  while (x1 !== x2 || y1 !== y2) {
+    // Calculate the next point
+    const e2 = 2 * err;
+    if (e2 > -dy) {
+      err -= dy;
+      x1 += sx;
+    }
+    if (e2 < dx) {
+      err += dx;
+      y1 += sy;
+    }
+
+    // Add the current point to the coordinates array
+    coordinates.push([x1, y1]);
+  }
+
+  // Add the final point to the coordinates array
+  coordinates.push([x2, y2]);
+
+  return coordinates;
 }
