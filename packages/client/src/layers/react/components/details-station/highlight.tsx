@@ -2,12 +2,12 @@ import styled from "styled-components";
 import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
-
+import { Mapping } from "../../../../utils/mapping";
 export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction },
+      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType },
       network: { connectedAddress },
     },
     phaser: {
@@ -29,6 +29,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             <S.HighLight>HIGHLIGHT</S.HighLight>
             <S.List>
               {allUserNameEntityId.map((nameEntity) => {
+                let totalPopulation = 0;
+                let totalLevel = 0;
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
                 const owner = world.entities[nameEntity] === userEntityId;
@@ -36,6 +38,24 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 const exists = selectedEntities.some((entity) => entity === nameEntity);
                 const factionNumber = getComponentValue(Faction, nameEntity)?.value;
                 const faction = factionData.find((f) => f.factionNumber === (factionNumber && +factionNumber));
+                [...getComponentEntities(Position)].forEach((entity) => {
+                  const entityType = getComponentValue(EntityType, entity)?.value;
+                  const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
+                  const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
+                  if (
+                    entityType &&
+                    +entityType === Mapping.residential.id &&
+                    nameEntity &&
+                    nameEntity === positionOwnedByIndex
+                  ) {
+                    const population = getComponentValue(Population, entity)?.value;
+                    const level = getComponentValue(Level, entity)?.value;
+                    if (population && level) {
+                      totalPopulation += +population;
+                      totalLevel += +level;
+                    }
+                  }
+                });
                 return (
                   <div key={nameEntity} style={{ height: "40px" }}>
                     <S.Player>
@@ -65,7 +85,13 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 0,
                             }).format(+cash / 1_000_000)}
-                          <span style={{ color: faction?.color }}>({faction?.name})</span>
+                          <span>
+                            <img
+                              src="/build-stations/users.png"
+                              style={{ height: "15px", width: "20px", margin: " 0 4px" }}
+                            />
+                            ({totalPopulation}/{totalLevel})
+                          </span>
                         </S.Cash>
                       </S.PLayerName>
                     </S.Player>
@@ -81,7 +107,6 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     return null;
   }
 };
-
 const S = {
   Container: styled.div`
     pointer-events: fill;
@@ -91,19 +116,16 @@ const S = {
     gap: 10px;
     margin-top: 100px;
   `,
-
   HighLight: styled.h3`
     color: white;
     position: absolute;
     top: 30px;
     left: 90px;
   `,
-
   DetailsContainer: styled.div`
     position: relative;
     margin-top: -30px;
   `,
-
   List: styled.div`
     position: absolute;
     top: 80px;
@@ -111,7 +133,7 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    max-height: 440px;
+    height: 440px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 10px;
@@ -144,12 +166,10 @@ const S = {
       background-repeat: no-repeat;
     }
   `,
-
   PLayerName: styled.p`
     font-size: 16px;
     font-weight: 700;
   `,
-
   Cash: styled.span`
     font-size: 16px;
     font-weight: bold;

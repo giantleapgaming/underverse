@@ -58,7 +58,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                 POSITION {position.x}/{position.y}
               </S.Text>
             </S.Column>
-            <S.Column style={{ width: "325px" }}>
+            <S.Column style={{ width: "340px" }}>
               <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
                 <S.Weapon>
                   <img src="/build-stations/shied.png" />
