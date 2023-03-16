@@ -82,7 +82,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Weapon>
                   <img src="/build-stations/hydrogen.png" />
                   <p>
-                    {Math.floor(+fuel / 10_00_000)}/{level * 1000}
+                    {Math.floor(+fuel / 10_00_000)}/{level * 2000}
                   </p>
                 </S.Weapon>
               </S.Row>
