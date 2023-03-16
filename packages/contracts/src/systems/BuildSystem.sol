@@ -65,7 +65,6 @@ contract BuildSystem is System {
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
 
     uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
-    uint256 initialFuel = baseInitialfuel;
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
@@ -81,7 +80,7 @@ contract BuildSystem is System {
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, initialFuel);
+    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
     EncounterComponent(getAddressById(components, EncounterComponentID)).set(godownEntity, 0);
 
     // update player data

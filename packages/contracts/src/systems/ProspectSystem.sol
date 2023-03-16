@@ -103,7 +103,7 @@ contract ProspectSystem is System {
           ((uint256(keccak256(abi.encodePacked(block.timestamp, distanceBetweens)))) %
             uint256(Math.abs(destinationPosition.y))) *
           MULTIPLIER *
-          10;
+          20;
       }
 
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance);

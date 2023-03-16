@@ -82,7 +82,7 @@ contract RefuelSystem is System {
       );
     } else {
       require(
-        destinationFuel + kgs <= (destinationLevel * 1000 * MULTIPLIER),
+        destinationFuel + kgs <= (destinationLevel * 2000 * MULTIPLIER),
         "Supplied Fuel is more than destination  storage capacity"
       );
     }
