@@ -7,7 +7,6 @@ import { convertPrice } from "../../react/utils/priceConverter";
 import { Highlight } from "./details-station/highlight";
 import { Mapping } from "../../../utils/mapping";
 import { getNftId } from "../../network/utils/getNftId";
-
 const Cash = ({ layers }: { layers: Layers }) => {
   const {
     network: {
@@ -24,7 +23,6 @@ const Cash = ({ layers }: { layers: Layers }) => {
     return nftIdValue && +nftIdValue === nftDetails.tokenId;
   });
   const cash = getComponentValue(Cash, ownedByIndex)?.value;
-
   let totalPopulation = 0;
   let totalLevel = 0;
   [...getComponentEntities(Position)].forEach((entity) => {
@@ -67,7 +65,6 @@ const Cash = ({ layers }: { layers: Layers }) => {
     </>
   );
 };
-
 export const registerCashDetails = () => {
   registerUIComponent(
     "CashDetails",
