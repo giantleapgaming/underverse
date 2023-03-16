@@ -422,13 +422,39 @@ function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
 }
 
 function createEncounterEntity(IWorld world, IUint256Component components, int32 x, int32 y, uint256 sourceEntity) {
-  uint256 ent = world.getUniqueEntityId();
-  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
-  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
-  ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
-  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, unprospected);
-  //We set the calling entity encounter ID to the newly created entity and vice versa
-  //That way we know which 2 entities belong to a specific encounter
-  // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
-  // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
+  bool occupied25 = false;
+  for (int32 i = x - 2; i <= x + 2; i++) {
+    for (int32 j = y - 2; j <= y + 2; j++) {
+      uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+        .getEntitiesWithValue(Coord({ x: i, y: j }));
+
+      if (arrayOfGodownsAtThatCoord.length > 0) {
+        for (int32 k = 0; k < int32(int256(arrayOfGodownsAtThatCoord.length)); k++) {
+          uint256 itsGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+            arrayOfGodownsAtThatCoord[uint256(uint32(k))]
+          );
+
+          if (itsGodownLevel > 0) {
+            occupied25 = true;
+          }
+          // require(
+          //   itsGodownLevel == 0,
+          //   "A godown has already been placed on this position or in the adjacent 8 cells"
+          // );
+        }
+      }
+    }
+  }
+
+  if (occupied25 == false) {
+    uint256 ent = world.getUniqueEntityId();
+    PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+    LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
+    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, unprospected);
+    //We set the calling entity encounter ID to the newly created entity and vice versa
+    //That way we know which 2 entities belong to a specific encounter
+    // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
+    // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
+  }
 }
