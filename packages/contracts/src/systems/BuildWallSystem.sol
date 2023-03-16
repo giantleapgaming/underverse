@@ -119,6 +119,7 @@ contract BuildWallSystem is System {
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
         DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
+        OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
       }
     }
     //vertical
@@ -136,6 +137,7 @@ contract BuildWallSystem is System {
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
         DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
+        OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
       }
     }
 
