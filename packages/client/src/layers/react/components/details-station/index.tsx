@@ -7,7 +7,7 @@ import { DetailsLayout } from "./layoutDetails";
 const Details = ({ layers }: { layers: Layers }) => {
   return (
     <div style={{ display: "flex", height: "100%", position: "relative", justifyContent: "end", alignItems: "end" }}>
-      <DetailsLayout layers={layers} />;
+      <DetailsLayout layers={layers} />
     </div>
   );
 };
