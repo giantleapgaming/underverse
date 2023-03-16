@@ -250,7 +250,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
               id: `wall-build-${i}`,
               once: (gameObject) => {
                 gameObject.setTexture(attack.assetKey, `wall.png`);
-                gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+                gameObject.setPosition(x, y);
                 gameObject.setDepth(1);
                 gameObject.setAngle(90);
                 gameObject.setOrigin(0.5, 0.5);
@@ -277,6 +277,11 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
 }
 
 function getCoordinatesBetweenPoints(x1: number, y1: number, x2: number, y2: number): [number, number][] {
+  // Check if the input points are the same
+  if (x1 === x2 && y1 === y2) {
+    return [[x1, y1]];
+  }
+
   const coordinates: [number, number][] = [];
 
   // Calculate the deltas and directions for the x and y axes
@@ -307,9 +312,6 @@ function getCoordinatesBetweenPoints(x1: number, y1: number, x2: number, y2: num
     // Add the current point to the coordinates array
     coordinates.push([x1, y1]);
   }
-
-  // Add the final point to the coordinates array
-  coordinates.push([x2, y2]);
 
   return coordinates;
 }
