@@ -40,24 +40,46 @@ contract RaptureSystem is System {
     // Check if source and destination are planet and residential station respectively
 
     require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 6,
-      "Source has to be a Planet"
-    );
-
-    require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(destinationEntity) == 3,
-      "Destination has to be a residential station"
-    );
-
-    require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) == playerID,
-      "Destination station not owned by user"
+      "Destination vessel not owned by user"
     );
 
-    uint256 destinationGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+      sourceEntity
+    );
+    uint256 destinationEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
       destinationEntity
     );
-    require(destinationGodownLevel >= 1, "Invalid destination godown entity");
+
+    require(
+      (sourceEntityType == 6 || sourceEntityType == 3 || sourceEntityType == 13),
+      "Source has to be a Planet or Habitat or People Carrier"
+    );
+
+    require(
+      (destinationEntityType == 3 || sourceEntityType == 13),
+      "Destination has to be a Habitat or People Carrier"
+    );
+
+    if (sourceEntityType == 6 || sourceEntityType == 3) {
+      require(
+        destinationEntityType == 13,
+        "If Source is a Planet or a Habitat, Destination has to be a People Carrier Ship"
+      );
+    }
+
+    if (
+      (sourceEntityType == 13) &&
+      (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID)
+    ) {
+      require(
+        destinationEntityType == 3,
+        "If Source is a People carrier owned by you can transport to Habitat owned by you"
+      );
+    }
+
+    uint256 destinationLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(destinationEntity);
+    require(destinationLevel >= 1, "Invalid destination godown entity");
 
     uint256 sourcePopulation = PopulationComponent(getAddressById(components, PopulationComponentID)).getValue(
       sourceEntity
@@ -69,41 +91,36 @@ contract RaptureSystem is System {
 
     require(
       peopleTransported <= sourcePopulation,
-      "People being transported is more than available population on the planet"
+      "People being transported is more than available population on the source"
     );
 
     require(
-      destinationPopulation + peopleTransported <= destinationGodownLevel,
-      "People being transported is more than available residential space at station"
+      destinationPopulation + peopleTransported <= destinationLevel,
+      "People being transported is more than available residential space at the destination"
     );
 
-    Coord memory sourceGodownPosition = getCurrentPosition(
+    Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       sourceEntity
     );
 
-    Coord memory destinationGodownPosition = getCurrentPosition(
+    Coord memory destinationPosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       destinationEntity
     );
 
     require(
       atleastOneObstacleOnTheWay(
-        sourceGodownPosition.x,
-        sourceGodownPosition.y,
-        destinationGodownPosition.x,
-        destinationGodownPosition.y,
+        sourcePosition.x,
+        sourcePosition.y,
+        destinationPosition.x,
+        destinationPosition.y,
         components
       ) == false,
       "Obstacle on the way"
     );
 
-    uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
-      sourceGodownPosition,
-      destinationGodownPosition
-    );
-
-    uint256 totalTransportCost = ((distanceBetweenGodowns * peopleTransported) ** 2);
+    uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
@@ -124,9 +141,9 @@ contract RaptureSystem is System {
 
     //Create new person entities on the destination station once rapture occurs
 
-    for (uint256 i = 0; i < peopleTransported; i++) {
-      createPerson(world, components, destinationGodownPosition.x, destinationGodownPosition.y);
-    }
+    // for (uint256 i = 0; i < peopleTransported; i++) {
+    //   createPerson(world, components, destinationGodownPosition.x, destinationGodownPosition.y);
+    // }
   }
 
   function executeTyped(

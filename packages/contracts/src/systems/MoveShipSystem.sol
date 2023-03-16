@@ -48,8 +48,8 @@ contract MoveShipSystem is System {
     );
 
     require(
-      sourceEntityType == 4 || sourceEntityType == 5 || sourceEntityType == 9,
-      "Source has to be an Harvester, Attack ship or fuel carrier"
+      sourceEntityType == 4 || sourceEntityType == 5 || sourceEntityType == 9 || sourceEntityType == 13,
+      "Source has to be an Harvester, Attack ship or fuel carrier or People Carrier"
     );
 
     // require(
