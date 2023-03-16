@@ -70,17 +70,19 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
         if (
           showBuildWall &&
           type &&
-          !(typeof destinationPositionX == "number" && typeof destinationPositionY == "number") &&
-          allPossiblePosition
+          !(typeof destinationPositionX == "number" && typeof destinationPositionY == "number")
         ) {
-          setBuildWall({ ...buildDetails, sourcePositionX: sourceX, sourcePositionY: sourceY, showHover: false });
+          if (allPossiblePosition) {
+            setBuildWall({ ...buildDetails, sourcePositionX: sourceX, sourcePositionY: sourceY, showHover: false });
+          } else {
+            toast.error("Start point of wall is further than 5 units away from Harvester");
+          }
         }
         if (
           showBuildWall &&
           type &&
           typeof sourcePositionY == "number" &&
           typeof sourcePositionX == "number" &&
-          allPossiblePosition &&
           typeof destinationPositionX == "number" &&
           typeof destinationPositionY == "number"
         ) {
@@ -91,6 +93,9 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             destinationPositionX,
             destinationPositionY
           );
+          if (allPossiblePosition) {
+            toast.error("End point of wall is further than 5 units away from Harvester");
+          }
           if (balance && +balance < allCords.length) {
             toast.error("Not enough material in harvester to build");
             return;
