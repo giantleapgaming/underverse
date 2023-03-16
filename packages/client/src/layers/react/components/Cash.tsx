@@ -54,7 +54,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
         }}
       >
         <p>{cash && convertPrice(+cash / 10_00_000)}</p>
-        {!!totalLevel && (
+        {typeof totalLevel === "number" && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
             <img src="/build-stations/users.png" />
             <p>
