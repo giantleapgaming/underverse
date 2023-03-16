@@ -935,24 +935,24 @@
 					}
 				},
 				{
-					"filename": "wall.png",
+					"filename": "pebble-1-3.png",
 					"rotated": false,
-					"trimmed": false,
+					"trimmed": true,
 					"sourceSize": {
-						"w": 40,
-						"h": 19
+						"w": 64,
+						"h": 64
 					},
 					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 40,
-						"h": 19
+						"x": 24,
+						"y": 25,
+						"w": 19,
+						"h": 17
 					},
 					"frame": {
 						"x": 870,
 						"y": 8159,
-						"w": 40,
-						"h": 19
+						"w": 19,
+						"h": 17
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -978,31 +978,6 @@
 						"y": 8115,
 						"w": 37,
 						"h": 38
-					},
-					"anchor": {
-						"x": 0.677852,
-						"y": 0.397351
-					}
-				},
-				{
-					"filename": "pebble-1-3.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 64,
-						"h": 64
-					},
-					"spriteSourceSize": {
-						"x": 24,
-						"y": 25,
-						"w": 19,
-						"h": 17
-					},
-					"frame": {
-						"x": 912,
-						"y": 8155,
-						"w": 19,
-						"h": 17
 					},
 					"anchor": {
 						"x": 0.677852,
@@ -1436,6 +1411,31 @@
 				},
 				{
 					"filename": "fueler-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 60,
+						"h": 135
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 60,
+						"h": 134
+					},
+					"frame": {
+						"x": 2559,
+						"y": 6919,
+						"w": 60,
+						"h": 134
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "passenger-3.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -2510,7 +2510,7 @@
 					}
 				},
 				{
-					"filename": "shipyard-new-1.png",
+					"filename": "passenger-1.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -2525,6 +2525,56 @@
 					},
 					"frame": {
 						"x": 7691,
+						"y": 2051,
+						"w": 256,
+						"h": 256
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "passenger-2.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 7838,
+						"y": 2309,
+						"w": 256,
+						"h": 256
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "shipyard-new-1.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 7949,
 						"y": 2051,
 						"w": 256,
 						"h": 256
@@ -2550,7 +2600,7 @@
 					},
 					"frame": {
 						"x": 7838,
-						"y": 2309,
+						"y": 2567,
 						"w": 256,
 						"h": 256
 					},
@@ -2574,8 +2624,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7949,
-						"y": 2051,
+						"x": 8096,
+						"y": 2309,
 						"w": 256,
 						"h": 256
 					},
@@ -2599,8 +2649,83 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 7838,
+						"x": 8096,
 						"y": 2567,
+						"w": 256,
+						"h": 256
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "tron.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 8199,
+						"y": 1,
+						"w": 256,
+						"h": 256
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "wall-highlight.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 8199,
+						"y": 259,
+						"w": 256,
+						"h": 256
+					},
+					"anchor": {
+						"x": 0.677852,
+						"y": 0.397351
+					}
+				},
+				{
+					"filename": "wall.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 256,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 256,
+						"h": 256
+					},
+					"frame": {
+						"x": 8199,
+						"y": 517,
 						"w": 256,
 						"h": 256
 					},
@@ -2624,8 +2749,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 8096,
-						"y": 2309,
+						"x": 8199,
+						"y": 775,
 						"w": 256,
 						"h": 256
 					},
@@ -2640,6 +2765,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:621c1d703ce87f08ccd2a1a44c000645:557322186c539fffb24085775e4ed9c8:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:0128eb42592b5ed1bf0599d4e4e73dd5:f38866e829bef78d8343e4c8109a3851:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }
