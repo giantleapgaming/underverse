@@ -23,7 +23,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
     return (
       <S.Flex>
         <S.Button onClick={() => build(Mapping.attack.id)}>
-          <S.Title>Attack Ship</S.Title>
+          <S.Title>Attack</S.Title>
           <S.Img src="/layout/hex.png" width="50px" height="44px" />
           <S.Img src={`/build-stations/attack.png`} width="30px" height="30px" />
           <S.ImgCrystal>
@@ -44,6 +44,15 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           <S.Title>Fueler</S.Title>
           <S.Img src="/layout/hex.png" width="50px" height="44px" />
           <S.Img src="/build-stations/fueler.png" width="30px" height="30px" />
+          <S.ImgCrystal>
+            <img src="/build-stations/crystal.png" width="15px" height="15px" />
+            <S.BalanceText>2</S.BalanceText>
+          </S.ImgCrystal>
+        </S.Button>
+        <S.Button onClick={() => build(Mapping.passenger.id)}>
+          <S.Title>Passenger</S.Title>
+          <S.Img src="/layout/hex.png" width="50px" height="44px" />
+          <S.Img src="/build-stations/passenger.png" width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
             <S.BalanceText>2</S.BalanceText>
@@ -93,6 +102,7 @@ const S = {
     align-items: center;
     justify-content: center;
     margin: auto;
+    object-fit: contain;
   `,
   ImgCrystal: styled.div`
     display: flex;

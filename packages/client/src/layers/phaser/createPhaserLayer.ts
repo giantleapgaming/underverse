@@ -79,6 +79,8 @@ import { moveRefueller } from "../network/systems/action/move/moveRefueller";
 import { displayEncounter } from "../network/systems/view/encounter";
 import { displayPirateShipSystem } from "../network/systems/view/pirateShip";
 import { highlightMaxDistance } from "../network/systems/view/highlightMaxDistance";
+import { buildPassengerSystem } from "../network/systems/build/passenger";
+import { displayPassengerSystem } from "../network/systems/view/passenger";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -366,6 +368,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   buildRefuelSystem(network, context);
   buildShipyardSystem(network, context);
   buildWallSystem(network, context);
+  buildPassengerSystem(network, context);
   //to display all the station
   displayAttackSystem(network, context);
   displayAsteroidSystem(network, context);
@@ -379,6 +382,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayEncounter(network, context);
   displayWallSystem(network, context);
   displayPirateShipSystem(network, context);
+  displayPassengerSystem(network, context);
   highlightMaxDistance(network, context);
   //Select system for the station
   selectClickSystem(network, context);
