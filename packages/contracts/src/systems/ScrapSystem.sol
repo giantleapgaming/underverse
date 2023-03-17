@@ -8,8 +8,8 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
-import { checkNFT } from "../utils.sol";
-import { nftContract, harvesterType, godownInitialLevel, baseInitialfuel } from "../constants.sol";
+import { checkNFT, deleteGodown } from "../utils.sol";
+import { nftContract, harvesterType, godownInitialLevel, baseInitialfuel, barrier } from "../constants.sol";
 
 uint256 constant ID = uint256(keccak256("system.Scrap"));
 
@@ -32,9 +32,13 @@ contract ScrapSystem is System {
     uint256 selectedEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
     require(selectedEntityLevel >= 1, "Invalid godown entity");
 
-    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, harvesterType);
-    LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
+    if (EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(godownEntity) == barrier) {
+      deleteGodown(godownEntity, components);
+    } else {
+      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, harvesterType);
+      LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
+      FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
+    }
   }
 
   function executeTyped(uint256 entity, uint256 nftID) public returns (bytes memory) {
