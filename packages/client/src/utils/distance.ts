@@ -133,7 +133,7 @@ export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
 //   return points;
 // }
 
-export function getObstacleList(arrayOfPointsOnThePath: any[], layer: Layers) {
+export function getObstacleListWhileMove(arrayOfPointsOnThePath: any[], layer: Layers) {
   const { network, phaser } = layer;
   const {
     world,
@@ -185,6 +185,23 @@ export function getObstacleList(arrayOfPointsOnThePath: any[], layer: Layers) {
           obstaclePoints.push(entityOnThatPoint);
         }
       }
+    }
+  }
+  return obstaclePoints;
+}
+
+export function getObstacleListWhileOtherActions(arrayOfPointsOnThePath: any[], layer: Layers) {
+  const { network, phaser } = layer;
+  const {
+    utils: { getEntityIndexAtPosition },
+    components: { Level },
+  } = network;
+  const obstaclePoints: any[] = [];
+  for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {
+    const entityOnThatPoint = getEntityIndexAtPosition(arrayOfPointsOnThePath[i].x, arrayOfPointsOnThePath[i].y);
+    const getLevel = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
+    if (getLevel > 0) {
+      obstaclePoints.push(entityOnThatPoint);
     }
   }
   return obstaclePoints;
