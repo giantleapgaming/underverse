@@ -52,7 +52,7 @@ contract BuildFromShipyardSystem is System {
     );
 
     require(
-      (entity_type == 4 || entity_type == 5 || entity_type == 9),
+      (entity_type == 4 || entity_type == 5 || entity_type == 9 || entity_type == 13),
       "Can only build Attack or Harvester or fuel carrier ships"
     );
 

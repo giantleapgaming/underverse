@@ -132,11 +132,15 @@ contract RaptureSystem is System {
 
     uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
 
-    require(totalTransportCost < 49, "You have to be at less than 7 units away");
-
-    //Increase cost of rapture from earth
+    //Increase cost of rapture from earth and allow longer raptures
     if (sourceEntityType == 6) {
+      require(totalTransportCost < 100, "You have to be at less than 10 units away if rapturing from earth");
       totalTransportCost = totalTransportCost * 5;
+    } else {
+      require(
+        totalTransportCost < 25,
+        "You have to be at less than 5 units away if rapturing from hab or other ppl carrier"
+      );
     }
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
