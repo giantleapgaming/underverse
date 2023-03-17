@@ -70,7 +70,7 @@ contract RepairSystem is System {
     uint256 factionCostPercent = getFactionRepairCosts(Faction(userFaction));
 
     uint256 repairCash = ((((godownCreationCost + totalGodownUpgradeCostUntilLevel) * damagePercent) / 100) *
-      factionCostPercent) / 100;
+      factionCostPercent) / 200;
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
