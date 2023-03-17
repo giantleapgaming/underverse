@@ -107,10 +107,7 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             toast.error("Wall can be made only horizontal or vertical");
             return;
           }
-          if (sourcePositionX === destinationPositionY || sourcePositionY === destinationPositionX) {
-            toast.error("Start and end point of the wall cannot be same");
-            return;
-          }
+
           const nftDetails = getNftId({ network, phaser });
           if (!nftDetails) return;
           toast.promise(
