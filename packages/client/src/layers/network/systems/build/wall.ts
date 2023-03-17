@@ -93,11 +93,8 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
             destinationPositionX,
             destinationPositionY
           );
-          if (sourcePositionX === destinationPositionX) {
-            toast.error("Start and end point of the wall cannot be same");
-            return;
-          }
-          if (allPossiblePosition) {
+
+          if (!allPossiblePosition) {
             toast.error("End point of wall is further than 5 units away from Harvester");
             return;
           }
@@ -108,6 +105,10 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
           if (!(sourcePositionX === destinationPositionX || sourcePositionY === destinationPositionY)) {
             toast.error("Wall can be made only horizontal or vertical");
+            return;
+          }
+          if (sourcePositionX === destinationPositionY || sourcePositionY === destinationPositionX) {
+            toast.error("Start and end point of the wall cannot be same");
             return;
           }
           const nftDetails = getNftId({ network, phaser });
