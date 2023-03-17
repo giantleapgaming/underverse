@@ -10,7 +10,7 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
-import { getCurrentPosition, getLastUpdatedTimeOfEntity, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay } from "../utils.sol";
+import { getCurrentPosition, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay } from "../utils.sol";
 import { godownInitialLevel, barrier } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -118,7 +118,7 @@ contract BuildWallSystem is System {
         PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
-        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
+        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
         OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
       }
     }
@@ -136,7 +136,7 @@ contract BuildWallSystem is System {
         PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
         LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
         EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
-        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 1000);
+        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
         OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
       }
     }
