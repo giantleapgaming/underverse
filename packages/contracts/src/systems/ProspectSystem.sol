@@ -18,7 +18,7 @@ import { EncounterComponent, ID as EncounterComponentID } from "../components/En
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { nftContract } from "../constants.sol";
+import { nftContract, defenceInitialAmount } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
@@ -111,6 +111,7 @@ contract ProspectSystem is System {
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
       //Exit Encounter: Allow further moves
       EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, 0);
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, defenceInitialAmount);
     } else {
       //We set the prospected status to 1 in both cases as we dont want the prospect system to be called again
       //We set defence and offence randomly and set the pirate ship to also be in an encounter
