@@ -3,7 +3,7 @@ pragma solidity >=0.8.0;
 
 uint256 constant MULTIPLIER = 1000000;
 uint256 constant MULTIPLIER2 = 1000;
-uint256 constant MISSILE_COST = 5000;
+uint256 constant MISSILE_COST = 1000;
 uint256 constant actionDelayInSeconds = 0;
 uint256 constant godownCreationCost = 20000 * MULTIPLIER;
 uint256 constant playerInitialCash = 100000 * MULTIPLIER;
@@ -14,7 +14,7 @@ uint256 constant godownInitialStorage = 1000;
 uint256 constant godownInitialBalance = 0;
 uint256 constant godownInitialFuel = 100;
 uint256 constant earthCenterPlanetDefence = 1000000;
-uint256 constant earthInitialPopulation = 1000;
+uint256 constant earthInitialPopulation = 100;
 uint256 constant initialEntityPopulation = 0;
 uint256 constant baseInitialBalance = 100;
 uint256 constant baseInitialfuel = 2000 * MULTIPLIER;
