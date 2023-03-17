@@ -1,6 +1,8 @@
-import { WorldCoord } from "../types";
-import { NetworkLayer } from "../layers/network";
+import { getNftId } from "./../layers/network/utils/getNftId";
+import { Layers } from "../types";
 import { EntityID, getComponentValue } from "@latticexyz/recs";
+import { Mapping } from "./mapping";
+import { WorldCoord } from "@latticexyz/phaserx/dist/types";
 
 /**
  * @param a Coordinate A
@@ -131,16 +133,58 @@ export function segmentPoints(x1: number, y1: number, x2: number, y2: number) {
 //   return points;
 // }
 
-export function getObstacleList(arrayOfPointsOnThePath: any[], network: NetworkLayer) {
+export function getObstacleList(arrayOfPointsOnThePath: any[], layer: Layers) {
+  const { network, phaser } = layer;
+  const {
+    world,
+    components: { EntityType, Level, OwnedBy, NFTID, Defence },
+    utils: { getEntityIndexAtPosition },
+  } = network;
   const obstaclePoints: any[] = [];
   for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {
-    const entityOnThatPoint = network?.utils?.getEntityIndexAtPosition(
-      arrayOfPointsOnThePath[i].x,
-      arrayOfPointsOnThePath[i].y
-    );
-    const getLevel = getComponentValue(network?.components?.Level, entityOnThatPoint)?.value as EntityID;
-    if (getLevel > 0) {
+    const entityOnThatPoint = getEntityIndexAtPosition(arrayOfPointsOnThePath[i].x, arrayOfPointsOnThePath[i].y);
+
+    const entityType = getComponentValue(EntityType, entityOnThatPoint)?.value as EntityID;
+    if (
+      entityType &&
+      (+entityType === Mapping.astroid.id ||
+        +entityType === Mapping.planet.id ||
+        +entityType === Mapping.pirateShip.id ||
+        +entityType === Mapping.unprospected.id)
+    ) {
       obstaclePoints.push(entityOnThatPoint);
+    }
+    if (
+      entityType &&
+      (+entityType === Mapping.attack.id ||
+        +entityType === Mapping.godown.id ||
+        +entityType === Mapping.harvester.id ||
+        +entityType === Mapping.refuel.id ||
+        +entityType === Mapping.residential.id ||
+        +entityType === Mapping.shipyard.id)
+    ) {
+      const getLevel = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
+      const ownedBy = getComponentValue(OwnedBy, entityOnThatPoint)?.value;
+      const nftEntityIndex = world.entities.findIndex((e) => e === ownedBy);
+      const nftId = getComponentValue(NFTID, nftEntityIndex)?.value;
+      const nftDetails = getNftId(layer);
+      if (getLevel > 0) {
+        if (!(nftId && nftDetails && +nftId === nftDetails.tokenId)) {
+          obstaclePoints.push(entityOnThatPoint);
+        }
+      }
+    }
+    if (entityType && +entityType === Mapping.wall.id) {
+      const ownedBy = getComponentValue(OwnedBy, entityOnThatPoint)?.value;
+      const nftEntityIndex = world.entities.findIndex((e) => e === ownedBy);
+      const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
+      const nftId = getComponentValue(NFTID, nftEntityIndex)?.value;
+      const nftDetails = getNftId(layer);
+      if (defence && +defence > 0) {
+        if (!(nftId && nftDetails && +nftId === nftDetails.tokenId)) {
+          obstaclePoints.push(entityOnThatPoint);
+        }
+      }
     }
   }
   return obstaclePoints;
