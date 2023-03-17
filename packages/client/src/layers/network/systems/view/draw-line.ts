@@ -64,7 +64,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       });
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
-      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, { network, phaser });
       setObstacleHighlight(obstacleEntityIndexList);
       const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
 
@@ -86,7 +86,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
       const sourcePosition = getComponentValueStrict(Position, selectedEntity);
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
-      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, network);
+      const obstacleEntityIndexList = getObstacleList(arrayOfPointsOnThePath, { network, phaser });
       const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
       obstacleHighlight.forEach((entity) => {
         objectPool.remove(`obstetrical-circle-${entity}`);
