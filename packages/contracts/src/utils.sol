@@ -74,7 +74,6 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
   DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, 0);
   OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
   BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
-  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(godownEntity, block.timestamp);
   // PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
 }
 
@@ -165,64 +164,64 @@ function getCoords(uint256[] memory entities, IUint256Component components) retu
   return coords;
 }
 
-function isThereAnyObstacleOnTheWay(
-  int32 x1,
-  int32 y1,
-  int32 x2,
-  int32 y2,
-  IUint256Component components
-)
-  view
-  returns (
-    Coordd[] memory // bool
-  )
-{
-  // (Coord[] memory) {
-  Coordd[] memory pointsArray; // new Coord[];
-  uint256 co;
-  // int32 deltaX = x2 - x1;
-  // int32 deltaY = y2 - y1;
-  // int32 d = int32(int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER)))))) / int256(MULTIPLIER2));
-  int32 d = int32(
-    int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
-      int256(MULTIPLIER2)
-  );
-  int32 stepX = ((x2 - x1) * 100) / d;
-  int32 stepY = ((y2 - y1) * 100) / d;
-  int32 x = x1 * 100;
-  int32 y = y1 * 100;
-  // for (int32 i = 1; i <= d; i++) {
-  for (uint256 i = 0; i <= uint256(int256(d - 1)); i++) {
-    // pointsArray[uint256(int256(i))] = Coord({x: x / 100, y: y / 100});
-    if (i > 0) {
-      // int32 int32(x / 100) = int32(x / 100);
-      // int32 int32(y / 100) = int32(y / 100);
-      if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
-        uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
-          .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
+// function isThereAnyObstacleOnTheWay(
+//   int32 x1,
+//   int32 y1,
+//   int32 x2,
+//   int32 y2,
+//   IUint256Component components
+// )
+//   view
+//   returns (
+//     Coordd[] memory // bool
+//   )
+// {
+//   // (Coord[] memory) {
+//   Coordd[] memory pointsArray; // new Coord[];
+//   uint256 co;
+//   // int32 deltaX = x2 - x1;
+//   // int32 deltaY = y2 - y1;
+//   // int32 d = int32(int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER)))))) / int256(MULTIPLIER2));
+//   int32 d = int32(
+//     int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
+//       int256(MULTIPLIER2)
+//   );
+//   int32 stepX = ((x2 - x1) * 100) / d;
+//   int32 stepY = ((y2 - y1) * 100) / d;
+//   int32 x = x1 * 100;
+//   int32 y = y1 * 100;
+//   // for (int32 i = 1; i <= d; i++) {
+//   for (uint256 i = 0; i <= uint256(int256(d - 1)); i++) {
+//     // pointsArray[uint256(int256(i))] = Coord({x: x / 100, y: y / 100});
+//     if (i > 0) {
+//       // int32 int32(x / 100) = int32(x / 100);
+//       // int32 int32(y / 100) = int32(y / 100);
+//       if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
+//         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+//           .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
 
-        if (arrayOfGodownsAtThatCoord.length > 0) {
-          for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
-            if (
-              LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0
-            ) {
-              pointsArray[co] = Coordd({ x: int32(x / 100), y: int32(y / 100) });
-              co++;
-              // There is atleast one obstacle having level greater than 0
-              // return true;
-            }
-          }
-        }
-      }
-      x += stepX;
-      y += stepY;
-    }
-  }
-  // return pointsArray;
-  // No obstacles along the path
-  // return false;
-  return pointsArray;
-}
+//         if (arrayOfGodownsAtThatCoord.length > 0) {
+//           for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
+//             if (
+//               LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0
+//             ) {
+//               pointsArray[co] = Coordd({ x: int32(x / 100), y: int32(y / 100) });
+//               co++;
+//               // There is atleast one obstacle having level greater than 0
+//               // return true;
+//             }
+//           }
+//         }
+//       }
+//       x += stepX;
+//       y += stepY;
+//     }
+//   }
+//   // return pointsArray;
+//   // No obstacles along the path
+//   // return false;
+//   return pointsArray;
+// }
 
 function atleastOneObstacleOnTheWay(
   int32 x1,
@@ -272,10 +271,10 @@ function createAsteroids(IWorld world, IUint256Component components, int32 x, in
   ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
 }
 
-function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
-  bytes memory playerCountBytes = playerCountComponent.getRawValue(entity);
-  return playerCountBytes.length == 0 ? 0 : abi.decode(playerCountBytes, (uint256));
-}
+// function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
+//   bytes memory playerCountBytes = playerCountComponent.getRawValue(entity);
+//   return playerCountBytes.length == 0 ? 0 : abi.decode(playerCountBytes, (uint256));
+// }
 
 function getFactionUpgradeCosts(Faction faction) pure returns (uint256) {
   if (faction == Faction.FREENAVY) {
@@ -457,4 +456,46 @@ function createEncounterEntity(IWorld world, IUint256Component components, int32
     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
   }
+}
+
+function unOwnedObstacle(
+  int32 x1,
+  int32 y1,
+  int32 x2,
+  int32 y2,
+  IUint256Component components,
+  uint256 playerID
+) view returns (bool) {
+  bool result;
+  int32 deltaX = x2 - x1;
+  int32 deltaY = y2 - y1;
+  int32 distance = int32(
+    int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(1000000)))))) / int256(1000)
+  );
+  // int32 stepX = (deltaX * 100) / distance;
+  // int32 stepY = (deltaY * 100) / distance;
+  int32 x = x1 * 100;
+  int32 y = y1 * 100;
+  for (int32 i = 0; i <= distance; i++) {
+    if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
+      uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+        .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
+      for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
+        if (
+          (LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0) &&
+          (OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) !=
+            playerID)
+        ) {
+          result = true;
+          break;
+        }
+      }
+      if (result) {
+        break;
+      }
+    }
+    x += (deltaX * 100) / distance;
+    y += (deltaY * 100) / distance;
+  }
+  return result;
 }
