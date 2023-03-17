@@ -17,7 +17,40 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-  const allUserNameEntityId = [...getComponentEntities(Name)];
+  const allUserNameEntityId = [...getComponentEntities(Name)].sort((prevEntity, presentEntity) => {
+    let preTotalPopulation = 0;
+    let presentTotalPopulation = 0;
+    const preCash = getComponentValue(Cash, prevEntity)?.value;
+    const presentCash = getComponentValue(Cash, presentEntity)?.value;
+    [...getComponentEntities(Position)].forEach((entity) => {
+      const entityType = getComponentValue(EntityType, entity)?.value;
+      const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
+      const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
+      if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
+        const prePopulation = getComponentValue(Population, entity)?.value;
+        if (prePopulation) {
+          preTotalPopulation += +prePopulation;
+        }
+      }
+      if (
+        entityType &&
+        +entityType === Mapping.residential.id &&
+        presentEntity &&
+        presentEntity === positionOwnedByIndex
+      ) {
+        const presentPopulation = getComponentValue(Population, entity)?.value;
+        if (presentPopulation) {
+          presentTotalPopulation += +presentPopulation;
+        }
+      }
+    });
+
+    if (preTotalPopulation - presentTotalPopulation) {
+      return presentTotalPopulation - preTotalPopulation;
+    } else {
+      return preCash && presentCash ? +presentCash - +preCash : 0;
+    }
+  });
   const userEntityId = connectedAddress.get() as EntityID;
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
   if (userEntityId) {
