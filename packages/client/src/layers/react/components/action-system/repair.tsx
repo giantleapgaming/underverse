@@ -20,7 +20,7 @@ export const Repair = ({
             <S.Cost>
               REPAIR COST
               <br />
-              {convertPrice(repairCost)}
+              {convertPrice(repairCost / 2)}
             </S.Cost>
           </div>
           <S.InlinePointer onClick={repairSystem}>

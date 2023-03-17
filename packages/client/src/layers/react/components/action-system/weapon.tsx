@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
-import { factionData } from '../../../../utils/constants';
+import { factionData } from "../../../../utils/constants";
 
 export const Weapon = ({
   level,
@@ -45,7 +45,9 @@ export const Weapon = ({
             })}
           </div>
           <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-            <S.OtherDetails>COST {+selected > 0 ? convertPrice(+selected * 5000 * factionData[faction]?.weapon) : "--:--"}</S.OtherDetails>
+            <S.OtherDetails>
+              COST {+selected > 0 ? convertPrice(+selected * 1000 * factionData[faction]?.weapon) : "--:--"}
+            </S.OtherDetails>
             <S.InlinePointer
               onClick={() => {
                 buyWeaponSystem(+selected);
