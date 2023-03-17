@@ -260,16 +260,16 @@ function atleastOneObstacleOnTheWay(
   return result;
 }
 
-function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
-  uint256 ent = world.getUniqueEntityId();
-  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
-  BalanceComponent(getAddressById(components, BalanceComponentID)).set(ent, balance);
-  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
-  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
-  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
-  FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
-  ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
-}
+// function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
+//   uint256 ent = world.getUniqueEntityId();
+//   PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+//   BalanceComponent(getAddressById(components, BalanceComponentID)).set(ent, balance);
+//   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
+//   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
+//   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+//   FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
+//   ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
+// }
 
 // function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
 //   bytes memory playerCountBytes = playerCountComponent.getRawValue(entity);
