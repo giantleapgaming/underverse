@@ -49,11 +49,11 @@ contract AttackSystem is System {
 
     require(sourceEntityOffenceAmount >= amount, "Not enough torpedos in ");
 
-    require(
-      ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0) &&
-        (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) == 0)),
-      "Neither source nor destination can be in an encounter"
-    );
+    // require(
+    //   ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0) &&
+    //     (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) == 0)),
+    //   "Neither source nor destination can be in an encounter"
+    // );
 
     // Take current position
     Coord memory sourcePosition = getCurrentPosition(
