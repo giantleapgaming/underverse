@@ -11,7 +11,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getGodownCreationCost, getTotalGodownUpgradeCostUntilLevel, getFactionRepairCosts } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getTotalGodownUpgradeCostUntilLevel, getFactionRepairCosts } from "../utils.sol";
 import "../libraries/Math.sol";
 import { Faction } from "../constants.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
@@ -41,18 +41,6 @@ contract RepairSystem is System {
     uint256 selectedEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(godownEntity);
     require(selectedEntityLevel >= 1, "Invalid godown entity");
 
-    require(
-      ((EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(godownEntity) == 0)),
-      "Entity cannot be repaired while in an encounter"
-    );
-
-    Coord memory godownPosition = getCurrentPosition(
-      PositionComponent(getAddressById(components, PositionComponentID)),
-      godownEntity
-    );
-
-    uint256 godownCreationCost = getGodownCreationCost(godownPosition.x, godownPosition.y);
-
     uint256 totalGodownUpgradeCostUntilLevel = getTotalGodownUpgradeCostUntilLevel(selectedEntityLevel);
 
     uint256 defenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(godownEntity);
@@ -69,8 +57,7 @@ contract RepairSystem is System {
 
     uint256 factionCostPercent = getFactionRepairCosts(Faction(userFaction));
 
-    uint256 repairCash = ((((godownCreationCost + totalGodownUpgradeCostUntilLevel) * damagePercent) / 100) *
-      factionCostPercent) / 200;
+    uint256 repairCash = ((((totalGodownUpgradeCostUntilLevel) * damagePercent) / 100) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
