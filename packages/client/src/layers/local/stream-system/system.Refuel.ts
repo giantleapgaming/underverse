@@ -40,7 +40,6 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
     const faction = getComponentValue(Faction, ownedByIndex)?.value;
     const destEntityType = getComponentValue(EntityType, destinationEntityIndex)?.value;
     const sourceEntityType = getComponentValue(EntityType, sourceEntityIndex)?.value;
-    console.log(BigInt(+kgs).toString());
 
     if (
       faction &&

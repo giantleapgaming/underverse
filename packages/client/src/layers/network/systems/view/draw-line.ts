@@ -143,8 +143,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             }
           }
         }
-
-        if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture") {
+        if (entityType && +entityType === Mapping.passenger.id && lineDetails.type === "rapture") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
             setDestinationDetails(stationEntity);
             setShowLine(true, x, y, "rapture");
@@ -232,7 +231,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             (+entityType === Mapping.harvester.id ||
               +entityType === Mapping.attack.id ||
               +entityType === Mapping.refuel.id ||
-              +entityType === Mapping.shipyard.id)
+              +entityType === Mapping.shipyard.id ||
+              +entityType === Mapping.passenger.id)
           ) {
             const nftDetails = getNftId({ network, phaser });
             if (nftDetails) {
@@ -258,6 +258,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                         (+entityType === Mapping.harvester.id && "moveHarvester") ||
                         (+entityType === Mapping.attack.id && "moveAttackShip") ||
                         (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                        (+entityType === Mapping.passenger.id && "movePassenger") ||
                         "move",
                       faction: +factionNumber,
                       entityID: selectedEntity,

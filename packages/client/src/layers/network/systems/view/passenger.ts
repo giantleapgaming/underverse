@@ -22,11 +22,11 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
     },
   } = phaser;
   const {
-    components: { Position, Level, EntityType, Population, OwnedBy, Defence },
+    components: { Position, Level, EntityType, Population, OwnedBy, Defence, PrevPosition },
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(Population), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence)],
+    [Has(Position), Has(Population), Has(EntityType), Has(Level), Has(OwnedBy), Has(Defence), Has(PrevPosition)],
     ({ entity }) => {
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.passenger.id) {
@@ -35,11 +35,17 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const population = getComponentValueStrict(Population, entity).value;
+          const prevPosition = getComponentValueStrict(PrevPosition, entity);
+          const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
+            { x: prevPosition.x, y: prevPosition.y },
+            tileWidth,
+            tileHeight
+          );
           const level = getComponentValueStrict(Level, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const passengerObjectGrayLayer = objectPool.get(` passenger-gray-${entity}`, "Sprite");
           const levelSprite = objectPool.get(` passenger-level-${entity}`, "Sprite");
-
+          const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
             objectPool.remove(` passenger-health-${entity}-${i}`);
@@ -88,6 +94,7 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setDepth(5);
               gameObject.setAngle(0);
               gameObject.setOrigin(0.5, 0.5);
+              gameObject.setAngle(angle);
             },
           });
 
@@ -97,7 +104,7 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setTexture(passenger.assetKey, `passenger-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
               gameObject.setDepth(4);
-              gameObject.setAngle(0);
+              gameObject.setAngle(angle);
               gameObject.setOrigin(0.5, 0.5);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);

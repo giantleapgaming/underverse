@@ -60,7 +60,12 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
           <S.Container>
             <S.Column>
               <S.Text>PASSENGER LVL {+level}</S.Text>
-              <img src={`/build-stations/harvester.png`} width="100px" height="100px" />
+              <img
+                src={`/build-stations/passenger.png`}
+                width="100px"
+                height="100px"
+                style={{ objectFit: "contain" }}
+              />
               <S.Text>
                 POSITION {position.x}/{position.y}
               </S.Text>
@@ -68,7 +73,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
             <S.Column style={{ width: "325px" }}>
               <S.Row style={{ justifyContent: "space-around", width: "100%", gap: "20px" }}>
                 <S.Weapon>
-                  <img src="/build-stations/passenger.png" />
+                  <img src="/build-stations/shied.png" />
                   <p>
                     {+defence}/{level && +level * 100}
                   </p>
@@ -388,27 +393,11 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
               <SelectButton
-                isActive={action === "prospect"}
-                name="PROSPECT"
+                name="RAPTURE"
+                isActive={action === "rapture"}
                 onClick={() => {
-                  setAction("prospect");
-                  setShowLine(true, position.x, position.y, "prospect");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "build"}
-                name="BUILD"
-                onClick={() => {
-                  setAction("build");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "defence"}
-                name="DEFENCE"
-                onClick={() => {
-                  setAction("defence");
+                  setAction("rapture");
+                  setShowLine(true, position.x, position.y, "rapture");
                   sounds["click"].play();
                 }}
               />

@@ -81,6 +81,7 @@ import { displayPirateShipSystem } from "../network/systems/view/pirateShip";
 import { highlightMaxDistance } from "../network/systems/view/highlightMaxDistance";
 import { buildPassengerSystem } from "../network/systems/build/passenger";
 import { displayPassengerSystem } from "../network/systems/view/passenger";
+import { movePassenger } from "../network/systems/action/move/movePassenger";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -412,7 +413,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   moveHarvester(network, context);
   moveAttackShip(network, context);
   moveRefueller(network, context);
-
+  movePassenger(network, context);
   //------transports----------------------------
   mineTransport(network, context);
   fuelTransport(network, context);
