@@ -90,7 +90,7 @@ contract TransportSystem is System {
 
     uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
 
-    require(sourceEntityFuel >= totalTransportCost, "Not enough money to transport product");
+    require(sourceEntityFuel >= totalTransportCost, "Not enough fuel to transport product");
 
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
