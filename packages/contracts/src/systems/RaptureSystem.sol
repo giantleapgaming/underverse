@@ -37,8 +37,6 @@ contract RaptureSystem is System {
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
-    // Check if source and destination are planet and residential station respectively
-
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(destinationEntity) == playerID,
       "Destination vessel not owned by user"
@@ -57,7 +55,7 @@ contract RaptureSystem is System {
     );
 
     require(
-      (destinationEntityType == 3 || sourceEntityType == 13),
+      (destinationEntityType == 3 || destinationEntityType == 13),
       "Destination has to be a Habitat or People Carrier"
     );
 
@@ -130,17 +128,26 @@ contract RaptureSystem is System {
       "Obstacle on the way"
     );
 
-    uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
+    uint256 totalTransportCost = (getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) **
+      2) / 1000000;
+    //We take the distance and square it, distance values are having multiplier of 1000,
+    //square of that will be 1M so we divide by that
+    //If the distance is 15, the function will return values like 15000, square will return 225000000.
+    //Dividing by 1M will give 225
+    //We use the same variable again to address stack too deep error
 
     //Increase cost of rapture from earth and allow longer raptures
     if (sourceEntityType == 6) {
-      require(totalTransportCost < 100, "You have to be at less than 10 units away if rapturing from earth");
-      totalTransportCost = totalTransportCost * 5;
+      require(totalTransportCost < 225, "You have to be at less than 15 units away if rapturing from earth");
+      totalTransportCost = totalTransportCost * 5000;
+      //Reapply multiplier so that it can work with the precision we have for cash
+      //Rapturing from earth should be expensive
     } else {
       require(
         totalTransportCost < 25,
         "You have to be at less than 5 units away if rapturing from hab or other ppl carrier"
       );
+      totalTransportCost = totalTransportCost * 1000; //Reapply multiplier
     }
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
