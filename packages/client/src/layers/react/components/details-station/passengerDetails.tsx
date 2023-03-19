@@ -16,6 +16,7 @@ import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLay
 import { BuildWall } from "../build-station/buildWall";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
+import { Rapture } from "../action-system/rapture";
 export const PassengerDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -28,7 +29,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem, raptureSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -299,6 +300,57 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
+                  {action === "rapture" && destinationDetails && isDestinationSelected && (
+                    <div>
+                      <Rapture
+                        space={
+                          (destinationPopulation && destinationLevel && +destinationLevel - +destinationPopulation) || 0
+                        }
+                        rapture={async (weapons) => {
+                          const nftDetails = getNftId(layers);
+                          if (!nftDetails) {
+                            return;
+                          }
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setShowAnimation({
+                                  showAnimation: true,
+                                  amount: weapons,
+                                  destinationX: destinationPosition.x,
+                                  destinationY: destinationPosition.y,
+                                  sourceX: position.x,
+                                  sourceY: position.y,
+                                  type: "humanTransport",
+                                  entityID: destinationDetails,
+                                });
+                                await raptureSystem(
+                                  world.entities[selectedEntity],
+                                  world.entities[destinationDetails],
+                                  weapons,
+                                  nftDetails.tokenId
+                                );
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }}
+                        playSound={() => {
+                          sounds["click"].play();
+                        }}
+                        distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      />
+                    </div>
+                  )}
                 </S.Column>
               )}
             </S.Column>
@@ -397,7 +449,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                 isActive={action === "rapture"}
                 onClick={() => {
                   setAction("rapture");
-                  setShowLine(true, position.x, position.y, "rapture");
+                  setShowLine(true, position.x, position.y, "rapture-passenger");
                   sounds["click"].play();
                 }}
               />

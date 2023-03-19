@@ -133,7 +133,7 @@ export function movePassenger(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setTexture(passenger.assetKey, `passenger-3.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
           gameObject.setDepth(151);
-          gameObject.setOrigin(0.5, 0.2);
+          gameObject.setOrigin(0.5, -0.4);
           gameObject.setAngle(angle);
           !animation?.systemStream && sounds["move-harvester"].play();
           phaserScene.add.tween({

@@ -51,6 +51,8 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
+      const angle =
+        Math.atan2(destinationPixelY - sourcePixelY, destinationPixelX - sourcePixelX) * (180 / Math.PI) + 90;
       const humanTransportObjectTopLayer = objectPool.get(`humanTransport-top-${entity}`, "Sprite");
       const humanTransportObjectGrayLayer = objectPool.get(`humanTransport-gray-${entity}`, "Sprite");
       const humanTransport = config.sprites[Sprites.Asteroid12];
@@ -61,6 +63,7 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(5);
           gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(0);
           gameObject.setScale(0.3);
           phaserScene.add.tween({
             targets: gameObject,
@@ -88,6 +91,7 @@ export function humanTransport(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
           gameObject.setDepth(4);
           gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(0);
           gameObject.setScale(0.3);
           const color = generateColorsFromWalletAddress(`${ownedBy}`);
           gameObject.setTint(color[0], color[1], color[2], color[3]);

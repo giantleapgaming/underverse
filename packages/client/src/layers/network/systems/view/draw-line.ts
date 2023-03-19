@@ -149,6 +149,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             setShowLine(true, x, y, "rapture");
           }
         }
+        if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture-passenger") {
+          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "rapture-passenger");
+          }
+        }
         if (
           entityType &&
           (+entityType === Mapping.godown.id ||
