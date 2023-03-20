@@ -37,9 +37,8 @@ export function displayWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
           id: `wall-${entity}`,
           once: (gameObject) => {
             gameObject.setTexture(attack.assetKey, `wall.png`);
-            gameObject.setPosition(x, y);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setDepth(1);
-            gameObject.setAngle(90);
             gameObject.setOrigin(0.5, 0.5);
           },
         });

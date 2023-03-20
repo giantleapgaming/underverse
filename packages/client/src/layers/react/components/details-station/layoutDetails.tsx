@@ -13,6 +13,7 @@ import { ShipyardDetails } from "./shipyardDetails";
 import { UserAction } from "./userAction";
 import { UserDetails } from "./userDetails";
 import { PassengerDetails } from "./passengerDetails";
+import { WallDetails } from "./wallDetails";
 
 export const DetailsLayout = ({ layers }: { layers: Layers }) => {
   const {
@@ -41,6 +42,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
           {+entityType === Mapping.godown.id && <GodownDetails layers={layers} />}
           {+entityType === Mapping.harvester.id && <HarvesterDetails layers={layers} />}
           {+entityType === Mapping.residential.id && <ResidentialDetails layers={layers} />}
+          {+entityType === Mapping.wall.id && <WallDetails layers={layers} />}
           {+entityType === Mapping.astroid.id && <AsteroidDetails layers={layers} />}
           {+entityType === Mapping.planet.id && <PlanetDetails layers={layers} />}
           {+entityType === Mapping.refuel.id && <RefuelDetails layers={layers} />}
