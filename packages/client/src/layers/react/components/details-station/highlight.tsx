@@ -77,7 +77,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
                   if (
                     entityType &&
-                    +entityType === Mapping.residential.id &&
+                    (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
                     nameEntity &&
                     nameEntity === positionOwnedByIndex
                   ) {
