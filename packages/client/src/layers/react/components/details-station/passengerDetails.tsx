@@ -303,6 +303,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                   {action === "rapture" && destinationDetails && isDestinationSelected && (
                     <div>
                       <Rapture
+                        transport
                         space={
                           (destinationPopulation && destinationLevel && +destinationLevel - +destinationPopulation) || 0
                         }
@@ -330,6 +331,62 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                                 await raptureSystem(
                                   world.entities[selectedEntity],
                                   world.entities[destinationDetails],
+                                  weapons,
+                                  nftDetails.tokenId
+                                );
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }}
+                        playSound={() => {
+                          sounds["click"].play();
+                        }}
+                        distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      />
+                    </div>
+                  )}
+                  {action === "steal" && destinationDetails && isDestinationSelected && (
+                    <div>
+                      <Rapture
+                        buttonName="STEAL"
+                        space={
+                          (destinationPopulation &&
+                            (+level - population < +destinationPopulation
+                              ? level - population
+                              : +destinationPopulation)) ||
+                          0
+                        }
+                        rapture={async (weapons) => {
+                          const nftDetails = getNftId(layers);
+                          if (!nftDetails) {
+                            return;
+                          }
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setShowAnimation({
+                                  showAnimation: true,
+                                  amount: weapons,
+                                  destinationX: position.x,
+                                  destinationY: position.y,
+                                  sourceX: destinationPosition.x,
+                                  sourceY: destinationPosition.y,
+                                  type: "humanTransport",
+                                  entityID: destinationDetails,
+                                });
+                                await raptureSystem(
+                                  world.entities[destinationDetails],
+                                  world.entities[selectedEntity],
                                   weapons,
                                   nftDetails.tokenId
                                 );
@@ -427,8 +484,8 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                   </S.SideButton>
                   <S.SideButton
                     onClick={() => {
-                      setAction("transport");
-                      setShowLine(true, position.x, position.y, "transport");
+                      setAction("rapture");
+                      setShowLine(true, position.x, position.y, "rapture-passenger");
                       sounds["click"].play();
                     }}
                     title="Transport Minerals"
@@ -445,11 +502,11 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
               <SelectButton
-                name="RAPTURE"
-                isActive={action === "rapture"}
+                name="STEAL"
+                isActive={action === "steal"}
                 onClick={() => {
-                  setAction("rapture");
-                  setShowLine(true, position.x, position.y, "rapture-passenger");
+                  setAction("steal");
+                  setShowLine(true, position.x, position.y, "steal-passenger");
                   sounds["click"].play();
                 }}
               />

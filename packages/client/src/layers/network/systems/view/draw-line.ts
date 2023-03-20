@@ -157,6 +157,16 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
         if (
           entityType &&
+          (+entityType === Mapping.residential.id || Mapping.passenger.id) &&
+          lineDetails.type === "steal-passenger"
+        ) {
+          if (!isOwnedByIndex({ network, phaser }, stationEntity)) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "steal-passenger");
+          }
+        }
+        if (
+          entityType &&
           (+entityType === Mapping.godown.id ||
             +entityType === Mapping.shipyard.id ||
             +entityType === Mapping.harvester.id) &&

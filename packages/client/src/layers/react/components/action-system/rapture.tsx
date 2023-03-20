@@ -7,11 +7,15 @@ export const Rapture = ({
   playSound,
   rapture,
   distance,
+  transport,
+  buttonName,
 }: {
   space: number;
   playSound: () => void;
   rapture: (amount: number) => void;
   distance: number;
+  transport?: boolean;
+  buttonName?: string;
 }) => {
   const [selected, setSelected] = useState("0");
 
@@ -52,7 +56,7 @@ export const Rapture = ({
             }}
           >
             <S.ButtonImg src="/button/greenButton.png" />
-            <S.DeployText>RAPTURE</S.DeployText>
+            <S.DeployText>{buttonName ? buttonName : <>{transport ? "TRANSPORT" : "RAPTURE"}</>}</S.DeployText>
           </S.InlinePointer>
         </S.Row>
       )}
