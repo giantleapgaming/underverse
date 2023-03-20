@@ -26,7 +26,16 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
   } = network;
   defineSystem(
     world,
-    [Has(Position), Has(EntityType), Has(Level), Has(Defence), Has(Offence), Has(OwnedBy), Has(PrevPosition)],
+    [
+      Has(Position),
+      Has(EntityType),
+      Has(Level),
+      Has(Defence),
+      Has(Offence),
+      Has(OwnedBy),
+      Has(PrevPosition),
+      Has(Offence),
+    ],
     ({ entity }) => {
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.attack.id) {
@@ -34,6 +43,7 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
         if (+defence > 0) {
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
+          const offence = getComponentValueStrict(Offence, entity).value;
           const prevPosition = getComponentValueStrict(PrevPosition, entity);
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
           const { x: prevPositionX, y: prevPositionY } = tileCoordToPixelCoord(
@@ -41,12 +51,14 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
             tileWidth,
             tileHeight
           );
+
           const level = getComponentValueStrict(Level, entity).value;
           const levelSprite = objectPool.get(`attack-level-${entity}`, "Sprite");
 
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
             objectPool.remove(`attack-health-${entity}-${i}`);
+            objectPool.remove(`attack-cargo-${entity}-${i}`);
           }
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
 
@@ -65,7 +77,20 @@ export function displayAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
               },
             });
           }
-
+          for (let i = 1; i < +level + 1; i++) {
+            const healthSprite = objectPool.get(`attack-cargo-${entity}-${i}`, "Rectangle");
+            healthSprite.setComponent({
+              id: `attack-cargo-${entity}-${i}`,
+              once: (gameObject) => {
+                gameObject.setPosition(x + i * 25, y + 281);
+                gameObject.setDepth(10);
+                gameObject.setOrigin(0.5, 0.5);
+                gameObject.setAngle(0);
+                gameObject.setFillStyle(+offence >= i ? 0x2c8073 : 0xffffff);
+                gameObject.setSize(15, 15);
+              },
+            });
+          }
           const attackShipObjectTop1Layer = objectPool.get(`attack-top1-${entity}`, "Sprite");
           const attackShipObjectTop2Layer = objectPool.get(`attack-top2-${entity}`, "Sprite");
           const attackShipObjectGrayLayer = objectPool.get(`attack-gray-${entity}`, "Sprite");
