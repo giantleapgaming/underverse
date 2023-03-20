@@ -3,11 +3,10 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
-import { EntityID, getComponentEntities, getComponentValue, Has, HasValue, Not, runQuery } from "@latticexyz/recs";
+import { EntityID, getComponentEntities, getComponentValue, Has, Not, runQuery } from "@latticexyz/recs";
 import { Mapping } from "../../../utils/mapping";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
 import { getNftId } from "../../network/utils/getNftId";
-import { factionData } from "../../../utils/constants";
 import { useState } from "react";
 
 const Win = ({ layers }: { layers: Layers }) => {
