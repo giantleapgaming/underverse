@@ -29,7 +29,12 @@ const Cash = ({ layers }: { layers: Layers }) => {
     const entityType = getComponentValue(EntityType, entity)?.value;
     const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
     const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
-    if (entityType && +entityType === Mapping.residential.id && ownedByIndex && ownedByIndex === positionOwnedByIndex) {
+    if (
+      entityType &&
+      (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
+      ownedByIndex &&
+      ownedByIndex === positionOwnedByIndex
+    ) {
       const population = getComponentValue(Population, entity)?.value;
       const level = getComponentValue(Level, entity)?.value;
       if (population && level) {
@@ -78,7 +83,7 @@ export const registerCashDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { NFTID, Cash, Position },
+          components: { NFTID, Cash, Position, Population },
           walletNfts,
         },
         phaser: {
@@ -91,7 +96,8 @@ export const registerCashDetails = () => {
         ShowHighLight.update$,
         ShowCircle.update$,
         Cash.update$,
-        Position.update$
+        Position.update$,
+        Population.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map(() => {
