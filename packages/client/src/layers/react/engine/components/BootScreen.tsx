@@ -8,7 +8,7 @@ export const BootScreen: React.FC<{ initialOpacity?: number }> = ({ children, in
 
   return (
     <Container>
-      <div>{children || <>&nbsp;</>}</div>
+      <div>{children}</div>
     </Container>
   );
 };
@@ -34,9 +34,5 @@ const Container = styled.div`
   div {
     font-family: "Space Grotesk", sans-serif;
     padding-top: 450px;
-  }
-
-  img {
-    transition: all 2s ease;
   }
 `;

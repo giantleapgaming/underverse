@@ -46,7 +46,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
           {+entityType === Mapping.astroid.id && <AsteroidDetails layers={layers} />}
           {+entityType === Mapping.planet.id && <PlanetDetails layers={layers} />}
           {+entityType === Mapping.refuel.id && <RefuelDetails layers={layers} />}
-          {+entityType === Mapping.shipyard.id && <ShipyardDetails layers={layers} />}{" "}
+          {+entityType === Mapping.shipyard.id && <ShipyardDetails layers={layers} />}
           {+entityType === Mapping.passenger.id && <PassengerDetails layers={layers} />}
         </S.Border>
         <div
