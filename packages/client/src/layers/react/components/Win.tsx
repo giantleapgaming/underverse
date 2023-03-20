@@ -3,12 +3,12 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
-import { EntityID, getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { EntityID, getComponentEntities, getComponentValue, Has, HasValue, Not, runQuery } from "@latticexyz/recs";
 import { Mapping } from "../../../utils/mapping";
-import { factionData } from "../../../utils/constants";
-import { walletAddress, walletAddressLoginDisplay } from "../utils/walletAddress";
-import { useState } from "react";
+import { walletAddressLoginDisplay } from "../utils/walletAddress";
 import { getNftId } from "../../network/utils/getNftId";
+import { factionData } from "../../../utils/constants";
+import { useState } from "react";
 
 const Win = ({ layers }: { layers: Layers }) => {
   const {
@@ -17,13 +17,7 @@ const Win = ({ layers }: { layers: Layers }) => {
       components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType },
       network: { connectedAddress },
     },
-    phaser: {
-      localIds: { showCircleIndex, stationDetailsEntityIndex },
-      localApi: { shouldShowCircle },
-      components: { ShowCircle, ShowStationDetails },
-    },
   } = layers;
-  const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
   const allUserNameEntityId = [...getComponentEntities(Name)].sort((prevEntity, presentEntity) => {
     let preTotalPopulation = 0;
     let presentTotalPopulation = 0;
@@ -58,8 +52,8 @@ const Win = ({ layers }: { layers: Layers }) => {
       return preCash && presentCash ? +presentCash - +preCash : 0;
     }
   });
+  const nftDetails = getNftId(layers);
   const userEntityId = connectedAddress.get() as EntityID;
-  const [copy, setCopy] = useState(false);
   return (
     <>
       <Container>
@@ -89,30 +83,25 @@ const Win = ({ layers }: { layers: Layers }) => {
                   <tr>
                     <th></th>
                     <th>{<img src="/img/winner.png" />}</th>
-                    <th></th>
+                    <th>Name</th>
                     <th>{<img src="/img/user.png" />}</th>
                     <th>{<img src="/img/USCoin.png" />}</th>
                     <th>{<img src="/img/tag.png" />}</th>
                     <th></th>
                   </tr>
-                  {allUserNameEntityId.map((nameEntity) => {
+                  {allUserNameEntityId.map((nameEntity, index) => {
+                    const [copy, setCopy] = useState(false);
                     let totalPopulation = 0;
-                    let totalLevel = 0;
                     const name = getComponentValue(Name, nameEntity);
                     const cash = getComponentValue(Cash, nameEntity)?.value;
-                    const owner = world.entities[nameEntity] === userEntityId;
-                    const indexOf = selectedEntities.indexOf(nameEntity);
-                    const exists = selectedEntities.some((entity) => entity === nameEntity);
-                    const nftDetails = getNftId(layers);
                     const factionNumber = getComponentValue(Faction, nameEntity)?.value;
-
                     [...getComponentEntities(Position)].forEach((entity) => {
                       const entityType = getComponentValue(EntityType, entity)?.value;
                       const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
                       const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
                       if (
                         entityType &&
-                        +entityType === Mapping.residential.id &&
+                        (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
                         nameEntity &&
                         nameEntity === positionOwnedByIndex
                       ) {
@@ -120,14 +109,15 @@ const Win = ({ layers }: { layers: Layers }) => {
                         const level = getComponentValue(Level, entity)?.value;
                         if (population && level) {
                           totalPopulation += +population;
-                          totalLevel += +level;
                         }
                       }
                     });
                     return (
                       <tr key={nameEntity}>
-                        <td>**</td>
-                        <td>{<img src={nftDetails && nftDetails.imageUrl} width="24px" height="24px" />}</td>
+                        <td>{troffyImages[index] && <img src={troffyImages[index].src} />}</td>
+                        <td>
+                          <img src={nftDetails && nftDetails.imageUrl} width="24px" height="24px" />
+                        </td>
                         <td style={{ fontSize: "20px" }}>{name?.value}</td>
                         <td style={{ fontSize: "20px" }}>{totalPopulation} </td>
                         <td style={{ fontSize: "20px" }}>
@@ -143,7 +133,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                           {factionNumber && <img src={`/faction/${+factionNumber}.png`} width="24px" height="24px" />}
                         </td>
                         <td style={{ fontSize: "18px", fontWeight: "bold" }}>
-                          {walletAddressLoginDisplay(`${connectedAddress.get()}`)}
+                          {copy ? "Copied" : walletAddressLoginDisplay(`${connectedAddress.get()}`)}
                           <span>
                             <img
                               src="/img/copy.png"
@@ -159,29 +149,6 @@ const Win = ({ layers }: { layers: Layers }) => {
                           </span>
                         </td>
                       </tr>
-
-                      /* <Player>
-                        <PLayerName style={{ color: faction?.color }}>
-                          {owner ? "Owned" : name?.value}
-                          <br />
-                          <CashAmount style={{ color: "white" }}>
-                            {cash &&
-                              new Intl.NumberFormat("en-US", {
-                                style: "currency",
-                                currency: "USD",
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 0,
-                              }).format(+cash / 1_000_000)}
-                            <span>
-                              <img
-                                src="/build-stations/userpng"
-                                style={{ height: "15px", width: "20px", margin: " 0 4px" }}
-                              />
-                              ({totalPopulation}/{totalLevel})
-                            </span>
-                          </CashAmount>
-                        </PLayerName>
-                      </Player> */
                     );
                   })}
                 </tbody>
@@ -193,7 +160,11 @@ const Win = ({ layers }: { layers: Layers }) => {
     </>
   );
 };
-
+const troffyImages = [
+  { src: "/img/goldTroffy.png" },
+  { src: "/img/silverTroffy.png" },
+  { src: "/img/bronzeTroffy.png" },
+];
 const Container = styled.div`
   width: 100%;
   height: 100vh;
@@ -386,14 +357,27 @@ export const registerWinScreen = () => {
     (layers) => {
       const {
         network: {
-          components: { NFTID },
+          components: { NFTID, Population, Cash, Position, EntityType, OwnedBy },
           network: { connectedAddress },
         },
+        phaser: {
+          scenes: {
+            Main: { input },
+          },
+        },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, Population.update$, Cash.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
-          return { layers };
+          const listOfPopulations = [...runQuery([Has(Position), Has(EntityType), Has(Population), Not(OwnedBy)])];
+          if (listOfPopulations.length) {
+            const population = getComponentValue(Population, listOfPopulations[0])?.value;
+            if (population && +population === 0) {
+              input.disableInput();
+              return { layers };
+            }
+          }
+          return;
         })
       );
     },
