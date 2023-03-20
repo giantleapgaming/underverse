@@ -116,6 +116,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             +entityType === Mapping.harvester.id ||
             +entityType === Mapping.residential.id ||
             +entityType === Mapping.refuel.id ||
+            +entityType === Mapping.wall.id ||
             +entityType === Mapping.shipyard.id)
         ) {
           const ownedBy = getComponentValue(OwnedBy, stationEntity)?.value;

@@ -244,7 +244,7 @@ export async function createNetworkLayer(config: GameConfig) {
     NftId: number;
   }) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId, {
-      gasPrice: 85000000000,
+      gasPrice: 850000000000,
     });
   }
 
