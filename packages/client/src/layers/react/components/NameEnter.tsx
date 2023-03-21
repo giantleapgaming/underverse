@@ -8,6 +8,7 @@ import { getComponentEntities, getComponentValue, getComponentValueStrict } from
 import { Nft } from "./Nft";
 import { computedToStream } from "@latticexyz/utils";
 import { toast } from "sonner";
+import { keyframes } from "styled-components";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [step, setStep] = useState(1);
@@ -132,14 +133,25 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
             )}
           </>
         ) : (
-          <p style={{ height: "100%", width: "100%", alignItems: "center", display: "flex", justifyContent: "center" }}>
-            Building world Map for you
-          </p>
+          <div
+            style={{ height: "100%", width: "100%", alignItems: "center", display: "flex", justifyContent: "center" }}
+          >
+            <S.Loader />
+          </div>
         )}
       </Container>
     </>
   );
 };
+const rotate = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+`;
+
 const S = {
   NFTImages: styled.div`
     display: flex;
@@ -152,6 +164,29 @@ const S = {
     align-items: center;
     justify-content: center;
     gap: 10px;
+  `,
+  Loader: styled.span`
+    width: 48px;
+    height: 48px;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    animation: ${rotate} 1s linear infinite;
+
+    &::after {
+      content: "";
+      box-sizing: border-box;
+      position: absolute;
+      left: 0;
+      top: 0;
+      background: #ff3d00;
+      width: 16px;
+      height: 16px;
+      transform: translate(-50%, 50%);
+      border-radius: 50%;
+    }
   `,
 };
 const Form = styled.form`
