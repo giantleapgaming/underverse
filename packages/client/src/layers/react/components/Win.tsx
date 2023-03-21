@@ -61,7 +61,6 @@ const Win = ({ layers }: { layers: Layers }) => {
 
         <WalletText>
           <div>
-            <p style={{ margin: "0px", color: "wheat", marginBottom: "20px" }}>WELCOME TO</p>
             <img src="/img/matchOver.png" />
             <div
               style={{
