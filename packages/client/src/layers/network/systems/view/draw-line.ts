@@ -111,6 +111,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           (+entityType === Mapping.attack.id ||
             +entityType === Mapping.godown.id ||
             +entityType === Mapping.harvester.id ||
+            +entityType === Mapping.passenger.id ||
             +entityType === Mapping.residential.id ||
             +entityType === Mapping.refuel.id ||
             +entityType === Mapping.wall.id ||
