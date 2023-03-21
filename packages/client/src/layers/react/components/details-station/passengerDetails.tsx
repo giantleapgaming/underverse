@@ -124,61 +124,6 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       faction={+factionNumber}
                     />
                   )}
-                  {action === "transport" && destinationDetails && isDestinationSelected && (
-                    <Transport
-                      space={
-                        (destinationPopulation &&
-                        destinationLevel &&
-                        +destinationLevel - destinationPopulation < +population
-                          ? destinationLevel - destinationPopulation
-                          : +population) || 0
-                      }
-                      transport={async (weapons) => {
-                        const nftDetails = getNftId(layers);
-                        if (!nftDetails) {
-                          return;
-                        }
-                        toast.promise(
-                          async () => {
-                            try {
-                              sounds["confirm"].play();
-                              setDestinationDetails();
-                              setShowLine(false);
-                              setAction("");
-                              setShowAnimation({
-                                showAnimation: true,
-                                amount: weapons,
-                                destinationX: destinationPosition.x,
-                                destinationY: destinationPosition.y,
-                                sourceX: position.x,
-                                sourceY: position.y,
-                                type: "humanTransport",
-                                entityID: destinationDetails,
-                              });
-                              await transportSystem(
-                                world.entities[selectedEntity],
-                                world.entities[destinationDetails],
-                                weapons,
-                                nftDetails.tokenId
-                              );
-                            } catch (e: any) {
-                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                            }
-                          },
-                          {
-                            loading: "Transaction in progress",
-                            success: `Transaction successful`,
-                            error: (e) => e.message,
-                          }
-                        );
-                      }}
-                      playSound={() => {
-                        sounds["click"].play();
-                      }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                      faction={+factionNumber}
-                    />
-                  )}
                   {action === "repair" && (
                     <Repair
                       defence={+defence}
@@ -305,7 +250,11 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       <Rapture
                         transport
                         space={
-                          (destinationPopulation && destinationLevel && +destinationLevel - +destinationPopulation) || 0
+                          (destinationPopulation &&
+                          destinationLevel &&
+                          +destinationLevel - destinationPopulation < +population
+                            ? destinationLevel - destinationPopulation
+                            : +population) || 0
                         }
                         rapture={async (weapons) => {
                           const nftDetails = getNftId(layers);
@@ -488,10 +437,10 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       setShowLine(true, position.x, position.y, "rapture-passenger");
                       sounds["click"].play();
                     }}
-                    title="Transport Minerals"
+                    title="Transport People"
                   >
                     <S.Img
-                      src={action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"}
+                      src={action === "rapture" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"}
                       width="40px"
                     />
                   </S.SideButton>

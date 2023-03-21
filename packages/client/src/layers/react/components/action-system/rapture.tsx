@@ -30,23 +30,25 @@ export const Rapture = ({
           minWidth: "330px",
         }}
       >
-        <img src="/img/user.png" />
-        {new Array(+space).fill(0).map((_, i) => {
-          return (
-            <S.Slanted
-              key={`red${i}`}
-              selected={+selected > i}
-              onClick={() => {
-                playSound();
-                setSelected((i + 1).toString());
-              }}
-            >
-              {/* <span style={{ marginLeft: "3px" }}>{i + 1}</span> */}
-            </S.Slanted>
-          );
-        })}
+        {+space > 0 && (
+          <>
+            <img src="/img/user.png" />
+            {new Array(+space).fill(0).map((_, i) => {
+              return (
+                <S.Slanted
+                  key={`red${i}`}
+                  selected={+selected > i}
+                  onClick={() => {
+                    playSound();
+                    setSelected((i + 1).toString());
+                  }}
+                />
+              );
+            })}
+          </>
+        )}
       </div>
-      {+space > 0 && (
+      {+space > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.Text>TOTAL COST {+selected && convertPrice(Math.pow(+selected * distance, 2))}</S.Text>
           <S.InlinePointer
@@ -60,6 +62,8 @@ export const Rapture = ({
             <S.DeployText>{buttonName ? buttonName : <>{transport ? "TRANSPORT" : "RAPTURE"}</>}</S.DeployText>
           </S.InlinePointer>
         </S.Row>
+      ) : (
+        <p>No space to Transport More People</p>
       )}
     </>
   );

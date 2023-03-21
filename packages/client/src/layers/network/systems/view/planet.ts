@@ -1,5 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, getComponentValue, getComponentValueStrict, Has } from "@latticexyz/recs";
+import { defineSystem, getComponentValueStrict, Has } from "@latticexyz/recs";
 import { Mapping } from "../../../../utils/mapping";
 import { NetworkLayer } from "../../../network";
 import { PhaserLayer } from "../../../phaser";
@@ -30,7 +30,6 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const population = getComponentValueStrict(Population, entity)?.value;
-      console.log(+population);
       const astroidObject = objectPool.get(`planet-${entity}`, "Sprite");
       if (population && +population === 0) {
         input.disableInput();

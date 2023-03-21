@@ -11,7 +11,7 @@ const Win = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType },
+      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence },
     },
   } = layers;
   const allUserNameEntityId = [...getComponentEntities(Name)]
@@ -28,8 +28,9 @@ const Win = ({ layers }: { layers: Layers }) => {
         const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
         const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
         if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
+          const defence = getComponentValue(Defence, entity)?.value;
           const prePopulation = getComponentValue(Population, entity)?.value;
-          if (prePopulation) {
+          if (prePopulation && defence) {
             preTotalPopulation += +prePopulation;
           }
         }
@@ -75,13 +76,11 @@ const Win = ({ layers }: { layers: Layers }) => {
               <table style={{ color: "white", width: "80%" }}>
                 <tbody style={{ textAlign: "center" }}>
                   <tr>
-                    <th></th>
                     <th>{<img src="/img/winner.png" />}</th>
                     <th>Name</th>
                     <th>{<img src="/img/user.png" />}</th>
                     <th>{<img src="/img/USCoin.png" />}</th>
                     <th>{<img src="/img/tag.png" />}</th>
-                    <th></th>
                   </tr>
                   {allUserNameEntityId.map((nameEntity, index) => {
                     let totalPopulation = 0;
@@ -107,7 +106,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                     });
                     return (
                       <tr key={nameEntity}>
-                        <td>{troffyImages[index] && <img src={troffyImages[index].src} />}</td>
+                        <td>{troffyImages[index] && <img src={troffyImages[index].src} width="24px" />}</td>
                         <td>
                           <img src={nftDetails && nftDetails.imageUrl} width="24px" height="24px" />
                         </td>

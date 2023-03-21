@@ -7,7 +7,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType },
+      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence },
       network: { connectedAddress },
     },
     phaser: {
@@ -31,8 +31,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
         const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
         const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
         if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
+          const defence = getComponentValue(Defence, entity)?.value;
           const prePopulation = getComponentValue(Population, entity)?.value;
-          if (prePopulation) {
+          if (prePopulation && defence) {
             preTotalPopulation += +prePopulation;
           }
         }
@@ -42,8 +43,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
           presentEntity &&
           presentEntity === positionOwnedByIndex
         ) {
+          const defence = getComponentValue(Defence, entity)?.value;
           const presentPopulation = getComponentValue(Population, entity)?.value;
-          if (presentPopulation) {
+          if (presentPopulation && defence) {
             presentTotalPopulation += +presentPopulation;
           }
         }
@@ -81,8 +83,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     nameEntity === positionOwnedByIndex
                   ) {
                     const population = getComponentValue(Population, entity)?.value;
-                    const level = getComponentValue(Level, entity)?.value;
-                    if (population && level) {
+                    const defence = getComponentValue(Defence, entity)?.value;
+                    if (population && defence) {
                       totalPopulation += +population;
                     }
                   }
