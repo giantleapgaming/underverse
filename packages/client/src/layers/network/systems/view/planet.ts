@@ -23,16 +23,33 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
   const {
     components: { Position, EntityType, Population },
   } = network;
-  defineSystem(world, [Has(Position), Has(EntityType)], ({ entity }) => {
+  defineSystem(world, [Has(Position), Has(Population), Has(EntityType)], ({ entity }) => {
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
+
     if (+entityTypeNumber === Mapping.planet.id) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-      const population = getComponentValue(Population, entity)?.value;
+      const population = getComponentValueStrict(Population, entity)?.value;
+      console.log(+population);
       const astroidObject = objectPool.get(`planet-${entity}`, "Sprite");
       if (population && +population === 0) {
         input.disableInput();
       }
+
+      const pplBalanceText = objectPool.get("people-balance", "Text");
+
+      pplBalanceText.setComponent({
+        id: "build-attack-station-text-white",
+        once: (gameObject) => {
+          gameObject.setPosition(x + tileWidth / 2, y - tileHeight * 2.8);
+          gameObject.setDepth(2);
+          gameObject.setText(`${+population}`);
+          gameObject.setFontSize(150);
+          gameObject.setFontStyle("bold");
+          gameObject.setColor("#ffffff");
+          gameObject.setOrigin(0.5, 0.5);
+        },
+      });
       astroidObject.setComponent({
         id: `planet-${entity}`,
         once: (gameObject) => {
