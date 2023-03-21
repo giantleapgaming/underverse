@@ -4,7 +4,7 @@ import { useIdNFTData } from "../hooks/useIdNFT";
 
 export const NFTImg = ({ id, size }: { id: number; size?: number }) => {
   const { error, loading, nftData } = useIdNFTData(id);
-  console.log(nftData);
+
   return (
     <div>
       {nftData?.nftData ? (
