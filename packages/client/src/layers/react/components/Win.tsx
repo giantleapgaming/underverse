@@ -5,13 +5,13 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { getComponentEntities, getComponentValue, Has, Not, runQuery } from "@latticexyz/recs";
 import { Mapping } from "../../../utils/mapping";
-import { getNftId } from "../../network/utils/getNftId";
+import { NFTImg } from "./NFTImg";
 
 const Win = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence },
+      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence, NFTID },
     },
   } = layers;
   const allUserNameEntityId = [...getComponentEntities(Name)]
@@ -49,7 +49,6 @@ const Win = ({ layers }: { layers: Layers }) => {
       return presentTotalPopulation - preTotalPopulation;
     });
 
-  const nftDetails = getNftId(layers);
   return (
     <>
       <Container>
@@ -86,6 +85,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                     let totalPopulation = 0;
                     const name = getComponentValue(Name, nameEntity);
                     const cash = getComponentValue(Cash, nameEntity)?.value;
+                    const nftId = getComponentValue(NFTID, nameEntity)?.value;
                     const factionNumber = getComponentValue(Faction, nameEntity)?.value;
                     [...getComponentEntities(Position)].forEach((entity) => {
                       const entityType = getComponentValue(EntityType, entity)?.value;
@@ -107,9 +107,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                     return (
                       <tr key={nameEntity}>
                         <td>{troffyImages[index] && <img src={troffyImages[index].src} width="24px" />}</td>
-                        <td>
-                          <img src={nftDetails && nftDetails.imageUrl} width="24px" height="24px" />
-                        </td>
+                        <td>{nftId && <NFTImg id={+nftId} />}</td>
                         <td style={{ fontSize: "20px" }}>{name?.value}</td>
                         <td style={{ fontSize: "20px" }}>{totalPopulation} </td>
                         <td style={{ fontSize: "20px" }}>

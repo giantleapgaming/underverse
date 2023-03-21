@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 interface Image {
-  imageUrl: string;
-  address: string;
+  nftData: string;
 }
 export const useIdNFTData = (tokenId: number): { nftData?: Image; loading: boolean; error: string } => {
   const [nftData, setAllNfts] = useState<Image | undefined>();
