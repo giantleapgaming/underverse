@@ -149,6 +149,15 @@ export const ShowWeaponModal = (world: World) => {
     { id: "ShowWeaponModal" }
   );
 };
+export const ShowWinGame = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showWinGame: Type.Boolean,
+    },
+    { id: "ShowWinGame" }
+  );
+};
 
 export const Attack = (world: World) => {
   return defineComponent(

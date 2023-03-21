@@ -21,6 +21,7 @@ import {
   ObstacleHighlight,
   BuildWall,
   SelectedNftID,
+  ShowWinGame,
 } from "../local/components";
 
 import {
@@ -125,6 +126,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     ObstacleHighlight: ObstacleHighlight(world),
     BuildWall: BuildWall(world),
     SelectedNftID: SelectedNftID(world),
+    ShowWinGame: ShowWinGame(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -162,6 +164,15 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const setNftId = (selectedNftId: number) => {
     setComponent(components.SelectedNftID, nftId, { selectedNftID: selectedNftId });
   };
+
+  const setWinGame = (showWinGame: boolean) => {
+    setComponent(components.ShowWinGame, modalIndex, { showWinGame });
+  };
+
+  const getWinState = (): boolean => {
+    return getComponentValue(components.ShowWinGame, modalIndex)?.showWinGame ? true : false;
+  };
+
   const setBuildWall = ({
     sourcePositionX,
     sourcePositionY,
@@ -349,6 +360,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setObstacleHighlight,
       setBuildWall,
       setNftId,
+      setWinGame,
+    },
+    getValues: {
+      getWinState,
     },
     sounds,
   };

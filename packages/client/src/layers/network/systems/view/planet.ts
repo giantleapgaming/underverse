@@ -14,11 +14,13 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         phaserScene,
         input,
         config,
+        camera,
         maps: {
           Main: { tileWidth, tileHeight },
         },
       },
     },
+    localApi: { setWinGame },
   } = phaser;
   const {
     components: { Position, EntityType, Population },
@@ -33,6 +35,10 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const astroidObject = objectPool.get(`planet-${entity}`, "Sprite");
       if (population && +population === 0) {
         input.disableInput();
+        camera.centerOn(0, -1);
+        setTimeout(() => {
+          setWinGame(true);
+        }, 6000);
       }
 
       const pplBalanceText = objectPool.get("people-balance", "Text");
@@ -57,8 +63,17 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setPosition(x + tileHeight / 2, y + tileHeight / 2);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
-          {
-            population && +population === 0 && gameObject.play(Animations.Explosion);
+          if (population && +population === 0) {
+            gameObject.play(Animations.Explosion);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 3000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 3000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 6000);
           }
           phaserScene.add.tween({
             targets: gameObject,

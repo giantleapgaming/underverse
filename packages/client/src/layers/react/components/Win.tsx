@@ -337,18 +337,26 @@ export const registerWinScreen = () => {
           network: { connectedAddress },
         },
         phaser: {
+          components: { ShowWinGame },
           scenes: {
             Main: { input },
           },
+          getValues: { getWinState },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, Population.update$, Cash.update$).pipe(
+      return merge(
+        computedToStream(connectedAddress),
+        NFTID.update$,
+        Population.update$,
+        Cash.update$,
+        ShowWinGame.update$
+      ).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const listOfPopulations = [...runQuery([Has(Position), Has(EntityType), Has(Population), Not(OwnedBy)])];
           if (listOfPopulations.length) {
             const population = getComponentValue(Population, listOfPopulations[0])?.value;
-            if (population && +population === 0) {
+            if (population && +population === 0 && getWinState()) {
               input.disableInput();
               return { layers };
             }
