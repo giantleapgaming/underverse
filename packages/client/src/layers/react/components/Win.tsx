@@ -3,56 +3,52 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
-import { EntityID, getComponentEntities, getComponentValue, Has, Not, runQuery } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, Has, Not, runQuery } from "@latticexyz/recs";
 import { Mapping } from "../../../utils/mapping";
-import { walletAddressLoginDisplay } from "../utils/walletAddress";
 import { getNftId } from "../../network/utils/getNftId";
-import { useState } from "react";
 
 const Win = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
       components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType },
-      network: { connectedAddress },
     },
   } = layers;
-  const allUserNameEntityId = [...getComponentEntities(Name)].sort((prevEntity, presentEntity) => {
-    let preTotalPopulation = 0;
-    let presentTotalPopulation = 0;
-    const preCash = getComponentValue(Cash, prevEntity)?.value;
-    const presentCash = getComponentValue(Cash, presentEntity)?.value;
-    [...getComponentEntities(Position)].forEach((entity) => {
-      const entityType = getComponentValue(EntityType, entity)?.value;
-      const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
-      const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
-      if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
-        const prePopulation = getComponentValue(Population, entity)?.value;
-        if (prePopulation) {
-          preTotalPopulation += +prePopulation;
+  const allUserNameEntityId = [...getComponentEntities(Name)]
+    .sort((prevEntity, presentEntity) => {
+      const preCash = getComponentValue(Cash, prevEntity)?.value;
+      const presentCash = getComponentValue(Cash, presentEntity)?.value;
+      return preCash && presentCash ? +presentCash - +preCash : 0;
+    })
+    .sort((prevEntity, presentEntity) => {
+      let preTotalPopulation = 0;
+      let presentTotalPopulation = 0;
+      [...getComponentEntities(Position)].forEach((entity) => {
+        const entityType = getComponentValue(EntityType, entity)?.value;
+        const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
+        const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
+        if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
+          const prePopulation = getComponentValue(Population, entity)?.value;
+          if (prePopulation) {
+            preTotalPopulation += +prePopulation;
+          }
         }
-      }
-      if (
-        entityType &&
-        +entityType === Mapping.residential.id &&
-        presentEntity &&
-        presentEntity === positionOwnedByIndex
-      ) {
-        const presentPopulation = getComponentValue(Population, entity)?.value;
-        if (presentPopulation) {
-          presentTotalPopulation += +presentPopulation;
+        if (
+          entityType &&
+          +entityType === Mapping.residential.id &&
+          presentEntity &&
+          presentEntity === positionOwnedByIndex
+        ) {
+          const presentPopulation = getComponentValue(Population, entity)?.value;
+          if (presentPopulation) {
+            presentTotalPopulation += +presentPopulation;
+          }
         }
-      }
+      });
+      return presentTotalPopulation - preTotalPopulation;
     });
 
-    if (preTotalPopulation - presentTotalPopulation) {
-      return presentTotalPopulation - preTotalPopulation;
-    } else {
-      return preCash && presentCash ? +presentCash - +preCash : 0;
-    }
-  });
   const nftDetails = getNftId(layers);
-  const userEntityId = connectedAddress.get() as EntityID;
   return (
     <>
       <Container>
@@ -89,7 +85,6 @@ const Win = ({ layers }: { layers: Layers }) => {
                     <th></th>
                   </tr>
                   {allUserNameEntityId.map((nameEntity, index) => {
-                    const [copy, setCopy] = useState(false);
                     let totalPopulation = 0;
                     const name = getComponentValue(Name, nameEntity);
                     const cash = getComponentValue(Cash, nameEntity)?.value;
@@ -100,7 +95,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                       const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
                       if (
                         entityType &&
-                        (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
+                        +entityType === Mapping.residential.id &&
                         nameEntity &&
                         nameEntity === positionOwnedByIndex
                       ) {
@@ -130,22 +125,6 @@ const Win = ({ layers }: { layers: Layers }) => {
                         </td>
                         <td>
                           {factionNumber && <img src={`/faction/${+factionNumber}.png`} width="24px" height="24px" />}
-                        </td>
-                        <td style={{ fontSize: "18px", fontWeight: "bold" }}>
-                          {copy ? "Copied" : walletAddressLoginDisplay(`${connectedAddress.get()}`)}
-                          <span>
-                            <img
-                              src="/img/copy.png"
-                              style={{ marginLeft: "10px", cursor: "pointer", width: "18px", height: "18px" }}
-                              onClick={() => {
-                                setCopy(true);
-                                navigator.clipboard.writeText(`${connectedAddress.get()}`);
-                                setTimeout(() => {
-                                  setCopy(false);
-                                }, 1000);
-                              }}
-                            />
-                          </span>
                         </td>
                       </tr>
                     );
@@ -369,13 +348,13 @@ export const registerWinScreen = () => {
         map(() => connectedAddress.get()),
         map(() => {
           const listOfPopulations = [...runQuery([Has(Position), Has(EntityType), Has(Population), Not(OwnedBy)])];
-          if (listOfPopulations.length) {
-            const population = getComponentValue(Population, listOfPopulations[0])?.value;
-            if (population && +population === 0) {
-              input.disableInput();
-              return { layers };
-            }
-          }
+          // if (listOfPopulations.length) {
+          //   const population = getComponentValue(Population, listOfPopulations[0])?.value;
+          //   if (population && +population === 0) {
+          //     input.disableInput();
+          //     return { layers };
+          //   }
+          // }
           return;
         })
       );

@@ -17,40 +17,40 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
-  const allUserNameEntityId = [...getComponentEntities(Name)].sort((prevEntity, presentEntity) => {
-    let preTotalPopulation = 0;
-    let presentTotalPopulation = 0;
-    const preCash = getComponentValue(Cash, prevEntity)?.value;
-    const presentCash = getComponentValue(Cash, presentEntity)?.value;
-    [...getComponentEntities(Position)].forEach((entity) => {
-      const entityType = getComponentValue(EntityType, entity)?.value;
-      const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
-      const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
-      if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
-        const prePopulation = getComponentValue(Population, entity)?.value;
-        if (prePopulation) {
-          preTotalPopulation += +prePopulation;
+  const allUserNameEntityId = [...getComponentEntities(Name)]
+    .sort((prevEntity, presentEntity) => {
+      const preCash = getComponentValue(Cash, prevEntity)?.value;
+      const presentCash = getComponentValue(Cash, presentEntity)?.value;
+      return preCash && presentCash ? +presentCash - +preCash : 0;
+    })
+    .sort((prevEntity, presentEntity) => {
+      let preTotalPopulation = 0;
+      let presentTotalPopulation = 0;
+      [...getComponentEntities(Position)].forEach((entity) => {
+        const entityType = getComponentValue(EntityType, entity)?.value;
+        const ownedByEntityId = getComponentValue(OwnedBy, entity)?.value;
+        const positionOwnedByIndex = world.entities.indexOf(ownedByEntityId);
+        if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
+          const prePopulation = getComponentValue(Population, entity)?.value;
+          if (prePopulation) {
+            preTotalPopulation += +prePopulation;
+          }
         }
-      }
-      if (
-        entityType &&
-        +entityType === Mapping.residential.id &&
-        presentEntity &&
-        presentEntity === positionOwnedByIndex
-      ) {
-        const presentPopulation = getComponentValue(Population, entity)?.value;
-        if (presentPopulation) {
-          presentTotalPopulation += +presentPopulation;
+        if (
+          entityType &&
+          +entityType === Mapping.residential.id &&
+          presentEntity &&
+          presentEntity === positionOwnedByIndex
+        ) {
+          const presentPopulation = getComponentValue(Population, entity)?.value;
+          if (presentPopulation) {
+            presentTotalPopulation += +presentPopulation;
+          }
         }
-      }
+      });
+      return presentTotalPopulation - preTotalPopulation;
     });
 
-    if (preTotalPopulation - presentTotalPopulation) {
-      return presentTotalPopulation - preTotalPopulation;
-    } else {
-      return preCash && presentCash ? +presentCash - +preCash : 0;
-    }
-  });
   const userEntityId = connectedAddress.get() as EntityID;
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
   if (userEntityId) {
@@ -63,7 +63,6 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             <S.List>
               {allUserNameEntityId.map((nameEntity) => {
                 let totalPopulation = 0;
-                let totalLevel = 0;
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
                 const owner = world.entities[nameEntity] === userEntityId;
@@ -77,7 +76,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
                   if (
                     entityType &&
-                    (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
+                    +entityType === Mapping.residential.id &&
                     nameEntity &&
                     nameEntity === positionOwnedByIndex
                   ) {
@@ -85,7 +84,6 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     const level = getComponentValue(Level, entity)?.value;
                     if (population && level) {
                       totalPopulation += +population;
-                      totalLevel += +level;
                     }
                   }
                 });
