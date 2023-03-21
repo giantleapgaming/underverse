@@ -92,7 +92,6 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setTexture(passenger.assetKey, `passenger-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
-              gameObject.setAngle(0);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
             },

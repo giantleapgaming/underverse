@@ -60,9 +60,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
         {typeof totalLevel === "number" && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
             <img src="/build-stations/users.png" />
-            <p>
-              {totalPopulation} / {totalLevel}
-            </p>
+            <p>{totalPopulation}</p>
           </div>
         )}
       </div>

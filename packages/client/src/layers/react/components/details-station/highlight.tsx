@@ -123,7 +123,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                               src="/build-stations/users.png"
                               style={{ height: "15px", width: "20px", margin: " 0 4px" }}
                             />
-                            ({totalPopulation}/{totalLevel})
+                            ({totalPopulation})
                           </span>
                         </S.Cash>
                       </S.PLayerName>

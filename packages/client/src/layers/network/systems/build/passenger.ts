@@ -80,6 +80,7 @@ export function buildPassengerSystem(network: NetworkLayer, phaser: PhaserLayer)
             gameObject.setTexture(HoverSprite.assetKey, `passenger-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setDepth(6);
+            gameObject.setAngle(0);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setAlpha(0.7);
           },
