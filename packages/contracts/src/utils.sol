@@ -472,14 +472,13 @@ function unOwnedObstacle(
   int32 distance = int32(
     int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(1000000)))))) / int256(1000)
   );
-  // int32 stepX = (deltaX * 100) / distance;
-  // int32 stepY = (deltaY * 100) / distance;
   int32 x = x1 * 100;
   int32 y = y1 * 100;
   for (int32 i = 0; i <= distance; i++) {
     if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
       uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
-        .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
+        .getEntitiesWithValue(Coord({ x: int32((x * 10 + 50) / 100) * 10, y: int32((y * 10 + 50) / 100) * 10 }));
+
       for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
         if (
           (LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0) &&
