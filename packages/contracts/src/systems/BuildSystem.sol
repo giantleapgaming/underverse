@@ -19,6 +19,7 @@ import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownI
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { HasCaptainComponent, ID as HasCaptainComponentID } from "../components/HasCaptainComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -30,13 +31,21 @@ contract BuildSystem is System {
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
-    require(entity_type == 5, "Can only build Harvesters in spawning zone");
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
+    require(entity_type == 14, "Can only build Captain Ships in spawning zone");
 
     int32 distSq = x ** 2 + y ** 2;
 
     Coord memory coord = Coord({ x: x, y: y });
 
     require(distSq < 225 && distSq > 9, "Can only build between 3 to 15 units from earth");
+
+    require(
+      HasCaptainComponent(getAddressById(components, HasCaptainComponentID)).getValue(playerID) == 0,
+      "Captain Ship has already been built"
+    );
 
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
@@ -57,9 +66,6 @@ contract BuildSystem is System {
       }
     }
 
-    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
-    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
-
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
@@ -76,7 +82,7 @@ contract BuildSystem is System {
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(godownEntity, coord);
     OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(godownEntity, playerID);
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, offenceInitialAmount);
-    DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount * 10);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
@@ -85,6 +91,7 @@ contract BuildSystem is System {
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
+    HasCaptainComponent(getAddressById(components, HasCaptainComponentID)).set(playerID, 1);
   }
 
   function executeTyped(int32 x, int32 y, uint256 entity_type, uint256 nftID) public returns (bytes memory) {
