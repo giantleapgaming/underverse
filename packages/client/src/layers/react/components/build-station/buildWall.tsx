@@ -14,15 +14,22 @@ export const BuildWall = ({ layers }: { layers: Layers }) => {
 
   if (selectedEntity) {
     return (
-      <S.Flex>
-        <S.Button
-          onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
-          title="Habitat"
-        >
-          <S.Img src="/layout/hex.png" width="70px" height="64px" />
-          <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
-        </S.Button>
-      </S.Flex>
+      <div>
+        <S.Flex>
+          <S.Button
+            onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
+            title="wall"
+          >
+            <S.Title>WALL</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </S.Flex>
+      </div>
     );
   } else {
     return null;
@@ -61,5 +68,21 @@ const S = {
   Text: styled.div`
     align-items: center;
     font-size: 12px;
+  `,
+  Title: styled.p`
+    margin-top: -70px;
+    text-align: center;
+    font-size: 12px;
+  `,
+  ImgCrystal: styled.div`
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    position: absolute;
+    bottom: -40px;
+    left: -10px;
+  `,
+  BalanceText: styled.p`
+    font-size: 10px;
   `,
 };
