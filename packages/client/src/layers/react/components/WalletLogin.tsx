@@ -128,39 +128,38 @@ const WalletLogin = () => {
                 gap: "10px",
               }}
             >
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                {!playGame && !loading && enterInputKey && <div>INPUT/</div>}
-                <Input ref={pkRef} value={input} onChange={(e) => setInput(e.target.value)} />
-              </div>
-              <div>
-                {enterInputKey && (
-                  <Button
-                    type="submit"
-                    onClick={() => {
-                      setError("");
-                      try {
-                        const wallet = new Wallet(input);
-                        const address = wallet.address;
-                        sessionStorage.setItem("user-burner-wallet", input);
-                        setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                        if (!allKeys.includes(wallet.privateKey)) {
-                          const newList = [...allKeys, input];
-                          localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+              {enterInputKey && (
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                  <Input ref={pkRef} value={input} onChange={(e) => setInput(e.target.value)} />
+                  <div>
+                    <Button
+                      type="submit"
+                      onClick={() => {
+                        setError("");
+                        try {
+                          const wallet = new Wallet(input);
+                          const address = wallet.address;
+                          sessionStorage.setItem("user-burner-wallet", input);
+                          setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
+                          if (!allKeys.includes(wallet.privateKey)) {
+                            const newList = [...allKeys, input];
+                            localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                          }
+                          setInput("");
+                          setPlayGame(true);
+                          setTimeout(() => {
+                            buttonRef.current?.focus();
+                          });
+                        } catch (e) {
+                          setError("Enter a valid private key");
                         }
-                        setInput("");
-                        setPlayGame(true);
-                        setTimeout(() => {
-                          buttonRef.current?.focus();
-                        });
-                      } catch (e) {
-                        setError("Enter a valid private key");
-                      }
-                    }}
-                  >
-                    SUBMIT
-                  </Button>
-                )}
-              </div>
+                      }}
+                    >
+                      <img src="/button/enterNameBtn.png" style={{ width: "40px", height: "40px" }} />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
             {error && enterInputKey && <Error>{error}</Error>}
           </div>
@@ -362,10 +361,17 @@ const Input = styled.input`
   border: none;
   outline: none;
   margin: 0 auto;
-  margin-left: 10px;
   background-color: transparent;
   color: #fffdd5;
   font-weight: 600;
+  padding-top: 10px;
+  padding-bottom: 5px;
+  padding-left: 15px;
+  padding-right: 10px;
+  width: 330px;
+  background-image: url("/button/enterNameInput.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 `;
 const Button = styled.button`
   font-size: 18px;
