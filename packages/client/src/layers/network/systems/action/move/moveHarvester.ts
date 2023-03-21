@@ -8,8 +8,9 @@ import { NetworkLayer } from "../../../types";
 export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
-    components: { ShowAnimation },
+    components: { ShowAnimation, ShowStationDetails },
     localApi: { setShowLine },
+    localIds: { stationDetailsEntityIndex },
     scenes: {
       Main: {
         objectPool,
@@ -33,7 +34,7 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
     const destinationY = animation && animation?.destinationY;
     const type = animation && animation?.type;
     const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
-
+    const selectedEntityId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     if (
       animation &&
       animation.showAnimation &&
@@ -157,7 +158,10 @@ export function moveHarvester(network: NetworkLayer, phaser: PhaserLayer) {
               destinationCircle.clear();
               sourceCircle.clear();
               if (!animation?.systemStream) {
-                setShowLine(true, destinationX, destinationY, "move");
+                const afterMoveSelectedId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+                if (selectedEntityId === afterMoveSelectedId) {
+                  setShowLine(true, destinationX, destinationY, "move");
+                }
               }
             },
           });
