@@ -2,24 +2,24 @@ import React from "react";
 import styled from "styled-components";
 import { useIdNFTData } from "../hooks/useIdNFT";
 
-export const NFTImg = ({ id }: { id: number }) => {
+export const NFTImg = ({ id, size }: { id: number; size?: number }) => {
   const { error, loading, nftData } = useIdNFTData(id);
   console.log(nftData);
   return (
     <div>
       {nftData?.nftData ? (
-        <img src={nftData?.nftData} width="24px" height="24px" />
+        <img src={nftData?.nftData} width={size ?? "24px"} height={size ?? "24px"} />
       ) : (
-        <ImagePlaceholder></ImagePlaceholder>
+        <ImagePlaceholder size={size}></ImagePlaceholder>
       )}
     </div>
   );
 };
 
-const ImagePlaceholder = styled.div`
+const ImagePlaceholder = styled.div<{ size?: number }>`
   background-color: #6d6d6d75;
-  width: 34px;
-  height: 34px;
+  width: ${({ size }) => (size ? size : 34)}px;
+  height: ${({ size }) => (size ? size : 34)}px;
   display: flex;
   justify-content: center;
   align-items: center;
