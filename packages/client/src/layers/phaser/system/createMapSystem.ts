@@ -28,10 +28,8 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
   }
 
-  const R = 50;
-
   // Define the number of points on the circle
-  const N = 100;
+  const N = 70;
 
   // Create an array to store the points
   const circlePoints: [number, number][] = [];
@@ -41,6 +39,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   // Compute the coordinates of each point on the circle
   for (let i = 0; i < N; i++) {
+    const R = 50 + Math.random() * 5;
     const theta = i * deltaTheta;
     const x = R * Math.cos(theta);
     const y = R * Math.sin(theta);
@@ -60,15 +59,17 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
         gameObject.setOrigin(0.5, 0.5);
         gameObject.setDepth(1);
         gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-        const durationMultiplier = 0.8 + Math.random() * 0.4;
+        // Set the scale of the sprite randomly between 0.5 and 1.5
+        const scaleMultiplier = 0.5 + Math.random() * 1;
+        gameObject.setScale(scaleMultiplier);
+        const durationMultiplier = 0.5 + Math.random() * 1;
         phaserScene.add.tween({
           targets: gameObject,
-          angle: Math.random() < 0.5 ? 360 : -360,
           duration: 1000000 * durationMultiplier,
           ease: "circular",
           repeat: -1,
           yoyo: false,
-          rotation: 360,
+          rotation: Math.random() < 0.5 ? 360 : -360,
         });
       },
     });
