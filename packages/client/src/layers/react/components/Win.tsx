@@ -348,13 +348,13 @@ export const registerWinScreen = () => {
         map(() => connectedAddress.get()),
         map(() => {
           const listOfPopulations = [...runQuery([Has(Position), Has(EntityType), Has(Population), Not(OwnedBy)])];
-          // if (listOfPopulations.length) {
-          //   const population = getComponentValue(Population, listOfPopulations[0])?.value;
-          //   if (population && +population === 0) {
-          //     input.disableInput();
-          //     return { layers };
-          //   }
-          // }
+          if (listOfPopulations.length) {
+            const population = getComponentValue(Population, listOfPopulations[0])?.value;
+            if (population && +population === 0) {
+              input.disableInput();
+              return { layers };
+            }
+          }
           return;
         })
       );
