@@ -35,12 +35,9 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         input,
       },
     },
-    network: {
-      components: { Faction },
-    },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, Fuel },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, Fuel, Faction },
     utils: { getEntityIndexAtPosition },
     api: { moveSystem, prospectSystem },
   } = network;
@@ -259,40 +256,44 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                 toast.error("Not Enough Fuel to Move Ship");
                 return;
               }
-              toast.promise(
-                async () => {
-                  try {
-                    objectPool.remove(`fuel-text-white`);
-                    objectPool.remove(`prospect-text-white`);
-                    setMoveStation(false);
-                    setShowAnimation({
-                      showAnimation: true,
-                      destinationX: x,
-                      destinationY: y,
-                      sourceX: sourcePosition.x,
-                      sourceY: sourcePosition.y,
-                      type:
-                        (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                        (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                        (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                        (+entityType === Mapping.passenger.id && "movePassenger") ||
-                        "move",
-                      faction: +factionNumber,
-                      entityID: selectedEntity,
-                    });
-                    showProgress();
-                    setShowLine(false);
-                    await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
-                  } catch (e: any) {
-                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+              if (x * -1 < 51 && y * -1 < 51) {
+                toast.promise(
+                  async () => {
+                    try {
+                      objectPool.remove(`fuel-text-white`);
+                      objectPool.remove(`prospect-text-white`);
+                      setMoveStation(false);
+                      setShowAnimation({
+                        showAnimation: true,
+                        destinationX: x,
+                        destinationY: y,
+                        sourceX: sourcePosition.x,
+                        sourceY: sourcePosition.y,
+                        type:
+                          (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                          (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                          (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                          (+entityType === Mapping.passenger.id && "movePassenger") ||
+                          "move",
+                        faction: +factionNumber,
+                        entityID: selectedEntity,
+                      });
+                      showProgress();
+                      setShowLine(false);
+                      await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
+                    } catch (e: any) {
+                      throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                    }
+                  },
+                  {
+                    loading: "Transaction in progress",
+                    success: `Transaction successful`,
+                    error: (e) => e.message,
                   }
-                },
-                {
-                  loading: "Transaction in progress",
-                  success: `Transaction successful`,
-                  error: (e) => e.message,
-                }
-              );
+                );
+              } else {
+                toast.error("Cannot move beyond 50 orbits");
+              }
             }
           }
         } else {
