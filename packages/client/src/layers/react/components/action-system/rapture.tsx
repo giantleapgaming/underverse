@@ -30,6 +30,7 @@ export const Rapture = ({
           minWidth: "330px",
         }}
       >
+        <img src="/img/user.png" />
         {new Array(+space).fill(0).map((_, i) => {
           return (
             <S.Slanted
@@ -40,7 +41,7 @@ export const Rapture = ({
                 setSelected((i + 1).toString());
               }}
             >
-              <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+              {/* <span style={{ marginLeft: "3px" }}>{i + 1}</span> */}
             </S.Slanted>
           );
         })}
@@ -92,8 +93,8 @@ const S = {
   Slanted: styled.div<{ selected: boolean }>`
     position: relative;
     display: inline-block;
-    padding: 1px;
-    width: 20px;
+    padding: 0.6px;
+    width: 18px;
     cursor: pointer;
     font-size: 12px;
     text-align: center;
@@ -101,11 +102,12 @@ const S = {
       position: absolute;
       position: absolute;
       top: 0;
-      left: -14%;
+      left: -12%;
       width: 100%;
       height: 100%;
       content: "";
-      border: ${({ selected }) => `1px solid ${selected ? "#036e71" : "#ffffff"}`};
+      background-color: ${({ selected }) => ` ${selected ? "#62FEE6" : "#000000"}`};
+      border: 1px solid ${({ selected }) => ` ${selected ? "#62FEE6" : "#ffffff"}`};
       z-index: 4;
       width: 140%;
       transform: skewX(-20deg);
