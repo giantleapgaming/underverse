@@ -87,33 +87,33 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     });
   });
 
-  points.map((point) => {
-    const { x, y } = point;
-    const { x: sourcePixelX, y: sourcePixelY } = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
-    const astroidObject = objectPool.get(`astroidc-${x}-${y}`, "Sprite");
-    astroidObject.setComponent({
-      id: `astroidc-${x}-${y}`,
-      once: (gameObject) => {
-        const astroid = config.sprites[Sprites.Asteroid12];
-        gameObject.setTexture(astroid.assetKey, `asteroid-12.png`);
-        gameObject.setOrigin(0.5, 0.5);
-        gameObject.setDepth(1);
-        gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
-        // Set the scale of the sprite randomly between 0.5 and 1.5
-        const scaleMultiplier = 0.5 + Math.random() * 1;
-        gameObject.setScale(scaleMultiplier);
-        const durationMultiplier = 0.5 + Math.random() * 1;
-        phaserScene.add.tween({
-          targets: gameObject,
-          duration: 1000000 * durationMultiplier,
-          ease: "circular",
-          repeat: -1,
-          yoyo: false,
-          rotation: Math.random() < 0.5 ? 360 : -360,
-        });
-      },
-    });
-  });
+  // points.map((point) => {
+  //   const { x, y } = point;
+  //   const { x: sourcePixelX, y: sourcePixelY } = tileCoordToPixelCoord({ x, y }, tileWidth, tileHeight);
+  //   const astroidObject = objectPool.get(`astroidc-${x}-${y}`, "Sprite");
+  //   astroidObject.setComponent({
+  //     id: `astroidc-${x}-${y}`,
+  //     once: (gameObject) => {
+  //       const astroid = config.sprites[Sprites.Asteroid12];
+  //       gameObject.setTexture(astroid.assetKey, `asteroid-12.png`);
+  //       gameObject.setOrigin(0.5, 0.5);
+  //       gameObject.setDepth(1);
+  //       gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
+  //       // Set the scale of the sprite randomly between 0.5 and 1.5
+  //       const scaleMultiplier = 0.5 + Math.random() * 1;
+  //       gameObject.setScale(scaleMultiplier);
+  //       const durationMultiplier = 0.5 + Math.random() * 1;
+  //       phaserScene.add.tween({
+  //         targets: gameObject,
+  //         duration: 1000000 * durationMultiplier,
+  //         ease: "circular",
+  //         repeat: -1,
+  //         yoyo: false,
+  //         rotation: Math.random() < 0.5 ? 360 : -360,
+  //       });
+  //     },
+  //   });
+  // });
 
   input.pointermove$.subscribe(({ pointer }) => {
     if (pointer.rightButtonDown()) {
