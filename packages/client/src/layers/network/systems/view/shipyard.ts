@@ -81,6 +81,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `shipyard-new-1.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+            gameObject.setAngle(0);
             gameObject.setDepth(5);
             gameObject.setOrigin(0.5, 0.5);
           },
@@ -91,6 +92,7 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
             gameObject.setTexture(shipyard.assetKey, `shipyard-new-2.png`);
             gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
             gameObject.setDepth(4);
+            gameObject.setAngle(0);
             gameObject.setOrigin(0.5, 0.5);
             const color = generateColorsFromWalletAddress(`${ownedBy}`);
             gameObject.setTint(color[0], color[1], color[2], color[3]);
@@ -101,9 +103,9 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
           once: (gameObject) => {
             gameObject.setTexture(shipyard.assetKey, `upgrade-${+level}.png`);
             gameObject.setPosition(x, y + 12);
+            gameObject.setAngle(0);
             gameObject.setDepth(4);
             gameObject.setOrigin(0.5, 0.5);
-            gameObject.setAngle(0);
           },
         });
       } else {

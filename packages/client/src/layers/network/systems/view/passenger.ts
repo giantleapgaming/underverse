@@ -60,10 +60,10 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               once: (gameObject) => {
                 gameObject.setPosition(x + i * 25, y + 256);
                 gameObject.setDepth(10);
-                gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
-                gameObject.setFillStyle(color, 0.5);
                 gameObject.setSize(15, 15);
+                gameObject.setFillStyle(color, 0.5);
+                gameObject.setOrigin(0.5, 0.5);
               },
             });
           }
@@ -75,10 +75,10 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               once: (gameObject) => {
                 gameObject.setPosition(x + i * 25, y + 281);
                 gameObject.setDepth(10);
-                gameObject.setOrigin(0.5, 0.5);
                 gameObject.setAngle(0);
                 gameObject.setFillStyle(population >= i ? 0x2c8073 : 0xffffff);
                 gameObject.setSize(15, 15);
+                gameObject.setOrigin(0.5, 0.5);
               },
             });
           }
@@ -92,8 +92,8 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setTexture(passenger.assetKey, `passenger-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
-              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(angle);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
 
@@ -104,9 +104,9 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
               gameObject.setDepth(4);
               gameObject.setAngle(angle);
-              gameObject.setOrigin(0.5, 0.5);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
               gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
           levelSprite.setComponent({
@@ -115,8 +115,8 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
               gameObject.setTexture(passenger.assetKey, `upgrade-${+level}.png`);
               gameObject.setPosition(x, y + 12);
               gameObject.setDepth(4);
-              gameObject.setOrigin(0.5, 0.5);
               gameObject.setAngle(0);
+              gameObject.setOrigin(0.5, 0.5);
             },
           });
         } else {
