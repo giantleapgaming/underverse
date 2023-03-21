@@ -192,9 +192,9 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
               id: `hoverStation`,
               once: (gameObject) => {
                 gameObject.setTexture(HoverSprite.assetKey, `wall.png`);
-                gameObject.setPosition(x, y);
+                gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
                 gameObject.setDepth(4);
-                gameObject.setAngle(180);
+                gameObject.setAngle(0);
                 gameObject.setOrigin(0.5, 0.5);
               },
             });
@@ -270,9 +270,9 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
               id: `wall-build-${i}`,
               once: (gameObject) => {
                 gameObject.setTexture(attack.assetKey, `wall.png`);
-                gameObject.setPosition(x, y);
+                gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
                 gameObject.setDepth(1);
-                gameObject.setAngle(90);
+                gameObject.setAngle(0);
                 gameObject.setOrigin(0.5, 0.5);
                 gameObject.setName(`wall-build-${i}`);
                 if (!(sourcePositionX === destinationPositionX || sourcePositionY === destinationPositionY)) {
