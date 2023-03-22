@@ -267,58 +267,6 @@ const WalletText = styled.div`
   z-index: 100;
   letter-spacing: 1;
 `;
-const List = styled.div`
-  position: absolute;
-  top: 80px;
-  left: 70px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  height: 440px;
-  overflow-y: auto;
-  ::-webkit-scrollbar {
-    width: 10px;
-  }
-`;
-
-const Player = styled.div`
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  overflow-x: hidden;
-  justify-content: flex-start;
-  height: 100px;
-`;
-
-const CheckBox = styled.input`
-  -webkit-appearance: none;
-  appearance: none;
-  width: 2.3em;
-  height: 2.3em;
-  border-radius: 0.12em;
-  margin-right: 0.5em;
-  border: 0.4em solid #00fde4;
-  outline: none;
-  cursor: pointer;
-  :checked {
-    background-image: url("/ui/check.png");
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-repeat: no-repeat;
-  }
-`;
-
-const PLayerName = styled.p`
-  font-size: 16px;
-  font-weight: 700;
-`;
-const CashAmount = styled.span`
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-`;
 
 export const registerWinScreen = () => {
   registerUIComponent(

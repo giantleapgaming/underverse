@@ -32,6 +32,9 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const population = getComponentValueStrict(Population, entity)?.value;
+
+      const harvester = config.sprites[Sprites.Asteroid12];
+
       const astroidObject = objectPool.get(`planet-${entity}`, "Sprite");
       if (population && +population === 0) {
         input.disableInput();
@@ -42,9 +45,10 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       }
 
       const pplBalanceText = objectPool.get("people-balance", "Text");
+      const pplImage = objectPool.get(`people-image`, "Sprite");
 
       pplBalanceText.setComponent({
-        id: "build-attack-station-text-white",
+        id: "people-balance",
         once: (gameObject) => {
           gameObject.setPosition(x + tileWidth / 2, y - tileHeight * 2.8);
           gameObject.setDepth(2);
@@ -55,12 +59,25 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setOrigin(0.5, 0.5);
         },
       });
+
+      pplImage.setComponent({
+        id: `people-image`,
+        once: (gameObject) => {
+          gameObject.setScale(0.5);
+          gameObject.setTexture(harvester.assetKey, `people.png`);
+          gameObject.setPosition(x + tileWidth / 2 - 200, y - tileHeight * 2.8);
+          gameObject.setDepth(155);
+          gameObject.setOrigin(0.5, 0.5);
+          gameObject.setScale(3.8);
+        },
+      });
+
       astroidObject.setComponent({
         id: `planet-${entity}`,
         once: (gameObject) => {
           const planet = config.sprites[Sprites.Earth];
           gameObject.setTexture(planet.assetKey, planet.frame);
-          gameObject.setPosition(x + tileHeight / 2, y + tileHeight / 2);
+          gameObject.setPosition(x + tileHeight / 2 - 100, y + tileHeight / 2);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
           if (population && +population === 0) {
