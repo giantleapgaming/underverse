@@ -75,6 +75,7 @@ const Win = ({ layers }: { layers: Layers }) => {
               <table style={{ color: "white", width: "80%" }}>
                 <tbody style={{ textAlign: "center" }}>
                   <tr>
+                    <th></th>
                     <th>{<img src="/img/winner.png" />}</th>
                     <th>Name</th>
                     <th>{<img src="/img/user.png" />}</th>
@@ -106,8 +107,8 @@ const Win = ({ layers }: { layers: Layers }) => {
                     });
                     return (
                       <tr key={nameEntity}>
-                        <td>{troffyImages[index] && <img src={troffyImages[index].src} width="24px" />}</td>
-                        <td>{nftId && <NFTImg id={+nftId} />}</td>
+                        <td>{troffyImages[index] && <img src={troffyImages[index].src} width="54px" />}</td>
+                        <td>{nftId && <NFTImg id={+nftId} size={64} />}</td>
                         <td style={{ fontSize: "20px" }}>{name?.value}</td>
                         <td style={{ fontSize: "20px" }}>{totalPopulation} </td>
                         <td style={{ fontSize: "20px" }}>
@@ -120,7 +121,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                             }).format(+cash / 1_000_000)}{" "}
                         </td>
                         <td>
-                          {factionNumber && <img src={`/faction/${+factionNumber}.png`} width="24px" height="24px" />}
+                          {factionNumber && <img src={`/faction/${+factionNumber}.png`} width="44px" height="44px" />}
                         </td>
                       </tr>
                     );
@@ -153,7 +154,7 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
-  overflow: hidden;
+  overflow-y: auto;
 `;
 const rotateAnimation = keyframes`
   from {
