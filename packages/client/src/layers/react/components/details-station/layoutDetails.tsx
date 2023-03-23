@@ -21,6 +21,9 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
       localApi: { setDestinationDetails, setShowStationDetails, setShowLine },
+      scenes: {
+        Main: { input },
+      },
     },
     network: {
       components: { EntityType },
@@ -31,7 +34,14 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     return (
-      <S.Container>
+      <S.Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
         {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id ? (
           <UserDetails layers={layers} />
         ) : (
