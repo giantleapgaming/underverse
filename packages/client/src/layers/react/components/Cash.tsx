@@ -36,6 +36,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
       }
     }
   });
+
   return (
     <>
       <div
