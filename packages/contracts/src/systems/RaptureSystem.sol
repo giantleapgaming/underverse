@@ -20,6 +20,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { checkNFT } from "../utils.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Rapture"));
 
@@ -172,6 +173,25 @@ contract RaptureSystem is System {
     // for (uint256 i = 0; i < peopleTransported; i++) {
     //   createPerson(world, components, destinationGodownPosition.x, destinationGodownPosition.y);
     // }
+
+    //When we move ppl from earth to ppl carrier then we set tutorial component to 110
+
+    if (
+      (sourceEntityType == 6) &&
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 110)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 110);
+    }
+
+    //When we move ppl from ppl carrier to hab then we set tutorial component to 130
+
+    if (
+      (sourceEntityType == 13) &&
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 130) &&
+      (destinationEntityType == 3)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 130);
+    }
   }
 
   function executeTyped(

@@ -18,6 +18,7 @@ import { MULTIPLIER, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Refuel"));
 
@@ -115,6 +116,10 @@ contract RefuelSystem is System {
     // update fuel data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceFuel - kgs);
     FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, destinationFuel + kgs);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 60) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 60);
+    }
   }
 
   function executeTyped(

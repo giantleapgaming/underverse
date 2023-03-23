@@ -88,7 +88,7 @@ contract BuildSystem is System {
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
 
     if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) == 0) {
-      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 1);
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 10);
     }
   }
 

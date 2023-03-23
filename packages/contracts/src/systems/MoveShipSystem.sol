@@ -104,8 +104,17 @@ contract MoveShipSystem is System {
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
 
-    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 2) {
-      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 2);
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 20) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 20);
+    }
+
+    //Check if ppl carier was moved into spawning zone
+    if (
+      (sourceEntityType == 13) &&
+      (distFromCenterSq < 225) &&
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 100)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 100);
     }
   }
 

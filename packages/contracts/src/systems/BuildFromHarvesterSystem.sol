@@ -19,6 +19,7 @@ import { actionDelayInSeconds, defenceInitialAmount, godownInitialLevel, godownI
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildFromHarvester"));
 
@@ -105,6 +106,24 @@ contract BuildFromHarvesterSystem is System {
     FuelComponent(getAddressById(components, FuelComponentID)).set(buildEntity, baseInitialfuel);
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(buildEntity, offenceInitialAmount);
     EncounterComponent(getAddressById(components, EncounterComponentID)).set(buildEntity, 0);
+
+    //We track build of shipyard
+
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 70) &&
+      (entity_type == 7)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 70);
+    }
+
+    //We track build of hab
+
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 120) &&
+      (entity_type == 3)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 120);
+    }
   }
 
   //Input parameters are harvester, asteroid, build location and what you want to build

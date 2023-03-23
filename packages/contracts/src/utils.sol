@@ -346,8 +346,8 @@ function createEncounterEntity(IWorld world, IUint256Component components, int32
     //That way we know which 2 entities belong to a specific encounter
     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
-    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 3) {
-      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 3);
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 30) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 30);
     }
   }
 }

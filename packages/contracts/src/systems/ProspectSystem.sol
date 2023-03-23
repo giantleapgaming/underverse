@@ -20,6 +20,7 @@ import { OffenceComponent, ID as OffenceComponentID } from "../components/Offenc
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract, defenceInitialAmount } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Prospect"));
 
@@ -36,14 +37,6 @@ contract ProspectSystem is System {
 
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
-
-    // require(
-    //   (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) ==
-    //     destinationEntity) &&
-    //     (EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(destinationEntity) ==
-    //       sourceEntity),
-    //   "Source and Destination entities need to be in encounter with each other"
-    // );
 
     require(
       OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
@@ -125,6 +118,10 @@ contract ProspectSystem is System {
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(destinationEntity, pirateShip);
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, balance * 2);
       OffenceComponent(getAddressById(components, OffenceComponentID)).set(destinationEntity, balance % 10);
+    }
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 40) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 40);
     }
   }
 

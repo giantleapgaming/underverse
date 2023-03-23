@@ -100,7 +100,8 @@
         "BalanceComponent",
         "FuelComponent",
         "PositionComponent",
-        "LevelComponent"
+        "LevelComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -108,7 +109,8 @@
       "writeAccess": [
         "LastUpdatedTimeComponent",
         "BalanceComponent",
-        "FuelComponent"
+        "FuelComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -174,7 +176,8 @@
         "FuelComponent",
         "EntityTypeComponent",
         "PositionComponent",
-        "LevelComponent"
+        "LevelComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -201,14 +204,16 @@
         "DefenceComponent",
         "EncounterComponent",
         "OffenceComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "TutorialStepComponent"
       ]
     },
     {
       "name": "RefuelSystem",
       "writeAccess": [
         "LastUpdatedTimeComponent",
-        "FuelComponent"
+        "FuelComponent",
+        "TutorialStepComponent"
       ]
     },
     {

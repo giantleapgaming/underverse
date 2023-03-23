@@ -19,6 +19,7 @@ import { defenceInitialAmount, godownInitialLevel, godownInitialBalance, initial
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildFromShipyard"));
 
@@ -53,7 +54,7 @@ contract BuildFromShipyardSystem is System {
 
     require(
       (entity_type == 4 || entity_type == 5 || entity_type == 9 || entity_type == 13),
-      "Can only build Attack or Harvester or fuel carrier ships"
+      "Can only build Attack or Harvester or fuel carrier ships or ppl carrier"
     );
 
     uint256 balanceShipyard = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(ShipyardEntity);
@@ -108,6 +109,14 @@ contract BuildFromShipyardSystem is System {
 
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(buildEntity, offenceInitialAmount);
     EncounterComponent(getAddressById(components, EncounterComponentID)).set(buildEntity, 0);
+
+    //We track build of ppl carrier
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 90) &&
+      (entity_type == 13)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 90);
+    }
   }
 
   //Input parameters are Shipyard, Build location and what you want to build

@@ -16,6 +16,7 @@ import { atleastOneObstacleOnTheWay, getCurrentPosition, getEntityLevel, getDist
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Harvest"));
 
@@ -107,6 +108,10 @@ contract HarvestSystem is System {
     // update  data
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 50) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 50);
+    }
   }
 
   function executeTyped(

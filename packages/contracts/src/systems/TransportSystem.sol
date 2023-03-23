@@ -5,7 +5,7 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
+import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
@@ -17,6 +17,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { checkNFT } from "../utils.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Transport"));
 
@@ -46,6 +47,13 @@ contract TransportSystem is System {
     require(
       LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity) >= 1,
       "Invalid source  entity"
+    );
+
+    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+      sourceEntity
+    );
+    uint256 destinationEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
+      destinationEntity
     );
 
     uint256 sourceBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity);
@@ -95,6 +103,15 @@ contract TransportSystem is System {
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - kgs);
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, destinationBalance + kgs);
+
+    //Check that minerals were transferred from harvester to shipyard
+    if (
+      (sourceEntityType == 5) &&
+      (destinationEntityType == 7) &&
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 80)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 80);
+    }
   }
 
   function executeTyped(
