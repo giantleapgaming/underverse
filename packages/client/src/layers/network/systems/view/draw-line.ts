@@ -220,6 +220,27 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             return;
           }
         }
+        if (
+          entityType &&
+          +entityType !== Mapping.planet.id &&
+          +entityType !== Mapping.astroid.id &&
+          lineDetails.type === "refuel-astroid"
+        ) {
+          const position = getComponentValueStrict(Position, selectedEntity);
+          const destEntityType = getComponentValue(EntityType, stationEntity)?.value;
+          if (getDistance(position.x, position?.y, x, y) <= 5) {
+            if (destEntityType && +destEntityType === Mapping.harvester.id) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "refuel-astroid");
+            } else {
+              toast.error("while refueling from astroid destination should be harvester");
+              return;
+            }
+          } else {
+            toast.error("Fuel Source is further than 5 units distance from target ship");
+            return;
+          }
+        }
       } else {
         toast.error("Obstacle on the way");
         return;
