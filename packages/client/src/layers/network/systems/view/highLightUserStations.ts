@@ -47,7 +47,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
               gameObject.setPosition(x + 198, y + 108);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setVisible(showSelected);
-              gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
+              gameObject.setTexture(stationBackground.assetKey, "highlight-circle-2.png");
             },
           });
         } else {
