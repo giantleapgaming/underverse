@@ -1,10 +1,10 @@
-# .github/workflows/build-client.yml
-name: Build client and push to the dist-client branch
+# .github/workflows/build-client-tutorials.yml
+name: Build client and push to the tutorial-dist-client branch
 
 on:
   push:
     branches:
-      - main
+      - tutorial
 
 jobs:
   build:
@@ -29,7 +29,8 @@ jobs:
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
-          BRANCH: dist-client # The branch name where you want to push the assets
+          BRANCH: tutorial-dist-client # The branch name where you want to push the assets
           FOLDER: packages/client/dist # The directory where your assets are generated
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # GitHub will automatically add this - you don't need to bother getting a token
           MESSAGE: "client: ({sha}) {msg}" # The commit message
+
