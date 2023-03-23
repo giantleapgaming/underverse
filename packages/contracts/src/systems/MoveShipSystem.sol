@@ -17,6 +17,7 @@ import { EncounterComponent, ID as EncounterComponentID } from "../components/En
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 
@@ -95,13 +96,17 @@ contract MoveShipSystem is System {
       (distFromCenterSq > 225) &&
       (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 2500)
     ) {
-      createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, sourceEntity);
+      createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, playerID);
     }
 
     // update player data
     FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 2) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 2);
+    }
   }
 
   //From UI we will pass which entity we want to move and the destination coordinates

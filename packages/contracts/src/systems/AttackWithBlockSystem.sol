@@ -12,7 +12,7 @@ import { OffenceComponent, ID as OffenceComponentID } from "../components/Offenc
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, deleteGodown, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, checkIntersections, getFactionAttackCosts } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, deleteGodown, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, getFactionAttackCosts } from "../utils.sol";
 import { actionDelayInSeconds, MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
 
@@ -25,14 +25,6 @@ contract AttackWithBlockSystem is System {
     (uint256 sourceGodownEntity, uint256 destinationGodownEntity, uint256 amount) = abi.decode(
       arguments,
       (uint256, uint256, uint256)
-    );
-
-    uint256 playerLastUpdatedTime = LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID))
-      .getValue(addressToEntity(msg.sender));
-
-    require(
-      playerLastUpdatedTime > 0 && block.timestamp >= playerLastUpdatedTime + actionDelayInSeconds,
-      "Need 0 seconds of delay between actions"
     );
 
     uint256 sourceGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
@@ -75,33 +67,6 @@ contract AttackWithBlockSystem is System {
       uint256[] memory allPositionEntities = position.getEntities();
 
       Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
-
-      // Coord[] memory enclosedPoints = findEnclosedPoints(
-      //   sourceGodownPosition,
-      //   destinationGodownPosition,
-      //   allStationCoords
-      // );
-
-      Coord[] memory blockingCoords = checkIntersections(
-        sourceGodownPosition,
-        destinationGodownPosition,
-        // enclosedPoints
-        allStationCoords
-      );
-
-      for (uint256 j = 0; j < blockingCoords.length; j++) {
-        Coord memory checkPos = blockingCoords[j];
-        uint256[] memory entities = PositionComponent(getAddressById(components, PositionComponentID))
-          .getEntitiesWithValue(checkPos);
-        for (uint256 k = 0; k < entities.length; k++) {
-          if (
-            OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(entities[k]) !=
-            addressToEntity(msg.sender)
-          ) {
-            revert("Enemy station blocking transport!");
-          }
-        }
-      }
     }
 
     // distanceBetweenGodowns the value that you get below is multiplied by MULTIPLIER
@@ -126,10 +91,6 @@ contract AttackWithBlockSystem is System {
       sourceGodownEntity,
       sourceGodownEntityOffenceAmount - amount
     );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      sourceGodownEntity,
-      block.timestamp
-    );
 
     uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
       destinationGodownEntity
@@ -149,17 +110,7 @@ contract AttackWithBlockSystem is System {
         destinationGodownEntity,
         destinationDefenceAmount - totalDamage
       );
-      LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-        destinationGodownEntity,
-        block.timestamp
-      );
     }
-
-    // update player data
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
-    );
   }
 
   function executeTyped(

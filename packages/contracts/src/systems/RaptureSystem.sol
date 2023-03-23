@@ -14,7 +14,7 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { PopulationComponent, ID as PopulationComponentID } from "../components/PopulationComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, createPerson } from "../utils.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerCash, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, createPerson } from "../utils.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";

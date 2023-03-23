@@ -25,7 +25,8 @@
     "Attribute3Component",
     "Attribute4Component",
     "Attribute5Component",
-    "Attribute6Component"
+    "Attribute6Component",
+    "TutorialStepComponent"
   ],
   "systems": [
     {
@@ -57,7 +58,8 @@
         "Attribute3Component",
         "Attribute4Component",
         "Attribute5Component",
-        "Attribute6Component"
+        "Attribute6Component",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -77,7 +79,8 @@
         "FuelComponent",
         "PopulationComponent",
         "PrevPositionComponent",
-        "EncounterComponent"
+        "EncounterComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -184,7 +187,8 @@
         "FuelComponent",
         "ProspectedComponent",
         "PrevPositionComponent",
-        "EncounterComponent"
+        "EncounterComponent",
+        "TutorialStepComponent"
       ]
     },
     {

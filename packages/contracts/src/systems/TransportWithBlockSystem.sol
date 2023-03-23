@@ -9,7 +9,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getLastUpdatedTimeOfEntity, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, checkIntersections, getFactionTransportCosts } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getCoords, findEnclosedPoints, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { MULTIPLIER, MULTIPLIER2, Faction } from "../constants.sol";
 import "../libraries/Math.sol";
@@ -82,33 +82,6 @@ contract TransportWithBlockSystem is System {
       uint256[] memory allPositionEntities = position.getEntities();
 
       Coord[] memory allStationCoords = getCoords(allPositionEntities, components);
-
-      // Coord[] memory enclosedPoints = findEnclosedPoints(
-      //   sourceGodownPosition,
-      //   destinationGodownPosition,
-      //   allStationCoords
-      // );
-
-      Coord[] memory blockingCoords = checkIntersections(
-        sourceGodownPosition,
-        destinationGodownPosition,
-        // enclosedPoints
-        allStationCoords
-      );
-
-      for (uint256 j = 0; j < blockingCoords.length; j++) {
-        Coord memory checkPos = blockingCoords[j];
-        uint256[] memory entities = PositionComponent(getAddressById(components, PositionComponentID))
-          .getEntitiesWithValue(checkPos);
-        for (uint256 k = 0; k < entities.length; k++) {
-          if (
-            OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(entities[k]) !=
-            addressToEntity(msg.sender)
-          ) {
-            revert("Enemy station blocking transport!");
-          }
-        }
-      }
     }
 
     uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(
@@ -122,7 +95,7 @@ contract TransportWithBlockSystem is System {
 
     uint256 factionCostPercent = getFactionTransportCosts(Faction(userFaction));
 
-    uint256 totalTransportCost = (((distanceBetweenGodowns * kgs)**2) * factionCostPercent) / 100;
+    uint256 totalTransportCost = (((distanceBetweenGodowns * kgs) ** 2) * factionCostPercent) / 100;
 
     uint256 playerCash = getPlayerCash(
       CashComponent(getAddressById(components, CashComponentID)),
@@ -135,10 +108,6 @@ contract TransportWithBlockSystem is System {
     CashComponent(getAddressById(components, CashComponentID)).set(
       addressToEntity(msg.sender),
       playerCash - totalTransportCost
-    );
-    LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(
-      addressToEntity(msg.sender),
-      block.timestamp
     );
 
     // update godown data

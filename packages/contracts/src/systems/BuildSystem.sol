@@ -19,6 +19,7 @@ import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownI
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -85,6 +86,10 @@ contract BuildSystem is System {
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) == 0) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 1);
+    }
   }
 
   function executeTyped(int32 x, int32 y, uint256 entity_type, uint256 nftID) public returns (bytes memory) {

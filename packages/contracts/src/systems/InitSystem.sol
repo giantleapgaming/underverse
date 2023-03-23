@@ -10,7 +10,6 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 // Added new by Moresh to support faction
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 //import { createAsteroids } from "../utils.sol";
-import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
@@ -30,6 +29,7 @@ import { Attribute3Component, ID as Attribute3ComponentID } from "../components/
 import { Attribute4Component, ID as Attribute4ComponentID } from "../components/Attribute4Component.sol";
 import { Attribute5Component, ID as Attribute5ComponentID } from "../components/Attribute5Component.sol";
 import { Attribute6Component, ID as Attribute6ComponentID } from "../components/Attribute6Component.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
 
@@ -45,13 +45,15 @@ contract InitSystem is System {
     require(registeredPlayers[nftID] == false, "NFT ID already registered");
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
 
-    uint256 playerId = world.getUniqueEntityId();
+    uint256 playerID = world.getUniqueEntityId();
 
-    CashComponent(getAddressById(components, CashComponentID)).set(playerId, playerInitialCash);
+    CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerInitialCash);
 
-    FactionComponent(getAddressById(components, FactionComponentID)).set(playerId, faction);
+    FactionComponent(getAddressById(components, FactionComponentID)).set(playerID, faction);
 
-    NameComponent(getAddressById(components, NameComponentID)).set(playerId, name);
+    NameComponent(getAddressById(components, NameComponentID)).set(playerID, name);
+
+    TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 0);
 
     // Init called for first time.
     if (playerCount == 0) {
@@ -66,15 +68,15 @@ contract InitSystem is System {
     registeredPlayers[nftID] = true;
     playerCount += 1;
 
-    NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(playerId, nftID);
+    NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(playerID, nftID);
 
     uint256 random = uint256(keccak256(abi.encodePacked(nftID)));
-    Attribute1Component(getAddressById(components, Attribute1ComponentID)).set(playerId, (random % 10) + 1);
-    Attribute2Component(getAddressById(components, Attribute2ComponentID)).set(playerId, (random % 9) + 2);
-    Attribute3Component(getAddressById(components, Attribute3ComponentID)).set(playerId, (random % 8) + 3);
-    Attribute4Component(getAddressById(components, Attribute4ComponentID)).set(playerId, (random % 7) + 4);
-    Attribute5Component(getAddressById(components, Attribute5ComponentID)).set(playerId, (random % 6) + 5);
-    Attribute6Component(getAddressById(components, Attribute6ComponentID)).set(playerId, (random % 5) + 6);
+    Attribute1Component(getAddressById(components, Attribute1ComponentID)).set(playerID, (random % 10) + 1);
+    Attribute2Component(getAddressById(components, Attribute2ComponentID)).set(playerID, (random % 9) + 2);
+    Attribute3Component(getAddressById(components, Attribute3ComponentID)).set(playerID, (random % 8) + 3);
+    Attribute4Component(getAddressById(components, Attribute4ComponentID)).set(playerID, (random % 7) + 4);
+    Attribute5Component(getAddressById(components, Attribute5ComponentID)).set(playerID, (random % 6) + 5);
+    Attribute6Component(getAddressById(components, Attribute6ComponentID)).set(playerID, (random % 5) + 6);
   }
 
   function executeTyped(string calldata name, uint256 faction, uint256 nftID) public returns (bytes memory) {
