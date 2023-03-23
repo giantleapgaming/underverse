@@ -116,8 +116,8 @@ export function buildPassengerSystem(network: NetworkLayer, phaser: PhaserLayer)
           once: (gameObject) => {
             gameObject.setPosition(textPosition.x + 40, textPosition.y - 35);
             gameObject.depth = 4;
-            gameObject.setText(`2`);
-            gameObject.setFontSize(16);
+            gameObject.setText(`1`);
+            gameObject.setFontSize(40);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
           },
