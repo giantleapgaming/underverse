@@ -30,7 +30,12 @@ export const highlightMaxDistance = (network: NetworkLayer, phaser: PhaserLayer)
       selectedEntity &&
       lineDetails &&
       lineDetails.showLine &&
-      (lineDetails.type === "harvest" || lineDetails.type === "refuel" || lineDetails.type === "prospect")
+      (lineDetails.type === "harvest" ||
+        lineDetails.type === "refuel" ||
+        lineDetails.type === "prospect" ||
+        lineDetails.type === "transport" ||
+        lineDetails.type === "steal-passenger" ||
+        lineDetails.type === "rapture-passenger")
     ) {
       const position = getComponentValue(Position, selectedEntity);
       if (position) {
