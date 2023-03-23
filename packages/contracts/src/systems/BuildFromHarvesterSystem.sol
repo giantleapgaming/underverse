@@ -60,7 +60,7 @@ contract BuildFromHarvesterSystem is System {
       harvesterEntity
     );
 
-    require(balanceHarvester >= 2, "Need atleast 2 minerals to build anything");
+    require(balanceHarvester >= 1, "Need atleast 2 minerals to build anything");
 
     require((x ** 2 + y ** 2) > 225, "Cannot build in spawning zone");
 
@@ -90,7 +90,7 @@ contract BuildFromHarvesterSystem is System {
       "Obstacle on the way"
     );
 
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(harvesterEntity, balanceHarvester - 2);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(harvesterEntity, balanceHarvester - 1);
 
     uint256 buildEntity = world.getUniqueEntityId();
 

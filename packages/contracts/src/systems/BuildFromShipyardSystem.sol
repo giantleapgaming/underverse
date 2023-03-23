@@ -58,7 +58,7 @@ contract BuildFromShipyardSystem is System {
 
     uint256 balanceShipyard = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(ShipyardEntity);
 
-    require(balanceShipyard >= 2, "Need atleast 2 minerals to build anything");
+    require(balanceShipyard >= 1, "Need atleast 2 minerals to build anything");
 
     require((x ** 2 + y ** 2) > 225, "Cannot build in spawning zone");
 
@@ -87,7 +87,7 @@ contract BuildFromShipyardSystem is System {
       "Obstacle on the way"
     );
 
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(ShipyardEntity, balanceShipyard - 2);
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(ShipyardEntity, balanceShipyard - 1);
 
     uint256 buildEntity = world.getUniqueEntityId();
 
