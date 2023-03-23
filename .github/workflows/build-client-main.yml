@@ -1,5 +1,5 @@
 # .github/workflows/build-client.yml
-name: Build client and push to the dist-client branch
+name: build-client-main
 
 on:
   push:
