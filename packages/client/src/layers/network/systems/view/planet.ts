@@ -57,6 +57,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
           gameObject.setOrigin(0.5, 0.5);
+          gameObject.setAngle(0);
         },
       });
 
@@ -82,6 +83,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setDepth(155);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setScale(3.8);
+          gameObject.setAngle(0);
         },
       });
 
