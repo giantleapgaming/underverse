@@ -41,7 +41,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         camera.centerOn(0, -1);
         setTimeout(() => {
           setWinGame(true);
-        }, 6000);
+        }, 10000);
       }
 
       const pplBalanceText = objectPool.get("people-balance", "Text");
@@ -70,6 +70,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           if (population && +population === 0) {
             objectPool.remove(`people-balance`);
             gameObject.play(Animations.Explosion);
+            gameObject.play(Animations.Explosion);
             setTimeout(() => {
               gameObject.play(Animations.Explosion);
             }, 3000);
@@ -79,6 +80,15 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
             setTimeout(() => {
               gameObject.play(Animations.Explosion);
             }, 6000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 8000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 10000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 12000);
           }
           gameObject.setDepth(155);
           gameObject.setOrigin(0.5, 0.5);
@@ -106,6 +116,15 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
             setTimeout(() => {
               gameObject.play(Animations.Explosion);
             }, 6000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 8000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 10000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 12000);
           }
           phaserScene.add.tween({
             targets: gameObject,
