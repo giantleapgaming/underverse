@@ -42,7 +42,9 @@ export const Rapture = ({
                     playSound();
                     setSelected((i + 1).toString());
                   }}
-                />
+                >
+                  <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+                </S.Slanted>
               );
             })}
           </>
@@ -110,7 +112,7 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      background-color: ${({ selected }) => ` ${selected ? "#62FEE6" : "#000000"}`};
+      background-color: ${({ selected }) => ` ${selected && "#62FEE6"}`};
       border: 1px solid ${({ selected }) => ` ${selected ? "#62FEE6" : "#ffffff"}`};
       z-index: 4;
       width: 140%;
