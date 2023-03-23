@@ -29,7 +29,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
   }
 
   // Define the number of points on the circle
-  const N = 70;
+  const N = 80;
 
   // Create an array to store the points
   const circlePoints: [number, number][] = [];
@@ -51,7 +51,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
 
   // Compute the coordinates of each point on the circle
   for (let i = 0; i < N; i++) {
-    const R = 50 + Math.random() * 5;
+    const R = 50 + Math.random() * 3;
     const theta = i * deltaTheta;
     const x = R * Math.cos(theta);
     const y = R * Math.sin(theta);
@@ -87,14 +87,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     });
   });
 
-  input.pointermove$.subscribe(({ pointer }) => {
-    if (pointer.rightButtonDown()) {
-      camera.setScroll(
-        camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,
-        camera.phaserCamera.scrollY - (pointer.y - pointer.prevPosition.y) / camera.phaserCamera.zoom
-      );
-    }
-  });
   camera.centerOn(0, -1);
   camera.setZoom(0.08);
 }

@@ -193,7 +193,7 @@ export function moveAttackShip(network: NetworkLayer, phaser: PhaserLayer) {
               if (!animation?.systemStream) {
                 const afterMoveSelectedId = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
                 if (selectedEntityId === afterMoveSelectedId) {
-                  setShowLine(true, destinationX, destinationY, "move");
+                  // setShowLine(true, destinationX, destinationY, "move");
                 }
               }
             },

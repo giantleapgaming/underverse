@@ -3,11 +3,12 @@ import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/r
 import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
+import { getNftId } from "../../../network/utils/getNftId";
 export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence },
+      components: { Name, Cash, Faction, Population, OwnedBy, Position, EntityType, Defence, NFTID },
       network: { connectedAddress },
     },
     phaser: {
@@ -17,6 +18,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
+  const nftDetails = getNftId(layers);
   const allUserNameEntityId = [...getComponentEntities(Name)]
     .sort((prevEntity, presentEntity) => {
       const preCash = getComponentValue(Cash, prevEntity)?.value;
@@ -33,7 +35,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
         if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
           const defence = getComponentValue(Defence, entity)?.value;
           const prePopulation = getComponentValue(Population, entity)?.value;
-          if (prePopulation && defence) {
+          if (prePopulation && defence && +defence > 0) {
             preTotalPopulation += +prePopulation;
           }
         }
@@ -53,9 +55,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
       return presentTotalPopulation - preTotalPopulation;
     });
 
-  const userEntityId = connectedAddress.get() as EntityID;
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
-  if (userEntityId) {
+  if (typeof nftDetails?.tokenId === "number") {
     return (
       <S.Container>
         {showDetails && (
@@ -67,7 +68,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 let totalPopulation = 0;
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
-                const owner = world.entities[nameEntity] === userEntityId;
+                const nftId = getComponentValue(NFTID, nameEntity)?.value;
+                const owner = !!(nftId && nftDetails.tokenId === +nftId);
                 const indexOf = selectedEntities.indexOf(nameEntity);
                 const exists = selectedEntities.some((entity) => entity === nameEntity);
                 const factionNumber = getComponentValue(Faction, nameEntity)?.value;
@@ -84,7 +86,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   ) {
                     const population = getComponentValue(Population, entity)?.value;
                     const defence = getComponentValue(Defence, entity)?.value;
-                    if (population && defence) {
+                    if (population && defence && +defence > 0) {
                       totalPopulation += +population;
                     }
                   }
@@ -94,6 +96,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     <S.Player>
                       <S.CheckBox
                         type="checkbox"
+                        owned={owner}
                         className={exists ? "checked" : ""}
                         checked={exists}
                         onChange={() => {
@@ -107,10 +110,10 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                           }
                         }}
                       />
-                      <S.PLayerName style={{ color: faction?.color }}>
-                        {owner ? "Owned" : name?.value}
+                      <S.PLayerName style={{ color: owner ? "#33ff00" : faction?.color }}>
+                        {owner ? "Owned" : name?.value.slice(0, 20)}
                         <br />
-                        <S.Cash style={{ color: "white" }}>
+                        <S.Cash style={{ color: owner ? "#33ff00" : "white" }}>
                           {cash &&
                             new Intl.NumberFormat("en-US", {
                               style: "currency",
@@ -180,14 +183,14 @@ const S = {
     justify-content: flex-start;
     height: 100px;
   `,
-  CheckBox: styled.input`
+  CheckBox: styled.input<{ owned?: boolean }>`
     -webkit-appearance: none;
     appearance: none;
     width: 2.3em;
     height: 2.3em;
     border-radius: 0.12em;
     margin-right: 0.5em;
-    border: 0.4em solid #00fde4;
+    border: 0.4em solid ${({ owned }) => (owned ? "#33ff00" : "#00fde4")};
     outline: none;
     cursor: pointer;
     :checked {

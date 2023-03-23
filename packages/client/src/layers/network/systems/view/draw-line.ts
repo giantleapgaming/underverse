@@ -150,8 +150,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         }
         if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture-passenger") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-            setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "rapture-passenger");
+            const position = getComponentValueStrict(Position, selectedEntity);
+            if (getDistance(position.x, position?.y, x, y) <= 5) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "rapture-passenger");
+            } else {
+              toast.error("destination Source is further than 5 units distance from your ship");
+              return;
+            }
           }
         }
         if (
@@ -160,8 +166,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           lineDetails.type === "steal-passenger"
         ) {
           if (!isOwnedByIndex({ network, phaser }, stationEntity)) {
-            setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "steal-passenger");
+            const position = getComponentValueStrict(Position, selectedEntity);
+            if (getDistance(position.x, position?.y, x, y) <= 5) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "steal-passenger");
+            } else {
+              toast.error("destination Source is further than 5 units distance from your ship");
+              return;
+            }
           }
         }
         if (
@@ -215,6 +227,27 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           if (getDistance(position.x, position?.y, x, y) <= 5) {
             setDestinationDetails(stationEntity);
             setShowLine(true, x, y, "refuel");
+          } else {
+            toast.error("Fuel Source is further than 5 units distance from target ship");
+            return;
+          }
+        }
+        if (
+          entityType &&
+          +entityType !== Mapping.planet.id &&
+          +entityType !== Mapping.astroid.id &&
+          lineDetails.type === "refuel-astroid"
+        ) {
+          const position = getComponentValueStrict(Position, selectedEntity);
+          const destEntityType = getComponentValue(EntityType, stationEntity)?.value;
+          if (getDistance(position.x, position?.y, x, y) <= 5) {
+            if (destEntityType && +destEntityType === Mapping.harvester.id) {
+              setDestinationDetails(stationEntity);
+              setShowLine(true, x, y, "refuel-astroid");
+            } else {
+              toast.error("Only Harvesters can be refueled from asteroids");
+              return;
+            }
           } else {
             toast.error("Fuel Source is further than 5 units distance from target ship");
             return;

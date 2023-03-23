@@ -246,7 +246,7 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                 name="REFUEL"
                 onClick={() => {
                   setAction("refuel");
-                  setShowLine(true, position.x, position.y, "refuel");
+                  setShowLine(true, position.x, position.y, "refuel-astroid");
                   sounds["click"].play();
                 }}
               />

@@ -105,9 +105,9 @@ export function buildHarvesterSystem(network: NetworkLayer, phaser: PhaserLayer)
           gameObject.setText(
             typeof stationDetails === "undefined" && buildDetails.entityType == Mapping.harvester.id
               ? convertPrice(price)
-              : `2`
+              : `1`
           );
-          gameObject.setFontSize(100);
+          gameObject.setFontSize(40);
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
         },

@@ -7,6 +7,7 @@ import { registerCashDetails } from "./Cash";
 import { registerDetails } from "./details-station";
 import { registerTostScreen } from "./toast";
 import { registerWinScreen } from "./Win";
+import { registerEthBalance } from "./EthBalance";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -18,4 +19,5 @@ export function registerUIComponents() {
   registerCashDetails();
   registerTostScreen();
   registerWinScreen();
+  registerEthBalance();
 }

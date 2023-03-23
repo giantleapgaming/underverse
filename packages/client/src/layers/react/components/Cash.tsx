@@ -11,7 +11,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Cash, Position, EntityType, OwnedBy, Population, Level, NFTID },
+      components: { Cash, Position, EntityType, OwnedBy, Population, Defence, NFTID },
     },
   } = layers;
   const nftDetails = getNftId(layers);
@@ -24,22 +24,15 @@ const Cash = ({ layers }: { layers: Layers }) => {
   });
   const cash = getComponentValue(Cash, ownedByIndex)?.value;
   let totalPopulation = 0;
-  let totalLevel = 0;
   [...getComponentEntities(Position)].forEach((entity) => {
     const entityType = getComponentValue(EntityType, entity)?.value;
     const OwnedByEntityId = getComponentValue(OwnedBy, entity)?.value;
     const positionOwnedByIndex = world.entities.indexOf(OwnedByEntityId);
-    if (
-      entityType &&
-      (+entityType === Mapping.residential.id || +entityType === Mapping.passenger.id) &&
-      ownedByIndex &&
-      ownedByIndex === positionOwnedByIndex
-    ) {
+    if (entityType && +entityType === Mapping.residential.id && ownedByIndex && ownedByIndex === positionOwnedByIndex) {
       const population = getComponentValue(Population, entity)?.value;
-      const level = getComponentValue(Level, entity)?.value;
-      if (population && level) {
+      const defence = getComponentValue(Defence, entity)?.value;
+      if (population && defence && +defence > 0) {
         totalPopulation += +population;
-        totalLevel += +level;
       }
     }
   });
@@ -57,7 +50,7 @@ const Cash = ({ layers }: { layers: Layers }) => {
         }}
       >
         <p>{cash && convertPrice(+cash / 10_00_000)}</p>
-        {typeof totalLevel === "number" && (
+        {typeof totalPopulation === "number" && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
             <img src="/build-stations/users.png" />
             <p>{totalPopulation}</p>
@@ -81,7 +74,7 @@ export const registerCashDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { NFTID, Cash, Position, Population },
+          components: { NFTID, Cash, Position, Population, Defence },
           walletNfts,
         },
         phaser: {
@@ -95,7 +88,8 @@ export const registerCashDetails = () => {
         ShowCircle.update$,
         Cash.update$,
         Position.update$,
-        Population.update$
+        Population.update$,
+        Defence.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map(() => {

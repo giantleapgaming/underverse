@@ -78,7 +78,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
               buildDetails.entityType == Mapping.shipyard.id)
           ) {
             const balance = selectedEntity && getComponentValue(Balance, selectedEntity)?.value;
-            if (balance && +balance < 2) {
+            if (balance && +balance < 1) {
               toast.error("Need atleast 2 minerals to build anything");
               return;
             }
@@ -107,7 +107,7 @@ export function leftClickBuildSystem(network: NetworkLayer, phaser: PhaserLayer)
             );
           } else if (selectedEntity) {
             const balance = selectedEntity && getComponentValue(Balance, selectedEntity)?.value;
-            if (balance && +balance < 2) {
+            if (balance && +balance < 1) {
               toast.error("Need atleast 2 minerals to build anything");
               return;
             }

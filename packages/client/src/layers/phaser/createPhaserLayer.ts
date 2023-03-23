@@ -83,6 +83,7 @@ import { highlightMaxDistance } from "../network/systems/view/highlightMaxDistan
 import { buildPassengerSystem } from "../network/systems/build/passenger";
 import { displayPassengerSystem } from "../network/systems/view/passenger";
 import { movePassenger } from "../network/systems/action/move/movePassenger";
+import { clickMove } from "../network/systems/cursor-actions/click-move";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -435,5 +436,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   cargoTransport(network, context);
   humanTransport(network, context);
 
+  //----------------------------------------------
+  clickMove(network, context);
   return context;
 }
