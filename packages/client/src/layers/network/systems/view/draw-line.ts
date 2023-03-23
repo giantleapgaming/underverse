@@ -233,7 +233,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               setDestinationDetails(stationEntity);
               setShowLine(true, x, y, "refuel-astroid");
             } else {
-              toast.error("while refueling from astroid destination should be harvester");
+              toast.error("Only Harvesters can be refueled from asteroids");
               return;
             }
           } else {
