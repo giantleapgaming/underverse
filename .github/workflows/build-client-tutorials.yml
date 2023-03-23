@@ -1,7 +1,8 @@
 # .github/workflows/build-client-tutorials.yml
-name: Build client and push to the tutorial-dist-client branch
+name: build-client-tutorials
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - tutorial
