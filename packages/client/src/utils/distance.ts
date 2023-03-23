@@ -163,12 +163,12 @@ export function getObstacleListWhileMove(arrayOfPointsOnThePath: any[], layer: L
         +entityType === Mapping.residential.id ||
         +entityType === Mapping.shipyard.id)
     ) {
-      const getLevel = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
+      const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
       const ownedBy = getComponentValue(OwnedBy, entityOnThatPoint)?.value;
       const nftEntityIndex = world.entities.findIndex((e) => e === ownedBy);
       const nftId = getComponentValue(NFTID, nftEntityIndex)?.value;
       const nftDetails = getNftId(layer);
-      if (getLevel > 0) {
+      if (defence && +defence > 0) {
         if (!(nftId && nftDetails && +nftId === nftDetails.tokenId)) {
           obstaclePoints.push(entityOnThatPoint);
         }
@@ -194,13 +194,15 @@ export function getObstacleListWhileOtherActions(arrayOfPointsOnThePath: any[], 
   const { network, phaser } = layer;
   const {
     utils: { getEntityIndexAtPosition },
-    components: { Level },
+    components: { Defence, EntityType },
   } = network;
   const obstaclePoints: any[] = [];
   for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {
     const entityOnThatPoint = getEntityIndexAtPosition(arrayOfPointsOnThePath[i].x, arrayOfPointsOnThePath[i].y);
-    const getLevel = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
-    if (getLevel > 0) {
+    const entityType = getComponentValue(EntityType, entityOnThatPoint)?.value as EntityID;
+    const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
+
+    if ((defence && +defence > 0) || (entityType && +entityType === Mapping.unprospected.id)) {
       obstaclePoints.push(entityOnThatPoint);
     }
   }

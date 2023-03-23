@@ -66,6 +66,19 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setScale(0.5);
           gameObject.setTexture(harvester.assetKey, `people.png`);
           gameObject.setPosition(x + tileWidth / 2 - 200, y - tileHeight * 2.8);
+          if (population && +population === 0) {
+            objectPool.remove(`people-balance`);
+            gameObject.play(Animations.Explosion);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 3000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 3000);
+            setTimeout(() => {
+              gameObject.play(Animations.Explosion);
+            }, 6000);
+          }
           gameObject.setDepth(155);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setScale(3.8);

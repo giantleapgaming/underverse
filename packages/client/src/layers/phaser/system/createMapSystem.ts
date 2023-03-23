@@ -87,14 +87,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     });
   });
 
-  input.pointermove$.subscribe(({ pointer }) => {
-    if (pointer.rightButtonDown()) {
-      camera.setScroll(
-        camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,
-        camera.phaserCamera.scrollY - (pointer.y - pointer.prevPosition.y) / camera.phaserCamera.zoom
-      );
-    }
-  });
   camera.centerOn(0, -1);
   camera.setZoom(0.08);
 }

@@ -28,7 +28,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src={`/build-stations/space-station.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
         <S.Button onClick={() => build(Mapping.godown.id)}>
@@ -37,7 +37,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src={`/build-stations/cargo.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
         <S.Button onClick={() => build(Mapping.shipyard.id)}>
@@ -46,7 +46,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src={`/build-stations/shipyard.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
       </S.Flex>

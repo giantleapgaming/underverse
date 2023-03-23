@@ -11,7 +11,7 @@ const Win = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, Level, OwnedBy, Position, EntityType, Defence, NFTID },
+      components: { Name, Cash, Faction, Population, OwnedBy, Position, EntityType, Defence, NFTID },
     },
   } = layers;
   const allUserNameEntityId = [...getComponentEntities(Name)]
@@ -30,7 +30,7 @@ const Win = ({ layers }: { layers: Layers }) => {
         if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
           const defence = getComponentValue(Defence, entity)?.value;
           const prePopulation = getComponentValue(Population, entity)?.value;
-          if (prePopulation && defence) {
+          if (prePopulation && defence && +defence > 0) {
             preTotalPopulation += +prePopulation;
           }
         }
@@ -41,7 +41,8 @@ const Win = ({ layers }: { layers: Layers }) => {
           presentEntity === positionOwnedByIndex
         ) {
           const presentPopulation = getComponentValue(Population, entity)?.value;
-          if (presentPopulation) {
+          const defence = getComponentValue(Defence, entity)?.value;
+          if (presentPopulation && defence && +defence > 0) {
             presentTotalPopulation += +presentPopulation;
           }
         }
@@ -99,8 +100,8 @@ const Win = ({ layers }: { layers: Layers }) => {
                         nameEntity === positionOwnedByIndex
                       ) {
                         const population = getComponentValue(Population, entity)?.value;
-                        const level = getComponentValue(Level, entity)?.value;
-                        if (population && level) {
+                        const defence = getComponentValue(Defence, entity)?.value;
+                        if (population && defence && +defence > 0) {
                           totalPopulation += +population;
                         }
                       }
@@ -109,7 +110,7 @@ const Win = ({ layers }: { layers: Layers }) => {
                       <tr key={nameEntity}>
                         <td>{troffyImages[index] && <img src={troffyImages[index].src} width="54px" />}</td>
                         <td>{nftId && <NFTImg id={+nftId} size={64} />}</td>
-                        <td style={{ fontSize: "20px" }}>{name?.value}</td>
+                        <td style={{ fontSize: "20px" }}>{name?.value.slice(0, 20)}</td>
                         <td style={{ fontSize: "20px" }}>{totalPopulation} </td>
                         <td style={{ fontSize: "20px" }}>
                           {cash &&

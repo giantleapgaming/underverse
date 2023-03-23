@@ -28,7 +28,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src={`/build-stations/attack.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
         <S.Button onClick={() => build(Mapping.harvester.id)}>
@@ -37,7 +37,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src={`/build-stations/harvester.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
         <S.Button onClick={() => build(Mapping.refuel.id)}>
@@ -46,7 +46,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src="/build-stations/fueler.png" width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
         <S.Button onClick={() => build(Mapping.passenger.id)}>
@@ -55,7 +55,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           <S.Img src="/build-stations/passenger.png" width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>2</S.BalanceText>
+            <S.BalanceText>1</S.BalanceText>
           </S.ImgCrystal>
         </S.Button>
       </S.Flex>
