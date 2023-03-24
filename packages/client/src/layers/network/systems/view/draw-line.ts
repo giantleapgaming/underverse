@@ -14,8 +14,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     sounds,
-    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight },
-    localIds: { stationDetailsEntityIndex, showCircleIndex },
+    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight, Build },
+    localIds: { stationDetailsEntityIndex, showCircleIndex, buildId },
     localApi: {
       setShowLine,
       setDestinationDetails,
@@ -23,6 +23,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       setObstacleHighlight,
       setShowAnimation,
       showProgress,
+      setBuild,
     },
     scenes: {
       Main: {
@@ -262,7 +263,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const holdRightClick = input.pointerdown$.subscribe((e) => {
     if (e.event.button === 2) {
       const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
+      const buildDetails = getComponentValue(Build, buildId);
       const isOwner = isOwnedBy({ network, phaser });
+      if ((buildDetails && buildDetails?.isBuilding) || buildDetails?.canPlace || buildDetails?.show) {
+        setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
+        return;
+      }
       if (!lineDetails?.showLine && isOwner) {
         const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
         if (selectedEntity) {
@@ -272,7 +278,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             (+entityType === Mapping.harvester.id ||
               +entityType === Mapping.attack.id ||
               +entityType === Mapping.refuel.id ||
-              +entityType === Mapping.shipyard.id ||
               +entityType === Mapping.passenger.id)
           ) {
             const pointer = e.pointer as Phaser.Input.Pointer;
@@ -324,7 +329,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                 (+entityType === Mapping.harvester.id ||
                   +entityType === Mapping.attack.id ||
                   +entityType === Mapping.refuel.id ||
-                  +entityType === Mapping.shipyard.id ||
                   +entityType === Mapping.passenger.id)
               ) {
                 const nftDetails = getNftId({ network, phaser });

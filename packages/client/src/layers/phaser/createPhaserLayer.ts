@@ -44,7 +44,6 @@ import {
   buildShipyardSystem,
   leftClickBuildSystem,
   mouseHover,
-  rightClickBuildSystem,
 } from "../network/systems/build";
 import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
@@ -393,7 +392,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   createMapSystem(network, context);
 
   // click of the build station
-  rightClickBuildSystem(network, context);
   leftClickBuildSystem(network, context);
   mouseHover(network, context);
 
