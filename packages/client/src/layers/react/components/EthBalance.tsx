@@ -15,7 +15,7 @@ const EthBalance = ({ layers }: { layers: Layers }) => {
   return (
     <S.Container>
       <div>
-        <p>Balance {balance.slice(0, 6)}</p>
+        <p>Balance {Math.floor(+balance.slice(0, 6))}</p>
       </div>
     </S.Container>
   );
