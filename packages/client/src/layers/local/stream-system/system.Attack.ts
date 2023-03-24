@@ -77,7 +77,9 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
           color: destColor,
         })} ${colorString({ name: destStationName, color: destColor })} Ship at ${destPosition?.x},${
           destPosition?.y
-        } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
+        } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`,
+        destPosition.x,
+        destPosition.y
       );
       const nftId = getNftId({ network, phaser });
       if (nftId?.tokenId != +transportedNftId._hex) {

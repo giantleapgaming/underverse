@@ -41,7 +41,9 @@ export function systemUpgrade(network: NetworkLayer, phaser: PhaserLayer) {
         },${position?.y}) from level ${colorString({ name: `${+level - 1}`, color: "#ffffff" })} to ${colorString({
           name: `${+level}`,
           color,
-        })}`
+        })}`,
+        position?.x,
+        position?.y
       );
     }
   });

@@ -30,7 +30,9 @@ export function systemScraped(network: NetworkLayer, phaser: PhaserLayer) {
       setLogs(
         `<p>${colorString({ name, color })}  scrapped the ${colorString({ name: stationName, color })} ship at (${
           position?.x
-        },${position?.y})</p>`
+        },${position?.y})</p>`,
+        position?.x,
+        position?.y
       );
     }
   });

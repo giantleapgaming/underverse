@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { registerUIComponent } from "../engine";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { map, merge } from "rxjs";
@@ -25,9 +26,19 @@ const LogBox = ({ layers }: { layers: Layers }) => {
         input.enableInput();
       }}
     >
-      {logs.map((log, index) => (
-        <div style={{ opacity: 0.7 }} key={`${log}-log-system, ${index}`} dangerouslySetInnerHTML={{ __html: log }} />
-      ))}
+      {logs.map((log, index) => {
+        return (
+          <div
+            onClick={() => {
+              // @ts-ignore
+              if (window?.LogActions[index]) window?.LogActions[index]();
+            }}
+            style={{ opacity: 0.7, cursor: "pointer" }}
+            key={`${log}-log-system, ${index}`}
+            dangerouslySetInnerHTML={{ __html: log }}
+          />
+        );
+      })}
     </S.Container>
   );
 };

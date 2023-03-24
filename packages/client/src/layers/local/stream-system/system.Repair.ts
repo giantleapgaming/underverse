@@ -30,7 +30,9 @@ export function systemRepaired(network: NetworkLayer, phaser: PhaserLayer) {
       setLogs(
         `<p>${colorString({ name, color })} repaired the ${colorString({ name: stationName, color })} station at (${
           position?.x
-        },${position?.y})</p>`
+        },${position?.y})</p>`,
+        position?.x,
+        position?.y
       );
     }
   });

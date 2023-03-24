@@ -29,7 +29,9 @@ export function systemBuild(network: NetworkLayer, phaser: PhaserLayer) {
       setLogs(
         `<p>${colorString({ name, color })} built ${colorString({ name: stationName, color })} station at (${
           position?.x
-        },${position?.y}) </p>`
+        },${position?.y}) </p>`,
+        x,
+        y
       );
     }
   });

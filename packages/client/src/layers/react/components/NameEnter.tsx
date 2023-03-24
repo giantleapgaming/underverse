@@ -39,14 +39,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const selectedId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
   return (
     <>
-      <Container
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      >
+      <Container>
         {!showBuildingMap ? (
           <>
             {"4242" == chainIdString || "100" == chainIdString ? (
@@ -270,6 +263,9 @@ export const registerNameScreen = () => {
         phaser: {
           components: { SelectedNftID },
           localIds: { nftId },
+          scenes: {
+            Main: { input },
+          },
         },
       } = layers;
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
@@ -282,8 +278,10 @@ export const registerNameScreen = () => {
             return +selectedNft === selectedNftId;
           });
           if (doesNftExist) {
+            input.enableInput();
             return;
           } else {
+            input.disableInput();
             return { layers };
           }
         })
