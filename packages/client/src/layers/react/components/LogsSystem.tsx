@@ -10,11 +10,21 @@ const LogBox = ({ layers }: { layers: Layers }) => {
     phaser: {
       components: { Logs },
       localIds: { modalIndex },
+      scenes: {
+        Main: { input },
+      },
     },
   } = layers;
   const logs = getComponentValue(Logs, modalIndex)?.logStrings ?? [];
   return (
-    <S.Container>
+    <S.Container
+      onMouseEnter={() => {
+        input.disableInput();
+      }}
+      onMouseLeave={() => {
+        input.enableInput();
+      }}
+    >
       {logs.map((log, index) => (
         <div style={{ opacity: 0.7 }} key={`${log}-log-system, ${index}`} dangerouslySetInnerHTML={{ __html: log }} />
       ))}

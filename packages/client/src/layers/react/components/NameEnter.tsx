@@ -31,12 +31,22 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       localApi: { setNftId },
       components: { SelectedNftID },
       localIds: { nftId },
+      scenes: {
+        Main: { input },
+      },
     },
   } = layers;
   const selectedId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
   return (
     <>
-      <Container>
+      <Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
         {!showBuildingMap ? (
           <>
             {"4242" == chainIdString || "100" == chainIdString ? (
