@@ -61,6 +61,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
         </S.Border>
         <div
           onClick={() => {
+            input.enableInput();
             setDestinationDetails();
             setShowStationDetails();
             setShowLine(false, 0, 0);
