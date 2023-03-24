@@ -44,10 +44,12 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
           circle.setComponent({
             id: `circle-${entity}`,
             once: (gameObject) => {
-              gameObject.setPosition(x + 198, y + 108);
-              gameObject.setOrigin(0.5, 0.5);
-              gameObject.setVisible(showSelected);
               gameObject.setTexture(stationBackground.assetKey, "highlight-circle-2.png");
+              gameObject.setVisible(showSelected);
+              gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
+              gameObject.setOrigin(0.5, 0.5);
+              gameObject.setDepth(2);
+              gameObject.setAngle(0);
             },
           });
         } else {

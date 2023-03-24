@@ -36,10 +36,11 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x + tileWidth / 2, y + +tileWidth / 2);
             gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
-            gameObject.setAngle(0);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setDepth(2);
+            gameObject.setAngle(0);
           },
         });
       }
@@ -50,10 +51,11 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setPosition(x + tileWidth / 2, y + +tileWidth / 2);
             gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
-            gameObject.setAngle(0);
+            gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setDepth(2);
+            gameObject.setAngle(0);
           },
         });
         //
