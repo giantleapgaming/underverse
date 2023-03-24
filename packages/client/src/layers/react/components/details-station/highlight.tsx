@@ -82,7 +82,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   }}
                 >
                   WALLET <br />
-                  Gas <span>{Math.floor(+balance.slice(0, 6))}</span>
+                  Gas <span>{Math.floor(+balance)}</span>
                 </div>
               </div>
             </S.HighLight>
@@ -134,9 +134,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                         }}
                       />
                       <S.PLayerName style={{ color: owner ? "#33ff00" : faction?.color }}>
-                        {owner ? "ME" : name?.value.slice(0, 20)}
+                        {owner ? "ME" : name?.value.slice(0, 13)}
                         <br />
-                        <S.Cash style={{ color: owner ? "#33ff00" : "white" }}>
+                        <S.Cash style={{ color: owner ? "#33ff00" : faction?.color }}>
                           {cash &&
                             new Intl.NumberFormat("en-US", {
                               style: "currency",
@@ -222,7 +222,7 @@ const S = {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    height: 440px;
+    height: 340px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 10px;

@@ -5,7 +5,6 @@ import { Layers } from "../../../../types";
 import { getNftId } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
 import { NFTImg } from "../NFTImg";
-import { UserAction } from "./userAction";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
@@ -43,7 +42,6 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
         <br />
         <span style={{ color: "white" }}>{name} </span>
       </p>
-      <UserAction layers={layers} />
     </S.Container>
   );
 };

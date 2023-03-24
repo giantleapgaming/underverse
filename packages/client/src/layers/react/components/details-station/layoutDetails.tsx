@@ -10,7 +10,6 @@ import { PlanetDetails } from "./planetDetails";
 import { ResidentialDetails } from "./residentialDetails";
 import { RefuelDetails } from "./refuelDetails";
 import { ShipyardDetails } from "./shipyardDetails";
-import { UserAction } from "./userAction";
 import { UserDetails } from "./userDetails";
 import { PassengerDetails } from "./passengerDetails";
 import { WallDetails } from "./wallDetails";
@@ -42,11 +41,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
           input.enableInput();
         }}
       >
-        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id ? (
-          <UserDetails layers={layers} />
-        ) : (
-          <UserAction layers={layers} hideFactionImage />
-        )}
+        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id && <UserDetails layers={layers} />}
         <S.Border>
           {+entityType === Mapping.attack.id && <AttackDetails layers={layers} />}
           {+entityType === Mapping.godown.id && <GodownDetails layers={layers} />}
