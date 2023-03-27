@@ -8,7 +8,6 @@ import { scrapPrice } from "../../utils/scrapPrice";
 import { distance } from "../../utils/distance";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
-import { Transport } from "../action-system/transport";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
@@ -29,7 +28,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem, raptureSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem, raptureSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
