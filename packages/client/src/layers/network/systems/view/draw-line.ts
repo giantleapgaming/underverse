@@ -14,7 +14,15 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     sounds,
-    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight, Build },
+    components: {
+      ShowLine,
+      ShowStationDetails,
+      ShowDestinationDetails,
+      MoveStation,
+      ObstacleHighlight,
+      Build,
+      BuildWall,
+    },
     localIds: { stationDetailsEntityIndex, showCircleIndex, buildId },
     localApi: {
       setShowLine,
@@ -24,6 +32,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       setShowAnimation,
       showProgress,
       setBuild,
+      setBuildWall,
     },
     scenes: {
       Main: {
@@ -265,6 +274,16 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
       const buildDetails = getComponentValue(Build, buildId);
       const isOwner = isOwnedBy({ network, phaser });
+      const buildWall = getComponentValue(BuildWall, buildId);
+      const showBuildWall = buildWall?.showBuildWall;
+      const type = buildWall?.type === "buildWall";
+      if (buildWall && type && showBuildWall) {
+        setBuildWall({});
+        objectPool.remove("build-wall");
+        objectPool.remove("wall-balance-harvester");
+        objectPool.remove("wall-balance-harvester-image");
+        return;
+      }
       if ((buildDetails && buildDetails?.isBuilding) || buildDetails?.canPlace || buildDetails?.show) {
         setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
         return;

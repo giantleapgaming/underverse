@@ -13,7 +13,6 @@ import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
-import { BuildWall } from "../build-station/buildWall";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
@@ -229,7 +228,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     />
                   )}
                   {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
-                  {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -399,14 +397,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 name="BUILD"
                 onClick={() => {
                   setAction("build");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "defence"}
-                name="DEFENCE"
-                onClick={() => {
-                  setAction("defence");
                   sounds["click"].play();
                 }}
               />

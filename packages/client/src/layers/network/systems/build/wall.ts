@@ -140,13 +140,6 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
     }
   });
 
-  const rightClick = input.rightClick$.subscribe(() => {
-    setBuildWall({});
-    objectPool.remove("build-wall");
-    objectPool.remove("wall-balance-harvester");
-    objectPool.remove("wall-balance-harvester-image");
-  });
-
   defineComponentSystem(world, BuildWall, () => {
     const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     if (selectedEntity) {
@@ -293,7 +286,6 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
   world.registerDisposer(() => hoverSub?.unsubscribe());
   world.registerDisposer(() => click?.unsubscribe());
-  world.registerDisposer(() => rightClick?.unsubscribe());
 }
 
 function getCoordinatesBetweenPoints(x1: number, y1: number, x2: number, y2: number): [number, number][] {
