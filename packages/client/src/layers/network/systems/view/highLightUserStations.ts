@@ -2,6 +2,7 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineRxSystem, EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { merge } from "rxjs";
 import { NetworkLayer } from "../..";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 // const stationColor = [Sprites.View1, Sprites.View2, Sprites.View3, Sprites.View4, Sprites.View5, Sprites.View6];
@@ -49,6 +50,8 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setDepth(2);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
               gameObject.setAngle(0);
             },
           });

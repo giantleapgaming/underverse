@@ -1,4 +1,4 @@
-import { getComponentValueStrict, Not } from "@latticexyz/recs";
+import { getComponentValueStrict } from "@latticexyz/recs";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
