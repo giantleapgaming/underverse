@@ -117,6 +117,22 @@ contract BuildFromShipyardSystem is System {
     ) {
       TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 90);
     }
+
+    //We track build of Attack ship
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 170) &&
+      (entity_type == 4)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 170);
+    }
+
+    //We track build of Attack ship
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 190) &&
+      (entity_type == 9)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 190);
+    }
   }
 
   //Input parameters are Shipyard, Build location and what you want to build

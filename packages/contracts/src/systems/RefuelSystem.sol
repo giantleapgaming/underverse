@@ -120,6 +120,13 @@ contract RefuelSystem is System {
     if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 60) {
       TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 60);
     }
+
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 200) &&
+      (sourceEntityType == 9)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 200);
+    }
   }
 
   function executeTyped(

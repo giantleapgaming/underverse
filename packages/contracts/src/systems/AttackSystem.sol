@@ -18,6 +18,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Attack"));
 
@@ -169,6 +170,8 @@ contract AttackSystem is System {
         destinationDefenceAmount - totalDamage
       );
     }
+
+    TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 180);
   }
 
   function executeTyped(
