@@ -1,17 +1,17 @@
-import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentValue } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
 import { NFTImg } from "../NFTImg";
-import { FactionImg } from "./FactionImg";
+import { UserAction } from "./userAction";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { OwnedBy, Name, NFTID, Faction },
+      components: { OwnedBy, Name, NFTID },
       world,
       network: { connectedAddress },
     },
@@ -28,8 +28,6 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const nftId = getComponentValue(NFTID, factionIndex)?.value;
     const nftDetails = getNftId(layers);
     const isOwner = isOwnedBy(layers);
-    const faction = getComponentValueStrict(Faction, nftId).value;
-
     return (
       <S.Container>
         {nftDetails && isOwner ? (
@@ -55,6 +53,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
           )}
           <span style={{ color: "white" }}>{name}</span>
         </p>
+        <UserAction layers={layers} />
       </S.Container>
     );
   } else {
