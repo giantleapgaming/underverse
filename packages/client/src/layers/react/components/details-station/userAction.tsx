@@ -24,7 +24,7 @@ export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideF
     return (
       <S.Container>
         {!hideFactionImage && <FactionImg layers={layers} />}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+        {/* <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/Cog.png"
@@ -45,7 +45,7 @@ export const UserAction = ({ layers, hideFactionImage }: { layers: Layers; hideF
               camera.centerOn(0, -1);
             }}
           />
-        </div>
+        </div> */}
       </S.Container>
     );
   } else {
