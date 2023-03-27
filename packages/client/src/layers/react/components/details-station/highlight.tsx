@@ -23,6 +23,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
       scenes: {
         Main: {
           camera,
+          input,
           maps: {
             Main: { tileWidth, tileHeight },
           },
@@ -75,7 +76,14 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
   if (typeof nftDetails?.tokenId === "number") {
     const { balance } = useEthBalance(connectedAddress.get());
     return (
-      <S.Container>
+      <S.Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
         {showDetails && (
           <S.DetailsContainer>
             <img src="/ui/CogButtonMenu.png" />
@@ -184,6 +192,12 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             src="/ui/Cog.png"
             width={"30px"}
             height={"30px"}
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
             onClick={() => {
               sounds["click"].play();
               setShowHighLight(!showDetails);
@@ -194,6 +208,12 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             height={"30px"}
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/recenter.png"
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
             onClick={() => {
               sounds["click"].play();
               camera.centerOn(0, -1);
@@ -204,6 +224,12 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             height={"30px"}
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/harvester.png"
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
             onClick={() => {
               sounds["click"].play();
               const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
