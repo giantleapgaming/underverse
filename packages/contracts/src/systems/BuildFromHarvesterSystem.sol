@@ -125,7 +125,7 @@ contract BuildFromHarvesterSystem is System {
       TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 120);
     }
 
-    //We track build of hab
+    //We track build of Depot
 
     if (
       (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 150) &&
