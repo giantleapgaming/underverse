@@ -85,7 +85,14 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
         }}
       >
         {showDetails && (
-          <S.DetailsContainer>
+          <S.DetailsContainer
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
+          >
             <img src="/ui/CogButtonMenu.png" />
             <S.HighLight>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
@@ -178,15 +185,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             </S.List>
           </S.DetailsContainer>
         )}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "15px",
-            marginTop: "200px",
-          }}
-        >
+        <S.ActionButtons>
           <img
             style={{ zIndex: 10, cursor: "pointer" }}
             src="/ui/Cog.png"
@@ -269,7 +268,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               }
             }}
           />
-        </div>
+        </S.ActionButtons>
       </S.Container>
     );
   } else {
@@ -285,6 +284,14 @@ const S = {
     gap: 10px;
     font-family: monospace;
   `,
+  ActionButtons: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    height: calc(100vh - 114px);
+  `,
   HighLight: styled.h3`
     color: white;
     position: absolute;
@@ -293,7 +300,10 @@ const S = {
   `,
   DetailsContainer: styled.div`
     position: relative;
-    margin-top: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0;
   `,
   List: styled.div`
     position: absolute;
