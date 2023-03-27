@@ -14,6 +14,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { checkNFT } from "../utils.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Upgrade"));
 
@@ -56,6 +57,10 @@ contract UpgradeSystem is System {
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - upgradeCost);
     LevelComponent(getAddressById(components, LevelComponentID)).set(entity, nextLevel);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(entity, selectedEntityDefence + 100);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 140) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 140);
+    }
   }
 
   function executeTyped(uint256 entity, uint256 nftID) public returns (bytes memory) {

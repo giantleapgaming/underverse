@@ -1,0 +1,5 @@
+{
+    "chainId": 11344216,
+    "rpc": "https://giantleap.calderachain.xyz/http",
+    "wsRpc": "wss://giantleap.calderachain.xyz/ws"
+}

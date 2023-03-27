@@ -124,6 +124,15 @@ contract BuildFromHarvesterSystem is System {
     ) {
       TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 120);
     }
+
+    //We track build of hab
+
+    if (
+      (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 150) &&
+      (entity_type == 1)
+    ) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 150);
+    }
   }
 
   //Input parameters are harvester, asteroid, build location and what you want to build

@@ -119,7 +119,8 @@
         "CashComponent",
         "LastUpdatedTimeComponent",
         "LevelComponent",
-        "DefenceComponent"
+        "DefenceComponent",
+        "TutorialStepComponent"
       ]
     },
     {
