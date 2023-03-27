@@ -59,9 +59,9 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name, color })} moved ${colorString({
           name: `${+peopleTransported}`,
           color,
-        })} people from  ${colorString({ name: destStationName, color })} (${srcPosition?.x},${
+        })} people from  ${colorString({ name: destStationName, color })} ${srcPosition?.x},${
           srcPosition?.y
-        }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`,
+        } to ${colorString({ name: srcStationName, color })} ${destPosition?.x},${destPosition?.y}</p>`,
         destPosition?.x,
         destPosition?.y
       );
