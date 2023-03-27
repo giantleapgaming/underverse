@@ -298,20 +298,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Column>
                   <S.SideButton
                     onClick={() => {
-                      setAction("move");
-                      const { x, y } = position;
-                      setShowLine(true, x, y, "move", 1);
-                      sounds["click"].play();
-                    }}
-                    title="Move"
-                  >
-                    <S.Img
-                      src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
                       setAction("upgrade");
                       setShowLine(false);
                       sounds["click"].play();
