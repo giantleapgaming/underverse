@@ -36,7 +36,6 @@ const Cash = ({ layers }: { layers: Layers }) => {
       }
     }
   });
-
   return (
     <>
       <div
@@ -45,16 +44,17 @@ const Cash = ({ layers }: { layers: Layers }) => {
           flexDirection: "column",
           justifyContent: "end",
           alignItems: "end",
-          paddingRight: "30px",
+          paddingRight: "10px",
           paddingTop: "30px",
           gap: "10px",
+          fontFamily: "monospace",
         }}
       >
-        <p>{cash && convertPrice(+cash / 10_00_000)}</p>
+        <p style={{ fontSize: "27px" }}>{cash && convertPrice(+cash / 10_00_000)}</p>
         {typeof totalPopulation === "number" && (
           <div style={{ display: "flex", alignItems: "center", justifyContent: "end", gap: "10px" }}>
             <img src="/build-stations/users.png" />
-            <p>{totalPopulation}</p>
+            <p style={{ fontSize: "23px", color: "#5AE7D2" }}>{totalPopulation}</p>
           </div>
         )}
       </div>
@@ -69,7 +69,7 @@ export const registerCashDetails = () => {
       colStart: 9,
       colEnd: 13,
       rowStart: 1,
-      rowEnd: 12,
+      rowEnd: 13,
     },
     (layers) => {
       const {

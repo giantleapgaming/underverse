@@ -10,7 +10,6 @@ import { PlanetDetails } from "./planetDetails";
 import { ResidentialDetails } from "./residentialDetails";
 import { RefuelDetails } from "./refuelDetails";
 import { ShipyardDetails } from "./shipyardDetails";
-import { UserAction } from "./userAction";
 import { UserDetails } from "./userDetails";
 import { PassengerDetails } from "./passengerDetails";
 import { WallDetails } from "./wallDetails";
@@ -21,6 +20,9 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
       components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
       localApi: { setDestinationDetails, setShowStationDetails, setShowLine },
+      scenes: {
+        Main: { input },
+      },
     },
     network: {
       components: { EntityType },
@@ -31,12 +33,15 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     return (
-      <S.Container>
-        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id ? (
-          <UserDetails layers={layers} />
-        ) : (
-          <UserAction layers={layers} hideFactionImage />
-        )}
+      <S.Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
+        {+entityType !== Mapping.astroid.id && +entityType !== Mapping.planet.id && <UserDetails layers={layers} />}
         <S.Border>
           {+entityType === Mapping.attack.id && <AttackDetails layers={layers} />}
           {+entityType === Mapping.godown.id && <GodownDetails layers={layers} />}
@@ -51,6 +56,7 @@ export const DetailsLayout = ({ layers }: { layers: Layers }) => {
         </S.Border>
         <div
           onClick={() => {
+            input.enableInput();
             setDestinationDetails();
             setShowStationDetails();
             setShowLine(false, 0, 0);

@@ -1,5 +1,6 @@
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
+import { toast } from "sonner";
 import { factionData } from "../../../utils/constants";
 import { numberMapping } from "../../../utils/mapping";
 import { NetworkLayer } from "../../network";
@@ -68,7 +69,7 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
       const srcStationName = numberMapping[+srcEntityType].name;
       const destStationName = numberMapping[+destEntityType].name;
       setLogs(
-        `<p>${colorString({ name: srcName, color: srcColor })} ${colorString({
+        `<p> ⚠️ ${colorString({ name: srcName, color: srcColor })} ${colorString({
           name: srcStationName,
           color: srcColor,
         })} Ship at ${srcPosition?.x},${srcPosition?.y} attacked ${colorString({
@@ -76,7 +77,9 @@ export function systemAttack(network: NetworkLayer, phaser: PhaserLayer) {
           color: destColor,
         })} ${colorString({ name: destStationName, color: destColor })} Ship at ${destPosition?.x},${
           destPosition?.y
-        } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`
+        } using ${colorString({ name: `${+amount}`, color: srcColor })}  missiles</p>`,
+        destPosition.x,
+        destPosition.y
       );
       const nftId = getNftId({ network, phaser });
       if (nftId?.tokenId != +transportedNftId._hex) {

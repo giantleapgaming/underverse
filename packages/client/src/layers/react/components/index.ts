@@ -19,5 +19,5 @@ export function registerUIComponents() {
   registerCashDetails();
   registerTostScreen();
   registerWinScreen();
-  registerEthBalance();
+  // registerEthBalance();
 }

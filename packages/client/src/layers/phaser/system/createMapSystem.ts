@@ -8,7 +8,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     scenes: {
       Main: {
         camera,
-        input,
         phaserScene,
         objectPool,
         config,
@@ -87,6 +86,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     });
   });
 
-  camera.centerOn(0, -1);
+  camera.setScroll(0, 0);
   camera.setZoom(0.08);
 }

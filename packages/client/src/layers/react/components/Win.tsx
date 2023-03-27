@@ -13,6 +13,11 @@ const Win = ({ layers }: { layers: Layers }) => {
       world,
       components: { Name, Cash, Faction, Population, OwnedBy, Position, EntityType, Defence, NFTID },
     },
+    phaser: {
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
   const allUserNameEntityId = [...getComponentEntities(Name)]
     .sort((prevEntity, presentEntity) => {
@@ -52,7 +57,14 @@ const Win = ({ layers }: { layers: Layers }) => {
 
   return (
     <>
-      <Container>
+      <Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
         <RotatingGreenAsteroid src="../img/greenAsteroid.png" />
         <RotatingOrangeAsteroid src="/img/orangeAsteroid.png" />
         <RotatingResidential src="../img/residential.png" />

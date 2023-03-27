@@ -6,7 +6,7 @@ import { PhaserLayer } from "../../../phaser";
 import { segmentPoints, getObstacleListWhileMove, getObstacleListWhileOtherActions } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
 import { Sprites } from "../../../phaser/constants";
-import { getNftId, isOwnedByIndex } from "../../utils/getNftId";
+import { getNftId, isOwnedBy, isOwnedByIndex } from "../../utils/getNftId";
 import { toast } from "sonner";
 import { getDistance } from "../../utils/getDistance";
 
@@ -14,8 +14,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
     sounds,
-    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight },
-    localIds: { stationDetailsEntityIndex, showCircleIndex },
+    components: { ShowLine, ShowStationDetails, ShowDestinationDetails, MoveStation, ObstacleHighlight, Build },
+    localIds: { stationDetailsEntityIndex, showCircleIndex, buildId },
     localApi: {
       setShowLine,
       setDestinationDetails,
@@ -23,6 +23,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       setObstacleHighlight,
       setShowAnimation,
       showProgress,
+      setBuild,
     },
     scenes: {
       Main: {
@@ -42,7 +43,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     api: { moveSystem, prospectSystem },
   } = network;
   const graphics = phaserScene.add.graphics();
-  const circle = phaserScene.add.circle();
   graphics.lineStyle(8, 0xffffff, 1);
 
   const hoverSub = input.pointermove$.subscribe((p) => {
@@ -258,102 +258,146 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         return;
       }
     }
-    if (
-      lineDetails &&
-      lineDetails.showLine &&
-      !stationEntity &&
-      lineDetails.type === "move" &&
-      selectedEntity &&
-      lineDetails.action
-    ) {
-      const sourcePosition = getComponentValue(Position, selectedEntity);
-      if (sourcePosition) {
-        const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
-        const entityIndex = world.entities.indexOf(ownedBy);
-        const factionNumber = getComponentValue(Faction, entityIndex)?.value;
-        const entityType = getComponentValue(EntityType, selectedEntity)?.value;
-        if (!obstacleHighlight.length) {
+  });
+
+  const holdRightClick = input.pointerdown$.subscribe((e) => {
+    if (e.event.button === 2) {
+      const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
+      const buildDetails = getComponentValue(Build, buildId);
+      const isOwner = isOwnedBy({ network, phaser });
+      if ((buildDetails && buildDetails?.isBuilding) || buildDetails?.canPlace || buildDetails?.show) {
+        setBuild({ x: 0, y: 0, canPlace: false, entityType: 0, isBuilding: false, show: false });
+        return;
+      }
+      if (!lineDetails?.showLine && isOwner) {
+        const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+        if (selectedEntity) {
+          const entityType = getComponentValue(EntityType, selectedEntity)?.value;
           if (
-            factionNumber &&
             entityType &&
             (+entityType === Mapping.harvester.id ||
               +entityType === Mapping.attack.id ||
               +entityType === Mapping.refuel.id ||
-              +entityType === Mapping.shipyard.id ||
               +entityType === Mapping.passenger.id)
           ) {
-            const nftDetails = getNftId({ network, phaser });
-            if (nftDetails) {
-              const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
-              const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
-              if (+fuel / 10_00_000 < fuelCost) {
-                toast.error("Not Enough Fuel to Move Ship");
-                return;
-              }
-              if (x * -1 < 51 && y * -1 < 51) {
-                toast.promise(
-                  async () => {
-                    try {
-                      objectPool.remove(`fuel-text-white`);
-                      objectPool.remove(`prospect-text-white`);
-                      setMoveStation(false);
-                      setShowAnimation({
-                        showAnimation: true,
-                        destinationX: x,
-                        destinationY: y,
-                        sourceX: sourcePosition.x,
-                        sourceY: sourcePosition.y,
-                        type:
-                          (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                          (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                          (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                          (+entityType === Mapping.passenger.id && "movePassenger") ||
-                          "move",
-                        faction: +factionNumber,
-                        entityID: selectedEntity,
-                      });
-                      showProgress();
-                      setShowLine(false);
-                      await moveSystem({ entityType: world.entities[selectedEntity], x, y, NftId: nftDetails.tokenId });
-                    } catch (e: any) {
-                      throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                    }
-                  },
-                  {
-                    loading: "Transaction in progress",
-                    success: `Transaction successful`,
-                    error: (e) => e.message,
+            const pointer = e.pointer as Phaser.Input.Pointer;
+            const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+            setShowLine(true, x, y, "move", 1);
+          }
+        }
+      } else {
+        const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
+        obstacleHighlight.forEach((entity) => {
+          objectPool.remove(`obstetrical-circle-${entity}`);
+        });
+        setDestinationDetails();
+        setShowLine(false, 0, 0);
+        setMoveStation(false);
+        objectPool.remove(`fuel-text-white`);
+        objectPool.remove(`prospect-text-white`);
+        objectPool.remove(`attack-region`);
+      }
+    }
+  });
+  const leaveRightClick = input.pointerup$.subscribe((e) => {
+    if (e.event.button === 2) {
+      const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
+      const pointer = e.pointer as Phaser.Input.Pointer;
+      const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      const stationEntity = getEntityIndexAtPosition(x, y);
+      const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
+      const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+      if (lineDetails && lineDetails.showLine && selectedEntity && !stationEntity) {
+        if (
+          lineDetails &&
+          lineDetails.showLine &&
+          !stationEntity &&
+          lineDetails.type === "move" &&
+          selectedEntity &&
+          lineDetails.action
+        ) {
+          const sourcePosition = getComponentValue(Position, selectedEntity);
+          if (sourcePosition) {
+            const ownedBy = getComponentValueStrict(OwnedBy, selectedEntity)?.value;
+            const entityIndex = world.entities.indexOf(ownedBy);
+            const factionNumber = getComponentValue(Faction, entityIndex)?.value;
+            const entityType = getComponentValue(EntityType, selectedEntity)?.value;
+            if (!obstacleHighlight.length) {
+              if (
+                factionNumber &&
+                entityType &&
+                (+entityType === Mapping.harvester.id ||
+                  +entityType === Mapping.attack.id ||
+                  +entityType === Mapping.refuel.id ||
+                  +entityType === Mapping.passenger.id)
+              ) {
+                const nftDetails = getNftId({ network, phaser });
+                if (nftDetails) {
+                  const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
+                  const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
+                  if (+fuel / 10_00_000 < fuelCost) {
+                    toast.error("Not Enough Fuel to Move Ship");
+                    return;
                   }
-                );
-              } else {
-                toast.error("Cannot move beyond 50 orbits");
+                  if (x * -1 < 51 && y * -1 < 51) {
+                    toast.promise(
+                      async () => {
+                        try {
+                          objectPool.remove(`fuel-text-white`);
+                          objectPool.remove(`prospect-text-white`);
+                          setMoveStation(false);
+                          setShowAnimation({
+                            showAnimation: true,
+                            destinationX: x,
+                            destinationY: y,
+                            sourceX: sourcePosition.x,
+                            sourceY: sourcePosition.y,
+                            type:
+                              (+entityType === Mapping.harvester.id && "moveHarvester") ||
+                              (+entityType === Mapping.attack.id && "moveAttackShip") ||
+                              (+entityType === Mapping.refuel.id && "moveRefueller") ||
+                              (+entityType === Mapping.passenger.id && "movePassenger") ||
+                              "move",
+                            faction: +factionNumber,
+                            entityID: selectedEntity,
+                          });
+                          showProgress();
+                          setShowLine(false);
+                          await moveSystem({
+                            entityType: world.entities[selectedEntity],
+                            x,
+                            y,
+                            NftId: nftDetails.tokenId,
+                          });
+                        } catch (e: any) {
+                          throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                        }
+                      },
+                      {
+                        loading: "Transaction in progress",
+                        success: `Transaction successful`,
+                        error: (e) => e.message,
+                      }
+                    );
+                  } else {
+                    toast.error("Cannot move beyond 50 orbits");
+                  }
+                }
               }
+            } else {
+              toast.error("Obstacle on the way");
+              return;
             }
           }
-        } else {
-          toast.error("Obstacle on the way");
-          return;
         }
       }
     }
   });
-  const rightClick = input.rightClick$.subscribe(() => {
-    const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
-    obstacleHighlight.forEach((entity) => {
-      objectPool.remove(`obstetrical-circle-${entity}`);
-    });
-    setDestinationDetails();
-    setShowLine(false, 0, 0);
-    setMoveStation(false);
-    circle.setAlpha(0);
-    objectPool.remove(`fuel-text-white`);
-    objectPool.remove(`prospect-text-white`);
-    objectPool.remove(`attack-region`);
-  });
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
   world.registerDisposer(() => destinationClick?.unsubscribe());
-  world.registerDisposer(() => rightClick?.unsubscribe());
+  world.registerDisposer(() => holdRightClick?.unsubscribe());
+  world.registerDisposer(() => leaveRightClick?.unsubscribe());
 
   defineComponentSystem(world, ShowLine, () => {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);

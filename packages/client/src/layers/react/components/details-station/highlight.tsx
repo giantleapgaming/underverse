@@ -4,6 +4,8 @@ import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
 import { getNftId } from "../../../network/utils/getNftId";
+import { useEthBalance } from "../../hooks/useEthBalance";
+
 export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
     network: {
@@ -13,8 +15,12 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
     phaser: {
       localIds: { showCircleIndex, stationDetailsEntityIndex },
-      localApi: { shouldShowCircle },
+      localApi: { shouldShowCircle, setShowHighLight },
       components: { ShowCircle, ShowHighLight },
+      scenes: {
+        Main: { camera },
+      },
+      sounds,
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
@@ -57,12 +63,29 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
 
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
   if (typeof nftDetails?.tokenId === "number") {
+    const { balance } = useEthBalance(connectedAddress.get());
     return (
       <S.Container>
         {showDetails && (
           <S.DetailsContainer>
             <img src="/ui/CogButtonMenu.png" />
-            <S.HighLight>HIGHLIGHT</S.HighLight>
+            <S.HighLight>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
+                <p>LEADERBORAD</p>
+                <div
+                  style={{
+                    border: "1px solid #5AE7D2",
+                    borderRadius: "10%",
+                    padding: "4px",
+                    fontSize: "13px",
+                    color: "#5AE7D2",
+                  }}
+                >
+                  WALLET <br />
+                  Gas <span>{Math.floor(+balance)}</span>
+                </div>
+              </div>
+            </S.HighLight>
             <S.List>
               {allUserNameEntityId.map((nameEntity) => {
                 let totalPopulation = 0;
@@ -111,9 +134,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                         }}
                       />
                       <S.PLayerName style={{ color: owner ? "#33ff00" : faction?.color }}>
-                        {owner ? "Owned" : name?.value.slice(0, 20)}
+                        {owner ? "ME" : name?.value.slice(0, 13)}
                         <br />
-                        <S.Cash style={{ color: owner ? "#33ff00" : "white" }}>
+                        <S.Cash style={{ color: owner ? "#33ff00" : faction?.color }}>
                           {cash &&
                             new Intl.NumberFormat("en-US", {
                               style: "currency",
@@ -124,9 +147,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                           <span>
                             <img
                               src="/build-stations/users.png"
-                              style={{ height: "15px", width: "20px", margin: " 0 4px" }}
+                              style={{ height: "13px", width: "18px", margin: " 0 8px" }}
                             />
-                            ({totalPopulation})
+                            <u>{totalPopulation}</u>
                           </span>
                         </S.Cash>
                       </S.PLayerName>
@@ -137,6 +160,36 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             </S.List>
           </S.DetailsContainer>
         )}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "15px",
+            marginTop: "200px",
+          }}
+        >
+          <img
+            style={{ zIndex: 10, cursor: "pointer" }}
+            src="/ui/Cog.png"
+            width={"30px"}
+            height={"30px"}
+            onClick={() => {
+              sounds["click"].play();
+              setShowHighLight(!showDetails);
+            }}
+          />
+          <img
+            width={"30px"}
+            height={"30px"}
+            style={{ zIndex: 10, cursor: "pointer" }}
+            src="/ui/recenter.png"
+            onClick={() => {
+              sounds["click"].play();
+              camera.centerOn(0, -1);
+            }}
+          />
+        </div>
       </S.Container>
     );
   } else {
@@ -150,26 +203,26 @@ const S = {
     padding-right: 10px;
     justify-content: end;
     gap: 10px;
-    margin-top: 100px;
+    font-family: monospace;
   `,
   HighLight: styled.h3`
     color: white;
     position: absolute;
-    top: 30px;
-    left: 90px;
+    top: 40px;
+    left: 30px;
   `,
   DetailsContainer: styled.div`
     position: relative;
-    margin-top: -30px;
+    margin-top: -10px;
   `,
   List: styled.div`
     position: absolute;
     top: 80px;
-    left: 70px;
+    left: 50px;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    height: 440px;
+    height: 340px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 10px;
@@ -188,9 +241,9 @@ const S = {
     appearance: none;
     width: 2.3em;
     height: 2.3em;
-    border-radius: 0.12em;
+    border-radius: 0.14em;
     margin-right: 0.5em;
-    border: 0.4em solid ${({ owned }) => (owned ? "#33ff00" : "#00fde4")};
+    border: 0.2em solid ${({ owned }) => (owned ? "#33ff00" : "#00fde4")};
     outline: none;
     cursor: pointer;
     :checked {
@@ -201,14 +254,22 @@ const S = {
       align-items: center;
       background-repeat: no-repeat;
     }
+    :unchecked {
+      background-image: url("/ui/Cog.png");
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-repeat: no-repeat;
+    }
   `,
   PLayerName: styled.p`
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
   `,
   Cash: styled.span`
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 500;
     text-align: center;
   `,
 };

@@ -20,6 +20,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
+    sounds,
     localApi: { setWinGame },
   } = phaser;
   const {
@@ -68,25 +69,31 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
           gameObject.setTexture(harvester.assetKey, `people.png`);
           gameObject.setPosition(x + tileWidth / 2 - 200, y - tileHeight * 2.8);
           if (population && +population === 0) {
+            sounds["explosion"].play();
             objectPool.remove(`people-balance`);
             gameObject.play(Animations.Explosion);
-            gameObject.play(Animations.Explosion);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 3000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 3000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 6000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 8000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 10000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 12000);
           }
@@ -102,27 +109,34 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         once: (gameObject) => {
           const planet = config.sprites[Sprites.Earth];
           gameObject.setTexture(planet.assetKey, planet.frame);
-          gameObject.setPosition(x + tileHeight / 2 - 100, y + tileHeight / 2);
+          gameObject.setPosition(x + tileHeight / 2, y + tileHeight / 2);
           gameObject.setDepth(2);
           gameObject.setOrigin(0.5, 0.5);
           if (population && +population === 0) {
+            sounds["explosion"].play();
             gameObject.play(Animations.Explosion);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 3000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 3000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 6000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 8000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 10000);
             setTimeout(() => {
+              sounds["explosion"].play();
               gameObject.play(Animations.Explosion);
             }, 12000);
           }

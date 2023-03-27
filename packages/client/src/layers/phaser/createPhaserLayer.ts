@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createEntity, EntityIndex, getComponentValue, namespaceWorld, setComponent } from "@latticexyz/recs";
-import { createPhaserEngine } from "@latticexyz/phaserx";
+import { createPhaserEngine, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { NetworkLayer } from "../network";
 import { createMapSystem } from "./system/createMapSystem";
@@ -43,7 +44,6 @@ import {
   buildShipyardSystem,
   leftClickBuildSystem,
   mouseHover,
-  rightClickBuildSystem,
 } from "../network/systems/build";
 import { selectClickSystem } from "../network/systems/select/select-click";
 import { selectSystem } from "../network/systems/select/select";
@@ -277,13 +277,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const setObstacleHighlight = (selectedEntities: number[]) =>
     setComponent(components.ObstacleHighlight, showCircleIndex, { selectedEntities });
 
-  const setLogs = (string: string) => {
-    const existingLogs = getComponentValue(components.Logs, modalIndex)?.logStrings ?? [];
-    if (existingLogs.length >= 0) {
-      setComponent(components.Logs, modalIndex, { logStrings: [string, ...existingLogs] });
-    }
-  };
-
   const shouldTransport = (
     showModal: boolean,
     showLine: boolean,
@@ -314,6 +307,32 @@ export async function createPhaserLayer(network: NetworkLayer) {
   ];
   const soundKeysMp3 = ["bg"];
   const sounds: Record<string, Phaser.Sound.BaseSound> = {};
+
+  const setLogs = (string: string, x?: number, y?: number) => {
+    const existingLogs = getComponentValue(components.Logs, modalIndex)?.logStrings ?? [];
+    if (existingLogs.length >= 0) {
+      setComponent(components.Logs, modalIndex, { logStrings: [string, ...existingLogs] });
+      const setAction = () => {
+        if (typeof x === "number" && typeof y === "number") {
+          tileCoordToPixelCoord;
+          const { x: sourcePixelX, y: sourcePixelY } = tileCoordToPixelCoord(
+            { x, y },
+            scenes.Main.maps.Main.tileWidth,
+            scenes.Main.maps.Main.tileHeight
+          );
+          scenes.Main.camera.setScroll(sourcePixelX, sourcePixelY);
+        }
+      };
+      // @ts-ignore
+      if (Array.isArray(window.LogActions)) {
+        // @ts-ignore
+        window.LogActions.unshift(setAction);
+      } else {
+        // @ts-ignore
+        window.LogActions = [setAction];
+      }
+    }
+  };
 
   const asyncFileLoader = (loaderPlugin: Phaser.Loader.LoaderPlugin) => {
     return new Promise<void>((resolve) => {
@@ -373,7 +392,6 @@ export async function createPhaserLayer(network: NetworkLayer) {
   createMapSystem(network, context);
 
   // click of the build station
-  rightClickBuildSystem(network, context);
   leftClickBuildSystem(network, context);
   mouseHover(network, context);
 

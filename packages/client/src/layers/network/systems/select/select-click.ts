@@ -30,61 +30,88 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
     const stationEntity = getEntityIndexAtPosition(x, y);
     const destination = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
     const showLine = getComponentValue(ShowLine, stationDetailsEntityIndex)?.showLine;
-    if (stationEntity && !destination && !showLine) {
-      const entityType = getComponentValue(EntityType, stationEntity)?.value;
-      const defence = getComponentValue(Defence, stationEntity)?.value;
-      if (defence && entityType && +entityType === Mapping.attack.id && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.astroid.id) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.residential.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.godown.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.harvester.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && (+entityType === Mapping.astroid.id || +entityType === Mapping.planet.id)) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.shipyard.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.refuel.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.passenger.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
-      }
-      if (entityType && +entityType === Mapping.wall.id && defence && +defence) {
-        setShowStationDetails(stationEntity);
-        sounds["click"].play();
-        return;
+    if (!destination && !showLine) {
+      if (stationEntity) {
+        const entityType = getComponentValue(EntityType, stationEntity)?.value;
+        const defence = getComponentValue(Defence, stationEntity)?.value;
+        if (defence && entityType && +entityType === Mapping.attack.id && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          console.log(stationEntity);
+          return;
+        }
+        if (entityType && +entityType === Mapping.astroid.id) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.residential.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.godown.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.harvester.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.shipyard.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.refuel.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.passenger.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.wall.id && defence && +defence) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+        if (entityType && +entityType === Mapping.planet.id) {
+          setShowStationDetails(stationEntity);
+          sounds["click"].play();
+          return;
+        }
+      } else {
+        if (getPointsWithinRadius(3).some(([x1, y1]) => x1 === x && y1 === y)) {
+          const stationEntity = getEntityIndexAtPosition(0, 0);
+          if (stationEntity) {
+            setShowStationDetails(stationEntity);
+            sounds["click"].play();
+            return;
+          }
+        }
       }
     }
   });
 
   world.registerDisposer(() => click?.unsubscribe());
+}
+
+function getPointsWithinRadius(radius: number): Array<[number, number]> {
+  const points: Array<[number, number]> = [];
+
+  for (let x = -radius; x <= radius; x++) {
+    for (let y = -radius; y <= radius; y++) {
+      const distance = Math.sqrt(x * x + y * y);
+      if (distance <= radius) {
+        points.push([x, y]);
+      }
+    }
+  }
+
+  return points;
 }

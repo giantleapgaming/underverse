@@ -61,7 +61,9 @@ export function systemRapture(network: NetworkLayer, phaser: PhaserLayer) {
           color,
         })} people from  ${colorString({ name: destStationName, color })} (${srcPosition?.x},${
           srcPosition?.y
-        }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`
+        }) to ${colorString({ name: srcStationName, color })} (${destPosition?.x},${destPosition?.y})</p>`,
+        destPosition?.x,
+        destPosition?.y
       );
       const nftId = getNftId({ network, phaser });
       if (nftId?.tokenId != +transportedNftId?._hex) {

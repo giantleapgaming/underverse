@@ -75,7 +75,9 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
           color,
         })} (${srcPosition?.x},${srcPosition?.y}) to ${colorString({ name: destStationName, color })} (${
           destPosition?.x
-        },${destPosition?.y})</p>`
+        },${destPosition?.y})</p>`,
+        destPosition.x,
+        destPosition.y
       );
       const nftId = getNftId({ network, phaser });
       if (nftId?.tokenId != +transportedNftId._hex) {

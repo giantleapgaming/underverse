@@ -11,6 +11,9 @@ export const Layout = ({ layers }: { layers: Layers }) => {
       components: { Build, ShowStationDetails },
       localApi: { setBuild },
       localIds: { buildId, stationDetailsEntityIndex },
+      scenes: {
+        Main: { input },
+      },
     },
   } = layers;
   const buildDetails = getComponentValue(Build, buildId)?.isBuilding;
@@ -24,7 +27,14 @@ export const Layout = ({ layers }: { layers: Layers }) => {
     return null;
   } else {
     return (
-      <S.Container>
+      <S.Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
         <UserDetails layers={layers} />
         <S.Border>
           <S.Flex>

@@ -61,7 +61,9 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
           color,
         })} mt to ${colorString({ name: srcStationName, color })} (${srcPosition?.x},${srcPosition?.y}) to (${
           destPosition?.x
-        },${destPosition?.y})</p>`
+        },${destPosition?.y})</p>`,
+        destPosition?.x,
+        destPosition?.y
       );
       const nftId = getNftId({ network, phaser });
       if (nftId?.tokenId != +transportedNftId._hex) {
