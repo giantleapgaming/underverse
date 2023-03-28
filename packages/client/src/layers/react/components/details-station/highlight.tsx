@@ -254,14 +254,6 @@ const S = {
       align-items: center;
       background-repeat: no-repeat;
     }
-    :unchecked {
-      background-image: url("/ui/Cog.png");
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-repeat: no-repeat;
-    }
   `,
   PLayerName: styled.p`
     font-size: 15px;
