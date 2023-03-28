@@ -81,3 +81,30 @@ export const isOwnedByIndex = (layers: Layers, index: number) => {
   }
   return;
 };
+
+export const ownedByName = (layers: Layers, index: number): string => {
+  const {
+    network: {
+      world,
+      components: { OwnedBy, Name },
+    },
+  } = layers;
+
+  if (index) {
+    const owner = getComponentValue(OwnedBy, index)?.value;
+    if (!owner) {
+      return "-";
+    }
+    const ownedNftId = world.entities.indexOf(owner);
+    if (ownedNftId !== -1) {
+      const name = getComponentValue(Name, ownedNftId)?.value;
+      if (!name) {
+        return "-";
+      }
+      return name;
+    } else {
+      return "-";
+    }
+  }
+  return "-";
+};

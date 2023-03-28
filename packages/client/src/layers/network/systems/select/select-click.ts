@@ -37,7 +37,6 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
         if (defence && entityType && +entityType === Mapping.attack.id && +defence) {
           setShowStationDetails(stationEntity);
           sounds["click"].play();
-          console.log(stationEntity);
           return;
         }
         if (entityType && +entityType === Mapping.astroid.id) {

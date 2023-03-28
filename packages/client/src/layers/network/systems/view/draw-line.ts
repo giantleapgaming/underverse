@@ -192,10 +192,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             +entityType === Mapping.harvester.id) &&
           lineDetails.type === "transport"
         ) {
-          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-            setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "transport");
-          }
+          setDestinationDetails(stationEntity);
+          setShowLine(true, x, y, "transport");
         }
 
         if (entityType && +entityType === Mapping.unprospected.id && lineDetails.type === "prospect") {

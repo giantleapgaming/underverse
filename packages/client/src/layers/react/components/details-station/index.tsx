@@ -25,7 +25,7 @@ export const registerDetails = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Cash, Fuel, NFTID },
+          components: { Cash, Fuel, NFTID, OwnedBy },
           walletNfts,
         },
         phaser: {
@@ -39,7 +39,8 @@ export const registerDetails = () => {
         ShowDestinationDetails.update$,
         MoveStation.update$,
         ShowHighLight.update$,
-        Fuel.update$
+        Fuel.update$,
+        OwnedBy.update$
       ).pipe(
         map(() => connectedAddress.get()),
         map(() => {

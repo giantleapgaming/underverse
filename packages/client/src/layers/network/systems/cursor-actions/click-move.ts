@@ -7,13 +7,15 @@ export function clickMove(network: NetworkLayer, phaser: PhaserLayer) {
     scenes: {
       Main: { camera, input },
     },
-    components: { ShowLine },
+    components: { ShowLine, ShowDestinationDetails, ShowStationDetails },
     localIds: { stationDetailsEntityIndex },
   } = phaser;
 
   input.pointermove$.subscribe(({ pointer }) => {
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
-    if (!lineDetails?.showLine) {
+    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
+    const sourceDetails = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+    if (!lineDetails?.showLine || (destinationDetails && sourceDetails)) {
       if (pointer.leftButtonDown()) {
         camera.setScroll(
           camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,

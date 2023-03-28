@@ -5,7 +5,6 @@ import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
 import { getNftId, isOwnedByIndex } from "../../../network/utils/getNftId";
 import { useEthBalance } from "../../hooks/useEthBalance";
-import { useState } from "react";
 import { toast } from "sonner";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
@@ -76,25 +75,26 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
   if (typeof nftDetails?.tokenId === "number") {
     const { balance } = useEthBalance(connectedAddress.get());
     return (
-      <S.Container
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      >
+      <S.Container>
         {showDetails && (
-          <S.DetailsContainer
-            onMouseEnter={() => {
-              input.disableInput();
-            }}
-            onMouseLeave={() => {
-              input.enableInput();
-            }}
-          >
-            <img src="/ui/CogButtonMenu.png" />
-            <S.HighLight>
+          <S.DetailsContainer>
+            <img
+              src="/ui/CogButtonMenu.png"
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            />
+            <S.HighLight
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
                 <p>LEADERBORAD</p>
                 <div
@@ -111,7 +111,14 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 </div>
               </div>
             </S.HighLight>
-            <S.List>
+            <S.List
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            >
               {allUserNameEntityId.map((nameEntity) => {
                 let totalPopulation = 0;
                 const name = getComponentValue(Name, nameEntity);
@@ -187,7 +194,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
         )}
         <S.ActionButtons>
           <img
-            style={{ zIndex: 10, cursor: "pointer" }}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
             src="/ui/Cog.png"
             width={"30px"}
             height={"30px"}
@@ -205,7 +212,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
           <img
             width={"30px"}
             height={"30px"}
-            style={{ zIndex: 10, cursor: "pointer" }}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
             src="/ui/recenter.png"
             onMouseEnter={() => {
               input.disableInput();
@@ -221,7 +228,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
           <img
             width={"30px"}
             height={"30px"}
-            style={{ zIndex: 10, cursor: "pointer" }}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
             src="/ui/harvester.png"
             onMouseEnter={() => {
               input.disableInput();
@@ -277,7 +284,6 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
 };
 const S = {
   Container: styled.div`
-    pointer-events: fill;
     display: flex;
     padding-right: 10px;
     justify-content: end;
@@ -297,6 +303,7 @@ const S = {
     position: absolute;
     top: 40px;
     left: 30px;
+    pointer-events: fill;
   `,
   DetailsContainer: styled.div`
     position: relative;
@@ -306,6 +313,7 @@ const S = {
     margin: auto 0;
   `,
   List: styled.div`
+    pointer-events: fill;
     position: absolute;
     top: 80px;
     left: 50px;

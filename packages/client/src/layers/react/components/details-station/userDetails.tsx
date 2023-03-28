@@ -2,7 +2,7 @@ import { getComponentValue } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
-import { getNftId } from "../../../network/utils/getNftId";
+import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
 import { NFTImg } from "../NFTImg";
 import { UserAction } from "./userAction";
@@ -11,41 +11,54 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
   const {
     network: {
-      components: { Name, NFTID },
+      components: { OwnedBy, Name, NFTID },
       world,
       network: { connectedAddress },
     },
+    phaser: {
+      localIds: { stationDetailsEntityIndex },
+      components: { ShowStationDetails },
+    },
   } = layers;
-
-  const address = connectedAddress.get();
-  const factionIndex = world.entities.indexOf(address);
-  const name = getComponentValue(Name, factionIndex)?.value;
-  const nftDetails = getNftId(layers);
-  const nftId = getComponentValue(NFTID, factionIndex)?.value;
-  return (
-    <S.Container>
-      {nftDetails ? (
-        <img src={nftDetails.imageUrl} width={64} height={64} />
-      ) : (
-        <>{nftId && <NFTImg size={64} id={+nftId} />}</>
-      )}
-      <p
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          setCopy(true);
-          navigator.clipboard.writeText(`${address}`);
-          setTimeout(() => {
-            setCopy(false);
-          }, 1000);
-        }}
-      >
-        {copy ? "Copy" : walletAddress(`${address}`)}
-        <br />
-        <span style={{ color: "white" }}>{name} </span>
-      </p>
-      <UserAction layers={layers} />
-    </S.Container>
-  );
+  const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+  if (selectedEntity) {
+    const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
+    const factionIndex = world.entities.indexOf(ownedBy);
+    const name = getComponentValue(Name, factionIndex)?.value;
+    const nftId = getComponentValue(NFTID, factionIndex)?.value;
+    const nftDetails = getNftId(layers);
+    const isOwner = isOwnedBy(layers);
+    return (
+      <S.Container>
+        {nftDetails && isOwner ? (
+          <img src={nftDetails.imageUrl} width={64} height={64} />
+        ) : (
+          <>{nftId && <NFTImg size={64} id={+nftId} />}</>
+        )}
+        <p
+          style={{ cursor: "pointer" }}
+          onClick={() => {
+            setCopy(true);
+            navigator.clipboard.writeText(`${connectedAddress.get()}`);
+            setTimeout(() => {
+              setCopy(false);
+            }, 1000);
+          }}
+        >
+          {isOwner && (
+            <>
+              {copy ? "Copy" : walletAddress(`${connectedAddress.get()}`)}
+              <br />
+            </>
+          )}
+          <span style={{ color: "white" }}>{name}</span>
+        </p>
+        <UserAction layers={layers} />
+      </S.Container>
+    );
+  } else {
+    return null;
+  }
 };
 
 const S = {

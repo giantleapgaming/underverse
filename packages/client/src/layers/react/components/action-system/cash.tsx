@@ -1,21 +1,19 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { factionData } from "../../../../utils/constants";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { convertPrice } from "../../utils/priceConverter";
 
-export const Transport = ({
+export const Cash = ({
   space,
   playSound,
-  transport,
-  distance,
-  faction,
+  sendCash,
 }: {
   space: number;
   playSound: () => void;
-  transport: (amount: number) => void;
-  distance: number;
-  faction: number;
+  sendCash: (amount: number) => void;
 }) => {
-  const [selected, setSelected] = useState("0");
+  const [selected, setSelected] = useState<number | number[]>(1);
   return (
     <>
       <div
@@ -27,44 +25,47 @@ export const Transport = ({
           minWidth: "330px",
         }}
       >
-        {+space > 0 &&
-          new Array(+space).fill(0).map((_, i) => {
-            return (
-              <S.Slanted
-                key={`red${i}`}
-                selected={+selected > i}
-                onClick={() => {
-                  playSound();
-                  setSelected((i + 1).toString());
-                }}
-              >
-                <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-              </S.Slanted>
-            );
-          })}
+        <div style={{ width: "260px", margin: "0px 50px", display: "flex", alignItems: "center" }}>
+          {+space > 0 && (
+            <Slider
+              min={1}
+              max={space}
+              value={selected}
+              onChange={(value) => {
+                setSelected(value);
+              }}
+              handleStyle={{
+                borderColor: "#008073",
+                height: 20,
+                width: 14,
+                marginLeft: 0,
+                marginTop: -9,
+                backgroundColor: "#008073",
+                opacity: 1,
+                borderRadius: 2,
+              }}
+            />
+          )}
+          <S.TextLg style={{ marginLeft: "10px" }}>{convertPrice(+space)}</S.TextLg>
+        </div>
       </div>
       {+space > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>
-            TOTAL COST{" "}
-            {+selected &&
-              `H ${((Math.pow(distance * +selected, 2) * factionData[faction]?.transport) / 10).toFixed(0)}`}
-          </S.Text>
+          <S.TextLg>SEND MONEY: {convertPrice(+selected)}</S.TextLg>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
-                transport(+selected);
+                playSound();
+                sendCash(+selected);
               }
             }}
           >
             <S.ButtonImg src="/button/greenButton.png" />
-            <S.DeployText>TRANSPORT</S.DeployText>
+            <S.DeployText>SEND</S.DeployText>
           </S.InlinePointer>
         </S.Row>
       ) : (
-        <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>Max capacity reached</S.Text>
-        </S.Row>
+        <S.TextLg>No Enough Cash to send</S.TextLg>
       )}
     </>
   );
@@ -72,8 +73,14 @@ export const Transport = ({
 
 const S = {
   Text: styled.p`
-    font-size: 14px;
+    font-size: 10px;
     font-weight: 500;
+    color: #ffffff;
+    text-align: center;
+  `,
+  TextLg: styled.p`
+    font-size: 12px;
+    font-weight: bold;
     color: #ffffff;
     text-align: center;
   `,
