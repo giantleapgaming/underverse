@@ -1,4 +1,4 @@
-import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
@@ -11,11 +11,10 @@ import { Scrap } from "../action-system/scrap";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
-import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
-import { BuildWall } from "../build-station/buildWall";
-import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
+import { getNftId, isOwnedBy, isOwnedByIndex, ownedByName } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
 import { Rapture } from "../action-system/rapture";
+import { TransportSelectPassenger } from "../action-system/transport-select-passenger";
 export const PassengerDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -27,8 +26,16 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem, raptureSystem },
+      components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel, NFTID, Cash },
+      api: {
+        upgradeSystem,
+        repairSystem,
+        scrapeSystem,
+        refuelSystem,
+        raptureSystem,
+        transferCashSystem,
+        transferEntitySystem,
+      },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -53,6 +60,12 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
+    const nftDetails = getNftId(layers);
+    const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+      const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+      return nftIdValue && +nftIdValue === nftDetails?.tokenId;
+    });
+    const cash = getComponentValue(Cash, ownedByIndex)?.value;
 
     if (entityType && +entityType === Mapping.passenger.id) {
       return (
@@ -180,8 +193,6 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       }}
                     />
                   )}
-                  {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
-                  {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -246,7 +257,60 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "rapture" && destinationDetails && isDestinationSelected && (
                     <div>
-                      <Rapture
+                      <TransportSelectPassenger
+                        cash={cash ? +cash / 10_00_000 : 0}
+                        isDestinationSelectedOwner={isOwnedByIndex(layers, destinationDetails)}
+                        destinationStationOwnerName={ownedByName(layers, destinationDetails)}
+                        transferOwnerShip={() => {
+                          const nftDetails = getNftId(layers);
+                          if (!nftDetails) {
+                            return;
+                          }
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setAction("");
+                                const ownedBy = getComponentValueStrict(OwnedBy, destinationDetails)?.value;
+                                await transferEntitySystem(world.entities[selectedEntity], ownedBy, nftDetails.tokenId);
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }}
+                        onCashTransport={(amount: number) => {
+                          const nftDetails = getNftId(layers);
+                          if (!nftDetails) {
+                            return;
+                          }
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setAction("");
+                                const ownedBy = getComponentValueStrict(OwnedBy, destinationDetails)?.value;
+                                await transferCashSystem(ownedBy, +amount * 10_00_000, nftDetails.tokenId);
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }}
                         transport
                         space={
                           (destinationPopulation &&

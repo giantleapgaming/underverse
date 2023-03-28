@@ -158,15 +158,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           }
         }
         if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture-passenger") {
-          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
-            const position = getComponentValueStrict(Position, selectedEntity);
-            if (getDistance(position.x, position?.y, x, y) <= 5) {
-              setDestinationDetails(stationEntity);
-              setShowLine(true, x, y, "rapture-passenger");
-            } else {
-              toast.error("destination Source is further than 5 units distance from your ship");
-              return;
-            }
+          const position = getComponentValueStrict(Position, selectedEntity);
+          if (getDistance(position.x, position?.y, x, y) <= 5) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, "rapture-passenger");
+          } else {
+            toast.error("destination Source is further than 5 units distance from your ship");
+            return;
           }
         }
         if (
