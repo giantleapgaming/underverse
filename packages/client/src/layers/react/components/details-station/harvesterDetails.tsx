@@ -1,4 +1,4 @@
-import { getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict, setComponent } from "@latticexyz/recs";
 import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
@@ -8,14 +8,13 @@ import { scrapPrice } from "../../utils/scrapPrice";
 import { distance } from "../../utils/distance";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
-import { Transport } from "../action-system/transport";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
 import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLayout";
-import { BuildWall } from "../build-station/buildWall";
-import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
+import { getNftId, isOwnedBy, isOwnedByIndex, ownedByName } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
+import { TransportSelect } from "../action-system/transport-select";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -27,8 +26,16 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel, NFTID, Cash },
+      api: {
+        upgradeSystem,
+        repairSystem,
+        scrapeSystem,
+        transportSystem,
+        refuelSystem,
+        transferCashSystem,
+        transferEntitySystem,
+      },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -53,6 +60,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     const moveStationDetails = getComponentValue(MoveStation, stationDetailsEntityIndex);
+    const nftDetails = getNftId(layers);
+    const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+      const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+      return nftIdValue && +nftIdValue === nftDetails?.tokenId;
+    });
+    const cash = getComponentValue(Cash, ownedByIndex)?.value;
 
     if (entityType && +entityType === Mapping.harvester.id) {
       return (
@@ -119,7 +132,60 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     />
                   )}
                   {action === "transport" && destinationDetails && isDestinationSelected && (
-                    <Transport
+                    <TransportSelect
+                      isDestinationSelectedOwner={isOwnedByIndex(layers, destinationDetails)}
+                      destinationStationOwnerName={ownedByName(layers, destinationDetails)}
+                      transferOwnerShip={() => {
+                        const nftDetails = getNftId(layers);
+                        if (!nftDetails) {
+                          return;
+                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              sounds["confirm"].play();
+                              setDestinationDetails();
+                              setShowLine(false);
+                              setAction("");
+                              const ownedBy = getComponentValueStrict(OwnedBy, destinationDetails)?.value;
+                              await transferEntitySystem(world.entities[selectedEntity], ownedBy, nftDetails.tokenId);
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
+                      }}
+                      onCashTransport={(amount: number) => {
+                        const nftDetails = getNftId(layers);
+                        if (!nftDetails) {
+                          return;
+                        }
+                        toast.promise(
+                          async () => {
+                            try {
+                              sounds["confirm"].play();
+                              setDestinationDetails();
+                              setShowLine(false);
+                              setAction("");
+                              const ownedBy = getComponentValueStrict(OwnedBy, destinationDetails)?.value;
+                              await transferCashSystem(ownedBy, +amount * 10_00_000, nftDetails.tokenId);
+                            } catch (e: any) {
+                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                            }
+                          },
+                          {
+                            loading: "Transaction in progress",
+                            success: `Transaction successful`,
+                            error: (e) => e.message,
+                          }
+                        );
+                      }}
+                      cash={cash ? +cash / 10_00_000 : 0}
                       space={
                         (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
                           ? destinationLevel - destinationBalance
@@ -229,7 +295,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     />
                   )}
                   {action === "build" && <BuildFromHarvesterLayout layers={layers} />}
-                  {action === "defence" && <BuildWall layers={layers} />}
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
@@ -298,20 +363,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("move");
-                      const { x, y } = position;
-                      setShowLine(true, x, y, "move", 1);
-                      sounds["click"].play();
-                    }}
-                    title="Move"
-                  >
-                    <S.Img
-                      src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
                   <S.SideButton
                     onClick={() => {
                       setAction("upgrade");
@@ -399,14 +450,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 name="BUILD"
                 onClick={() => {
                   setAction("build");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "defence"}
-                name="DEFENCE"
-                onClick={() => {
-                  setAction("defence");
                   sounds["click"].play();
                 }}
               />

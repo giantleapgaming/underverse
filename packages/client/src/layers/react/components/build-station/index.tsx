@@ -23,14 +23,21 @@ export const registerBuild = () => {
       const {
         network: {
           network: { connectedAddress },
-          components: { Cash, NFTID },
+          components: { Cash, NFTID, OwnedBy },
           walletNfts,
         },
         phaser: {
           components: { Build, ShowStationDetails, ShowHighLight },
         },
       } = layers;
-      return merge(NFTID.update$, Cash.update$, Build.update$, ShowStationDetails.update$, ShowHighLight.update$).pipe(
+      return merge(
+        NFTID.update$,
+        Cash.update$,
+        Build.update$,
+        ShowStationDetails.update$,
+        ShowHighLight.update$,
+        OwnedBy.update$
+      ).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {

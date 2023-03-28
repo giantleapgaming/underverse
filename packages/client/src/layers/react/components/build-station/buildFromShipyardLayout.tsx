@@ -23,7 +23,7 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
     return (
       <S.Flex>
         <S.Button onClick={() => build(Mapping.attack.id)}>
-          <S.Title>Attack</S.Title>
+          <S.Title style={{ marginRight: "10px" }}>Attack Ship</S.Title>
           <S.Img src="/layout/hex.png" width="50px" height="44px" />
           <S.Img src={`/build-stations/attack.png`} width="30px" height="30px" />
           <S.ImgCrystal>
@@ -71,7 +71,7 @@ const S = {
     flex-wrap: wrap;
     align-items: center;
     justify-content: start;
-    gap: 16px;
+    gap: 19px;
     height: 100%;
     width: 90%;
     justify-content: space-around;

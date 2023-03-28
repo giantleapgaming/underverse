@@ -8,7 +8,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
     phaser: {
       sounds,
       components: { ShowStationDetails },
-      localApi: { setBuild },
+      localApi: { setBuild, setBuildWall },
       localIds: { stationDetailsEntityIndex },
     },
   } = layers;
@@ -44,6 +44,18 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           <S.Title>Shipyard</S.Title>
           <S.Img src="/layout/hex.png" width="50px" height="44px" />
           <S.Img src={`/build-stations/shipyard.png`} width="30px" height="30px" />
+          <S.ImgCrystal>
+            <img src="/build-stations/crystal.png" width="15px" height="15px" />
+            <S.BalanceText>1</S.BalanceText>
+          </S.ImgCrystal>
+        </S.Button>
+        <S.Button
+          onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
+          title="wall"
+        >
+          <S.Title>WALL</S.Title>
+          <S.Img src="/layout/hex.png" width="50px" height="44px" />
+          <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
           <S.ImgCrystal>
             <img src="/build-stations/crystal.png" width="15px" height="15px" />
             <S.BalanceText>1</S.BalanceText>

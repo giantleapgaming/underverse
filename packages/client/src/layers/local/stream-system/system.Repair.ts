@@ -28,9 +28,9 @@ export function systemRepaired(network: NetworkLayer, phaser: PhaserLayer) {
       const color = factionData[+faction]?.color;
       const stationName = numberMapping[+entityType].name;
       setLogs(
-        `<p>${colorString({ name, color })} repaired the ${colorString({ name: stationName, color })} station at (${
+        `<p>${colorString({ name, color })} repaired the ${colorString({ name: stationName, color })} station at ${
           position?.x
-        },${position?.y})</p>`,
+        },${position?.y}</p>`,
         position?.x,
         position?.y
       );

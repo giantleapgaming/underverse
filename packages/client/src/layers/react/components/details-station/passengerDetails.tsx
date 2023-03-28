@@ -8,7 +8,6 @@ import { scrapPrice } from "../../utils/scrapPrice";
 import { distance } from "../../utils/distance";
 import { Repair } from "../action-system/repair";
 import { Scrap } from "../action-system/scrap";
-import { Transport } from "../action-system/transport";
 import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { SelectButton } from "./Button";
@@ -29,7 +28,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     network: {
       world,
       components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel },
-      api: { upgradeSystem, repairSystem, scrapeSystem, transportSystem, refuelSystem, raptureSystem },
+      api: { upgradeSystem, repairSystem, scrapeSystem, refuelSystem, raptureSystem },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -363,20 +362,6 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("move");
-                      const { x, y } = position;
-                      setShowLine(true, x, y, "move", 1);
-                      sounds["click"].play();
-                    }}
-                    title="Move"
-                  >
-                    <S.Img
-                      src={action === "move" ? "/build-stations/move-a.png" : "/build-stations/move.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
                   <S.SideButton
                     onClick={() => {
                       setAction("upgrade");

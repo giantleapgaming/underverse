@@ -59,9 +59,9 @@ export function systemHarvest(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name, color })} ${colorString({ name: destStationName, color })} ${colorString({
           name: `${+kgs}`,
           color,
-        })} mt to ${colorString({ name: srcStationName, color })} (${srcPosition?.x},${srcPosition?.y}) to (${
+        })} mt to ${colorString({ name: srcStationName, color })} ${srcPosition?.x},${srcPosition?.y} to ${
           destPosition?.x
-        },${destPosition?.y})</p>`,
+        },${destPosition?.y}</p>`,
         destPosition?.x,
         destPosition?.y
       );

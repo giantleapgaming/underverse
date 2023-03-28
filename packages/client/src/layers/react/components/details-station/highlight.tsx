@@ -3,8 +3,10 @@ import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/r
 import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
-import { getNftId } from "../../../network/utils/getNftId";
+import { getNftId, isOwnedByIndex } from "../../../network/utils/getNftId";
 import { useEthBalance } from "../../hooks/useEthBalance";
+import { toast } from "sonner";
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
@@ -15,15 +17,22 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
     phaser: {
       localIds: { showCircleIndex, stationDetailsEntityIndex },
-      localApi: { shouldShowCircle, setShowHighLight },
-      components: { ShowCircle, ShowHighLight },
+      localApi: { shouldShowCircle, setShowHighLight, setShowStationDetails },
+      components: { ShowCircle, ShowHighLight, ShowStationDetails },
       scenes: {
-        Main: { camera },
+        Main: {
+          camera,
+          input,
+          maps: {
+            Main: { tileWidth, tileHeight },
+          },
+        },
       },
       sounds,
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
+
   const nftDetails = getNftId(layers);
   const allUserNameEntityId = [...getComponentEntities(Name)]
     .sort((prevEntity, presentEntity) => {
@@ -62,14 +71,30 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     });
 
   const showDetails = getComponentValue(ShowHighLight, stationDetailsEntityIndex)?.value;
+
   if (typeof nftDetails?.tokenId === "number") {
     const { balance } = useEthBalance(connectedAddress.get());
     return (
       <S.Container>
         {showDetails && (
           <S.DetailsContainer>
-            <img src="/ui/CogButtonMenu.png" />
-            <S.HighLight>
+            <img
+              src="/ui/CogButtonMenu.png"
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            />
+            <S.HighLight
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
                 <p>LEADERBORAD</p>
                 <div
@@ -86,7 +111,14 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 </div>
               </div>
             </S.HighLight>
-            <S.List>
+            <S.List
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            >
               {allUserNameEntityId.map((nameEntity) => {
                 let totalPopulation = 0;
                 const name = getComponentValue(Name, nameEntity);
@@ -94,7 +126,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 const nftId = getComponentValue(NFTID, nameEntity)?.value;
                 const owner = !!(nftId && nftDetails.tokenId === +nftId);
                 const indexOf = selectedEntities.indexOf(nameEntity);
-                const exists = selectedEntities.some((entity) => entity === nameEntity);
+                const exists = selectedEntities.some((entity: any) => entity === nameEntity);
                 const factionNumber = getComponentValue(Faction, nameEntity)?.value;
                 const faction = factionData.find((f) => f.factionNumber === (factionNumber && +factionNumber));
                 [...getComponentEntities(Position)].forEach((entity) => {
@@ -160,20 +192,18 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             </S.List>
           </S.DetailsContainer>
         )}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "15px",
-            marginTop: "200px",
-          }}
-        >
+        <S.ActionButtons>
           <img
-            style={{ zIndex: 10, cursor: "pointer" }}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
             src="/ui/Cog.png"
             width={"30px"}
             height={"30px"}
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
             onClick={() => {
               sounds["click"].play();
               setShowHighLight(!showDetails);
@@ -182,14 +212,70 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
           <img
             width={"30px"}
             height={"30px"}
-            style={{ zIndex: 10, cursor: "pointer" }}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
             src="/ui/recenter.png"
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
             onClick={() => {
               sounds["click"].play();
               camera.centerOn(0, -1);
             }}
           />
-        </div>
+          <img
+            width={"30px"}
+            height={"30px"}
+            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+            src="/ui/harvester.png"
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
+            onClick={() => {
+              sounds["click"].play();
+              const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
+                const entityType = getComponentValue(EntityType, entity)?.value;
+                const isOwner = isOwnedByIndex(layers, entity);
+                return entityType && isOwner && +entityType === Mapping.harvester.id;
+              });
+              const totalHarvesterEntities = allHarvesterEntities.length;
+              if (totalHarvesterEntities) {
+                const selectedStationEntity = getComponentValue(
+                  ShowStationDetails,
+                  stationDetailsEntityIndex
+                )?.entityId;
+                if (selectedStationEntity) {
+                  const entityType = getComponentValue(EntityType, selectedStationEntity)?.value;
+                  if (entityType && +entityType === Mapping.harvester.id) {
+                    const index = allHarvesterEntities.indexOf(selectedStationEntity);
+                    if (!(index === totalHarvesterEntities - 1)) {
+                      const position = getComponentValue(Position, allHarvesterEntities[index + 1]);
+                      setShowStationDetails(allHarvesterEntities[index + 1]);
+                      if (position) {
+                        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                        camera.setScroll(x, y);
+                      }
+                      return;
+                    }
+                  }
+                }
+                const position = getComponentValue(Position, allHarvesterEntities[0]);
+                setShowStationDetails(allHarvesterEntities[0]);
+                if (position) {
+                  const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                  camera.setScroll(x, y);
+                }
+              } else {
+                toast.error("You don't have any Harvester, Please build one");
+              }
+            }}
+          />
+        </S.ActionButtons>
       </S.Container>
     );
   } else {
@@ -198,24 +284,36 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
 };
 const S = {
   Container: styled.div`
-    pointer-events: fill;
     display: flex;
     padding-right: 10px;
     justify-content: end;
     gap: 10px;
     font-family: monospace;
   `,
+  ActionButtons: styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    height: calc(100vh - 114px);
+  `,
   HighLight: styled.h3`
     color: white;
     position: absolute;
     top: 40px;
     left: 30px;
+    pointer-events: fill;
   `,
   DetailsContainer: styled.div`
     position: relative;
-    margin-top: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto 0;
   `,
   List: styled.div`
+    pointer-events: fill;
     position: absolute;
     top: 80px;
     left: 50px;

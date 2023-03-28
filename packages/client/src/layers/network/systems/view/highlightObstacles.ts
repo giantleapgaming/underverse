@@ -1,6 +1,7 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, EntityID, getComponentValue, Has, Not } from "@latticexyz/recs";
 import { NetworkLayer } from "../..";
+import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 
@@ -36,10 +37,12 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
+            gameObject.setTexture(stationBackground.assetKey, "highlight-circle-2.png");
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setDepth(2);
+            const color = generateColorsFromWalletAddress(`${ownedBy}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
             gameObject.setAngle(0);
           },
         });
@@ -51,10 +54,12 @@ export function highlightObstacles(network: NetworkLayer, phaser: PhaserLayer) {
         circle.setComponent({
           id: `circle-${entity}`,
           once: (gameObject) => {
-            gameObject.setTexture(stationBackground.assetKey, "highlight-circle.png");
+            gameObject.setTexture(stationBackground.assetKey, "highlight-circle-2.png");
             gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
             gameObject.setOrigin(0.5, 0.5);
             gameObject.setDepth(2);
+            const color = generateColorsFromWalletAddress(`${ownedBy}`);
+            gameObject.setTint(color[0], color[1], color[2], color[3]);
             gameObject.setAngle(0);
           },
         });

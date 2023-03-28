@@ -290,6 +290,21 @@ export async function createNetworkLayer(config: GameConfig) {
       }
     );
   }
+  async function transferCashSystem(playerId: EntityID, cash: number, nftId: number) {
+    return systems["system.TransferCash"].executeTyped(BigNumber.from(playerId), cash, nftId, {
+      gasPrice: 85000000000,
+    });
+  }
+  async function transferEntitySystem(sourceEntity: EntityID, playerId: EntityID, nftId: number) {
+    return systems["system.TransferEntity"].executeTyped(
+      BigNumber.from(sourceEntity),
+      BigNumber.from(playerId),
+      nftId,
+      {
+        gasPrice: 85000000000,
+      }
+    );
+  }
 
   async function prospectSystem(srcGodownEntity: EntityID, destinationGodownEntity: EntityID, NftId: number) {
     return systems["system.Prospect"].executeTyped(
@@ -495,6 +510,8 @@ export async function createNetworkLayer(config: GameConfig) {
       buildFromHarvesterSystem,
       buildFromShipyardSystem,
       wallSystem,
+      transferCashSystem,
+      transferEntitySystem,
     },
     utils: {
       getEntityIndexAtPosition,

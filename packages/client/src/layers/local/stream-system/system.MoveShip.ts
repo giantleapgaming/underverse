@@ -44,7 +44,7 @@ export function systemMoveShip(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name, color })} moved ${colorString({
           name: stationName,
           color,
-        })} ship at (${x},${y}) </p>`,
+        })} ship at ${x},${y} </p>`,
         x,
         y
       );

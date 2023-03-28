@@ -32,7 +32,7 @@ export function systemBuyWeapon(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name, color })} bought ${colorString({
           name: `${+buyQuantity}`,
           color,
-        })} missiles at ${colorString({ name: stationName, color })} station (${position?.x}, ${position?.y})</p>`,
+        })} missiles at ${colorString({ name: stationName, color })} ship ${position?.x}, ${position?.y}</p>`,
         position?.x,
         position?.y
       );

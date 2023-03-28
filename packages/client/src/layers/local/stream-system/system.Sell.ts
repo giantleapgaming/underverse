@@ -37,7 +37,7 @@ export function systemSell(network: NetworkLayer, phaser: PhaserLayer) {
         `<p>${colorString({ name, color })} sold ${colorString({ name: `${+kgs}`, color })} mt from ${colorString({
           name: stationName,
           color,
-        })} station at (${position?.x},${position?.y}) for ${convertPrice(buyPrice * kgs.toNumber())}</p>`,
+        })} station at ${position?.x},${position?.y} for ${convertPrice(buyPrice * kgs.toNumber())}</p>`,
         position?.x,
         position?.y
       );

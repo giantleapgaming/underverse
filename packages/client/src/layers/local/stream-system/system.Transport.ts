@@ -62,9 +62,9 @@ export function systemTransport(network: NetworkLayer, phaser: PhaserLayer) {
         })} mt from  ${colorString({
           name: srcStationName,
           color,
-        })} (${srcPosition?.x},${srcPosition?.y}) to ${colorString({ name: destStationName, color })} (${
+        })} ${srcPosition?.x},${srcPosition?.y} to ${colorString({ name: destStationName, color })} ${
           destPosition?.x
-        },${destPosition?.y})</p>`,
+        },${destPosition?.y}</p>`,
         destPosition.x,
         destPosition.y
       );
