@@ -1,6 +1,6 @@
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue } from "@latticexyz/recs";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Sprites } from "../../../phaser/constants";

@@ -1,28 +1,15 @@
 import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
-import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
-import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Mapping } from "../../../../utils/mapping";
-import { getNftId } from "../../../network/utils/getNftId";
-import { distance } from "../../utils/distance";
-import { Harvest } from "../action-system/harvest";
-import { Refuel } from "../action-system/refuel";
-import { SelectButton } from "./Button";
-import { toast } from "sonner";
 export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
-  const [action, setAction] = useState("");
   const {
     phaser: {
-      sounds,
-      components: { ShowStationDetails, ShowDestinationDetails },
+      components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { setShowLine, setShowAnimation, setDestinationDetails },
     },
     network: {
-      world,
-      components: { EntityType, Position, Balance, Level, Fuel, Prospected },
-      api: { harvestSystem, refuelSystem },
+      components: { EntityType, Position, Balance, Fuel, Prospected },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -30,17 +17,8 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const position = getComponentValueStrict(Position, selectedEntity);
     const balance = getComponentValueStrict(Balance, selectedEntity).value;
-    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
-    const destinationBalance = getComponentValue(Balance, destinationDetails)?.value;
-    const destinationPosition = getComponentValue(Position, destinationDetails);
     const isProspected = getComponentValueStrict(Prospected, selectedEntity).value;
-    const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
-    const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
-    const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
-
-    const isDestinationSelected =
-      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
     if (entityType && +entityType === Mapping.astroid.id) {
       return (
         <div>
@@ -107,151 +85,8 @@ export const AsteroidDetails = ({ layers }: { layers: Layers }) => {
                   </S.Row>
                 </>
               )}
-              <S.Column style={{ width: "100%" }}>
-                {action === "harvest" &&
-                  destinationDetails &&
-                  isDestinationSelected &&
-                  get10x10Grid(position.x, position.y)
-                    .flat()
-                    .some(
-                      ([xCoord, yCoord]) => xCoord === destinationPosition.x && yCoord === destinationPosition.y
-                    ) && (
-                    <div>
-                      <Harvest
-                        space={
-                          (destinationBalance && destinationLevel && +destinationLevel - destinationBalance < +balance
-                            ? destinationLevel - destinationBalance
-                            : +balance) || 0
-                        }
-                        harvest={async (amount) => {
-                          const nftDetails = getNftId(layers);
-                          if (nftDetails) {
-                            toast.promise(
-                              async () => {
-                                try {
-                                  sounds["confirm"].play();
-                                  setShowLine(false);
-                                  setAction("");
-                                  setDestinationDetails();
-                                  setShowAnimation({
-                                    showAnimation: true,
-                                    destinationX: destinationPosition.x,
-                                    destinationY: destinationPosition.y,
-                                    sourceX: position.x,
-                                    sourceY: position.y,
-                                    type: "mineTransport",
-                                    entityID: destinationDetails,
-                                  });
-                                  await harvestSystem(
-                                    world.entities[selectedEntity],
-                                    world.entities[destinationDetails],
-                                    amount,
-                                    nftDetails.tokenId
-                                  );
-                                } catch (e: any) {
-                                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                                }
-                              },
-                              {
-                                loading: "Transaction in progress",
-                                success: `Transaction successful`,
-                                error: (e) => e.message,
-                              }
-                            );
-                          }
-                        }}
-                        distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                        playSound={() => {
-                          sounds["click"].play();
-                        }}
-                      />
-                    </div>
-                  )}
-                {action === "refuel" && destinationDetails && isDestinationSelected && (
-                  <Refuel
-                    space={
-                      (destinationFuel &&
-                      destinationLevel &&
-                      +destinationLevel *
-                        (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
-                        10_00_000 -
-                        destinationFuel <
-                        +fuel
-                        ? destinationLevel *
-                            (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
-                              ? 5000
-                              : 1000) *
-                            10_00_000 -
-                          destinationFuel
-                        : +fuel) || 0
-                    }
-                    refuel={async (weapons) => {
-                      const nftDetails = getNftId(layers);
-                      if (nftDetails) {
-                        toast.promise(
-                          async () => {
-                            try {
-                              sounds["confirm"].play();
-                              setDestinationDetails();
-                              setShowLine(false);
-                              setAction("");
-                              setShowAnimation({
-                                showAnimation: true,
-                                destinationX: destinationPosition.x,
-                                destinationY: destinationPosition.y,
-                                sourceX: position.x,
-                                sourceY: position.y,
-                                type: "fuelTransport",
-                                entityID: destinationDetails,
-                              });
-                              await refuelSystem(
-                                world.entities[selectedEntity],
-                                world.entities[destinationDetails],
-                                weapons,
-                                nftDetails.tokenId
-                              );
-                            } catch (e: any) {
-                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                            }
-                          },
-                          {
-                            loading: "Transaction in progress",
-                            success: `Transaction successful`,
-                            error: (e) => e.message,
-                          }
-                        );
-                      }
-                    }}
-                    playSound={() => {
-                      sounds["click"].play();
-                    }}
-                  />
-                )}
-              </S.Column>
             </S.Column>
           </S.Container>
-          {+isProspected && !destinationDetails && !isDestinationSelected && (
-            <S.Row style={{ marginTop: "5px" }}>
-              <SelectButton
-                name="MINE"
-                isActive={action === "harvest"}
-                onClick={() => {
-                  setAction("harvest");
-                  setShowLine(true, position.x, position.y, "harvest");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "refuel"}
-                name="REFUEL"
-                onClick={() => {
-                  setAction("refuel");
-                  setShowLine(true, position.x, position.y, "refuel-astroid");
-                  sounds["click"].play();
-                }}
-              />
-            </S.Row>
-          )}
         </div>
       );
     }

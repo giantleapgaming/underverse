@@ -1,7 +1,7 @@
 import { pixelCoordToTileCoord, tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineComponentSystem, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Mapping } from "../../../../utils/mapping";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { segmentPoints, getObstacleListWhileMove, getObstacleListWhileOtherActions } from "../../../../utils/distance";
 import { distance } from "../../../react/utils/distance";
@@ -141,7 +141,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             }
           }
         }
-
         if (entityType && +entityType === Mapping.harvester.id && lineDetails.type === "harvest") {
           if (isOwnedByIndex({ network, phaser }, stationEntity)) {
             const position = getComponentValueStrict(Position, selectedEntity);
@@ -149,6 +148,19 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
               setDestinationDetails(stationEntity);
               setShowLine(true, x, y, "harvest");
             }
+          }
+        }
+        if (
+          (entityType && +entityType === Mapping.astroid.id && lineDetails.type === "mine-astroid") ||
+          lineDetails.type === "extract-fuel-asteroid"
+        ) {
+          const position = getComponentValueStrict(Position, selectedEntity);
+          if (getDistance(position.x, position?.y, x, y) <= 5) {
+            setDestinationDetails(stationEntity);
+            setShowLine(true, x, y, lineDetails.type);
+          } else {
+            toast.error("destination Source is further than 5 units distance from your ship");
+            return;
           }
         }
         if (entityType && +entityType === Mapping.passenger.id && lineDetails.type === "rapture") {

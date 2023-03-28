@@ -3,7 +3,7 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, getComponentValueStrict, Has } from "@latticexyz/recs";
 import { calculateHealthBar, generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
 import { Mapping } from "../../../../utils/mapping";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Sprites } from "../../../phaser/constants";
 

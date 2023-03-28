@@ -1,7 +1,7 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
 import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { get3x3Grid } from "../../../../utils/get3X3Grid";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 
 export function mouseHover(network: NetworkLayer, phaser: PhaserLayer) {

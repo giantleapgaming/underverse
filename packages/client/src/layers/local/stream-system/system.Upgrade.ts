@@ -1,4 +1,4 @@
-import { numberMapping } from "./../../../utils/mapping";
+import { numberMapping } from "../../../utils/mapping";
 import { defineRxSystem, EntityIndex, getComponentValue } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { factionData } from "../../../utils/constants";

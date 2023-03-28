@@ -7,7 +7,7 @@ export const Attack = ({
   playSound,
   distance,
   onFire,
-  faction
+  faction,
 }: {
   offence: number;
   playSound: () => void;
@@ -45,7 +45,7 @@ export const Attack = ({
       </div>
       {+offence > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>TOTAL DAMAGE {Math.floor(+selected * (250 / distance * factionData[+faction]?.attack))}</S.Text>
+          <S.Text>TOTAL DAMAGE {Math.floor(+selected * ((250 / distance) * factionData[+faction]?.attack))}</S.Text>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {

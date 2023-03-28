@@ -15,6 +15,8 @@ import { BuildFromHarvesterLayout } from "../build-station/buildFromHarvesterLay
 import { getNftId, isOwnedBy, isOwnedByIndex, ownedByName } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
 import { TransportSelect } from "../action-system/transport-select";
+import { get10x10Grid } from "../../../../utils/get3X3Grid";
+import { Harvest } from "../action-system/harvest";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -35,6 +37,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
         refuelSystem,
         transferCashSystem,
         transferEntitySystem,
+        harvestSystem,
       },
     },
   } = layers;
@@ -298,20 +301,11 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
-                        (destinationFuel &&
-                        destinationLevel &&
-                        +destinationLevel *
-                          (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
-                          10_00_000 -
-                          destinationFuel <
-                          +fuel
-                          ? destinationLevel *
-                              (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
-                                ? 5000
-                                : 1000) *
-                              10_00_000 -
-                            destinationFuel
-                          : +fuel) || 0
+                        fuel && destinationFuel && destinationLevel
+                          ? +destinationLevel * 2000 - destinationFuel / 10_00_000 < +fuel / 10_00_000
+                            ? +destinationLevel * 2000 - destinationFuel / 10_00_000
+                            : +fuel / 10_00_000
+                          : 0
                       }
                       refuel={async (weapons) => {
                         const nftDetails = getNftId(layers);
@@ -351,6 +345,116 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                             error: (e) => e.message,
                           }
                         );
+                      }}
+                      playSound={() => {
+                        sounds["click"].play();
+                      }}
+                    />
+                  )}
+                  {action === "mine" &&
+                    destinationDetails &&
+                    isDestinationSelected &&
+                    get10x10Grid(destinationPosition.x, destinationPosition.y)
+                      .flat()
+                      .some(([xCoord, yCoord]) => xCoord === position.x && yCoord === position.y) && (
+                      <div>
+                        <Harvest
+                          space={
+                            (destinationBalance && balance && level && +level - balance < +destinationBalance
+                              ? level - balance
+                              : destinationBalance
+                              ? +destinationBalance
+                              : 0) || 0
+                          }
+                          harvest={async (amount) => {
+                            const nftDetails = getNftId(layers);
+                            if (nftDetails) {
+                              toast.promise(
+                                async () => {
+                                  try {
+                                    sounds["confirm"].play();
+                                    setShowLine(false);
+                                    setAction("");
+                                    setDestinationDetails();
+                                    setShowAnimation({
+                                      showAnimation: true,
+                                      destinationX: position.x,
+                                      destinationY: position.y,
+                                      sourceX: destinationPosition.x,
+                                      sourceY: destinationPosition.y,
+                                      type: "mineTransport",
+                                      entityID: selectedEntity,
+                                    });
+                                    await harvestSystem(
+                                      world.entities[destinationDetails],
+                                      world.entities[selectedEntity],
+                                      amount,
+                                      nftDetails.tokenId
+                                    );
+                                  } catch (e: any) {
+                                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                                  }
+                                },
+                                {
+                                  loading: "Transaction in progress",
+                                  success: `Transaction successful`,
+                                  error: (e) => e.message,
+                                }
+                              );
+                            }
+                          }}
+                          distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                          playSound={() => {
+                            sounds["click"].play();
+                          }}
+                        />
+                      </div>
+                    )}
+                  {action === "extract" && destinationDetails && isDestinationSelected && (
+                    <Refuel
+                      space={
+                        fuel && level && destinationFuel
+                          ? 2000 * +level - +fuel / 10_00_000 < +destinationFuel / 10_00_000
+                            ? 2000 * +level - +fuel / 10_00_000
+                            : +destinationFuel / 10_00_000
+                          : 0
+                      }
+                      refuel={async (amount) => {
+                        const nftDetails = getNftId(layers);
+                        if (nftDetails) {
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setAction("");
+                                setShowAnimation({
+                                  showAnimation: true,
+                                  destinationX: position.x,
+                                  destinationY: position.y,
+                                  sourceX: destinationPosition.x,
+                                  sourceY: destinationPosition.y,
+                                  type: "fuelTransport",
+                                  entityID: selectedEntity,
+                                });
+                                await refuelSystem(
+                                  world.entities[destinationDetails],
+                                  world.entities[selectedEntity],
+                                  amount * 10_00_000,
+                                  nftDetails.tokenId
+                                );
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }
                       }}
                       playSound={() => {
                         sounds["click"].play();
@@ -450,6 +554,24 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 name="BUILD"
                 onClick={() => {
                   setAction("build");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "mine"}
+                name="MINE"
+                onClick={() => {
+                  setShowLine(true, position.x, position.y, "mine-astroid");
+                  setAction("mine");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "extract"}
+                name="EXTRACT"
+                onClick={() => {
+                  setAction("extract");
+                  setShowLine(true, position.x, position.y, "extract-fuel-asteroid");
                   sounds["click"].play();
                 }}
               />

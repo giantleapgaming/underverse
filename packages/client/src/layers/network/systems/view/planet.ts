@@ -1,7 +1,7 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { defineSystem, getComponentValueStrict, Has } from "@latticexyz/recs";
 import { Mapping } from "../../../../utils/mapping";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Animations, Sprites } from "../../../phaser/constants";
 

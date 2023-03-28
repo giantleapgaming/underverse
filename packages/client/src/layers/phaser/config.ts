@@ -9,9 +9,9 @@ import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH, Animations } fr
 import {
   Tileset as OverworldTileset,
   TileAnimations as OverworldTileAnimations,
-} from "../phaser/assets/tilesets/overworldTileset";
-import overworldTileset from "./assets/tilesets/overworld-tileset.png";
-import mountainTileset from "./assets/tilesets/mountain-tileset.png";
+} from "./assets/tilesets/overworldTileset";
+import overworldTileset from "src/layers/phaser/assets/tilesets/overworld-tileset.png";
+import mountainTileset from "src/layers/phaser/assets/tilesets/mountain-tileset.png";
 
 const ANIMATION_INTERVAL = 200;
 

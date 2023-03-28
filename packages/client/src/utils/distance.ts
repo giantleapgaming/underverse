@@ -1,4 +1,4 @@
-import { getNftId } from "./../layers/network/utils/getNftId";
+import { getNftId } from "../layers/network/utils/getNftId";
 import { Layers } from "../types";
 import { EntityID, getComponentValue } from "@latticexyz/recs";
 import { Mapping } from "./mapping";

@@ -1,4 +1,4 @@
-import { Sprites } from "./../constants";
+import { Sprites } from "../constants";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { NetworkLayer } from "../../network";
 import { PhaserLayer } from "../types";

@@ -13,7 +13,6 @@ export const Refuel = ({
   refuel: (amount: number) => void;
 }) => {
   const [selected, setSelected] = useState<number | number[]>(1);
-
   return (
     <>
       <div
@@ -50,7 +49,7 @@ export const Refuel = ({
       </div>
       {+space > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.TextLg>H {Math.round(+selected / 10_00_000)}</S.TextLg>
+          <S.TextLg>H {Math.round(+selected)}</S.TextLg>
           <S.InlinePointer
             onClick={() => {
               if (+selected) {
