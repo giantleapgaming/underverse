@@ -9,9 +9,9 @@ import { Sprites, Assets, Maps, Scenes, TILE_HEIGHT, TILE_WIDTH, Animations } fr
 import {
   Tileset as OverworldTileset,
   TileAnimations as OverworldTileAnimations,
-} from "./assets/tilesets/overworldTileset";
-import overworldTileset from "src/layers/phaser/assets/tilesets/overworld-tileset.png";
-import mountainTileset from "src/layers/phaser/assets/tilesets/mountain-tileset.png";
+} from "../phaser/assets/tilesets/overworldTileset";
+import overworldTileset from "./assets/tilesets/overworld-tileset.png";
+import mountainTileset from "./assets/tilesets/mountain-tileset.png";
 
 const ANIMATION_INTERVAL = 200;
 
@@ -1580,10 +1580,6 @@ export const phaserConfig = {
           assetKey: Assets.MainAtlas,
           frame: "faction-miner-6",
         },
-        [Sprites.HightLightCircle]: {
-          assetKey: Assets.MainAtlas,
-          frame: "highlight-circle",
-        },
       },
       animations: [
         {
@@ -1602,7 +1598,7 @@ export const phaserConfig = {
           startFrame: 1,
           endFrame: 7,
           frameRate: 4,
-          repeat: -1,
+          repeat: 0,
           prefix: "wave-",
           suffix: ".png",
         },
