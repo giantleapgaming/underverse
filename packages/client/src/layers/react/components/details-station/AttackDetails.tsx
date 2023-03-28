@@ -258,22 +258,13 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                   {action === "refuel" && destinationDetails && isDestinationSelected && (
                     <Refuel
                       space={
-                        (destinationFuel &&
-                        destinationLevel &&
-                        +destinationLevel *
-                          (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9 ? 5000 : 1000) *
-                          10_00_000 -
-                          destinationFuel <
-                          +fuel
-                          ? destinationLevel *
-                              (typeof destinationEntityType !== "undefined" && +destinationEntityType == 9
-                                ? 5000
-                                : 1000) *
-                              10_00_000 -
-                            destinationFuel
-                          : +fuel) || 0
+                        fuel && destinationFuel && destinationLevel
+                          ? +destinationLevel * 2000 - destinationFuel / 10_00_000 < +fuel / 10_00_000
+                            ? +destinationLevel * 2000 - destinationFuel / 10_00_000
+                            : +fuel / 10_00_000
+                          : 0
                       }
-                      refuel={async (weapons) => {
+                      refuel={async (amount) => {
                         const nftDetails = getNftId(layers);
                         if (!nftDetails) {
                           return;
@@ -285,21 +276,20 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                               setDestinationDetails();
                               setShowLine(false);
                               setAction("");
-
                               setShowAnimation({
                                 showAnimation: true,
-                                amount: weapons,
+                                amount,
                                 destinationX: destinationPosition.x,
                                 destinationY: destinationPosition.y,
                                 sourceX: position.x,
-                                sourceY: position.x,
-                                type: "refuel",
+                                sourceY: position.y,
+                                type: "fuelTransport",
                                 entityID: destinationDetails,
                               });
                               await refuelSystem(
                                 world.entities[selectedEntity],
                                 world.entities[destinationDetails],
-                                weapons,
+                                amount * 10_00_000,
                                 nftDetails.tokenId
                               );
                             } catch (e: any) {

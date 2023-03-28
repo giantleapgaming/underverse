@@ -3,7 +3,7 @@ import { getComponentEntities, getComponentValue, getComponentValueStrict } from
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
-import { convertPrice } from "../../react/utils/priceConverter";
+import { convertPrice } from "../utils/priceConverter";
 import { Highlight } from "./details-station/highlight";
 import { Mapping } from "../../../utils/mapping";
 import { getNftId } from "../../network/utils/getNftId";

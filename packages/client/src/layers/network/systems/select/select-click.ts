@@ -1,7 +1,7 @@
 import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
 import { getComponentValue } from "@latticexyz/recs";
 import { Mapping } from "../../../../utils/mapping";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {

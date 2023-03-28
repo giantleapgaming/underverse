@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { getComponentValueStrict } from "@latticexyz/recs";
 import { defineSystem, Has } from "@latticexyz/recs";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 export function displayOrbits(network: NetworkLayer, phaser: PhaserLayer) {
   const {

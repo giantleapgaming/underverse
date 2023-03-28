@@ -1,4 +1,4 @@
-import { Sprites } from "./../../../phaser/constants";
+import { Sprites } from "../../../phaser/constants";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import {
   defineComponentSystem,
@@ -6,7 +6,7 @@ import {
   getComponentValue,
   getComponentValueStrict,
 } from "@latticexyz/recs";
-import { NetworkLayer } from "../../../network";
+import { NetworkLayer } from "../..";
 import { PhaserLayer } from "../../../phaser";
 import { Mapping } from "../../../../utils/mapping";
 import { generateColorsFromWalletAddress } from "../../../../utils/hexToColour";
