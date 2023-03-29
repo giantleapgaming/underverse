@@ -11,8 +11,8 @@ export const Faction = ({
 }) => {
   return (
     <S.Container>
-      <p>Select Faction</p>
-      <S.Faction>Faction</S.Faction>
+      <p>CHOOSE YOUR</p>
+      <S.Faction>FACTION</S.Faction>
       <S.FactionSelectionContainer>
         {factionData.map((data, index) => (
           <S.FactionSelect
@@ -39,17 +39,18 @@ const S = {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    overflow-y: auto;
+    margin-top: 20px;
   `,
   Faction: styled.div`
-    font-size: 50px;
-    font-weight: 600;
-    color: #fff;
+    font-size: 70px;
+    font-weight: 700;
+    color: #fffdd5;
     margin-bottom: 40px;
+    font-style: italic;
   `,
   Img: styled.img`
-    width: 100px;
-    height: 100px;
+    width: 160px;
+    height: 130px;
     border-radius: 100%;
   `,
   FactionSelect: styled.div`
