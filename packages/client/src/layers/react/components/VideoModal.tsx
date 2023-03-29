@@ -6,6 +6,7 @@ import { YoutubeEmbed } from "./YoutubeEmbed";
 import styled from "styled-components";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
+import { useState } from "react";
 
 const VideoModal = ({ layers }: { layers: Layers }) => {
   const {
@@ -19,6 +20,7 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const nftDetails = getNftId(layers);
+  const [showModal, setShowModal] = useState(true);
   const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
     const id = +getComponentValueStrict(NFTID, nftId).value;
     return nftDetails?.tokenId === id;
@@ -34,7 +36,21 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
           input.enableInput();
         }}
       >
-        <YoutubeEmbed src="https://www.youtube.com/embed/D0UnqGm_miA" />
+        <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "8px" }}>
+          {showModal && (
+            <iframe
+              width="853"
+              height="480"
+              src="https://www.youtube.com/embed/D0UnqGm_miA"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title="Embedded youtube"
+            />
+          )}
+          <S.Button type="button" onClick={() => setShowModal(false)}>
+            X
+          </S.Button>
+        </div>
       </S.Container>
     );
   } else {
@@ -45,14 +61,22 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
 const S = {
   Container: styled.div`
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
     pointer-events: fill;
     background-color: #00000058;
-    z-index: 500;
+    z-index: 49;
+    position: relative;
+  `,
+
+  Button: styled.button`
+    outline: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: white;
   `,
 };
 
