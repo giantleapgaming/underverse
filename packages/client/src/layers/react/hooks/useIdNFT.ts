@@ -21,7 +21,7 @@ export const useIdNFTData = (tokenId: number): { nftData?: Image; loading: boole
       const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
         method: "POST",
         body: JSON.stringify({
-          nftContract: "0x5e42fCbB2583CcaD0BaAfb92078b156bd661B93C",
+          nftContract: "0x3e2D7736aB18aBABDc4C377F63d58B1421cDAc12",
           chainId: chainIdString,
           nftTokenId: tokenId,
         }),
