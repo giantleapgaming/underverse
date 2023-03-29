@@ -24,8 +24,7 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
     return nftDetails?.tokenId === id;
   });
   const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
-  console.log(number);
-  if (number) {
+  if (!number) {
     return (
       <S.Container
         onMouseEnter={() => {
