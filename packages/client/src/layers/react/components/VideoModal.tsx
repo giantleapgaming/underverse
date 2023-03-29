@@ -9,24 +9,38 @@ import { getNftId } from "../../network/utils/getNftId";
 
 const VideoModal = ({ layers }: { layers: Layers }) => {
   const {
+    network: {
+      components: { NFTID, TutorialStep },
+    },
     phaser: {
       scenes: {
         Main: { input },
       },
     },
   } = layers;
-  return (
-    <S.Container
-      onMouseEnter={() => {
-        input.disableInput();
-      }}
-      onMouseLeave={() => {
-        input.enableInput();
-      }}
-    >
-      <YoutubeEmbed src="https://www.youtube.com/embed/D0UnqGm_miA" />
-    </S.Container>
-  );
+  const nftDetails = getNftId(layers);
+  const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+    const id = +getComponentValueStrict(NFTID, nftId).value;
+    return nftDetails?.tokenId === id;
+  });
+  const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
+  console.log(number);
+  if (number) {
+    return (
+      <S.Container
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
+      >
+        <YoutubeEmbed src="https://www.youtube.com/embed/D0UnqGm_miA" />
+      </S.Container>
+    );
+  } else {
+    return null;
+  }
 };
 
 const S = {
@@ -73,7 +87,7 @@ export const registerModalScreen = () => {
           if (id) {
             return { layers };
           }
-          return {};
+          return;
         })
       );
     },
