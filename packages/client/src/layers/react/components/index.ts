@@ -7,8 +7,8 @@ import { registerCashDetails } from "./Cash";
 import { registerDetails } from "./details-station";
 import { registerTostScreen } from "./toast";
 import { registerWinScreen } from "./Win";
-import { registerEthBalance } from "./EthBalance";
 import { registerTutorialsListScreen } from "./TutorialsList";
+import { registerModalScreen } from "./VideoModal";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -21,5 +21,5 @@ export function registerUIComponents() {
   registerTostScreen();
   registerTutorialsListScreen();
   registerWinScreen();
-  // registerEthBalance();
+  registerModalScreen();
 }

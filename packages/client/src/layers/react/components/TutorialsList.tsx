@@ -3,7 +3,6 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import styled from "styled-components";
-import { ChangeEvent, useState } from "react";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
   const {
@@ -13,50 +12,6 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
       },
     },
   } = layers;
-
-  const [checkedItems, setCheckedItems] = useState([
-    { id: 1, label: "Build Harvester", isChecked: false, videoId: "VIDEO_ID_1" },
-    { id: 2, label: "Move", isChecked: false, videoId: "VIDEO_ID_2" },
-    { id: 3, label: "Encounter something", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 4, label: "Prospect", isChecked: false, videoId: "VIDEO_ID_4" },
-    { id: 5, label: "Harvest", isChecked: false, videoId: "VIDEO_ID_5" },
-    { id: 6, label: "Refuel", isChecked: false, videoId: "VIDEO_ID_6" },
-    { id: 7, label: "Build Shipyard", isChecked: false, videoId: "VIDEO_ID_7" },
-    {
-      id: 8,
-      label: "Check that minerals were transferred from harvester to shipyard",
-      isChecked: false,
-      videoId: "VIDEO_ID_8",
-    },
-    { id: 9, label: "Build of ppl carrier", isChecked: false, videoId: "VIDEO_ID_9" },
-    { id: 10, label: "Check if ppl carier was moved into spawning zone", isChecked: false, videoId: "VIDEO_ID_10" },
-    { id: 11, label: "Move ppl from earth to ppl carrier", isChecked: false, videoId: "VIDEO_ID_11" },
-    { id: 12, label: "Track build of hab", isChecked: false, videoId: "VIDEO_ID_12" },
-    { id: 13, label: "Move ppl from ppl carrier to hab", isChecked: false, videoId: "VIDEO_ID_13" },
-    { id: 14, label: "Upgrade", isChecked: false, videoId: "VIDEO_ID_14" },
-    { id: 15, label: "Build Depot", isChecked: false, videoId: "VIDEO_ID_15" },
-    { id: 16, label: "Transport minerals and sell", isChecked: false, videoId: "VIDEO_ID_16" },
-    { id: 17, label: "Build Attack Ship", isChecked: false, videoId: "VIDEO_ID_17" },
-    { id: 18, label: "Attack", isChecked: false, videoId: "VIDEO_ID_18" },
-    { id: 19, label: "Build fuel carrier", isChecked: false, videoId: "VIDEO_ID_19" },
-    { id: 20, label: "Move and Refuel from Fuel Carrier", isChecked: false, videoId: "VIDEO_ID_20" },
-  ]);
-
-  const [showModal, setShowModal] = useState(false);
-  const [videoId, setVideoId] = useState("");
-
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>, index: number) => {
-    const newCheckedItems = [...checkedItems];
-    newCheckedItems[index].isChecked = event.target.checked;
-    setCheckedItems(newCheckedItems);
-    if (event.target.checked) {
-      console.log(`Item ${index + 1} is selected.`);
-      setVideoId(checkedItems[index].videoId);
-      setShowModal(true);
-    } else {
-      setShowModal(false);
-    }
-  };
 
   return (
     <S.Container
@@ -77,39 +32,20 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
         <S.Hr></S.Hr>
         <div>
           <ul>
-            {checkedItems.map((item, index) => (
-              <li key={index} style={{ display: index === 0 || checkedItems[index - 1].isChecked ? "block" : "none" }}>
+            {TutorialDataList.map((item, index) => (
+              <li key={index} style={{ display: index === 0 ? "block" : "none" }}>
                 <S.ListItem>
                   <div style={{ display: "flex", gap: "6px", alignItems: "center", justifyContent: "center" }}>
                     <S.Index checked={item.isChecked}>{index + 1}</S.Index>
                     <S.Label checked={item.isChecked}>{item.label}</S.Label>
                   </div>
-                  <S.CheckBox
-                    type="checkbox"
-                    checked={item.isChecked}
-                    onChange={(event) => handleCheckboxChange(event, index)}
-                  />
+                  <S.CheckBox type="checkbox" checked={item.isChecked} />
                 </S.ListItem>
               </li>
             ))}
           </ul>
         </div>
       </S.ListContainer>
-      {showModal && (
-        <S.ModalContainer>
-          <S.Modal>
-            <iframe
-              title="YouTube video"
-              width="500"
-              height="330"
-              src={`https://www.youtube.com/embed/${videoId}`}
-              allow="autoplay; encrypted-media"
-              allowFullScreen
-            ></iframe>
-          </S.Modal>
-          <S.CloseModalButton onClick={() => setShowModal(false)}>X</S.CloseModalButton>
-        </S.ModalContainer>
-      )}
     </S.Container>
   );
 };
@@ -244,3 +180,31 @@ export const registerTutorialsListScreen = () => {
     }
   );
 };
+
+export const TutorialDataList = [
+  { id: 1, label: "Build Harvester", isChecked: false, videoId: "VIDEO_ID_1" },
+  { id: 2, label: "Move", isChecked: false, videoId: "VIDEO_ID_2" },
+  { id: 3, label: "Encounter something", isChecked: false, videoId: "VIDEO_ID_3" },
+  { id: 4, label: "Prospect", isChecked: false, videoId: "VIDEO_ID_4" },
+  { id: 5, label: "Harvest", isChecked: false, videoId: "VIDEO_ID_5" },
+  { id: 6, label: "Refuel", isChecked: false, videoId: "VIDEO_ID_6" },
+  { id: 7, label: "Build Shipyard", isChecked: false, videoId: "VIDEO_ID_7" },
+  {
+    id: 8,
+    label: "Check that minerals were transferred from harvester to shipyard",
+    isChecked: false,
+    videoId: "VIDEO_ID_8",
+  },
+  { id: 9, label: "Build of ppl carrier", isChecked: false, videoId: "VIDEO_ID_9" },
+  { id: 10, label: "Check if ppl carier was moved into spawning zone", isChecked: false, videoId: "VIDEO_ID_10" },
+  { id: 11, label: "Move ppl from earth to ppl carrier", isChecked: false, videoId: "VIDEO_ID_11" },
+  { id: 12, label: "Track build of hab", isChecked: false, videoId: "VIDEO_ID_12" },
+  { id: 13, label: "Move ppl from ppl carrier to hab", isChecked: false, videoId: "VIDEO_ID_13" },
+  { id: 14, label: "Upgrade", isChecked: false, videoId: "VIDEO_ID_14" },
+  { id: 15, label: "Build Depot", isChecked: false, videoId: "VIDEO_ID_15" },
+  { id: 16, label: "Transport minerals and sell", isChecked: false, videoId: "VIDEO_ID_16" },
+  { id: 17, label: "Build Attack Ship", isChecked: false, videoId: "VIDEO_ID_17" },
+  { id: 18, label: "Attack", isChecked: false, videoId: "VIDEO_ID_18" },
+  { id: 19, label: "Build fuel carrier", isChecked: false, videoId: "VIDEO_ID_19" },
+  { id: 20, label: "Move and Refuel from Fuel Carrier", isChecked: false, videoId: "VIDEO_ID_20" },
+];
