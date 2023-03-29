@@ -266,6 +266,17 @@
       "writeAccess": [
         "CashComponent"
       ]
+    },
+    {
+      "name": "AttackLocationSystem",
+      "writeAccess": [
+        "OwnedByComponent",
+        "PositionComponent",
+        "OffenceComponent",
+        "DefenceComponent",
+        "LevelComponent",
+        "BalanceComponent"
+      ]
     }
   ]
 }
