@@ -184,6 +184,11 @@ export async function createNetworkLayer(config: GameConfig) {
       indexed: true,
       metadata: { contractId: "component.Encounter" },
     }),
+    TutorialStep: defineNumberComponent(world, {
+      id: "TutorialStep",
+      indexed: true,
+      metadata: { contractId: "component.TutorialStep" },
+    }),
   };
   const componentsWithOverrides = {
     Position: overridableComponent(components.Position),
@@ -208,6 +213,7 @@ export async function createNetworkLayer(config: GameConfig) {
     Prospected: overridableComponent(components.Prospected),
     NFTID: overridableComponent(components.NFTID),
     Encounter: overridableComponent(components.Encounter),
+    TutorialStep: overridableComponent(components.TutorialStep),
   };
 
   // --- SETUP ----------------------------------------------------------------------

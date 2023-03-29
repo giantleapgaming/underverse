@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
+import { YoutubeEmbed } from "./YoutubeEmbed";
 
 const WalletLogin = () => {
   const [output, setOutput] = useState("");
@@ -44,25 +45,33 @@ const WalletLogin = () => {
                 marginBottom: "50px",
               }}
             >
+              <YoutubeEmbed src="https://www.youtube.com/embed/D0UnqGm_miA" />
               <img
                 onClick={async () => {
                   const wallet = Wallet.createRandom();
                   try {
                     setLoading(true);
-                    const response = await fetch("https://api.giantleap.gg/api/drip", {
+                    const params = new URLSearchParams(window.location.search);
+                    const chainIdString = params.get("chainId");
+                    const response = await fetch("https://api.giantleap.gg/api/drip-with-nft", {
                       method: "POST",
-                      body: JSON.stringify({ address: wallet.address }),
+                      body: JSON.stringify({ address: wallet.address, chainId: chainIdString && chainIdString }),
                       headers: {
                         "Content-Type": "application/json",
                       },
                     });
-                    await response.json();
-                    sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                    if (!allKeys.includes(wallet.privateKey)) {
-                      const newList = [...allKeys, wallet.privateKey];
-                      localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                    const data = await response.json();
+                    if (data.status) {
+                      sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                      if (!allKeys.includes(wallet.privateKey)) {
+                        const newList = [...allKeys, wallet.privateKey];
+                        localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                      }
+                      window.location.reload();
+                    } else {
+                      setLoading(false);
+                      setError("unexpected error");
                     }
-                    window.location.reload();
                   } catch (e) {
                     console.log(e);
                     setError("unexpected error");
@@ -100,7 +109,6 @@ const WalletLogin = () => {
             )}
           </div>
         </WalletText>
-
         <InputBox>
           <P
             onClick={() => {
