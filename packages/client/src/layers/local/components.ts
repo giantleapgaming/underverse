@@ -237,3 +237,13 @@ export const SelectedNftID = (world: World) => {
     { id: "SelectedNftID" }
   );
 };
+export const TutorialModalDetails = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      tutorialNumber: Type.OptionalNumber,
+      showModal: Type.Boolean,
+    },
+    { id: "tutorialModalDetails" }
+  );
+};

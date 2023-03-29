@@ -4,6 +4,8 @@ import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import { YoutubeEmbed } from "./YoutubeEmbed";
 import styled from "styled-components";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getNftId } from "../../network/utils/getNftId";
 
 const VideoModal = ({ layers }: { layers: Layers }) => {
   const {
@@ -53,8 +55,9 @@ export const registerModalScreen = () => {
     (layers) => {
       const {
         network: {
-          components: { NFTID },
+          components: { NFTID, TutorialStep },
           network: { connectedAddress },
+          walletNfts,
         },
         phaser: {
           components: { SelectedNftID },
@@ -62,7 +65,15 @@ export const registerModalScreen = () => {
       } = layers;
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => {
-          return { layers };
+          const nftDetails = getNftId(layers);
+          const id = [...getComponentEntities(NFTID)].find((nftId) => {
+            const id = +getComponentValueStrict(NFTID, nftId).value;
+            return nftDetails?.tokenId === id;
+          });
+          if (id) {
+            return { layers };
+          }
+          return {};
         })
       );
     },
