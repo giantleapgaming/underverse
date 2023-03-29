@@ -6,19 +6,40 @@ import styled from "styled-components";
 import { ChangeEvent, useState } from "react";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
+  const {
+    phaser: {
+      scenes: {
+        Main: { input },
+      },
+    },
+  } = layers;
+
   const [checkedItems, setCheckedItems] = useState([
-    { id: 1, label: "DEPLOY", isChecked: false, videoId: "VIDEO_ID_1" },
-    { id: 2, label: "MOVE", isChecked: false, videoId: "VIDEO_ID_2" },
-    { id: 3, label: "SIGNALS", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 4, label: "PROSPECT", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 5, label: "MINE", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 6, label: "REFUEL", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 7, label: "BUILD SHIPYARD", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 8, label: "TRANSPORT", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 9, label: "BUILD SHIP", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 10, label: "RAPTURE", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 11, label: "BUILD HUB", isChecked: false, videoId: "VIDEO_ID_3" },
-    { id: 12, label: "TRANSPORT PPL", isChecked: false, videoId: "VIDEO_ID_3" },
+    { id: 1, label: "Build Harvester", isChecked: false, videoId: "VIDEO_ID_1" },
+    { id: 2, label: "Move", isChecked: false, videoId: "VIDEO_ID_2" },
+    { id: 3, label: "Encounter something", isChecked: false, videoId: "VIDEO_ID_3" },
+    { id: 4, label: "Prospect", isChecked: false, videoId: "VIDEO_ID_4" },
+    { id: 5, label: "Harvest", isChecked: false, videoId: "VIDEO_ID_5" },
+    { id: 6, label: "Refuel", isChecked: false, videoId: "VIDEO_ID_6" },
+    { id: 7, label: "Build Shipyard", isChecked: false, videoId: "VIDEO_ID_7" },
+    {
+      id: 8,
+      label: "Check that minerals were transferred from harvester to shipyard",
+      isChecked: false,
+      videoId: "VIDEO_ID_8",
+    },
+    { id: 9, label: "Build of ppl carrier", isChecked: false, videoId: "VIDEO_ID_9" },
+    { id: 10, label: "Check if ppl carier was moved into spawning zone", isChecked: false, videoId: "VIDEO_ID_10" },
+    { id: 11, label: "Move ppl from earth to ppl carrier", isChecked: false, videoId: "VIDEO_ID_11" },
+    { id: 12, label: "Track build of hab", isChecked: false, videoId: "VIDEO_ID_12" },
+    { id: 13, label: "Move ppl from ppl carrier to hab", isChecked: false, videoId: "VIDEO_ID_13" },
+    { id: 14, label: "Upgrade", isChecked: false, videoId: "VIDEO_ID_14" },
+    { id: 15, label: "Build Depot", isChecked: false, videoId: "VIDEO_ID_15" },
+    { id: 16, label: "Transport minerals and sell", isChecked: false, videoId: "VIDEO_ID_16" },
+    { id: 17, label: "Build Attack Ship", isChecked: false, videoId: "VIDEO_ID_17" },
+    { id: 18, label: "Attack", isChecked: false, videoId: "VIDEO_ID_18" },
+    { id: 19, label: "Build fuel carrier", isChecked: false, videoId: "VIDEO_ID_19" },
+    { id: 20, label: "Move and Refuel from Fuel Carrier", isChecked: false, videoId: "VIDEO_ID_20" },
   ]);
 
   const [showModal, setShowModal] = useState(false);
@@ -38,10 +59,17 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
   };
 
   return (
-    <S.Container>
+    <S.Container
+      onMouseEnter={() => {
+        input.disableInput();
+      }}
+      onMouseLeave={() => {
+        input.enableInput();
+      }}
+    >
       <S.ListContainer>
         <S.Title>
-          <img src="/img/detailsIcon.png" style={{ marginLeft: "10px" }} />
+          <img src="/img/detailsIcon.png" style={{ marginLeft: "18px" }} />
           <p style={{ fontSize: "16px", color: "#00fde4", fontWeight: "600", letterSpacing: "1" }}>
             TUTORIAL <br /> MISSIONS
           </p>
@@ -72,8 +100,8 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
           <S.Modal>
             <iframe
               title="YouTube video"
-              width="460"
-              height="315"
+              width="500"
+              height="330"
               src={`https://www.youtube.com/embed/${videoId}`}
               allow="autoplay; encrypted-media"
               allowFullScreen
@@ -94,7 +122,7 @@ const S = {
     align-items: flex-start;
     padding-left: 10px;
     font-family: monospace;
-    gap: 60px;
+    gap: 150px;
   `,
   ListContainer: styled.div`
     display: flex;
@@ -102,16 +130,27 @@ const S = {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
-    gap: 7px;
+    gap: 5px;
+    height: 360px;
+    overflow-y: auto;
+    ::-webkit-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
+    scrollbar-width: none;
+    *::-ms-scrollbar {
+      width: 0px;
+      height: 0px;
+    }
   `,
   Title: styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 20px;
+    gap: 30px;
   `,
   Hr: styled.hr`
-    width: 180px;
+    width: 190px;
     color: #00fde4;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -120,8 +159,7 @@ const S = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 180px;
-    gap: 40px;
+    gap: 30px;
     margin-bottom: 8px;
   `,
   Index: styled.span<{ checked?: boolean }>`
@@ -136,6 +174,7 @@ const S = {
     font-size: 10px;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-weight: bold;
+    width: 120px;
   `,
 
   CheckBox: styled.input`
@@ -170,7 +209,7 @@ const S = {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    gap: 4px;
+    gap: 8px;
     margin-top: -20px;
   `,
 };
