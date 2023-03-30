@@ -3,9 +3,8 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
-import { getComponentEntities, getComponentValue, Has, Not, runQuery } from "@latticexyz/recs";
-import { Mapping } from "../../../utils/mapping";
-import { NFTImg } from "./NFTImg";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getNftId } from "../../network/utils/getNftId";
 
 const Congratulations = ({ layers }: { layers: Layers }) => {
   const {
@@ -237,35 +236,24 @@ export const registerCongratulationsScreen = () => {
     (layers) => {
       const {
         network: {
-          components: { NFTID, Population, Cash, Position, EntityType, OwnedBy },
+          components: { NFTID, TutorialStep },
           network: { connectedAddress },
         },
-        phaser: {
-          components: { ShowWinGame },
-          scenes: {
-            Main: { input },
-          },
-          getValues: { getWinState },
-        },
       } = layers;
-      return merge(
-        computedToStream(connectedAddress),
-        NFTID.update$,
-        Population.update$,
-        Cash.update$,
-        ShowWinGame.update$
-      ).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
-          const listOfPopulations = [...runQuery([Has(Position), Has(EntityType), Has(Population), Not(OwnedBy)])];
-          if (listOfPopulations.length) {
-            const population = getComponentValue(Population, listOfPopulations[0])?.value;
-            if (population && +population === 0 && getWinState()) {
-              input.disableInput();
-              return { layers };
-            }
+          const nftDetails = getNftId(layers);
+          const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+            const id = +getComponentValueStrict(NFTID, nftId).value;
+            return nftDetails?.tokenId === id;
+          });
+          const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
+          if (number === 130) {
+            return { layers };
+          } else {
+            return;
           }
-          return;
         })
       );
     },
