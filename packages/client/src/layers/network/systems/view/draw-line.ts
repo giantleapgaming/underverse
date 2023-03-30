@@ -368,7 +368,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                     toast.error("Not Enough Fuel to Move Ship");
                     return;
                   }
-                  if (x * -1 < 51 && y * -1 < 51) {
+                  if (Math.sqrt(Math.pow(x - sourcePosition.x, 2) + Math.pow(y - sourcePosition.y, 2)) < 51) {
                     toast.promise(
                       async () => {
                         try {
