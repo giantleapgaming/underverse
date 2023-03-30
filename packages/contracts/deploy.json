@@ -208,7 +208,8 @@
         "EncounterComponent",
         "OffenceComponent",
         "EntityTypeComponent",
-        "TutorialStepComponent"
+        "TutorialStepComponent",
+        "OwnedByComponent"
       ]
     },
     {

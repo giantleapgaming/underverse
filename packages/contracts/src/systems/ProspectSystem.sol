@@ -108,6 +108,9 @@ contract ProspectSystem is System {
         destinationEntity,
         defenceInitialAmount / 100
       );
+      //In tutorial campaign we set asteroid ownership so that they can be purged once the user completes the campaign leaving a clean slate for other players
+
+      OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(destinationEntity, playerID);
     } else {
       //We set the prospected status to 1 in both cases as we dont want the prospect system to be called again
       //We set defence and offence randomly and set the pirate ship to also be in an encounter
