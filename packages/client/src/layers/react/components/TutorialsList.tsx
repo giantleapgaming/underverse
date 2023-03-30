@@ -218,8 +218,4 @@ export const TutorialDataList = [
   { id: 110, showId: 100, label: "Rapture", videoId: "D0UnqGm_miA" },
   { id: 120, showId: 110, label: "Build Hab", videoId: "D0UnqGm_miA" },
   { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },
-  { id: 140, showId: 130, label: "Upgrade", videoId: "D0UnqGm_miA" },
-  { id: 150, showId: 140, label: "Build Depot", videoId: "D0UnqGm_miA" },
-  { id: 160, showId: 150, label: "Transport minerals and sell", videoId: "D0UnqGm_miA" },
-  { id: 170, showId: 160, label: "Build Attack Ship", videoId: "D0UnqGm_miA" },
 ];
