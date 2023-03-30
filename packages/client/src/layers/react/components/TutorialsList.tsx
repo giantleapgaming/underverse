@@ -25,6 +25,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
     return nftDetails?.tokenId === id;
   });
   const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
+  const list = number && +number >= 135 ? TutorialDataListPart1 : TutorialDataListPart2;
   return (
     <S.Container>
       <S.ListContainer
@@ -44,7 +45,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
         <S.Hr></S.Hr>
         <div>
           <ul>
-            {TutorialDataList.map((item, index) => {
+            {list.map((item, index) => {
               const [checked, setChecked] = useState(false);
               const show = typeof number === "number" ? (+number >= item.showId ? true : false) : false;
               const completed = typeof number === "number" ? (+number >= item.id ? true : false) : false;
@@ -215,7 +216,7 @@ export const registerTutorialsListScreen = () => {
   );
 };
 
-export const TutorialDataList = [
+export const TutorialDataListPart1 = [
   { id: 10, showId: 0, label: "Deploy", videoId: "D0UnqGm_miA" },
   { id: 20, showId: 10, label: "Move", videoId: "D0UnqGm_miA" },
   { id: 30, showId: 20, label: "Signals", videoId: "D0UnqGm_miA" },
@@ -229,4 +230,18 @@ export const TutorialDataList = [
   { id: 110, showId: 100, label: "Rapture", videoId: "D0UnqGm_miA" },
   { id: 120, showId: 110, label: "Build Hab", videoId: "D0UnqGm_miA" },
   { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },
+];
+export const TutorialDataListPart2 = [
+  { id: 140, showId: 130, label: "Upgrade", videoId: "D0UnqGm_miA" },
+  { id: 150, showId: 140, label: "Depots", videoId: "D0UnqGm_miA" },
+  { id: 160, showId: 150, label: "Sell Minerals", videoId: "D0UnqGm_miA" },
+  { id: 170, showId: 160, label: "Attack Ships", videoId: "D0UnqGm_miA" },
+  { id: 180, showId: 170, label: "Attacking", videoId: "D0UnqGm_miA" },
+  { id: 190, showId: 180, label: "Fuel Carriers", videoId: "D0UnqGm_miA" },
+  { id: 200, showId: 190, label: "Fuel Carriers", videoId: "D0UnqGm_miA" },
+  { id: 210, showId: 200, label: "Build Walls", videoId: "D0UnqGm_miA" },
+  { id: 220, showId: 210, label: "Transfer Cash", videoId: "D0UnqGm_miA" },
+  { id: 230, showId: 220, label: "Transfer Ship", videoId: "D0UnqGm_miA" },
+  { id: 240, showId: 230, label: "Scrapping", videoId: "D0UnqGm_miA" },
+  { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
 ];
