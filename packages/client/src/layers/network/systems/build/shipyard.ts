@@ -98,10 +98,10 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
         textWhite.setComponent({
           id: "build-shipyard-station-text-white",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x + 40, textPosition.y - 35);
+            gameObject.setPosition(textPosition.x + 90, textPosition.y - 60);
             gameObject.depth = 4;
             gameObject.setText(`1`);
-            gameObject.setFontSize(40);
+            gameObject.setFontSize(80);
             gameObject.setFontStyle("bold");
             gameObject.setColor("#ffffff");
             gameObject.setAngle(0);
@@ -111,10 +111,11 @@ export function buildShipyardSystem(network: NetworkLayer, phaser: PhaserLayer) 
         mineral.setComponent({
           id: "build-shipyard-station-text-white-m",
           once: (gameObject) => {
-            gameObject.setPosition(textPosition.x + 10, textPosition.y - 30);
+            gameObject.setPosition(textPosition.x, textPosition.y - 30);
             gameObject.setTexture(HoverSprite.assetKey, `mineral.png`);
             gameObject.depth = 4;
             gameObject.setOrigin(0.5, 0.5);
+            gameObject.setScale(3);
             gameObject.setAngle(0);
           },
         });
