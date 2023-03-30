@@ -5,7 +5,7 @@ export const YoutubeEmbed = ({ src }: { src: string }) => (
     <iframe
       width="853"
       height="480"
-      src={src}
+      src="https://www.youtube.com/embed/D0UnqGm_miA"
       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
       title="Embedded youtube"

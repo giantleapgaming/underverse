@@ -45,7 +45,14 @@ const WalletLogin = () => {
                 marginBottom: "50px",
               }}
             >
-              <YoutubeEmbed src="https://www.youtube.com/embed/D0UnqGm_miA" />
+              <iframe
+                width="853"
+                height="480"
+                src="https://www.youtube.com/embed/D0UnqGm_miA"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title="Embedded youtube"
+              />
               <img
                 onClick={async () => {
                   const wallet = Wallet.createRandom();

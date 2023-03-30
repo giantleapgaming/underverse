@@ -2,60 +2,49 @@ import { registerUIComponent } from "../engine";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
-import { YoutubeEmbed } from "./YoutubeEmbed";
 import styled from "styled-components";
-import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
-import { useState } from "react";
 
 const VideoModal = ({ layers }: { layers: Layers }) => {
   const {
-    network: {
-      components: { NFTID, TutorialStep },
-    },
     phaser: {
       scenes: {
         Main: { input },
       },
+      localApi: { setTutorial },
     },
   } = layers;
-  const nftDetails = getNftId(layers);
-  const [showModal, setShowModal] = useState(true);
-  const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
-    const id = +getComponentValueStrict(NFTID, nftId).value;
-    return nftDetails?.tokenId === id;
-  });
-  const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
-  if (!number) {
-    return (
-      <S.Container
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "8px" }}>
-          {showModal && (
-            <iframe
-              width="853"
-              height="480"
-              src="https://www.youtube.com/embed/D0UnqGm_miA"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              title="Embedded youtube"
-            />
-          )}
-          <S.Button type="button" onClick={() => setShowModal(false)}>
-            X
-          </S.Button>
-        </div>
-      </S.Container>
-    );
-  } else {
-    return null;
-  }
+
+  return (
+    <S.Container
+      onMouseEnter={() => {
+        input.disableInput();
+      }}
+      onMouseLeave={() => {
+        input.enableInput();
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "8px" }}>
+        <iframe
+          width="853"
+          height="480"
+          src="https://www.youtube.com/embed/D0UnqGm_miA"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+          title="Embedded youtube"
+        />
+        <S.Button
+          type="button"
+          onClick={() => {
+            setTutorial(false);
+          }}
+        >
+          X
+        </S.Button>
+      </div>
+    </S.Container>
+  );
 };
 
 const S = {
@@ -92,22 +81,23 @@ export const registerModalScreen = () => {
     (layers) => {
       const {
         network: {
-          components: { NFTID, TutorialStep },
+          components: { NFTID },
           network: { connectedAddress },
-          walletNfts,
         },
         phaser: {
-          components: { SelectedNftID },
+          components: { TutorialModalDetails },
+          localIds: { modalIndex },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialModalDetails.update$).pipe(
         map(() => {
           const nftDetails = getNftId(layers);
           const id = [...getComponentEntities(NFTID)].find((nftId) => {
             const id = +getComponentValueStrict(NFTID, nftId).value;
             return nftDetails?.tokenId === id;
           });
-          if (id) {
+          const videoDetails = getComponentValue(TutorialModalDetails, modalIndex);
+          if (id && videoDetails?.showModal) {
             return { layers };
           }
           return;

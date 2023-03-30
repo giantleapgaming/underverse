@@ -26,7 +26,8 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
   defineSystem(world, [Has(Position), Has(EntityType), Has(Balance), Has(Level), Has(Fuel)], ({ entity }) => {
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
     const balance = getComponentValueStrict(Balance, entity).value;
-    if (+entityTypeNumber === Mapping.astroid.id) {
+    const level = getComponentValueStrict(Level, entity).value;
+    if (+entityTypeNumber === Mapping.astroid.id && +level) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const astroidObject = objectPool.get(`astroid-${entity}`, "Sprite");
