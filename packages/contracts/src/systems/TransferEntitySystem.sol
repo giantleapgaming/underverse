@@ -10,6 +10,7 @@ import { getEntityLevel, checkNFT } from "../utils.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.TransferEntity"));
 
@@ -37,6 +38,10 @@ contract TransferEntitySystem is System {
     //We do not need to do any special checks for Target player id as it is triggered by the user anyway
     // update  data
     OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(sourceEntity, targetPlayerID);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 230) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 230);
+    }
   }
 
   function executeTyped(uint256 sourceEntity, uint256 targetPlayerID, uint256 nftID) public returns (bytes memory) {

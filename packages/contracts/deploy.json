@@ -272,7 +272,8 @@
     {
       "name": "TransferEntitySystem",
       "writeAccess": [
-        "OwnedByComponent"
+        "OwnedByComponent",
+        "TutorialStepComponent"
       ]
     },
     {
