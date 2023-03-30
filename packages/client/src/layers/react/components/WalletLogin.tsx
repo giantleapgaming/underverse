@@ -75,7 +75,7 @@ const WalletLogin = () => {
                       const chainIdString = params.get("chainId");
                       const response = await fetch("https://api.giantleap.gg/api/drip-with-nft", {
                         method: "POST",
-                        body: JSON.stringify({ address: wallet.address, chainId: chainIdString && chainIdString }),
+                        body: JSON.stringify({ address: wallet.address, chainId: chainIdString && +chainIdString }),
                         headers: {
                           "Content-Type": "application/json",
                         },
