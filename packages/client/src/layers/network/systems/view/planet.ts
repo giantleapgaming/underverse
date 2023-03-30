@@ -51,10 +51,10 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
       pplBalanceText.setComponent({
         id: "people-balance",
         once: (gameObject) => {
-          gameObject.setPosition(x + tileWidth / 2, y - tileHeight * 2.8);
+          gameObject.setPosition(x + tileWidth / 2 + 130, y - tileHeight * 2.8);
           gameObject.setDepth(2);
           gameObject.setText(`${+population}`);
-          gameObject.setFontSize(150);
+          gameObject.setFontSize(170);
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
           gameObject.setOrigin(0.5, 0.5);
@@ -67,7 +67,7 @@ export function displayPlanetSystem(network: NetworkLayer, phaser: PhaserLayer) 
         once: (gameObject) => {
           gameObject.setScale(0.5);
           gameObject.setTexture(harvester.assetKey, `people.png`);
-          gameObject.setPosition(x + tileWidth / 2 - 200, y - tileHeight * 2.8);
+          gameObject.setPosition(x + tileWidth / 2 - 150, y - tileHeight * 2.8);
           if (population && +population === 0) {
             sounds["explosion"].play();
             objectPool.remove(`people-balance`);
