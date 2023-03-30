@@ -9,6 +9,7 @@ import { registerTostScreen } from "./toast";
 import { registerWinScreen } from "./Win";
 import { registerTutorialsListScreen } from "./TutorialsList";
 import { registerModalScreen } from "./VideoModal";
+import { registerCongratulationsScreen } from "./Congratulations";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -22,4 +23,5 @@ export function registerUIComponents() {
   registerTutorialsListScreen();
   registerWinScreen();
   registerModalScreen();
+  registerCongratulationsScreen();
 }

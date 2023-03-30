@@ -38,6 +38,7 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
           type="button"
           onClick={() => {
             setTutorial(false);
+            input.enableInput();
           }}
         >
           X

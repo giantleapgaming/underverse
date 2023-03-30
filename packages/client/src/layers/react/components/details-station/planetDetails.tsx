@@ -3,25 +3,19 @@ import { useState } from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
-import { Rapture } from "../action-system/rapture";
 import { SelectButton } from "./Button";
-import { distance } from "../../utils/distance";
-import { getNftId } from "../../../network/utils/getNftId";
-import { toast } from "sonner";
 
 export const PlanetDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("rapture");
   const {
     phaser: {
-      world,
       sounds,
-      components: { ShowStationDetails, ShowDestinationDetails },
+      components: { ShowStationDetails },
       localIds: { stationDetailsEntityIndex },
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      localApi: { setShowLine },
     },
     network: {
-      components: { EntityType, Position, Population, Level },
-      api: { raptureSystem },
+      components: { EntityType, Position, Population },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -29,12 +23,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
     const entityType = getComponentValueStrict(EntityType, selectedEntity).value;
     const position = getComponentValueStrict(Position, selectedEntity);
     const population = getComponentValueStrict(Population, selectedEntity).value;
-    const destinationDetails = getComponentValue(ShowDestinationDetails, stationDetailsEntityIndex)?.entityId;
-    const level = getComponentValue(Level, destinationDetails)?.value;
-    const destinationPopulation = getComponentValue(Population, destinationDetails)?.value;
-    const destinationPosition = getComponentValue(Position, destinationDetails);
-    const isDestinationSelected =
-      destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
+
     if (entityType && +entityType === Mapping.planet.id) {
       return (
         <div>
@@ -53,57 +42,6 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
                   <p>{+population}</p>
                 </S.Weapon>
               </S.Row>
-              <S.Column style={{ width: "100%" }}>
-                {action === "rapture" && destinationDetails && isDestinationSelected && (
-                  <div>
-                    <Rapture
-                      space={(destinationPopulation && level && +level - +destinationPopulation) || 0}
-                      rapture={async (weapons) => {
-                        const nftDetails = getNftId(layers);
-                        if (!nftDetails) {
-                          return;
-                        }
-                        toast.promise(
-                          async () => {
-                            try {
-                              sounds["confirm"].play();
-                              setDestinationDetails();
-                              setShowLine(false);
-                              setShowAnimation({
-                                showAnimation: true,
-                                amount: weapons,
-                                destinationX: destinationPosition.x,
-                                destinationY: destinationPosition.y,
-                                sourceX: position.x,
-                                sourceY: position.y,
-                                type: "humanTransport",
-                                entityID: destinationDetails,
-                              });
-                              await raptureSystem(
-                                world.entities[selectedEntity],
-                                world.entities[destinationDetails],
-                                weapons,
-                                nftDetails.tokenId
-                              );
-                            } catch (e: any) {
-                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                            }
-                          },
-                          {
-                            loading: "Transaction in progress",
-                            success: `Transaction successful`,
-                            error: (e) => e.message,
-                          }
-                        );
-                      }}
-                      playSound={() => {
-                        sounds["click"].play();
-                      }}
-                      distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
-                    />
-                  </div>
-                )}
-              </S.Column>
             </S.Column>
             <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
               <S.Column>
@@ -130,17 +68,7 @@ export const PlanetDetails = ({ layers }: { layers: Layers }) => {
               </S.Column>
             </div>
           </S.Container>
-          <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-            <SelectButton
-              name="RAPTURE"
-              isActive={action === "rapture"}
-              onClick={() => {
-                setAction("rapture");
-                setShowLine(true, position.x, position.y, "rapture");
-                sounds["click"].play();
-              }}
-            />
-          </S.Row>
+          <S.Row style={{ gap: "10px", marginTop: "5px" }}></S.Row>
         </div>
       );
     }

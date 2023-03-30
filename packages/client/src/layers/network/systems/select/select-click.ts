@@ -100,7 +100,7 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
   world.registerDisposer(() => click?.unsubscribe());
 }
 
-function getPointsWithinRadius(radius: number): Array<[number, number]> {
+export function getPointsWithinRadius(radius: number): Array<[number, number]> {
   const points: Array<[number, number]> = [];
 
   for (let x = -radius; x <= radius; x++) {

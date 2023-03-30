@@ -5,6 +5,7 @@ import { Layers } from "../../../types";
 import styled from "styled-components";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
+import { useEffect, useState } from "react";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
   const {
@@ -44,8 +45,12 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
         <div>
           <ul>
             {TutorialDataList.map((item, index) => {
+              const [checked, setChecked] = useState(false);
               const show = typeof number === "number" ? (+number >= item.showId ? true : false) : false;
-              const completed = !!(number && +number >= item.id);
+              const completed = typeof number === "number" ? (+number >= item.id ? true : false) : false;
+              useEffect(() => {
+                setChecked(typeof number === "number" ? (+number >= item.id ? true : false) : false);
+              }, [typeof number === "number" ? (+number >= item.id ? true : false) : false]);
               return (
                 <li key={index} style={{ display: show ? "block" : "none" }}>
                   <S.ListItem
@@ -54,10 +59,16 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
                     }}
                   >
                     <div style={{ display: "flex", gap: "6px", alignItems: "center", justifyContent: "center" }}>
-                      <S.Index checked={completed}>{index + 1}</S.Index>
-                      <S.Label checked={completed}>{item.label}</S.Label>
+                      <S.Index checked={!completed}>{index + 1}</S.Index>
+                      <S.Label checked={!completed}>{item.label}</S.Label>
                     </div>
-                    <S.CheckBox disabled type="checkbox" defaultChecked={completed} />
+                    <S.CheckBox
+                      onClick={() => {
+                        setChecked(typeof number === "number" ? (+number >= item.id ? true : false) : false);
+                      }}
+                      type="checkbox"
+                      checked={checked}
+                    />
                   </S.ListItem>
                 </li>
               );

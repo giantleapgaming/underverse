@@ -9,6 +9,7 @@ import { Sprites } from "../../../phaser/constants";
 import { getNftId, isOwnedBy, isOwnedByIndex } from "../../utils/getNftId";
 import { toast } from "sonner";
 import { getDistance } from "../../utils/getDistance";
+import { getPointsWithinRadius } from "../select/select-click";
 
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
@@ -163,10 +164,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             return;
           }
         }
-        if (entityType && +entityType === Mapping.passenger.id && lineDetails.type === "rapture") {
-          if (isOwnedByIndex({ network, phaser }, stationEntity)) {
+        if (entityType && +entityType === Mapping.planet.id && lineDetails.type === "rapture-earth") {
+          if (getPointsWithinRadius(3).some(([x1, y1]) => x1 === x && y1 === y)) {
+            const stationEntity = getEntityIndexAtPosition(0, 0);
             setDestinationDetails(stationEntity);
-            setShowLine(true, x, y, "rapture");
+            setShowLine(true, x, y, "rapture-earth");
           }
         }
         if (entityType && +entityType === Mapping.residential.id && lineDetails.type === "rapture-passenger") {

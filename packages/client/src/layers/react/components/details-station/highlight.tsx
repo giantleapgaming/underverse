@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { EntityID, getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
@@ -97,18 +97,20 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
                 <p>LEADERBORAD</p>
-                <div
+                <a
+                  href={"https://explorer.testnet-chain.linfra.xyz/address/" + connectedAddress.get()}
                   style={{
                     border: "1px solid #5AE7D2",
                     borderRadius: "10%",
                     padding: "4px",
                     fontSize: "13px",
                     color: "#5AE7D2",
+                    textDecoration: "none",
                   }}
                 >
                   WALLET <br />
                   Gas <span>{Math.floor(+balance)}</span>
-                </div>
+                </a>
               </div>
             </S.HighLight>
             <S.List
