@@ -57,7 +57,7 @@ const S = {
   Container: styled.div`
     pointer-events: fill;
     display: flex;
-    padding-right: 10px;
+    justify-content: center;
     gap: 10px;
     margin-top: 10px;
   `,

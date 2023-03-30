@@ -97,7 +97,6 @@ const S = {
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
-    height: 360px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 0px;

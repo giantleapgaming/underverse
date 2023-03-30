@@ -20,8 +20,8 @@ export const FactionImg = ({ layers }: { layers: Layers }) => {
       return (
         <img
           src={`/faction/${+faction}.png`}
-          width={"60px"}
-          height={"60px"}
+          width={"45px"}
+          height={"40px"}
           style={{ marginTop: "-5px", display: "flex", justifyContent: "center", alignItems: "center" }}
         />
       );

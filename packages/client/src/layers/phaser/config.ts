@@ -1598,7 +1598,7 @@ export const phaserConfig = {
           startFrame: 1,
           endFrame: 7,
           frameRate: 4,
-          repeat: 0,
+          repeat: -1,
           prefix: "wave-",
           suffix: ".png",
         },
