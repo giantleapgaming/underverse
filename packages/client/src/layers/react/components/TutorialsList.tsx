@@ -214,7 +214,7 @@ export const TutorialDataList = [
   { id: 70, showId: 60, label: "Build Shipyard", videoId: "D0UnqGm_miA" },
   { id: 80, showId: 70, label: "Transport", videoId: "D0UnqGm_miA" },
   { id: 90, showId: 80, label: "Build Ship", videoId: "D0UnqGm_miA" },
-  { id: 100, showId: 90, label: "Check if ppl carier was moved into spawning zone", videoId: "D0UnqGm_miA" },
+  { id: 100, showId: 90, label: "Rapture Zone", videoId: "D0UnqGm_miA" },
   { id: 110, showId: 100, label: "Rapture", videoId: "D0UnqGm_miA" },
   { id: 120, showId: 110, label: "Build Hab", videoId: "D0UnqGm_miA" },
   { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },

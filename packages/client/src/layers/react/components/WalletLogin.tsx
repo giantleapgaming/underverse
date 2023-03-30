@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
-import { YoutubeEmbed } from "./YoutubeEmbed";
 
 const WalletLogin = () => {
   const [output, setOutput] = useState("");
@@ -46,48 +45,63 @@ const WalletLogin = () => {
               }}
             >
               <iframe
-                width="853"
-                height="480"
+                width="653"
+                height="380"
                 src="https://www.youtube.com/embed/D0UnqGm_miA"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded youtube"
               />
-              <img
-                onClick={async () => {
-                  const wallet = Wallet.createRandom();
-                  try {
-                    setLoading(true);
-                    const params = new URLSearchParams(window.location.search);
-                    const chainIdString = params.get("chainId");
-                    const response = await fetch("https://api.giantleap.gg/api/drip-with-nft", {
-                      method: "POST",
-                      body: JSON.stringify({ address: wallet.address, chainId: chainIdString && chainIdString }),
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                    });
-                    const data = await response.json();
-                    if (data.status) {
-                      sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                      if (!allKeys.includes(wallet.privateKey)) {
-                        const newList = [...allKeys, wallet.privateKey];
-                        localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+              {loading ? (
+                <p
+                  style={{
+                    fontSize: "20px",
+                    color: "#fffdd5",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bolder",
+                    marginTop: "20px",
+                    marginBottom: "20px",
+                  }}
+                >
+                  Loading
+                </p>
+              ) : (
+                <img
+                  onClick={async () => {
+                    const wallet = Wallet.createRandom();
+                    try {
+                      setLoading(true);
+                      const params = new URLSearchParams(window.location.search);
+                      const chainIdString = params.get("chainId");
+                      const response = await fetch("https://api.giantleap.gg/api/drip-with-nft", {
+                        method: "POST",
+                        body: JSON.stringify({ address: wallet.address, chainId: chainIdString && chainIdString }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+                      const data = await response.json();
+                      if (data.status) {
+                        sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
+                        if (!allKeys.includes(wallet.privateKey)) {
+                          const newList = [...allKeys, wallet.privateKey];
+                          localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                        }
+                        window.location.reload();
+                      } else {
+                        setLoading(false);
+                        setError("unexpected error");
                       }
-                      window.location.reload();
-                    } else {
-                      setLoading(false);
+                    } catch (e) {
+                      console.log(e);
                       setError("unexpected error");
+                      setLoading(false);
                     }
-                  } catch (e) {
-                    console.log(e);
-                    setError("unexpected error");
-                    setLoading(false);
-                  }
-                }}
-                src="../img/createAccount.png"
-                style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "15px" }}
-              />
+                  }}
+                  src="../img/createAccount.png"
+                  style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "15px" }}
+                />
+              )}
               <p
                 style={{
                   fontSize: "20px",
