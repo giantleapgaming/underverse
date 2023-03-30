@@ -10,6 +10,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { checkNFT, deleteGodown } from "../utils.sol";
 import { nftContract, harvesterType, godownInitialLevel, baseInitialfuel, barrier } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Scrap"));
 
@@ -38,6 +39,10 @@ contract ScrapSystem is System {
       EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, harvesterType);
       LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
       FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
+    }
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 240) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 240);
     }
   }
 

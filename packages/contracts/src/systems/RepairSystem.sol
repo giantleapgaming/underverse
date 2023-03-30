@@ -19,6 +19,7 @@ import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDCompo
 import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { checkNFT } from "../utils.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Repair"));
 
@@ -67,6 +68,10 @@ contract RepairSystem is System {
 
     // Updating defence value
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, selectedEntityLevel * 100);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 250) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 250);
+    }
   }
 
   function executeTyped(uint256 entity, uint256 nftID) public returns (bytes memory) {
