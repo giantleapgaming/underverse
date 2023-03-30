@@ -134,7 +134,8 @@
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
-        "FuelComponent"
+        "FuelComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -159,7 +160,8 @@
         "DefenceComponent",
         "FuelComponent",
         "BalanceComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -167,7 +169,8 @@
       "writeAccess": [
         "CashComponent",
         "LastUpdatedTimeComponent",
-        "DefenceComponent"
+        "DefenceComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -235,7 +238,8 @@
         "PopulationComponent",
         "OffenceComponent",
         "PrevPositionComponent",
-        "EncounterComponent"
+        "EncounterComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -253,7 +257,8 @@
         "PopulationComponent",
         "OffenceComponent",
         "PrevPositionComponent",
-        "EncounterComponent"
+        "EncounterComponent",
+        "TutorialStepComponent"
       ]
     },
     {
@@ -286,7 +291,8 @@
     {
       "name": "PurgeUserEntitiesSystem",
       "writeAccess": [
-        "LevelComponent"
+        "LevelComponent",
+        "TutorialStepComponent"
       ]
     }
   ]
