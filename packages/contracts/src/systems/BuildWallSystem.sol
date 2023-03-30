@@ -16,6 +16,7 @@ import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildWall"));
 
@@ -142,6 +143,10 @@ contract BuildWallSystem is System {
     }
 
     BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - wallLength);
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 210) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 210);
+    }
   }
 
   function executeTyped(
