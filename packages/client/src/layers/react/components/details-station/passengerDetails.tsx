@@ -66,7 +66,6 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
       return nftIdValue && +nftIdValue === nftDetails?.tokenId;
     });
     const cash = getComponentValue(Cash, ownedByIndex)?.value;
-
     if (entityType && +entityType === Mapping.passenger.id) {
       return (
         <div>
@@ -355,6 +354,61 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </div>
                   )}
+                  {action === "rapture-earth" && destinationDetails && isDestinationSelected && (
+                    <div>
+                      <Rapture
+                        space={
+                          (destinationPopulation && level
+                            ? +level - +population < +destinationPopulation
+                              ? +level - +population
+                              : +destinationPopulation
+                            : 0) || 0
+                        }
+                        rapture={async (weapons) => {
+                          const nftDetails = getNftId(layers);
+                          if (!nftDetails) {
+                            return;
+                          }
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setShowAnimation({
+                                  showAnimation: true,
+                                  amount: weapons,
+                                  destinationX: position.x,
+                                  destinationY: position.y,
+                                  sourceX: destinationPosition.x,
+                                  sourceY: destinationPosition.y,
+                                  type: "humanTransport",
+                                  entityID: selectedEntity,
+                                });
+                                await raptureSystem(
+                                  world.entities[destinationDetails],
+                                  world.entities[selectedEntity],
+                                  weapons,
+                                  nftDetails.tokenId
+                                );
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
+                            }
+                          );
+                        }}
+                        playSound={() => {
+                          sounds["click"].play();
+                        }}
+                        distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
+                      />
+                    </div>
+                  )}
                   {action === "steal" && destinationDetails && isDestinationSelected && (
                     <div>
                       <Rapture
@@ -496,6 +550,15 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                 onClick={() => {
                   setAction("steal");
                   setShowLine(true, position.x, position.y, "steal-passenger");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                name="RAPTURE"
+                isActive={action === "rapture-earth"}
+                onClick={() => {
+                  setAction("rapture-earth");
+                  setShowLine(true, position.x, position.y, "rapture-earth");
                   sounds["click"].play();
                 }}
               />
