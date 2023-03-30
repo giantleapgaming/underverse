@@ -278,6 +278,12 @@
       "writeAccess": [
         "CashComponent"
       ]
+    },
+    {
+      "name": "PurgeUserEntitiesSystem",
+      "writeAccess": [
+        "LevelComponent"
+      ]
     }
   ]
 }
