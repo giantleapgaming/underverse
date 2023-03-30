@@ -37,8 +37,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
       const factionNumber = getComponentValue(Faction, factionIndex)?.value;
       if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-        const Sprite = Sprites.HightLightCircle;
-        const stationBackground = config.sprites[Sprite];
+        const stationBackground = config.sprites[Sprites.Asteroid12];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");
         const showSelected = allShowCircleEntity?.includes(factionIndex);
         if (showSelected) {
