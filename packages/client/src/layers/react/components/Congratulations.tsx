@@ -30,9 +30,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
     return nftDetails?.tokenId === id;
   });
   const number = getComponentValue(TutorialStep, nftEntity)?.value;
-
-  const isCadet = typeof number === "number" && +number === 250;
-  const isRookie = typeof number === "number" && +number === 130;
+  const isCadet = number && +number == 250;
+  const isRookie = number && +number == 130;
 
   return (
     <>
@@ -126,7 +125,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                 "https://twitter.com/share?url=" +
                 encodeURIComponent(tutorialURL) +
                 "&text=" +
-                encodeURIComponent(text);
+                encodeURIComponent(text || "");
               const popupWidth = 550;
               const popupHeight = 420;
               const left = window.screen.width / 2 - popupWidth / 2;
