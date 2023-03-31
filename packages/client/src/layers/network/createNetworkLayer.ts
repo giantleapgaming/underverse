@@ -374,6 +374,11 @@ export async function createNetworkLayer(config: GameConfig) {
       gasPrice: 85000000000,
     });
   }
+  async function tutorial1CompleteSystem(nftId: number) {
+    return systems["system.Tutorial1Complete"].executeTyped(nftId, {
+      gasPrice: 85000000000,
+    });
+  }
 
   const attackSystem = async (
     srcGodownEntity: EntityID,
@@ -484,6 +489,8 @@ export async function createNetworkLayer(config: GameConfig) {
     return entityIndex ? world.entities[entityIndex] : undefined;
   }
   const walletNfts = await getNftData(network.connectedAddress.get());
+  const rookieNft = await getNftData(network.connectedAddress.get(), "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F");
+  const cadetNft = await getNftData(network.connectedAddress.get(), "0xaBae05dc9C8e5f0309D8DA655F8c02f2995760ca");
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
@@ -518,12 +525,17 @@ export async function createNetworkLayer(config: GameConfig) {
       wallSystem,
       transferCashSystem,
       transferEntitySystem,
+      tutorial1CompleteSystem,
     },
     utils: {
       getEntityIndexAtPosition,
       getEntityIdAtPosition,
     },
     walletNfts,
+    nft: {
+      rookieNft,
+      cadetNft,
+    },
   };
 
   return context;

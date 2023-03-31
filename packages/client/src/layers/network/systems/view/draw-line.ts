@@ -369,7 +369,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                     return;
                   }
                   if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) < 51) {
-                    console.log("distance: ", Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)));
                     toast.promise(
                       async () => {
                         try {

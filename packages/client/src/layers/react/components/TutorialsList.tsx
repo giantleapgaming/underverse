@@ -3,7 +3,7 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import styled from "styled-components";
-import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
 import { useEffect, useState } from "react";
 
@@ -25,7 +25,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
     return nftDetails?.tokenId === id;
   });
   const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
-  const list = number && +number >= 135 ? TutorialDataListPart1 : TutorialDataListPart2;
+  const list = typeof number == "number" && +number < 135 ? TutorialDataListPart1 : TutorialDataListPart2;
   return (
     <S.Container>
       <S.ListContainer
@@ -60,8 +60,8 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
                     }}
                   >
                     <div style={{ display: "flex", gap: "6px", alignItems: "center", justifyContent: "center" }}>
-                      <S.Index checked={!completed}>{index + 1}</S.Index>
-                      <S.Label checked={!completed}>{item.label}</S.Label>
+                      <S.Index checked={completed}>{index + 1}</S.Index>
+                      <S.Label checked={completed}>{item.label}</S.Label>
                     </div>
                     <S.CheckBox
                       onClick={() => {
@@ -195,16 +195,23 @@ export const registerTutorialsListScreen = () => {
           components: { NFTID, TutorialStep },
           network: { connectedAddress },
         },
+        phaser: {
+          components: { SelectedNftID },
+          localIds: { nftId },
+        },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$, SelectedNftID.update$).pipe(
         map(() => {
-          const nftDetails = getNftId(layers);
-          const id = [...getComponentEntities(NFTID)].find((nftId) => {
-            const id = +getComponentValueStrict(NFTID, nftId).value;
-            return nftDetails?.tokenId === id;
+          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
+          const allNftsEntityIds = [...getComponentEntities(NFTID)];
+          const doesNftExist = allNftsEntityIds.some((entityId) => {
+            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
+            return +selectedNft === selectedNftId;
           });
-          if (id) {
+          if (doesNftExist) {
             return { layers };
+          } else {
+            return;
           }
         })
       );
@@ -231,7 +238,7 @@ export const TutorialDataListPart1 = [
   { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },
 ];
 export const TutorialDataListPart2 = [
-  { id: 140, showId: 130, label: "Upgrade", videoId: "D0UnqGm_miA" },
+  { id: 140, showId: 135, label: "Upgrade", videoId: "D0UnqGm_miA" },
   { id: 150, showId: 140, label: "Depots", videoId: "D0UnqGm_miA" },
   { id: 160, showId: 150, label: "Sell Minerals", videoId: "D0UnqGm_miA" },
   { id: 170, showId: 160, label: "Attack Ships", videoId: "D0UnqGm_miA" },

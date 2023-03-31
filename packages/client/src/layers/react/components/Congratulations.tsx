@@ -3,9 +3,10 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
-import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
-
+import { useState } from "react";
+import { toast } from "sonner";
 const Congratulations = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
@@ -13,8 +14,15 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         Main: { input },
       },
     },
+    network: {
+      api: { tutorial1CompleteSystem },
+      network: { connectedAddress },
+      nft: { rookieNft },
+    },
   } = layers;
-
+  const [loading, setLoading] = useState(false);
+  const [minted, setMinter] = useState(false);
+  const isNftAlreadyMinted = !!rookieNft?.length;
   return (
     <>
       <Container
@@ -35,17 +43,82 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         <WalletText>
           <img src="/img/Congratulations.png" />
           <Title>
-            CADET TRAINING <br /> COMPLETED!
+            ROOKIE TRAINING <br /> COMPLETED!
           </Title>
-          <Img src="/faction/CadetWingImg.png" />
+          <Img src="/faction/rookie.png" />
         </WalletText>
-        <img src="../img/MintBadge.png" />
+        {loading ? (
+          <Loading>Minting a Badge...</Loading>
+        ) : (
+          <>
+            {minted || isNftAlreadyMinted ? (
+              <Loading>NFT Already Minted</Loading>
+            ) : (
+              <img
+                style={{ cursor: "pointer" }}
+                src="../img/MintBadge.png"
+                onClick={async () => {
+                  const params = new URLSearchParams(window.location.search);
+                  const chainIdString = params.get("chainId");
+                  setLoading(true);
+                  try {
+                    const response = await fetch("https://api.giantleap.gg/api/tutorial-nft", {
+                      method: "POST",
+                      body: JSON.stringify({
+                        address: connectedAddress.get(),
+                        chainId: chainIdString && +chainIdString,
+                        nftContractAddress: "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F",
+                      }),
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                    });
+                    const data = await response.json();
+                    if (data.status) {
+                      toast.success("Congratulations! You have successfully minted a badge!");
+                      setMinter(true);
+                    } else {
+                      toast.error("You have already minted a badge!");
+                    }
+                    setLoading(false);
+                  } catch (e) {
+                    console.log(e);
+                    toast.error("Something went wrong, please try again later!");
+                    setLoading(true);
+                  }
+                }}
+              />
+            )}
+          </>
+        )}
         <Twitter>
           <img src="../img/TweetBox.png" style={{ marginLeft: "-60px", height: "120px", width: "350px" }} />
           <img src="../img/TwitterIcon.png" style={{ marginTop: "20px", width: "45px", height: "40px" }} />
         </Twitter>
-        <Conquer>
-          <Title>CONQUER THE UNDERVERSE</Title>
+        <Conquer
+          onClick={async () => {
+            const nftDetails = getNftId(layers);
+            if (!nftDetails) {
+              return;
+            }
+            toast.promise(
+              async () => {
+                try {
+                  await tutorial1CompleteSystem(nftDetails.tokenId);
+                } catch (e: any) {
+                  console.log(e);
+                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                }
+              },
+              {
+                loading: "Transaction in progress",
+                success: `Transaction successful`,
+                error: (e) => e.message,
+              }
+            );
+          }}
+        >
+          <Title>CONTINUE TO CADET TRAINING</Title>
           <img src="../img/Conquer.png" />
         </Conquer>
       </Container>
@@ -198,6 +271,13 @@ const Title = styled.div`
   line-height: 1.5;
   font-weight: bold;
 `;
+const Loading = styled.p`
+  font-size: 16px;
+  color: #00fde4;
+  letter-spacing: 0.9;
+  line-height: 1.5;
+  font-weight: bold;
+`;
 
 const Img = styled.img`
   width: 310px;
@@ -222,6 +302,7 @@ const Conquer = styled.div`
   margin-left: auto;
   margin-bottom: 15px;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const registerCongratulationsScreen = () => {
@@ -239,8 +320,15 @@ export const registerCongratulationsScreen = () => {
           components: { NFTID, TutorialStep },
           network: { connectedAddress },
         },
+        phaser: {
+          components: { SelectedNftID },
+          localIds: { nftId },
+          scenes: {
+            Main: { input },
+          },
+        },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const nftDetails = getNftId(layers);
@@ -248,9 +336,19 @@ export const registerCongratulationsScreen = () => {
             const id = +getComponentValueStrict(NFTID, nftId).value;
             return nftDetails?.tokenId === id;
           });
-          const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
-          if (number === 130) {
-            return { layers };
+          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
+          const allNftsEntityIds = [...getComponentEntities(NFTID)];
+          const doesNftExist = allNftsEntityIds.some((entityId) => {
+            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
+            return +selectedNft === selectedNftId;
+          });
+          if (doesNftExist) {
+            const number = getComponentValue(TutorialStep, nftEntity)?.value;
+            if (number && +number === 130) {
+              return { layers };
+            } else {
+              return;
+            }
           } else {
             return;
           }

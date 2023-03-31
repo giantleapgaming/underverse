@@ -1,5 +1,6 @@
 export const getNftData = async (
-  walletAddress?: string
+  walletAddress?: string,
+  nftContract?: string
 ): Promise<
   {
     tokenId: number;
@@ -13,7 +14,7 @@ export const getNftData = async (
       method: "POST",
       body: JSON.stringify({
         address: walletAddress,
-        nftContract: "0x5bAB1484F457Df67741E4C0e5ed06AFaDC31e94F",
+        nftContract: nftContract || "0x5bAB1484F457Df67741E4C0e5ed06AFaDC31e94F",
         chainId: chainIdString,
       }),
       headers: {
