@@ -21,29 +21,44 @@ export const Harvest = ({
     <>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(8, 1fr)",
+          display: "flex",
+          alignContent: "center",
+          justifyContent: "center",
+          gap: "10px",
           marginTop: "15px",
           marginBottom: "15px",
-          minWidth: "330px",
+          marginLeft: "35px",
         }}
       >
-        {new Array(totalAsteroid && +totalAsteroid).fill(0).map((_, i) => {
-          return (
-            <>
-              <S.Slanted
-                key={`red${i}`}
-                selected={+selected > i}
-                onClick={() => {
-                  playSound();
-                  setSelected((i + 1).toString());
-                }}
-              >
-                <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-              </S.Slanted>
-            </>
-          );
-        })}
+        <div>{totalAsteroid}</div>
+        <div>
+          <img src="/build-stations/crystal.png" width="20px" height="20px" />
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(8, 1fr)",
+
+            minWidth: "330px",
+          }}
+        >
+          {new Array(+space).fill(0).map((_, i) => {
+            return (
+              <>
+                <S.Slanted
+                  key={`red${i}`}
+                  selected={+selected > i}
+                  onClick={() => {
+                    playSound();
+                    setSelected((i + 1).toString());
+                  }}
+                >
+                  <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+                </S.Slanted>
+              </>
+            );
+          })}
+        </div>
       </div>
       {+space > 0 && (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
