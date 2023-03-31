@@ -373,10 +373,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                               toast.promise(
                                 async () => {
                                   try {
-                                    console.log("amount: " + +amount);
-                                    console.log("balance: " + +balance);
-                                    console.log("level: " + +level);
-                                    console.log("destinationBalance: " + +destinationBalance);
                                     sounds["confirm"].play();
                                     setShowLine(false);
                                     setAction("");
