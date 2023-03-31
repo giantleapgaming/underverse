@@ -98,11 +98,12 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
                 <p>LEADERBORAD</p>
                 <a
+                  target="_blank"
                   href={"https://explorer.testnet-chain.linfra.xyz/address/" + connectedAddress.get()}
                   style={{
                     border: "1px solid #5AE7D2",
                     borderRadius: "10%",
-                    padding: "4px",
+                    padding: "8px",
                     fontSize: "13px",
                     color: "#5AE7D2",
                     textDecoration: "none",
