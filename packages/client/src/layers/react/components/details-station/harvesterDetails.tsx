@@ -199,39 +199,43 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                         if (!nftDetails) {
                           return;
                         }
-                        toast.promise(
-                          async () => {
-                            try {
-                              sounds["confirm"].play();
-                              setDestinationDetails();
-                              setShowLine(false);
-                              setAction("");
-                              setShowAnimation({
-                                showAnimation: true,
-                                amount: weapons,
-                                destinationX: destinationPosition.x,
-                                destinationY: destinationPosition.y,
-                                sourceX: position.x,
-                                sourceY: position.y,
-                                type: "cargoTransport",
-                                entityID: destinationDetails,
-                              });
-                              await transportSystem(
-                                world.entities[selectedEntity],
-                                world.entities[destinationDetails],
-                                weapons,
-                                nftDetails.tokenId
-                              );
-                            } catch (e: any) {
-                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                        if (+fuel / 10_00_000 >= +weapons * +weapons) {
+                          toast.promise(
+                            async () => {
+                              try {
+                                sounds["confirm"].play();
+                                setDestinationDetails();
+                                setShowLine(false);
+                                setAction("");
+                                setShowAnimation({
+                                  showAnimation: true,
+                                  amount: weapons,
+                                  destinationX: destinationPosition.x,
+                                  destinationY: destinationPosition.y,
+                                  sourceX: position.x,
+                                  sourceY: position.y,
+                                  type: "cargoTransport",
+                                  entityID: destinationDetails,
+                                });
+                                await transportSystem(
+                                  world.entities[selectedEntity],
+                                  world.entities[destinationDetails],
+                                  weapons,
+                                  nftDetails.tokenId
+                                );
+                              } catch (e: any) {
+                                throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                              }
+                            },
+                            {
+                              loading: "Transaction in progress",
+                              success: `Transaction successful`,
+                              error: (e) => e.message,
                             }
-                          },
-                          {
-                            loading: "Transaction in progress",
-                            success: `Transaction successful`,
-                            error: (e) => e.message,
-                          }
-                        );
+                          );
+                        } else {
+                          toast.error("Not enough fuel to transfer");
+                        }
                       }}
                       playSound={() => {
                         sounds["click"].play();
