@@ -53,8 +53,8 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
       transportedNftId?._hex
     ) {
       const color = factionData[+faction]?.color;
-      const srcStationName = numberMapping[+destEntityType].name;
-      const destStationName = numberMapping[+sourceEntityType].name;
+      const srcStationName = numberMapping[+sourceEntityType].name;
+      const destStationName = numberMapping[+destEntityType].name;
       const numDigits = kgs.toString().length;
       let roundedNumber;
       if (numDigits === 8) {
@@ -67,7 +67,7 @@ export function systemRefuel(network: NetworkLayer, phaser: PhaserLayer) {
         roundedNumber = kgs.toString().substring(0, 5);
       }
       setLogs(
-        `<p>${colorString({ name, color })} moved ${colorString({
+        `<p>${colorString({ name, color })} refueled ${colorString({
           name: `${roundedNumber}`,
           color,
         })} mt from  ${colorString({
