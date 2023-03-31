@@ -63,7 +63,7 @@ export const Refuel = ({
           </S.InlinePointer>
         </S.Row>
       ) : (
-        <S.TextLg>NO MORE FUEL ON ASTEROID</S.TextLg>
+        <S.TextLg>NO MORE FUEL ON UNIT</S.TextLg>
       )}
     </>
   );
