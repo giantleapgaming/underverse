@@ -550,14 +550,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 }}
               />
               <SelectButton
-                isActive={action === "build"}
-                name="BUILD"
-                onClick={() => {
-                  setAction("build");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
                 isActive={action === "mine"}
                 name="MINE"
                 onClick={() => {
@@ -572,6 +564,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 onClick={() => {
                   setAction("extract");
                   setShowLine(true, position.x, position.y, "extract-fuel-asteroid");
+                  sounds["click"].play();
+                }}
+              />
+              <SelectButton
+                isActive={action === "build"}
+                name="BUILD"
+                onClick={() => {
+                  setAction("build");
                   sounds["click"].play();
                 }}
               />
