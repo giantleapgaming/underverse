@@ -359,6 +359,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       .some(([xCoord, yCoord]) => xCoord === position.x && yCoord === position.y) && (
                       <div>
                         <Harvest
+                          totalAsteroid={destinationBalance && +destinationBalance}
                           space={
                             (destinationBalance && balance && level && +level - balance < +destinationBalance
                               ? level - balance
@@ -368,10 +369,14 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                           }
                           harvest={async (amount) => {
                             const nftDetails = getNftId(layers);
-                            if (nftDetails) {
+                            if (nftDetails && destinationBalance && balance && level && amount <= +level - balance) {
                               toast.promise(
                                 async () => {
                                   try {
+                                    console.log("amount: " + +amount);
+                                    console.log("balance: " + +balance);
+                                    console.log("level: " + +level);
+                                    console.log("destinationBalance: " + +destinationBalance);
                                     sounds["confirm"].play();
                                     setShowLine(false);
                                     setAction("");
@@ -401,6 +406,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                                   error: (e) => e.message,
                                 }
                               );
+                            } else {
+                              setShowLine(false, 0, 0);
+                              toast.error(`you can harvest ${+level - +balance} minerals only`);
+                              return;
                             }
                           }}
                           distance={distance(position.x, position.y, destinationPosition.x, destinationPosition.y)}
