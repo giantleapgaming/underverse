@@ -5,7 +5,6 @@ import { Layers } from "../../../types";
 import styled from "styled-components";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
-import { useEffect, useState } from "react";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
   const {
@@ -46,12 +45,9 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
         <div>
           <ul>
             {list.map((item, index) => {
-              const [checked, setChecked] = useState(false);
               const show = typeof number === "number" ? (+number >= item.showId ? true : false) : false;
               const completed = typeof number === "number" ? (+number >= item.id ? true : false) : false;
-              useEffect(() => {
-                setChecked(typeof number === "number" ? (+number >= item.id ? true : false) : false);
-              }, [typeof number === "number" ? (+number >= item.id ? true : false) : false]);
+              const checked = typeof number === "number" ? (+number >= item.id ? true : false) : false;
               return (
                 <li key={index} style={{ display: show ? "block" : "none" }}>
                   <S.ListItem
@@ -63,13 +59,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
                       <S.Index checked={completed}>{index + 1}</S.Index>
                       <S.Label checked={completed}>{item.label}</S.Label>
                     </div>
-                    <S.CheckBox
-                      onClick={() => {
-                        setChecked(typeof number === "number" ? (+number >= item.id ? true : false) : false);
-                      }}
-                      type="checkbox"
-                      checked={checked}
-                    />
+                    <S.CheckBox type="checkbox" checked={checked} />
                   </S.ListItem>
                 </li>
               );
