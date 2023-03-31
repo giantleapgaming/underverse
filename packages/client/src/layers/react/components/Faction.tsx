@@ -61,10 +61,10 @@ const S = {
     align-items: center;
     gap: 20px;
     padding: 20px;
+    background-color: #eeeeee11;
+    border-radius: 10%;
     &:hover {
-      background-color: #eeeeee11;
-      border-radius: 10%;
-      scale: 1.1;
+      scale: 1.02;
     }
   `,
   FactionSelectionContainer: styled.div`
