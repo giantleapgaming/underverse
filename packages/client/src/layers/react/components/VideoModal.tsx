@@ -21,12 +21,24 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
       onMouseEnter={() => {
         input.disableInput();
       }}
+      onContextMenu={(e) => {
+        e.preventDefault();
+        setTutorial(false);
+        input.enableInput();
+      }}
+      onClick={() => {
+        setTutorial(false);
+        input.enableInput();
+      }}
       onMouseLeave={() => {
         input.enableInput();
       }}
     >
       <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "8px" }}>
         <iframe
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           width="853"
           height="480"
           src="https://www.youtube.com/embed/D0UnqGm_miA"
@@ -67,6 +79,8 @@ const S = {
     background: transparent;
     cursor: pointer;
     color: white;
+    font-size: 34px;
+    margin-top: -12px;
   `,
 };
 
