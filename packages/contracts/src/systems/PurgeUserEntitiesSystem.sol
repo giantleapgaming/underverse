@@ -9,6 +9,7 @@ import { checkNFT, deleteGodown } from "../utils.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { nftContract } from "../constants.sol";
+import { TutorialStepComponent, ID as TutorialStepComponentID } from "../components/TutorialStepComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.PurgeUserEntities"));
 
@@ -33,6 +34,10 @@ contract PurgeUserEntitiesSystem is System {
       if (LevelComponent(getAddressById(components, LevelComponentID)).getValue(playerEntities[i]) > 0) {
         LevelComponent(getAddressById(components, LevelComponentID)).set(playerEntities[i], 0);
       }
+    }
+
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 260) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 260);
     }
   }
 
