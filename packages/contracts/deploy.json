@@ -294,6 +294,12 @@
         "LevelComponent",
         "TutorialStepComponent"
       ]
+    },
+    {
+      "name": "Tutorial1CompleteSystem",
+      "writeAccess": [
+        "TutorialStepComponent"
+      ]
     }
   ]
 }
