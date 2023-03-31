@@ -61,7 +61,7 @@ export const Rapture = ({
             }}
           >
             <S.ButtonImg src="/button/greenButton.png" />
-            <S.DeployText>{buttonName ? buttonName : <>{transport ? "TRANSPORT" : "RAPTURE"}</>}</S.DeployText>
+            <S.DeployText>{buttonName ? buttonName : <>TRANSPORT</>}</S.DeployText>
           </S.InlinePointer>
         </S.Row>
       ) : (

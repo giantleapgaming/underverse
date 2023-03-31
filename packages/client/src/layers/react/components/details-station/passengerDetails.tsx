@@ -554,7 +554,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                 }}
               />
               <SelectButton
-                name="TRANSPORT"
+                name="RAPTURE"
                 isActive={action === "rapture-earth"}
                 onClick={() => {
                   setAction("rapture-earth");
