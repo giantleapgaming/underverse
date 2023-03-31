@@ -287,8 +287,17 @@ const Circle = styled.div`
   animation: ${neon} 1s ease-in-out infinite alternate, ${pulsate} 1s ease-in-out infinite alternate;
   margin-left: 1em;
 `;
+const flash = keyframes`
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+`;
 
 const I = styled.i`
   font-size: 1em;
   color: #00fde4;
+  animation: ${flash} 1s ease-in-out infinite;
 `;
