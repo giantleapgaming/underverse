@@ -7,11 +7,13 @@ export const Harvest = ({
   playSound,
   harvest,
   distance,
+  totalAsteroid,
 }: {
   space: number;
   playSound: () => void;
   harvest: (amount: number) => void;
   distance: number;
+  totalAsteroid?: number;
 }) => {
   const [selected, setSelected] = useState("0");
 
@@ -26,18 +28,20 @@ export const Harvest = ({
           minWidth: "330px",
         }}
       >
-        {new Array(+space).fill(0).map((_, i) => {
+        {new Array(totalAsteroid && +totalAsteroid).fill(0).map((_, i) => {
           return (
-            <S.Slanted
-              key={`red${i}`}
-              selected={+selected > i}
-              onClick={() => {
-                playSound();
-                setSelected((i + 1).toString());
-              }}
-            >
-              <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-            </S.Slanted>
+            <>
+              <S.Slanted
+                key={`red${i}`}
+                selected={+selected > i}
+                onClick={() => {
+                  playSound();
+                  setSelected((i + 1).toString());
+                }}
+              >
+                <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+              </S.Slanted>
+            </>
           );
         })}
       </div>
