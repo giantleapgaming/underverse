@@ -2,9 +2,9 @@ import { registerUIComponent } from "../engine";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
-import styled from "styled-components";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
+import styled, { keyframes } from "styled-components";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
   const {
@@ -36,7 +36,9 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
         }}
       >
         <S.Title>
-          <img src="/img/detailsIcon.png" style={{ marginLeft: "18px" }} />
+          <Circle>
+            <I>i</I>
+          </Circle>
           <p style={{ fontSize: "16px", color: "#00fde4", fontWeight: "600", letterSpacing: "1" }}>
             TUTORIAL <br /> MISSIONS
           </p>
@@ -102,7 +104,7 @@ const S = {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 30px;
+    gap: 20px;
   `,
   Hr: styled.hr`
     width: 190px;
@@ -242,3 +244,51 @@ export const TutorialDataListPart2 = [
   { id: 240, showId: 230, label: "Scrapping", videoId: "D0UnqGm_miA" },
   { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
 ];
+
+const pulsate = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.2);
+  }
+`;
+
+const neon = keyframes`
+  from {
+    text-shadow:
+      0 0 3px #fff,
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 30px #00fde4,
+      0 0 40px #00fde4,
+      0 0 70px #00fde4,
+      0 0 80px #00fde4;
+  }
+  to {
+    text-shadow:
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 30px #00fde4,
+      0 0 40px #00fde4,
+      0 0 70px #00fde4,
+      0 0 80px #00fde4;
+  }
+`;
+const Circle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  border: 4px solid #00fde4;
+  animation: ${neon} 1s ease-in-out infinite alternate, ${pulsate} 1s ease-in-out infinite alternate;
+  margin-left: 1em;
+`;
+
+const I = styled.i`
+  font-size: 1em;
+  color: #00fde4;
+`;
