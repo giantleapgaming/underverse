@@ -63,7 +63,7 @@ export const Refuel = ({
           </S.InlinePointer>
         </S.Row>
       ) : (
-        <S.TextLg>REFUEL MAX CAPACITY REACHED</S.TextLg>
+        <S.TextLg>NO MORE FUEL ON ASTEROID</S.TextLg>
       )}
     </>
   );
