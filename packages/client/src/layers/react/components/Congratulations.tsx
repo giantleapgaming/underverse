@@ -17,12 +17,23 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
     network: {
       api: { tutorial1CompleteSystem },
       network: { connectedAddress },
+      components: { NFTID, TutorialStep },
       nft: { rookieNft },
     },
   } = layers;
   const [loading, setLoading] = useState(false);
   const [minted, setMinter] = useState(false);
   const isNftAlreadyMinted = !!rookieNft?.length;
+  const nftDetails = getNftId(layers);
+  const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+    const id = +getComponentValueStrict(NFTID, nftId).value;
+    return nftDetails?.tokenId === id;
+  });
+  const number = getComponentValue(TutorialStep, nftEntity)?.value;
+
+  const isCadet = typeof number === "number" && +number === 250;
+  const isRookie = typeof number === "number" && +number === 130;
+
   return (
     <>
       <Container
@@ -43,9 +54,19 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         <WalletText>
           <img src="/img/Congratulations.png" />
           <Title>
-            ROOKIE TRAINING <br /> COMPLETED!
+            {isCadet && (
+              <>
+                CADET TRAINING <br /> COMPLETED!
+              </>
+            )}
+            {isRookie && (
+              <>
+                ROOKIE TRAINING <br /> COMPLETED!
+              </>
+            )}
           </Title>
-          <Img src="/faction/rookie.png" />
+          {isRookie && <Img src={"/faction/rookie.png"} />}
+          {isCadet && <Img src={"/faction/CadetWingImg.png"} />}
         </WalletText>
         {loading ? (
           <Loading>Minting a Badge...</Loading>
@@ -118,7 +139,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             );
           }}
         >
-          <Title>CONTINUE TO CADET TRAINING</Title>
+          {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>}
+          {isCadet && <Title>CONQUER THE UNDERVERSE</Title>}
           <img src="../img/Conquer.png" />
         </Conquer>
       </Container>
@@ -344,7 +366,7 @@ export const registerCongratulationsScreen = () => {
           });
           if (doesNftExist) {
             const number = getComponentValue(TutorialStep, nftEntity)?.value;
-            if (number && +number === 130) {
+            if (number && (+number === 130 || +number === 250)) {
               return { layers };
             } else {
               return;
