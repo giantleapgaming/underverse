@@ -113,7 +113,39 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
           </>
         )}
         <Twitter>
-          <img src="../img/TweetBox.png" style={{ marginLeft: "-60px", height: "120px", width: "350px" }} />
+          <img
+            onClick={() => {
+              const text =
+                (isCadet &&
+                  `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! Think you've got what it takes? Get one for yourself here (insert link to tutorial URL) Join me in the Underverse!`) ||
+                (isRookie &&
+                  `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! Think you've got what it takes? Get one for yourself here (insert link to tutorial URL) The Underverse awaits!`);
+
+              const tutorialURL = "https://underverse.giantleap.gg/";
+              const twitterShareURL =
+                "https://twitter.com/share?url=" +
+                encodeURIComponent(tutorialURL) +
+                "&text=" +
+                encodeURIComponent(text);
+              const popupWidth = 550;
+              const popupHeight = 420;
+              const left = window.screen.width / 2 - popupWidth / 2;
+              const top = window.screen.height / 2 - popupHeight / 2;
+              const popup = window.open(
+                twitterShareURL,
+                "pop",
+                "width=" + popupWidth + ",height=" + popupHeight + ",left=" + left + ",top=" + top
+              );
+
+              if (popup?.focus) {
+                popup.focus();
+              }
+
+              return false;
+            }}
+            src="../img/TweetBox.png"
+            style={{ marginLeft: "-60px", height: "120px", width: "350px" }}
+          />
           <img src="../img/TwitterIcon.png" style={{ marginTop: "20px", width: "45px", height: "40px" }} />
         </Twitter>
         <Conquer
@@ -345,9 +377,6 @@ export const registerCongratulationsScreen = () => {
         phaser: {
           components: { SelectedNftID },
           localIds: { nftId },
-          scenes: {
-            Main: { input },
-          },
         },
       } = layers;
       return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$, SelectedNftID.update$).pipe(
