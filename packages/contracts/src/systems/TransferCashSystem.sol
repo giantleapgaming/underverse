@@ -38,7 +38,7 @@ contract TransferCashSystem is System {
     //We do not need to do any special checks for Target player id as it is triggered by the user anyway
     // update  data
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - transferCash);
-    CashComponent(getAddressById(components, CashComponentID)).set(playerID, targetPlayerCash + transferCash);
+    CashComponent(getAddressById(components, CashComponentID)).set(targetPlayerID, targetPlayerCash + transferCash);
 
     if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 220) {
       TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 220);
