@@ -18,12 +18,11 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
       api: { tutorial1CompleteSystem },
       network: { connectedAddress },
       components: { NFTID, TutorialStep },
-      nft: { rookieNft },
+      nft: { rookieNft, cadetNft },
     },
   } = layers;
   const [loading, setLoading] = useState(false);
   const [minted, setMinter] = useState(false);
-  const isNftAlreadyMinted = !!rookieNft?.length;
   const nftDetails = getNftId(layers);
   const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
     const id = +getComponentValueStrict(NFTID, nftId).value;
@@ -71,7 +70,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
           <Loading>Minting a Badge...</Loading>
         ) : (
           <>
-            {minted || isNftAlreadyMinted ? (
+            {minted || (rookieNft && isRookie) || (cadetNft && isCadet) ? (
               <Loading>NFT Already Minted</Loading>
             ) : (
               <img
@@ -87,7 +86,9 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                       body: JSON.stringify({
                         address: connectedAddress.get(),
                         chainId: chainIdString && +chainIdString,
-                        nftContractAddress: "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F",
+                        nftContractAddress:
+                          (isRookie && "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F") ||
+                          (isCadet && "0xaBae05dc9C8e5f0309D8DA655F8c02f2995760ca"),
                       }),
                       headers: {
                         "Content-Type": "application/json",

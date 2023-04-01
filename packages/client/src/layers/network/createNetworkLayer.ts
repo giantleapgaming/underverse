@@ -22,6 +22,7 @@ import { GameConfig, getNetworkConfig } from "./config";
 import { BigNumber } from "ethers";
 import { Mapping } from "../../utils/mapping";
 import { getNftData } from "../react/utils/getNftData";
+import { checkNft } from "../react/components/utils/checkNft";
 /**
  * The Network layer is the lowest layer in the client architecture.
  * Its purpose is to synchronize the client components with the contract components.
@@ -489,8 +490,9 @@ export async function createNetworkLayer(config: GameConfig) {
     return entityIndex ? world.entities[entityIndex] : undefined;
   }
   const walletNfts = await getNftData(network.connectedAddress.get());
-  const rookieNft = await getNftData(network.connectedAddress.get(), "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F");
-  const cadetNft = await getNftData(network.connectedAddress.get(), "0xaBae05dc9C8e5f0309D8DA655F8c02f2995760ca");
+  const rookieNft = await checkNft("0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F", network.connectedAddress.get());
+  const cadetNft = await checkNft("0xaBae05dc9C8e5f0309D8DA655F8c02f2995760ca", network.connectedAddress.get());
+
   // --- CONTEXT --------------------------------------------------------------------
   const context = {
     world,
