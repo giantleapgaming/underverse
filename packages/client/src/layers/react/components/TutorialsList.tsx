@@ -241,9 +241,7 @@ export const TutorialDataListPart2 = [
   { id: 190, showId: 180, label: "Fuel Carriers", videoId: "D0UnqGm_miA" },
   { id: 200, showId: 190, label: "Refuel", videoId: "D0UnqGm_miA" },
   { id: 210, showId: 200, label: "Build Walls", videoId: "D0UnqGm_miA" },
-  { id: 220, showId: 210, label: "Transfer Cash", videoId: "D0UnqGm_miA" },
-  { id: 230, showId: 220, label: "Transfer Ship", videoId: "D0UnqGm_miA" },
-  { id: 240, showId: 230, label: "Scrapping", videoId: "D0UnqGm_miA" },
+  { id: 240, showId: 210, label: "Scrapping", videoId: "D0UnqGm_miA" },
   { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
 ];
 

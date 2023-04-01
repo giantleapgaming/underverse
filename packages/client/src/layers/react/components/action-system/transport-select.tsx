@@ -35,7 +35,7 @@ export const TransportSelect = ({
     <>
       {!selected && (
         <S.Container>
-          <S.Button
+          {/* <S.Button
             onClick={() => {
               setSelected("ship");
               playSound();
@@ -54,7 +54,7 @@ export const TransportSelect = ({
             <S.Title>CASH</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
             <S.Img src={`/build-stations/cash.png`} width="20px" height="30px" />
-          </S.Button>
+          </S.Button> */}
           <S.Button
             onClick={() => {
               setSelected("mine");
