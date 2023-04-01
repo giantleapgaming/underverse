@@ -62,6 +62,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
                       <S.Label checked={completed}>{item.label}</S.Label>
                     </div>
                     <S.CheckBox type="checkbox" checked={checked} />
+                    {!checked ? <ArrowLeft /> : <div style={{ width: "20px" }}></div>}
                   </S.ListItem>
                 </li>
               );
@@ -135,6 +136,7 @@ const S = {
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-weight: bold;
     width: 90px;
+    text-transform: uppercase;
   `,
 
   CheckBox: styled.input`
@@ -300,4 +302,26 @@ const I = styled.i`
   font-size: 1em;
   color: #00fde4;
   animation: ${flash} 1s ease-in-out infinite;
+`;
+
+const moveLeft = keyframes`
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+`;
+
+const ArrowLeft = styled.span`
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-right: 20px solid #00fde4;
+  border-bottom: 10px solid transparent;
+  animation: ${moveLeft} 1s infinite;
 `;

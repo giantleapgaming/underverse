@@ -14,7 +14,7 @@ export const checkNft = async (nftContractAddress: string, address?: string): Pr
   try {
     const balance = await nftContract.balanceOfBatch(userAddressArr, tokenId);
     for (let i = 0; i < balance.length; i++) {
-      if (balance[i] !== 0) {
+      if (balance[i] != 0) {
         return true;
       }
     }

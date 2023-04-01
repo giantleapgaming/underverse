@@ -71,7 +71,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         ) : (
           <>
             {minted || (rookieNft && isRookie) || (cadetNft && isCadet) ? (
-              <Loading>NFT Already Minted</Loading>
+              <Loading>NFT Minted</Loading>
             ) : (
               <img
                 style={{ cursor: "pointer" }}
@@ -120,9 +120,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                   `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://underverse.giantleap.gg/`) ||
                 (isRookie &&
                   `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://underverse.giantleap.gg/`);
-
-              const twitterShareURL = "https://twitter.com/share?";
-              "text=" + encodeURIComponent(text || "");
+              const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
+              console.log(twitterShareURL);
               const popupWidth = 550;
               const popupHeight = 420;
               const left = window.screen.width / 2 - popupWidth / 2;
