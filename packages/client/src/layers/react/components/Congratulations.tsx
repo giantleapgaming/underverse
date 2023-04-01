@@ -116,16 +116,12 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             onClick={() => {
               const text =
                 (isCadet &&
-                  `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! Think you've got what it takes? Get one for yourself here (insert link to tutorial URL) Join me in the Underverse!`) ||
+                  `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://underverse.giantleap.gg/`) ||
                 (isRookie &&
-                  `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! Think you've got what it takes? Get one for yourself here (insert link to tutorial URL) The Underverse awaits!`);
+                  `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://underverse.giantleap.gg/`);
 
-              const tutorialURL = "https://underverse.giantleap.gg/";
-              const twitterShareURL =
-                "https://twitter.com/share?url=" +
-                encodeURIComponent(tutorialURL) +
-                "&text=" +
-                encodeURIComponent(text || "");
+              const twitterShareURL = "https://twitter.com/share?";
+              "text=" + encodeURIComponent(text || "");
               const popupWidth = 550;
               const popupHeight = 420;
               const left = window.screen.width / 2 - popupWidth / 2;
@@ -149,25 +145,29 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         </Twitter>
         <Conquer
           onClick={async () => {
-            const nftDetails = getNftId(layers);
-            if (!nftDetails) {
-              return;
-            }
-            toast.promise(
-              async () => {
-                try {
-                  await tutorial1CompleteSystem(nftDetails.tokenId);
-                } catch (e: any) {
-                  console.log(e);
-                  throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                }
-              },
-              {
-                loading: "Transaction in progress",
-                success: `Transaction successful`,
-                error: (e) => e.message,
+            if (isRookie) {
+              const nftDetails = getNftId(layers);
+              if (!nftDetails) {
+                return;
               }
-            );
+              toast.promise(
+                async () => {
+                  try {
+                    await tutorial1CompleteSystem(nftDetails.tokenId);
+                  } catch (e: any) {
+                    console.log(e);
+                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                  }
+                },
+                {
+                  loading: "Transaction in progress",
+                  success: `Transaction successful`,
+                  error: (e) => e.message,
+                }
+              );
+            } else if (isCadet) {
+              window.open("https://discord.gg/2YxDpucg8Y", "_blank");
+            }
           }}
         >
           {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>}
