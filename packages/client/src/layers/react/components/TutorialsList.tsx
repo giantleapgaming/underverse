@@ -39,7 +39,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
           <Circle>
             <I>i</I>
           </Circle>
-          <p style={{ fontSize: "16px", color: "#00fde4", fontWeight: "600", letterSpacing: "1" }}>
+          <p style={{ fontSize: "18px", color: "#00fde4", fontWeight: "600", letterSpacing: "1.2" }}>
             TUTORIAL <br /> MISSIONS
           </p>
         </S.Title>
@@ -57,7 +57,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
                       setTutorial(true, item.id);
                     }}
                   >
-                    <div style={{ display: "flex", gap: "6px", alignItems: "center", justifyContent: "center" }}>
+                    <div style={{ display: "flex", gap: "7px", alignItems: "center", justifyContent: "center" }}>
                       <S.Index checked={completed}>{index + 1}</S.Index>
                       <S.Label checked={completed}>{item.label}</S.Label>
                     </div>
@@ -106,8 +106,10 @@ const S = {
     align-items: center;
     gap: 20px;
   `,
-  Hr: styled.hr`
-    width: 190px;
+  Hr: styled.div`
+    width: 175px;
+    border: 2.8px solid #00fde4;
+    height: 100%;
     color: #00fde4;
     margin-top: 10px;
     margin-bottom: 10px;
@@ -116,7 +118,7 @@ const S = {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    gap: 22px;
     margin-bottom: 8px;
     cursor: pointer;
   `,
@@ -132,7 +134,7 @@ const S = {
     font-size: 10px;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-weight: bold;
-    width: 120px;
+    width: 90px;
   `,
 
   CheckBox: styled.input`
