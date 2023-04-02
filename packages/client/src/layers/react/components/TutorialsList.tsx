@@ -220,7 +220,14 @@ export const registerTutorialsListScreen = () => {
   );
 };
 
-export const TutorialDataListPart1 = [
+export interface TutorialDataItem<TLabel extends string> {
+  id: number;
+  showId: number;
+  label: TLabel;
+  videoId: string;
+}
+
+const TutorialDataListPart1: TutorialDataItem<string>[] = [
   { id: 10, showId: 0, label: "Deploy", videoId: "D0UnqGm_miA" },
   { id: 20, showId: 10, label: "Move", videoId: "D0UnqGm_miA" },
   { id: 30, showId: 20, label: "Signals", videoId: "D0UnqGm_miA" },
@@ -236,7 +243,13 @@ export const TutorialDataListPart1 = [
   { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },
   { id: 135, showId: 130, label: "Mint NFT", videoId: "D0UnqGm_miA" },
 ];
-export const TutorialDataListPart2 = [
+
+export const objectListTutorialDataListPart1 = TutorialDataListPart1.reduce((acc, curr) => {
+  acc[curr.label] = curr.showId;
+  return acc;
+}, {} as { [key: string]: number });
+
+export const TutorialDataListPart2: TutorialDataItem<string>[] = [
   { id: 140, showId: 135, label: "Upgrade", videoId: "D0UnqGm_miA" },
   { id: 150, showId: 140, label: "Depots", videoId: "D0UnqGm_miA" },
   { id: 160, showId: 150, label: "Sell Minerals", videoId: "D0UnqGm_miA" },
@@ -248,7 +261,10 @@ export const TutorialDataListPart2 = [
   { id: 240, showId: 210, label: "Scrapping", videoId: "D0UnqGm_miA" },
   { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
 ];
-
+export const objectListTutorialDataListPart12 = TutorialDataListPart2.reduce((acc, curr) => {
+  acc[curr.label] = curr.showId;
+  return acc;
+}, {} as { [key: string]: number });
 const pulsate = keyframes`
   from {
     transform: scale(1);

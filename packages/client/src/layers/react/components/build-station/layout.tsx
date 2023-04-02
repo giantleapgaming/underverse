@@ -3,6 +3,9 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { UserDetails } from "./userDetails";
+import { Focus } from "../Focus";
+import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart1 } from "../TutorialsList";
 
 export const Layout = ({ layers }: { layers: Layers }) => {
   const {
@@ -38,15 +41,17 @@ export const Layout = ({ layers }: { layers: Layers }) => {
         <UserDetails layers={layers} />
         <S.Border>
           <S.Flex>
-            <S.Button
-              onClick={() => {
-                input.enableInput();
-                build(Mapping.harvester.id);
-              }}
-            >
-              <S.Img src="/layout/hex.png" width="70px" height="64px" />
-              <S.Img src="/build-stations/harvester.png" width="30px" height="30px" />
-            </S.Button>
+            <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Deploy"])}>
+              <S.Button
+                onClick={() => {
+                  input.enableInput();
+                  build(Mapping.harvester.id);
+                }}
+              >
+                <S.Img src="/layout/hex.png" width="70px" height="64px" />
+                <S.Img src="/build-stations/harvester.png" width="30px" height="30px" />
+              </S.Button>
+            </Focus>
           </S.Flex>
         </S.Border>
       </S.Container>

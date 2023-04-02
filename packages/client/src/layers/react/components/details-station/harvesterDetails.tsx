@@ -17,6 +17,9 @@ import { toast } from "sonner";
 import { TransportSelect } from "../action-system/transport-select";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Harvest } from "../action-system/harvest";
+import { Focus } from "../Focus";
+import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart1 } from "../TutorialsList";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -476,19 +479,21 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("upgrade");
-                      setShowLine(false);
-                      sounds["click"].play();
-                    }}
-                    title="Upgrade"
-                  >
-                    <S.Img
-                      src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Deploy"])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("upgrade");
+                        setShowLine(false);
+                        sounds["click"].play();
+                      }}
+                      title="Upgrade"
+                    >
+                      <S.Img
+                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                   <S.SideButton
                     onClick={() => {
                       setAction("refuel");
@@ -549,41 +554,49 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <SelectButton
-                isActive={action === "prospect"}
-                name="PROSPECT"
-                onClick={() => {
-                  setAction("prospect");
-                  setShowLine(true, position.x, position.y, "prospect");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "mine"}
-                name="MINE"
-                onClick={() => {
-                  setShowLine(true, position.x, position.y, "mine-astroid");
-                  setAction("mine");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "extract"}
-                name="EXTRACT"
-                onClick={() => {
-                  setAction("extract");
-                  setShowLine(true, position.x, position.y, "extract-fuel-asteroid");
-                  sounds["click"].play();
-                }}
-              />
-              <SelectButton
-                isActive={action === "build"}
-                name="BUILD"
-                onClick={() => {
-                  setAction("build");
-                  sounds["click"].play();
-                }}
-              />
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+                <SelectButton
+                  isActive={action === "prospect"}
+                  name="PROSPECT"
+                  onClick={() => {
+                    setAction("prospect");
+                    setShowLine(true, position.x, position.y, "prospect");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Signals"])}>
+                <SelectButton
+                  isActive={action === "mine"}
+                  name="MINE"
+                  onClick={() => {
+                    setShowLine(true, position.x, position.y, "mine-astroid");
+                    setAction("mine");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+                <SelectButton
+                  isActive={action === "extract"}
+                  name="EXTRACT"
+                  onClick={() => {
+                    setAction("extract");
+                    setShowLine(true, position.x, position.y, "extract-fuel-asteroid");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+                <SelectButton
+                  isActive={action === "build"}
+                  name="BUILD"
+                  onClick={() => {
+                    setAction("build");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
             </S.Row>
           )}
         </div>
