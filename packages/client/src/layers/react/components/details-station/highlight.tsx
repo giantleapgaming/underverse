@@ -244,7 +244,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
                 const entityType = getComponentValue(EntityType, entity)?.value;
                 const isOwner = isOwnedByIndex(layers, entity);
-                return entityType && isOwner && +entityType === Mapping.harvester.id;
+                const defence = getComponentValue(Defence, entity)?.value;
+                return defence && entityType && isOwner && +entityType === Mapping.harvester.id && +defence > 0;
               });
               const totalHarvesterEntities = allHarvesterEntities.length;
               if (totalHarvesterEntities) {
