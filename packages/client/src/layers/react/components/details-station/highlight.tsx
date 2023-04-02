@@ -244,7 +244,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
                 const entityType = getComponentValue(EntityType, entity)?.value;
                 const isOwner = isOwnedByIndex(layers, entity);
-                return entityType && isOwner && +entityType === Mapping.harvester.id;
+                const defence = getComponentValue(Defence, entity)?.value;
+                return defence && entityType && isOwner && +entityType === Mapping.harvester.id && +defence > 0;
               });
               const totalHarvesterEntities = allHarvesterEntities.length;
               if (totalHarvesterEntities) {
@@ -257,20 +258,29 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   if (entityType && +entityType === Mapping.harvester.id) {
                     const index = allHarvesterEntities.indexOf(selectedStationEntity);
                     if (!(index === totalHarvesterEntities - 1)) {
+                      const defence = getComponentValue(Defence, allHarvesterEntities[index + 1]);
                       const position = getComponentValue(Position, allHarvesterEntities[index + 1]);
-                      setShowStationDetails(allHarvesterEntities[index + 1]);
-                      if (position) {
-                        const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-                        camera.setScroll(x, y);
+                      if (defence && defence.value > 0) {
+                        setShowStationDetails(allHarvesterEntities[index + 1]);
+                        if (position) {
+                          const { x, y } = tileCoordToPixelCoord(
+                            { x: position.x, y: position.y },
+                            tileWidth,
+                            tileHeight
+                          );
+                          camera.setScroll(x, y);
+                        }
                       }
                       return;
                     }
                   }
                 }
+                const defence = getComponentValue(Defence, allHarvesterEntities[0]);
                 const position = getComponentValue(Position, allHarvesterEntities[0]);
                 setShowStationDetails(allHarvesterEntities[0]);
-                if (position) {
+                if (position && defence && +defence.value > 0) {
                   const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                  console.log("sdflksj");
                   camera.setScroll(x, y);
                 }
               } else {
