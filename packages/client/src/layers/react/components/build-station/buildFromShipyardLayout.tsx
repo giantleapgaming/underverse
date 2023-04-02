@@ -2,6 +2,9 @@ import { getComponentValue } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { Focus } from "../Focus";
+import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
 
 export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
   const {
@@ -22,42 +25,50 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     return (
       <S.Flex>
-        <S.Button onClick={() => build(Mapping.attack.id)}>
-          <S.Title style={{ marginRight: "10px" }}>Attack Ship</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/attack.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button onClick={() => build(Mapping.harvester.id)}>
-          <S.Title>Harvester</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/harvester.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button onClick={() => build(Mapping.refuel.id)}>
-          <S.Title>Fueler</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src="/build-stations/fueler.png" width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button onClick={() => build(Mapping.passenger.id)}>
-          <S.Title>Passenger</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src="/build-stations/passenger.png" width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Ship"])}>
+          <S.Button onClick={() => build(Mapping.attack.id)}>
+            <S.Title style={{ marginRight: "10px" }}>Attack Ship</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/attack.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button onClick={() => build(Mapping.harvester.id)}>
+            <S.Title>Harvester</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/harvester.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button onClick={() => build(Mapping.refuel.id)}>
+            <S.Title>Fueler</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src="/build-stations/fueler.png" width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button onClick={() => build(Mapping.passenger.id)}>
+            <S.Title>Passenger</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src="/build-stations/passenger.png" width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
       </S.Flex>
     );
   } else {

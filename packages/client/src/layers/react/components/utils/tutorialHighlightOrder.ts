@@ -14,7 +14,7 @@ export const tutorialHighlightOrder = (layers: Layers, number: number): boolean 
     return nftDetails?.tokenId === id;
   });
   const currentNumber = getComponentValue(TutorialStep, nftEntity)?.value;
-  if (currentNumber && +currentNumber === number) {
+  if (currentNumber == number) {
     return true;
   } else {
     return false;

@@ -15,6 +15,9 @@ import { BuildFromShipyardLayout } from "../build-station/buildFromShipyardLayou
 import { getNftId, isOwnedBy, isOwnedByIndex, ownedByName } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
 import { TransportSelect } from "../action-system/transport-select";
+import { Focus } from "../Focus";
+import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart1 } from "../TutorialsList";
 
 export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -358,87 +361,101 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("upgrade");
-                      setShowLine(false);
-                      sounds["click"].play();
-                    }}
-                    title="Upgrade"
-                  >
-                    <S.Img
-                      src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("refuel");
-                      setShowLine(true, position.x, position.y, "refuel");
-                      sounds["click"].play();
-                    }}
-                    title="Refuel"
-                  >
-                    <S.Img
-                      src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("upgrade");
+                        setShowLine(false);
+                        sounds["click"].play();
+                      }}
+                      title="Upgrade"
+                    >
+                      <S.Img
+                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("refuel");
+                        setShowLine(true, position.x, position.y, "refuel");
+                        sounds["click"].play();
+                      }}
+                      title="Refuel"
+                    >
+                      <S.Img
+                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("repair");
-                      sounds["click"].play();
-                    }}
-                    title="Repair"
-                  >
-                    <S.Img
-                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("scrap");
-                      sounds["click"].play();
-                    }}
-                    title="Scrap"
-                  >
-                    <S.Img
-                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("transport");
-                      setShowLine(true, position.x, position.y, "transport");
-                      sounds["click"].play();
-                    }}
-                    title="Transport Minerals"
-                  >
-                    <S.Img
-                      src={action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                      title="Repair"
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                      title="Scrap"
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("transport");
+                        setShowLine(true, position.x, position.y, "transport");
+                        sounds["click"].play();
+                      }}
+                      title="Transport Minerals"
+                    >
+                      <S.Img
+                        src={
+                          action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"
+                        }
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
               </div>
             )}
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <SelectButton
-                isActive={action === "build"}
-                name="BUILD"
-                onClick={() => {
-                  setAction("build");
-                  sounds["click"].play();
-                }}
-              />
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Ship"])}>
+                <SelectButton
+                  isActive={action === "build"}
+                  name="BUILD"
+                  onClick={() => {
+                    setAction("build");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
             </S.Row>
           )}
         </div>

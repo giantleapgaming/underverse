@@ -3,6 +3,7 @@ import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs"
 import { map, merge } from "rxjs";
 import { Layers } from "../../../../types";
 import { Layout } from "./layout";
+import { getNftId } from "../../../network/utils/getNftId";
 
 const Build = ({ layers }: { layers: Layers }) => (
   <div style={{ display: "flex", height: "100%", position: "relative", justifyContent: "end", alignItems: "end" }}>
@@ -40,11 +41,12 @@ export const registerBuild = () => {
       ).pipe(
         map(() => connectedAddress.get()),
         map(() => {
+          const nftDetails = getNftId(layers);
           const allNftIds = [...getComponentEntities(NFTID)].map((nftId) => {
             return +getComponentValueStrict(NFTID, nftId).value;
           });
           const doesExist = walletNfts.some((walletNftId) => allNftIds.includes(walletNftId.tokenId));
-          if (doesExist) {
+          if (doesExist && nftDetails?.imageUrl) {
             return { layers };
           } else {
             return;

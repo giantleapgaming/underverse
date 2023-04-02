@@ -261,7 +261,7 @@ export const TutorialDataListPart2: TutorialDataItem<string>[] = [
   { id: 240, showId: 210, label: "Scrapping", videoId: "D0UnqGm_miA" },
   { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
 ];
-export const objectListTutorialDataListPart12 = TutorialDataListPart2.reduce((acc, curr) => {
+export const objectListTutorialDataListPart2 = TutorialDataListPart2.reduce((acc, curr) => {
   acc[curr.label] = curr.showId;
   return acc;
 }, {} as { [key: string]: number });

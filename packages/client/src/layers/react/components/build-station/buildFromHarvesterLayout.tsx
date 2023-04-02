@@ -2,6 +2,9 @@ import { getComponentValue } from "@latticexyz/recs";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
+import { Focus } from "../Focus";
+import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
 
 export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
   const {
@@ -22,45 +25,56 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     return (
       <S.Flex>
-        <S.Button onClick={() => build(Mapping.residential.id)}>
-          <S.Title>Habitat</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/space-station.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button onClick={() => build(Mapping.godown.id)}>
-          <S.Title>Depot</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/cargo.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button onClick={() => build(Mapping.shipyard.id)}>
-          <S.Title>Shipyard</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/shipyard.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
-        <S.Button
-          onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
-          title="wall"
-        >
-          <S.Title>WALL</S.Title>
-          <S.Img src="/layout/hex.png" width="50px" height="44px" />
-          <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
-          <S.ImgCrystal>
-            <img src="/build-stations/crystal.png" width="15px" height="15px" />
-            <S.BalanceText>1</S.BalanceText>
-          </S.ImgCrystal>
-        </S.Button>
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button onClick={() => build(Mapping.residential.id)}>
+            <S.Title>Habitat</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/space-station.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button onClick={() => build(Mapping.godown.id)}>
+            <S.Title>Depot</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/cargo.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Shipyard"])}>
+          <S.Button onClick={() => build(Mapping.shipyard.id)}>
+            <S.Title>Shipyard</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/shipyard.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
+
+        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+          <S.Button
+            onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}
+            title="wall"
+          >
+            <S.Title>WALL</S.Title>
+            <S.Img src="/layout/hex.png" width="50px" height="44px" />
+            <S.Img src={`/build-stations/wall.png`} width="30px" height="30px" />
+            <S.ImgCrystal>
+              <img src="/build-stations/crystal.png" width="15px" height="15px" />
+              <S.BalanceText>1</S.BalanceText>
+            </S.ImgCrystal>
+          </S.Button>
+        </Focus>
       </S.Flex>
     );
   } else {

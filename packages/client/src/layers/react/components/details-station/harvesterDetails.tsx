@@ -19,7 +19,7 @@ import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Harvest } from "../action-system/harvest";
 import { Focus } from "../Focus";
 import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
-import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
   const {
@@ -31,7 +31,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel, NFTID, Cash },
+      components: { TutorialStep, EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel, NFTID, Cash },
       api: {
         upgradeSystem,
         repairSystem,
@@ -74,6 +74,12 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const cash = getComponentValue(Cash, ownedByIndex)?.value;
 
     if (entityType && +entityType === Mapping.harvester.id) {
+      const nftDetails = getNftId(layers);
+      const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+        const id = +getComponentValueStrict(NFTID, nftId).value;
+        return nftDetails?.tokenId === id;
+      });
+      const currentNumber = getComponentValue(TutorialStep, nftEntity)?.value;
       return (
         <div>
           <S.Container>
@@ -479,7 +485,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Deploy"])}>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Upgrade"])}>
                     <S.SideButton
                       onClick={() => {
                         setAction("upgrade");
@@ -494,60 +500,70 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("refuel");
-                      setShowLine(true, position.x, position.y, "refuel");
-                      sounds["click"].play();
-                    }}
-                    title="Refuel"
-                  >
-                    <S.Img
-                      src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Refuel"])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("refuel");
+                        setShowLine(true, position.x, position.y, "refuel");
+                        sounds["click"].play();
+                      }}
+                      title="Refuel"
+                    >
+                      <S.Img
+                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("repair");
-                      sounds["click"].play();
-                    }}
-                    title="Repair"
-                  >
-                    <S.Img
-                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("scrap");
-                      sounds["click"].play();
-                    }}
-                    title="Scrap"
-                  >
-                    <S.Img
-                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("transport");
-                      setShowLine(true, position.x, position.y, "transport");
-                      sounds["click"].play();
-                    }}
-                    title="Transport Minerals"
-                  >
-                    <S.Img
-                      src={action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2[""])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                      title="Repair"
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Refuel"])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                      title="Scrap"
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Transport"])}>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("transport");
+                        setShowLine(true, position.x, position.y, "transport");
+                        sounds["click"].play();
+                      }}
+                      title="Transport Minerals"
+                    >
+                      <S.Img
+                        src={
+                          action === "transport" ? "/build-stations/transport-a.png" : "/build-stations/transport.png"
+                        }
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
               </div>
             )}
@@ -565,7 +581,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Signals"])}>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Mine"])}>
                 <SelectButton
                   isActive={action === "mine"}
                   name="MINE"
@@ -576,7 +592,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Refuel"])}>
                 <SelectButton
                   isActive={action === "extract"}
                   name="EXTRACT"
@@ -587,7 +603,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Shipyard"])}>
                 <SelectButton
                   isActive={action === "build"}
                   name="BUILD"
