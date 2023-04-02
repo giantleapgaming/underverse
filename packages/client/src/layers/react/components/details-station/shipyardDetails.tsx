@@ -16,7 +16,7 @@ import { getNftId, isOwnedBy, isOwnedByIndex, ownedByName } from "../../../netwo
 import { toast } from "sonner";
 import { TransportSelect } from "../action-system/transport-select";
 import { Focus } from "../Focus";
-import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 import { objectListTutorialDataListPart1 } from "../TutorialsList";
 
 export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
@@ -361,7 +361,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}>
                     <S.SideButton
                       onClick={() => {
                         setAction("upgrade");
@@ -376,7 +376,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("refuel");
@@ -393,7 +396,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                   </Focus>
                 </S.Column>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setShowLine(false);
@@ -408,7 +414,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setShowLine(false);
@@ -423,7 +432,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("transport");
@@ -446,7 +458,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Ship"])}>
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"])}
+              >
                 <SelectButton
                   isActive={action === "build"}
                   name="BUILD"

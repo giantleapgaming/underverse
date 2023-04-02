@@ -4,7 +4,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { Focus } from "../Focus";
 import { objectListTutorialDataListPart1 } from "../TutorialsList";
-import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 
 export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
   const {
@@ -25,7 +25,10 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
   if (selectedEntity) {
     return (
       <S.Flex>
-        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Ship"])}>
+        <Focus
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"])}
+        >
           <S.Button onClick={() => build(Mapping.attack.id)}>
             <S.Title style={{ marginRight: "10px" }}>Attack Ship</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
@@ -36,7 +39,10 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
             </S.ImgCrystal>
           </S.Button>
         </Focus>
-        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+        <Focus
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+        >
           <S.Button onClick={() => build(Mapping.harvester.id)}>
             <S.Title>Harvester</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
@@ -47,7 +53,10 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
             </S.ImgCrystal>
           </S.Button>
         </Focus>
-        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+        <Focus
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+        >
           <S.Button onClick={() => build(Mapping.refuel.id)}>
             <S.Title>Fueler</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
@@ -58,7 +67,10 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
             </S.ImgCrystal>
           </S.Button>
         </Focus>
-        <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1[""])}>
+        <Focus
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+        >
           <S.Button onClick={() => build(Mapping.passenger.id)}>
             <S.Title>Passenger</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />

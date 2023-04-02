@@ -4,7 +4,7 @@ import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { UserDetails } from "./userDetails";
 import { Focus } from "../Focus";
-import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 import { objectListTutorialDataListPart1 } from "../TutorialsList";
 
 export const Layout = ({ layers }: { layers: Layers }) => {
@@ -41,7 +41,10 @@ export const Layout = ({ layers }: { layers: Layers }) => {
         <UserDetails layers={layers} />
         <S.Border>
           <S.Flex>
-            <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Deploy"])}>
+            <Focus
+              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Deploy"])}
+              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Deploy"])}
+            >
               <S.Button
                 onClick={() => {
                   input.enableInput();

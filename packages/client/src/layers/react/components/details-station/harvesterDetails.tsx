@@ -18,7 +18,7 @@ import { TransportSelect } from "../action-system/transport-select";
 import { get10x10Grid } from "../../../../utils/get3X3Grid";
 import { Harvest } from "../action-system/harvest";
 import { Focus } from "../Focus";
-import { tutorialHighlightOrder } from "../utils/tutorialHighlightOrder";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -61,7 +61,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
-    const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
@@ -74,12 +73,6 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     const cash = getComponentValue(Cash, ownedByIndex)?.value;
 
     if (entityType && +entityType === Mapping.harvester.id) {
-      const nftDetails = getNftId(layers);
-      const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
-        const id = +getComponentValueStrict(NFTID, nftId).value;
-        return nftDetails?.tokenId === id;
-      });
-      const currentNumber = getComponentValue(TutorialStep, nftEntity)?.value;
       return (
         <div>
           <S.Container>
@@ -485,7 +478,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Upgrade"])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Upgrade"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Upgrade"])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("upgrade");
@@ -500,7 +496,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Refuel"])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Refuel"])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("refuel");
@@ -517,7 +516,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   </Focus>
                 </S.Column>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2[""])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setShowLine(false);
@@ -532,7 +534,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart2["Refuel"])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Refuel"])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setShowLine(false);
@@ -547,7 +552,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                       />
                     </S.SideButton>
                   </Focus>
-                  <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Transport"])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Transport"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Transport"])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("transport");
@@ -570,7 +578,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Prospect"])}>
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Prospect"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Prospect"])}
+              >
                 <SelectButton
                   isActive={action === "prospect"}
                   name="PROSPECT"
@@ -581,7 +592,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Mine"])}>
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mine"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mine"])}
+              >
                 <SelectButton
                   isActive={action === "mine"}
                   name="MINE"
@@ -592,7 +606,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Refuel"])}>
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Refuel"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Refuel"])}
+              >
                 <SelectButton
                   isActive={action === "extract"}
                   name="EXTRACT"
@@ -603,7 +620,10 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   }}
                 />
               </Focus>
-              <Focus highlight={tutorialHighlightOrder(layers, objectListTutorialDataListPart1["Build Shipyard"])}>
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Shipyard"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Shipyard"])}
+              >
                 <SelectButton
                   isActive={action === "build"}
                   name="BUILD"

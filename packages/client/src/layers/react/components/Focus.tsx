@@ -1,8 +1,20 @@
 import React, { ReactNode } from "react";
 import styled, { css, keyframes } from "styled-components";
 
-export const Focus = ({ children, highlight }: { children: ReactNode; highlight?: boolean }) => {
-  return <Container highlight={highlight}>{children}</Container>;
+export const Focus = ({
+  children,
+  highlight,
+  present,
+}: {
+  children: ReactNode;
+  highlight?: boolean;
+  present?: boolean;
+}) => {
+  return (
+    <Container highlight={highlight} present={present}>
+      {children}
+    </Container>
+  );
 };
 
 const pulse = keyframes`
@@ -21,12 +33,13 @@ const pulse = keyframes`
 
 interface ContainerProps {
   highlight?: boolean;
+  present?: boolean;
 }
 
 const Container = styled.div<ContainerProps>`
   display: inline-block;
-  opacity: ${({ highlight }) => (highlight ? 1 : 0.3)};
-  pointer-events: ${({ highlight }) => (highlight ? "auto" : "none")};
+  opacity: ${({ present }) => (present ? 1 : 0.3)};
+  pointer-events: ${({ present }) => (present ? "auto" : "none")};
   ${({ highlight }) =>
     highlight &&
     css`
