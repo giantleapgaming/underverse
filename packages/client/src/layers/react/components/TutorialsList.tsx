@@ -129,6 +129,7 @@ const S = {
     padding: 0px 6px;
     font-size: 15px;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
+    font-family: "MyOTFFontBold";
   `,
 
   Label: styled.span<{ checked?: boolean }>`
@@ -137,6 +138,7 @@ const S = {
     font-weight: bold;
     width: 90px;
     text-transform: uppercase;
+    font-family: "MyOTFFont";
   `,
 
   CheckBox: styled.input`
