@@ -327,7 +327,13 @@ const S = {
     height: 340px;
     overflow-y: auto;
     ::-webkit-scrollbar {
-      width: 10px;
+      width: 0px;
+      height: 0px;
+    }
+    scrollbar-width: none;
+    *::-ms-scrollbar {
+      width: 0px;
+      height: 0px;
     }
   `,
   Player: styled.div`
