@@ -7,6 +7,9 @@ import { getComponentEntities, getComponentValue, getComponentValueStrict } from
 import { getNftId } from "../../network/utils/getNftId";
 import { useState } from "react";
 import { toast } from "sonner";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "./utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart1 } from "./TutorialsList";
+import { Focus } from "./Focus";
 const Congratulations = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {

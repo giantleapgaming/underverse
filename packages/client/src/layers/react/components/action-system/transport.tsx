@@ -63,7 +63,7 @@ export const Transport = ({
         </S.Row>
       ) : (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
-          <S.Text>Max capacity reached</S.Text>
+          <S.Text>MAX CAPACITY REACHED, DON'T HAVE ENOUGH SPACE / MINE</S.Text>
         </S.Row>
       )}
     </>

@@ -9,6 +9,9 @@ import { Scrap } from "../action-system/scrap";
 import { Upgrade } from "../action-system/upgrade";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart2 } from "../TutorialsList";
+import { Focus } from "../Focus";
 
 export const WallDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -164,30 +167,40 @@ export const WallDetails = ({ layers }: { layers: Layers }) => {
                   </S.SideButton>
                 </S.Column>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("repair");
-                      sounds["click"].play();
-                    }}
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
                   >
-                    <S.Img
-                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("scrap");
-                      sounds["click"].play();
-                    }}
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Scrapping"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Scrapping"])}
                   >
-                    <S.Img
-                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
               </div>
             )}

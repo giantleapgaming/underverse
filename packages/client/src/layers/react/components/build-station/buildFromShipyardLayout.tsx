@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { Focus } from "../Focus";
-import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 
 export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
@@ -26,8 +26,8 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
     return (
       <S.Flex>
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attack Ships"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attack Ships"])}
         >
           <S.Button onClick={() => build(Mapping.attack.id)}>
             <S.Title style={{ marginRight: "10px" }}>Attack Ship</S.Title>
@@ -54,8 +54,8 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           </S.Button>
         </Focus>
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Fuel Carriers"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Fuel Carriers"])}
         >
           <S.Button onClick={() => build(Mapping.refuel.id)}>
             <S.Title>Fueler</S.Title>
@@ -68,8 +68,8 @@ export const BuildFromShipyardLayout = ({ layers }: { layers: Layers }) => {
           </S.Button>
         </Focus>
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"])}
         >
           <S.Button onClick={() => build(Mapping.passenger.id)}>
             <S.Title>Passenger</S.Title>

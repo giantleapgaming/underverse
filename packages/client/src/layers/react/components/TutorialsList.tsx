@@ -5,6 +5,7 @@ import { Layers } from "../../../types";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
 import styled, { keyframes } from "styled-components";
+import { RefObject, useEffect, useRef } from "react";
 
 const TutorialsList = ({ layers }: { layers: Layers }) => {
   const {
@@ -25,8 +26,15 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
   });
   const number = +getComponentValueStrict(TutorialStep, nftEntity).value;
   const list = typeof number == "number" && +number < 135 ? TutorialDataListPart1 : TutorialDataListPart2;
+  const listRef: RefObject<HTMLDivElement> = useRef(null);
+
+  useEffect(() => {
+    if (listRef.current !== null) {
+      listRef.current.scrollTop = listRef.current.scrollHeight;
+    }
+  }, [list]);
   return (
-    <S.Container>
+    <S.Container ref={listRef}>
       <S.ListContainer
         onMouseEnter={() => {
           input.disableInput();
@@ -44,7 +52,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
           </p>
         </S.Title>
         <S.Hr></S.Hr>
-        <div>
+        <S.UL>
           <ul>
             {list.map((item, index) => {
               const show = typeof number === "number" ? (+number >= item.showId ? true : false) : false;
@@ -68,7 +76,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
               );
             })}
           </ul>
-        </div>
+        </S.UL>
       </S.ListContainer>
     </S.Container>
   );
@@ -90,6 +98,10 @@ const S = {
     align-items: flex-start;
     flex-direction: column;
     gap: 5px;
+  `,
+
+  UL: styled.ul`
+    height: 420px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 0px;
@@ -136,7 +148,7 @@ const S = {
     font-size: 10px;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-weight: bold;
-    width: 90px;
+    width: 95px;
     text-transform: uppercase;
     font-family: "MyOTFFont";
   `,

@@ -11,6 +11,9 @@ import { Refuel } from "../action-system/refuel";
 import { Upgrade } from "../action-system/upgrade";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
+import { Focus } from "../Focus";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 
 export const RefuelDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -221,60 +224,80 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("upgrade");
-                      setShowLine(false);
-                      sounds["click"].play();
-                    }}
-                    title="Upgrade"
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Upgrade"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Upgrade"])}
                   >
-                    <S.Img
-                      src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("refuel");
-                      setShowLine(true, position.x, position.y, "refuel");
-                      sounds["click"].play();
-                    }}
-                    title="Refuel"
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("upgrade");
+                        setShowLine(false);
+                        sounds["click"].play();
+                      }}
+                      title="Upgrade"
+                    >
+                      <S.Img
+                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Refuel"])}
                   >
-                    <S.Img
-                      src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("refuel");
+                        setShowLine(true, position.x, position.y, "refuel");
+                        sounds["click"].play();
+                      }}
+                      title="Refuel"
+                    >
+                      <S.Img
+                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("repair");
-                      sounds["click"].play();
-                    }}
-                    title="Repair"
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
                   >
-                    <S.Img
-                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("scrap");
-                      sounds["click"].play();
-                    }}
-                    title="Scrap"
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                      title="Repair"
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Scrapping"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Scrapping"])}
                   >
-                    <S.Img
-                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                      title="Scrap"
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
               </div>
             )}

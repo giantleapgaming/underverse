@@ -17,7 +17,7 @@ import { toast } from "sonner";
 import { TransportSelect } from "../action-system/transport-select";
 import { Focus } from "../Focus";
 import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
-import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 
 export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
@@ -361,7 +361,10 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && !destinationDetails && !isDestinationSelected && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <Focus highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Upgrade"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Upgrade"])}
+                  >
                     <S.SideButton
                       onClick={() => {
                         setAction("upgrade");
@@ -377,8 +380,8 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                     </S.SideButton>
                   </Focus>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Refuel"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -397,8 +400,8 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
                 <S.Column>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -415,8 +418,8 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                     </S.SideButton>
                   </Focus>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Scrapping"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Scrapping"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -433,8 +436,8 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                     </S.SideButton>
                   </Focus>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Transport"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Transport"])}
                   >
                     <S.SideButton
                       onClick={() => {

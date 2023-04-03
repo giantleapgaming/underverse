@@ -480,7 +480,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Column>
                   <Focus
                     highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Upgrade"])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Upgrade"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Upgrade"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -498,7 +498,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   </Focus>
                   <Focus
                     highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Refuel"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -517,8 +517,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 </S.Column>
                 <S.Column>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2[""])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
                   >
                     <S.SideButton
                       onClick={() => {
@@ -535,8 +535,8 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                     </S.SideButton>
                   </Focus>
                   <Focus
-                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
-                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Refuel"])}
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Scrapping"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Scrapping"])}
                   >
                     <S.SideButton
                       onClick={() => {

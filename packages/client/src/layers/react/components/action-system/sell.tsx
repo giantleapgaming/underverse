@@ -44,7 +44,7 @@ export const Sell = ({
           );
         })}
       </div>
-      {+amount > 0 && (
+      {+amount > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.Text>
             TOTAL SELL{" "}
@@ -61,6 +61,8 @@ export const Sell = ({
             <S.DeployText>SELL</S.DeployText>
           </S.InlinePointer>
         </S.Row>
+      ) : (
+        <S.TextLg>NO MORE MINE ON DEPOT, PLEASE TRANSPORT SOME FROM HARVESTER</S.TextLg>
       )}
     </>
   );
@@ -70,6 +72,13 @@ const S = {
   Text: styled.p`
     font-size: 10px;
     font-weight: 500;
+    color: #ffffff;
+    text-align: center;
+  `,
+
+  TextLg: styled.p`
+    font-size: 12px;
+    font-weight: bold;
     color: #ffffff;
     text-align: center;
   `,

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Layers } from "../../../../types";
 import { Mapping } from "../../../../utils/mapping";
 import { Focus } from "../Focus";
-import { objectListTutorialDataListPart1 } from "../TutorialsList";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "../TutorialsList";
 import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
 
 export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
@@ -26,8 +26,8 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
     return (
       <S.Flex>
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Hab"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Hab"])}
         >
           <S.Button onClick={() => build(Mapping.residential.id)}>
             <S.Title>Habitat</S.Title>
@@ -41,8 +41,8 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
         </Focus>
 
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Depots"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Depots"])}
         >
           <S.Button onClick={() => build(Mapping.godown.id)}>
             <S.Title>Depot</S.Title>
@@ -71,8 +71,8 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
         </Focus>
 
         <Focus
-          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1[""])}
-          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1[""])}
+          highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Build Walls"])}
+          present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Build Walls"])}
         >
           <S.Button
             onClick={() => setBuildWall({ type: "buildWall", showBuildWall: true, showHover: true })}

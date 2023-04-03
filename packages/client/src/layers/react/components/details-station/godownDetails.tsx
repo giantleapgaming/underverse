@@ -14,6 +14,9 @@ import { Refuel } from "../action-system/refuel";
 import { SelectButton } from "./Button";
 import { getNftId, isOwnedBy } from "../../../network/utils/getNftId";
 import { toast } from "sonner";
+import { Focus } from "../Focus";
+import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "../utils/tutorialHighlightOrder";
+import { objectListTutorialDataListPart2 } from "../TutorialsList";
 
 export const GodownDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("attack");
@@ -262,70 +265,95 @@ export const GodownDetails = ({ layers }: { layers: Layers }) => {
             {isOwner && (
               <div style={{ display: "flex", alignItems: "center", marginLeft: "5px", gap: "5px" }}>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("upgrade");
-                      setShowLine(false);
-                      sounds["click"].play();
-                    }}
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Upgrade"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Upgrade"])}
                   >
-                    <S.Img
-                      src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setAction("refuel");
-                      setShowLine(true, position.x, position.y, "refuel");
-                      sounds["click"].play();
-                    }}
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("upgrade");
+                        setShowLine(false);
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "upgrade" ? "/build-stations/upgrade-a.png" : "/build-stations/upgrade.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Refuel"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Refuel"])}
                   >
-                    <S.Img
-                      src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setAction("refuel");
+                        setShowLine(true, position.x, position.y, "refuel");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "refuel" ? "/build-stations/fuel-a.png" : "/build-stations/fuel.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
                 <S.Column>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("repair");
-                      sounds["click"].play();
-                    }}
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
                   >
-                    <S.Img
-                      src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
-                  <S.SideButton
-                    onClick={() => {
-                      setShowLine(false);
-                      setAction("scrap");
-                      sounds["click"].play();
-                    }}
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("repair");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "repair" ? "/build-stations/repair-a.png" : "/build-stations/repair.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
+                  <Focus
+                    highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Scrapping"])}
+                    present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Scrapping"])}
                   >
-                    <S.Img
-                      src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
-                      width="40px"
-                    />
-                  </S.SideButton>
+                    <S.SideButton
+                      onClick={() => {
+                        setShowLine(false);
+                        setAction("scrap");
+                        sounds["click"].play();
+                      }}
+                    >
+                      <S.Img
+                        src={action === "scrap" ? "/build-stations/scrap-a.png" : "/build-stations/scrap.png"}
+                        width="40px"
+                      />
+                    </S.SideButton>
+                  </Focus>
                 </S.Column>
               </div>
             )}
           </S.Container>
           {isOwner && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <SelectButton
-                name="SELL"
-                isActive={action === "sell"}
-                onClick={() => {
-                  setAction("sell");
-                  sounds["click"].play();
-                }}
-              />
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Sell Minerals"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Sell Minerals"])}
+              >
+                <SelectButton
+                  name="SELL"
+                  isActive={action === "sell"}
+                  onClick={() => {
+                    setAction("sell");
+                    sounds["click"].play();
+                  }}
+                />
+              </Focus>
             </S.Row>
           )}
         </div>

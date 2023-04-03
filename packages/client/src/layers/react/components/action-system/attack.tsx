@@ -43,7 +43,7 @@ export const Attack = ({
           );
         })}
       </div>
-      {+offence > 0 && (
+      {+offence > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.Text>TOTAL DAMAGE {Math.floor(+selected * ((250 / distance) * factionData[+faction]?.attack))}</S.Text>
           <S.InlinePointer
@@ -57,6 +57,8 @@ export const Attack = ({
             <S.DeployText>FIRE</S.DeployText>
           </S.InlinePointer>
         </S.Row>
+      ) : (
+        <S.TextLg>PLEASE BUY WEAPONS</S.TextLg>
       )}
     </>
   );
@@ -74,6 +76,12 @@ const S = {
     flex-direction: column;
     align-items: center;
     gap: 5px;
+  `,
+  TextLg: styled.p`
+    font-size: 12px;
+    font-weight: bold;
+    color: #ffffff;
+    text-align: center;
   `,
   Row: styled.div`
     display: flex;
