@@ -52,7 +52,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
         <div>
           <S.Container>
             <S.Column>
-              <S.Text>RESIDENTIAL LVL {+level}</S.Text>
+              <S.Text>HABITAT LVL {+level}</S.Text>
               <img src={`/build-stations/space-station.png`} width="100px" height="100px" />
               <S.Text>
                 POSITION {position.x}/{position.y}
