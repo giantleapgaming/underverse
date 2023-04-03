@@ -230,12 +230,14 @@ export async function createNetworkLayer(config: GameConfig) {
   const initSystem = async (name: string, faction: number, nftID: number) => {
     return systems["system.Init"].executeTyped(name, faction, nftID, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   };
 
   async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType, NftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
@@ -252,6 +254,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
@@ -272,12 +275,14 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildWall"].executeTyped(BigNumber.from(entityType), x1, y1, x2, y2, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
   async function upgradeSystem(godownEntity: EntityID, nftId: number) {
     return systems["system.Upgrade"].executeTyped(BigNumber.from(godownEntity), nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
@@ -294,12 +299,14 @@ export async function createNetworkLayer(config: GameConfig) {
       nftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
   async function transferCashSystem(playerId: EntityID, cash: number, nftId: number) {
     return systems["system.TransferCash"].executeTyped(BigNumber.from(playerId), cash, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
   async function transferEntitySystem(sourceEntity: EntityID, playerId: EntityID, nftId: number) {
@@ -309,6 +316,7 @@ export async function createNetworkLayer(config: GameConfig) {
       nftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
@@ -320,6 +328,7 @@ export async function createNetworkLayer(config: GameConfig) {
       NftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
@@ -337,6 +346,7 @@ export async function createNetworkLayer(config: GameConfig) {
       nftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
@@ -354,6 +364,7 @@ export async function createNetworkLayer(config: GameConfig) {
       nftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
@@ -361,23 +372,27 @@ export async function createNetworkLayer(config: GameConfig) {
   async function buyWeaponSystem(godownEntity: EntityID, kgs: number, nftId: number) {
     return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
   async function repairSystem(godownEntity: EntityID, nftId: number) {
     return systems["system.Repair"].executeTyped(BigNumber.from(godownEntity), nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
   async function scrapeSystem(godownEntity: EntityID, nftId: number) {
     return systems["system.Scrap"].executeTyped(BigNumber.from(godownEntity), nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
   async function tutorial1CompleteSystem(nftId: number) {
     return systems["system.Tutorial1Complete"].executeTyped(nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
@@ -394,6 +409,7 @@ export async function createNetworkLayer(config: GameConfig) {
       nftId,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   };
@@ -401,6 +417,7 @@ export async function createNetworkLayer(config: GameConfig) {
   const sellSystem = async (godownEntity: EntityID, kgs: number, nftId: number) => {
     return systems["system.Sell"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   };
 
@@ -417,6 +434,7 @@ export async function createNetworkLayer(config: GameConfig) {
       nftIds,
       {
         gasPrice: 1500000,
+        gasLimit: 5000000,
       }
     );
   }
@@ -436,6 +454,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildFromHarvester"].executeTyped(BigNumber.from(harvesterEntity), x, y, entityType, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
@@ -454,6 +473,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildFromShipyard"].executeTyped(BigNumber.from(shipyardEntity), x, y, entityType, nftId, {
       gasPrice: 1500000,
+      gasLimit: 5000000,
     });
   }
 
