@@ -17,7 +17,7 @@ export const useNFTData = (id: number, walletAddress: string): { nftURL: string 
         method: "POST",
         body: JSON.stringify({
           address: walletAddress,
-          nftContract: "0x5bAB1484F457Df67741E4C0e5ed06AFaDC31e94F",
+          nftContract: "0xfA4F088838A53Cdcc6A9E233Ff60B86c1AFFb07d",
           chainId: chainIdString,
           nftTokenId: id,
         }),

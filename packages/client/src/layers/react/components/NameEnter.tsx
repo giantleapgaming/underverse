@@ -39,7 +39,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       <Container>
         {!showBuildingMap ? (
           <>
-            {"4242" == chainIdString || "100" == chainIdString ? (
+            {"4242" == chainIdString || "100" == chainIdString || "9874612" == chainIdString ? (
               <>
                 {step === 1 && (
                   <Form
@@ -129,7 +129,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 )}
               </>
             ) : (
-              <p>Chain Id not supported it will only work on lattice chain that is 4242</p>
+              <p>Chain Id not supported it will only work on lattice chain that is 4242 or 9874612</p>
             )}
           </>
         ) : (

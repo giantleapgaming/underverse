@@ -1,7 +1,7 @@
 import { ethers } from "ethers";
 import GiantleapTutorialNFT from "./GiantleapTutorialNFT.json";
 
-const provider = new ethers.providers.JsonRpcProvider("https://follower.testnet-chain.linfra.xyz");
+const provider = new ethers.providers.JsonRpcProvider("https://giantleap-test.calderachain.xyz/http");
 
 export const checkNft = async (nftContractAddress: string, address?: string): Promise<boolean | undefined> => {
   const userAddressArr = [],

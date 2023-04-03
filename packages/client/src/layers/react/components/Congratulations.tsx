@@ -90,8 +90,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                         address: connectedAddress.get(),
                         chainId: chainIdString && +chainIdString,
                         nftContractAddress:
-                          (isRookie && "0xa13809abcBCCe2a1C9f1dc64242a9E21A4C8444F") ||
-                          (isCadet && "0xaBae05dc9C8e5f0309D8DA655F8c02f2995760ca"),
+                          (isRookie && "0xbAC949c145d7896085a90bD7B0F2333D0647D423") ||
+                          (isCadet && "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3"),
                       }),
                       headers: {
                         "Content-Type": "application/json",
