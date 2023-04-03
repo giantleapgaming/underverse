@@ -102,47 +102,6 @@ contract AttackSystem is System {
       "Can only attack upto a certain distance based on your level"
     );
 
-    //Now we check if the attack coordinate is less than certain units (dictated by your level) away from a line
-    //that is drawn from the previous position to current position of the attacker
-    // The distance of the attack point to the line connecting the two points
-    //We check if the attack point is less than a certain distaince from the heading line
-    //The greater this distance the more wider your shooting arc, which means higher level ships become more powerful at shooting
-
-    // require(
-    //   (
-    //     Math.abs(
-    //       (sourcePosition.y - sourcePrevPosition.y) *
-    //         destinationPosition.x -
-    //         (sourcePosition.x - sourcePrevPosition.x) *
-    //         destinationPosition.y +
-    //         sourcePosition.x *
-    //         sourcePrevPosition.y -
-    //         sourcePosition.y *
-    //         sourcePrevPosition.x
-    //     )
-    //   ) /
-    //     (
-    //       Math.sqrtInt(
-    //         (sourcePosition.y - sourcePrevPosition.y) *
-    //           (sourcePosition.y - sourcePrevPosition.y) +
-    //           (sourcePosition.x - sourcePrevPosition.x) *
-    //           (sourcePosition.x - sourcePrevPosition.x)
-    //       )
-    //     ) <=
-    //     int256(sourceEntityLevel),
-    //   "Attack coordinate is out of shooting arc"
-    // );
-
-    //We also want to ensure that the attack point is in the direction the ship was heading and not on the back side of the ship
-    //It is possible for the attack point to be at the right distance but on the other side of the ship, we want to prevent attacks on points behind you
-    //You should only be able to attack points which are ahead of you and in the attack arc
-    //To do this we will find distance from prev position and compare it to distance from current position to ensure that it is greater
-
-    // require(
-    //   getDistanceBetweenCoordinatesWithMultiplier(sourcePrevPosition, destinationPosition) > distance,
-    //   "Attack point is behind the attacker"
-    // );
-
     uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
 
     uint256 factionCostPercent = getFactionAttackCosts(Faction(userFaction));
@@ -163,7 +122,7 @@ contract AttackSystem is System {
     );
 
     if (totalDamage >= destinationDefenceAmount) {
-      deleteGodown(destinationEntity, components);
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(destinationEntity, 10);
     } else {
       DefenceComponent(getAddressById(components, DefenceComponentID)).set(
         destinationEntity,
