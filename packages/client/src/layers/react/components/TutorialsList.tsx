@@ -263,16 +263,16 @@ export const objectListTutorialDataListPart1 = TutorialDataListPart1.reduce((acc
 }, {} as { [key: string]: number });
 
 export const TutorialDataListPart2: TutorialDataItem<string>[] = [
-  { id: 140, showId: 135, label: "Upgrade", videoId: "D0UnqGm_miA" },
-  { id: 150, showId: 140, label: "Depots", videoId: "D0UnqGm_miA" },
-  { id: 160, showId: 150, label: "Sell Minerals", videoId: "D0UnqGm_miA" },
-  { id: 170, showId: 160, label: "Attack Ships", videoId: "D0UnqGm_miA" },
-  { id: 180, showId: 170, label: "Attacking", videoId: "D0UnqGm_miA" },
-  { id: 190, showId: 180, label: "Fuel Carriers", videoId: "D0UnqGm_miA" },
-  { id: 200, showId: 190, label: "Refuel", videoId: "D0UnqGm_miA" },
-  { id: 210, showId: 200, label: "Build Walls", videoId: "D0UnqGm_miA" },
-  { id: 240, showId: 210, label: "Scrapping", videoId: "D0UnqGm_miA" },
-  { id: 250, showId: 240, label: "Repairs", videoId: "D0UnqGm_miA" },
+  { id: 140, showId: 135, label: "Upgrade", videoId: "6_kTXYGLR3U" },
+  { id: 150, showId: 140, label: "Depots", videoId: "ZQGChE8dQks" },
+  { id: 160, showId: 150, label: "Sell Minerals", videoId: "7gwIHkbk7H8" },
+  { id: 170, showId: 160, label: "Attack Ships", videoId: "Q0dp81Ft4rU" },
+  { id: 180, showId: 170, label: "Attacking", videoId: "2JIGd8dUlxk" },
+  { id: 190, showId: 180, label: "Fuel Carriers", videoId: "oetIqCRwvJM" },
+  { id: 200, showId: 190, label: "Refuel", videoId: "46j1buZaH84" },
+  { id: 210, showId: 200, label: "Build Walls", videoId: "PINPjIgXLYo" },
+  { id: 240, showId: 210, label: "Scrapping", videoId: "XutRD4yRf_4" },
+  { id: 250, showId: 240, label: "Repairs", videoId: "1KWHLS5XSG0" },
 ];
 export const objectListTutorialDataListPart2 = TutorialDataListPart2.reduce((acc, curr) => {
   acc[curr.label] = curr.showId;
