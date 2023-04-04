@@ -174,7 +174,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                 }
               );
             } else if (isCadet) {
-              window.open("https://discord.gg/2YxDpucg8Y", "_blank");
+              window.open("https://underverse.giantleap.gg/", "_blank");
             }
           }}
         >
