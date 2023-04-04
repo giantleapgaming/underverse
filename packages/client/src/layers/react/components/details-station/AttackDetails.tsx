@@ -21,6 +21,7 @@ import { Focus } from "../Focus";
 
 export const AttackDetails = ({ layers }: { layers: Layers }) => {
   const [action, setAction] = useState("");
+  const [weaponShow, setWeaponShow] = useState(false);
   const {
     phaser: {
       sounds,
@@ -397,13 +398,26 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              <Focus
-                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attacking"])}
-                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attacking"])}
-              >
+              {weaponShow && offence > 0 ? (
+                <Focus
+                  highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attacking"])}
+                  present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attacking"])}
+                >
+                  <SelectButton
+                    isActive={action === "attack"}
+                    name="ATTACK"
+                    onClick={() => {
+                      setAction("attack");
+                      const { x, y } = position;
+                      setShowLine(true, x, y, "attack");
+                      sounds["click"].play();
+                    }}
+                  />
+                </Focus>
+              ) : (
                 <SelectButton
                   isActive={action === "attack"}
-                  name="ATTACk"
+                  name="ATTACK"
                   onClick={() => {
                     setAction("attack");
                     const { x, y } = position;
@@ -411,17 +425,35 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     sounds["click"].play();
                   }}
                 />
-              </Focus>
-
-              <SelectButton
-                isActive={action === "weapon"}
-                name="WEAPON"
-                onClick={() => {
-                  setShowLine(false);
-                  setAction("weapon");
-                  sounds["click"].play();
-                }}
-              />
+              )}
+              {!weaponShow ? (
+                <Focus
+                  highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attacking"])}
+                  present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attacking"])}
+                >
+                  <SelectButton
+                    isActive={action === "weapon"}
+                    name="WEAPON"
+                    onClick={() => {
+                      setShowLine(false);
+                      setAction("weapon");
+                      sounds["click"].play();
+                      setWeaponShow(true);
+                    }}
+                  />
+                </Focus>
+              ) : (
+                <SelectButton
+                  isActive={action === "weapon"}
+                  name="WEAPON"
+                  onClick={() => {
+                    setShowLine(false);
+                    setAction("weapon");
+                    sounds["click"].play();
+                    setWeaponShow(true);
+                  }}
+                />
+              )}
             </S.Row>
           )}
         </div>

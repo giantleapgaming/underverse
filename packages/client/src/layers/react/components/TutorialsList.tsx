@@ -47,7 +47,7 @@ const TutorialsList = ({ layers }: { layers: Layers }) => {
           <Circle>
             <I>i</I>
           </Circle>
-          <p style={{ fontSize: "18px", color: "#00fde4", fontWeight: "600", letterSpacing: "1.2" }}>
+          <p style={{ fontSize: "18px", color: "#00fde4", fontWeight: "600", letterSpacing: "1.2", lineHeight: "1.5" }}>
             TUTORIAL <br /> MISSIONS
           </p>
         </S.Title>
@@ -101,7 +101,6 @@ const S = {
   `,
 
   UL: styled.ul`
-    height: 420px;
     overflow-y: auto;
     ::-webkit-scrollbar {
       width: 0px;
@@ -120,7 +119,7 @@ const S = {
     gap: 20px;
   `,
   Hr: styled.div`
-    width: 175px;
+    width: 165px;
     border: 2.8px solid #00fde4;
     height: 100%;
     color: #00fde4;
@@ -137,9 +136,11 @@ const S = {
   `,
   Index: styled.span<{ checked?: boolean }>`
     border-radius: 0.2em;
-    border: 0.25em solid ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
-    padding: 0px 6px;
+    border: 0.22em solid ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
+    padding: 0px 0px;
     font-size: 15px;
+    width: 25px;
+    text-align: center;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-family: "MyOTFFontBold";
   `,
@@ -148,7 +149,7 @@ const S = {
     font-size: 10px;
     color: ${({ checked }) => (checked ? "#A6A6A6" : "#00fde4")};
     font-weight: bold;
-    width: 95px;
+    width: 80px;
     text-transform: uppercase;
     font-family: "MyOTFFont";
   `,
@@ -197,7 +198,7 @@ export const registerTutorialsListScreen = () => {
       colStart: 1,
       colEnd: 4,
       rowStart: 4,
-      rowEnd: 10,
+      rowEnd: 12,
     },
     (layers) => {
       const {
@@ -239,21 +240,21 @@ export interface TutorialDataItem<TLabel extends string> {
   videoId: string;
 }
 
-const TutorialDataListPart1: TutorialDataItem<string>[] = [
-  { id: 10, showId: 0, label: "Deploy", videoId: "D0UnqGm_miA" },
-  { id: 20, showId: 10, label: "Move", videoId: "D0UnqGm_miA" },
-  { id: 30, showId: 20, label: "Signals", videoId: "D0UnqGm_miA" },
-  { id: 40, showId: 30, label: "Prospect", videoId: "D0UnqGm_miA" },
-  { id: 50, showId: 40, label: "Mine", videoId: "D0UnqGm_miA" },
-  { id: 60, showId: 50, label: "Refuel", videoId: "D0UnqGm_miA" },
-  { id: 70, showId: 60, label: "Build Shipyard", videoId: "D0UnqGm_miA" },
-  { id: 80, showId: 70, label: "Transport", videoId: "D0UnqGm_miA" },
-  { id: 90, showId: 80, label: "Build Ship", videoId: "D0UnqGm_miA" },
-  { id: 100, showId: 90, label: "Rapture Zone", videoId: "D0UnqGm_miA" },
-  { id: 110, showId: 100, label: "Rapture", videoId: "D0UnqGm_miA" },
-  { id: 120, showId: 110, label: "Build Hab", videoId: "D0UnqGm_miA" },
-  { id: 130, showId: 120, label: "Transport PPL", videoId: "D0UnqGm_miA" },
-  { id: 135, showId: 130, label: "Mint NFT", videoId: "D0UnqGm_miA" },
+export const TutorialDataListPart1: TutorialDataItem<string>[] = [
+  { id: 10, showId: 0, label: "Deploy", videoId: "TeHWAuYVnDE" },
+  { id: 20, showId: 10, label: "Move", videoId: "YJGZtZ-dZOY" },
+  { id: 30, showId: 20, label: "Signals", videoId: "Rakw5LQAwQ" },
+  { id: 40, showId: 30, label: "Prospect", videoId: "Sx2SmhBzQwg" },
+  { id: 50, showId: 40, label: "Mine", videoId: "rTToSkjFkPQ" },
+  { id: 60, showId: 50, label: "Refuel", videoId: "dSrmylM4U0E" },
+  { id: 70, showId: 60, label: "Build Shipyard", videoId: "" },
+  { id: 80, showId: 70, label: "Transport", videoId: "CIa--7MQIjk" },
+  { id: 90, showId: 80, label: "Build Ship", videoId: "" },
+  { id: 100, showId: 90, label: "Rapture Zone", videoId: "" },
+  { id: 110, showId: 100, label: "Rapture", videoId: "uVs1xRNzDDg" },
+  { id: 120, showId: 110, label: "Build Hab", videoId: "" },
+  { id: 130, showId: 120, label: "Transport PPL", videoId: "_DPn9KG0bsw" },
+  { id: 135, showId: 130, label: "Mint NFT", videoId: "" },
 ];
 
 export const objectListTutorialDataListPart1 = TutorialDataListPart1.reduce((acc, curr) => {

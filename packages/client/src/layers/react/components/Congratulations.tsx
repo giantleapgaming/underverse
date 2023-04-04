@@ -74,44 +74,49 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         ) : (
           <>
             {minted || (rookieNft && isRookie) || (cadetNft && isCadet) ? (
-              <Loading>NFT Minted</Loading>
+              <Loading>Badge Minted!</Loading>
             ) : (
-              <img
-                style={{ cursor: "pointer" }}
-                src="../img/MintBadge.png"
-                onClick={async () => {
-                  const params = new URLSearchParams(window.location.search);
-                  const chainIdString = params.get("chainId");
-                  setLoading(true);
-                  try {
-                    const response = await fetch("https://api.giantleap.gg/api/tutorial-nft", {
-                      method: "POST",
-                      body: JSON.stringify({
-                        address: connectedAddress.get(),
-                        chainId: chainIdString && +chainIdString,
-                        nftContractAddress:
-                          (isRookie && "0xbAC949c145d7896085a90bD7B0F2333D0647D423") ||
-                          (isCadet && "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3"),
-                      }),
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                    });
-                    const data = await response.json();
-                    if (data.status) {
-                      toast.success("Congratulations! You have successfully minted a badge!");
-                      setMinter(true);
-                    } else {
-                      toast.error("You have already minted a badge!");
-                    }
-                    setLoading(false);
-                  } catch (e) {
-                    console.log(e);
-                    toast.error("Something went wrong, please try again later!");
+              <Focus
+                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
+                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+              >
+                <img
+                  style={{ cursor: "pointer" }}
+                  src="../img/MintBadge.png"
+                  onClick={async () => {
+                    const params = new URLSearchParams(window.location.search);
+                    const chainIdString = params.get("chainId");
                     setLoading(true);
-                  }
-                }}
-              />
+                    try {
+                      const response = await fetch("https://api.giantleap.gg/api/tutorial-nft", {
+                        method: "POST",
+                        body: JSON.stringify({
+                          address: connectedAddress.get(),
+                          chainId: chainIdString && +chainIdString,
+                          nftContractAddress:
+                            (isRookie && "0xbAC949c145d7896085a90bD7B0F2333D0647D423") ||
+                            (isCadet && "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3"),
+                        }),
+                        headers: {
+                          "Content-Type": "application/json",
+                        },
+                      });
+                      const data = await response.json();
+                      if (data.status) {
+                        toast.success("Congratulations! You have successfully minted a badge!");
+                        setMinter(true);
+                      } else {
+                        toast.error("You have already minted a badge!");
+                      }
+                      setLoading(false);
+                    } catch (e) {
+                      console.log(e);
+                      toast.error("Something went wrong, please try again later!");
+                      setLoading(true);
+                    }
+                  }}
+                />
+              </Focus>
             )}
           </>
         )}
@@ -173,14 +178,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             }
           }}
         >
-          {isRookie && (
-            <Focus
-              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
-              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
-            >
-              <Title>CONTINUE TO CADET TRAINING</Title>
-            </Focus>
-          )}
+          {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>}
           {isCadet && <Title>CONQUER THE UNDERVERSE</Title>}
           <img src="../img/Conquer.png" />
         </Conquer>
@@ -335,11 +333,12 @@ const Title = styled.div`
   font-weight: bold;
 `;
 const Loading = styled.p`
-  font-size: 16px;
+  font-size: 18px;
   color: #00fde4;
   letter-spacing: 0.9;
-  line-height: 1.5;
+  line-height: 1.7;
   font-weight: bold;
+  font-family: monospace;
 `;
 
 const Img = styled.img`

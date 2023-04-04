@@ -5,8 +5,10 @@ import { Layers } from "../../../types";
 import styled from "styled-components";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
+import { TutorialDataListPart1, TutorialDataListPart2 } from "./TutorialsList";
+import { tutorialHighlightOrderCompleted } from "./utils/tutorialHighlightOrder";
 
-const VideoModal = ({ layers }: { layers: Layers }) => {
+const VideoModal = ({ layers, videoId }: { layers: Layers; videoId: string }) => {
   const {
     phaser: {
       scenes: {
@@ -41,7 +43,7 @@ const VideoModal = ({ layers }: { layers: Layers }) => {
           }}
           width="853"
           height="480"
-          src="https://www.youtube.com/embed/D0UnqGm_miA"
+          src={`https://www.youtube.com/embed/${videoId}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           title="Embedded youtube"
@@ -112,15 +114,20 @@ export const registerModalScreen = () => {
             return nftDetails?.tokenId === id;
           });
           const videoDetails = getComponentValue(TutorialModalDetails, modalIndex);
-          if (id && videoDetails?.showModal) {
-            return { layers };
+          const selectedId = videoDetails?.tutorialNumber;
+          if (id && videoDetails?.showModal && typeof selectedId == "number") {
+            const videoDetails = TutorialDataListPart1.find(({ id }) => id === selectedId);
+            const videoDetails2 = TutorialDataListPart2.find(({ id }) => id === selectedId);
+
+            if (videoDetails) return { layers, videoId: videoDetails?.videoId };
+            if (videoDetails2) return { layers, videoId: videoDetails2?.videoId };
           }
           return;
         })
       );
     },
-    ({ layers }) => {
-      return <VideoModal layers={layers} />;
+    ({ layers, videoId }) => {
+      return <VideoModal layers={layers} videoId={videoId} />;
     }
   );
 };
