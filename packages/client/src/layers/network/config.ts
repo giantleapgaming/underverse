@@ -9,7 +9,7 @@ export type GameConfig = {
   checkpointUrl?: string;
   devMode: boolean;
   initialBlockNumber: number;
-  snapshotServiceUrl?: string;
+  // snapshotServiceUrl?: string;
 };
 
 export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfig = (config) => ({
@@ -32,5 +32,5 @@ export const getNetworkConfig: (networkConfig: GameConfig) => SetupContractConfi
   initialBlockNumber: config.initialBlockNumber,
   worldAddress: config.worldAddress,
   devMode: config.devMode,
-  snapshotServiceUrl: config.snapshotServiceUrl,
+  // snapshotServiceUrl: config.snapshotServiceUrl,
 });

@@ -104,4 +104,4 @@ uint256 constant usaScrap = 95;
 uint256 constant usaIncome = 95;
 uint256 constant usaSell = 95;
 
-address constant nftContract = 0x5e42fCbB2583CcaD0BaAfb92078b156bd661B93C;
+address constant nftContract = 0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3;

@@ -13,6 +13,8 @@ const WalletLogin = () => {
   const [loading, setLoading] = useState(false);
   const [enterInputKey, setEnterInputKey] = useState(false);
   const [playGame, setPlayGame] = useState(false);
+  const params = new URLSearchParams(window.location.search);
+  const chainIdString = params.get("chainId");
 
   return (
     <Container>
@@ -51,7 +53,7 @@ const WalletLogin = () => {
                     setLoading(true);
                     const response = await fetch("https://api.giantleap.gg/api/drip", {
                       method: "POST",
-                      body: JSON.stringify({ address: wallet.address }),
+                      body: JSON.stringify({ address: wallet.address, chainId: chainIdString }),
                       headers: {
                         "Content-Type": "application/json",
                       },
