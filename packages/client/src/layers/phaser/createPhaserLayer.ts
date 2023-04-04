@@ -349,7 +349,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   for (const soundKey of soundKeys) {
     const loader = scenes.Main.phaserScene.load.audio(soundKey, `/sounds/${soundKey}.m4a`);
     await asyncFileLoader(loader);
-    sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: false, volume: 0.2 });
+    sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: false, volume: 0.05 });
   }
 
   for (const soundKey of soundKeysMp3) {

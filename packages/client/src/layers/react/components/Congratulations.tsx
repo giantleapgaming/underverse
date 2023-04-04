@@ -173,7 +173,14 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             }
           }}
         >
-          {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>}
+          {isRookie && (
+            <Focus
+              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
+              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+            >
+              <Title>CONTINUE TO CADET TRAINING</Title>
+            </Focus>
+          )}
           {isCadet && <Title>CONQUER THE UNDERVERSE</Title>}
           <img src="../img/Conquer.png" />
         </Conquer>

@@ -99,7 +99,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 <p>LEADERBORAD</p>
                 <a
                   target="_blank"
-                  href={"https://explorer.testnet-chain.linfra.xyz/address/" + connectedAddress.get()}
+                  href={"https://giantleap-test.calderaexplorer.xyz/address/" + connectedAddress.get()}
                   style={{
                     border: "1px solid #5AE7D2",
                     borderRadius: "10%",
