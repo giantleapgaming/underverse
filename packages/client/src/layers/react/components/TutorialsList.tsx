@@ -243,7 +243,7 @@ export interface TutorialDataItem<TLabel extends string> {
 export const TutorialDataListPart1: TutorialDataItem<string>[] = [
   { id: 10, showId: 0, label: "Deploy", videoId: "TeHWAuYVnDE" },
   { id: 20, showId: 10, label: "Move", videoId: "YJGZtZ-dZOY" },
-  { id: 30, showId: 20, label: "Signals", videoId: "Rakw5LQAwQ" },
+  { id: 30, showId: 20, label: "Signals", videoId: "7qk1QHyEq3I" },
   { id: 40, showId: 30, label: "Prospect", videoId: "Sx2SmhBzQwg" },
   { id: 50, showId: 40, label: "Mine", videoId: "rTToSkjFkPQ" },
   { id: 60, showId: 50, label: "Refuel", videoId: "dSrmylM4U0E" },
