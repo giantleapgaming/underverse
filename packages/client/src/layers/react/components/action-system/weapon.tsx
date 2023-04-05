@@ -54,7 +54,7 @@ export const Weapon = ({
               }}
             >
               <S.Img src="/button//blueButton.png" />
-              <S.DeployText>Buy</S.DeployText>
+              <S.DeployText>BUY</S.DeployText>
             </S.InlinePointer>
           </S.Row>
         </div>

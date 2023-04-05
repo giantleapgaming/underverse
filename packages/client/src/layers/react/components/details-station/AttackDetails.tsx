@@ -128,6 +128,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                           defence={+defence}
                           level={+level}
                           buyWeaponSystem={async (kgs: number) => {
+                            setWeaponShow(true);
                             const nftDetails = getNftId(layers);
                             if (!nftDetails) {
                               return;
@@ -398,7 +399,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
-              {weaponShow && offence > 0 ? (
+              {offence > 0 ? (
                 <Focus
                   highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attacking"])}
                   present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attacking"])}
@@ -438,7 +439,6 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                       setShowLine(false);
                       setAction("weapon");
                       sounds["click"].play();
-                      setWeaponShow(true);
                     }}
                   />
                 </Focus>
@@ -450,7 +450,6 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     setShowLine(false);
                     setAction("weapon");
                     sounds["click"].play();
-                    setWeaponShow(true);
                   }}
                 />
               )}

@@ -27,6 +27,7 @@ export const Sell = ({
           marginTop: "15px",
           marginBottom: "15px",
           minWidth: "330px",
+          marginLeft: "20px",
         }}
       >
         {new Array(+amount).fill(0).map((_, i) => {
