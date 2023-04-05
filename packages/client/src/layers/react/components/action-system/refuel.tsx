@@ -12,7 +12,7 @@ export const Refuel = ({
   playSound: () => void;
   refuel: (amount: number) => void;
 }) => {
-  const [selected, setSelected] = useState<number | number[]>(1);
+  const [selected, setSelected] = useState<number | number[]>(0);
   return (
     <>
       <div
@@ -25,7 +25,7 @@ export const Refuel = ({
         }}
       >
         <div style={{ width: "260px", margin: "0px 50px" }}>
-          {+space > 0 && (
+          {Math.floor(+space) > 0 && (
             <Slider
               min={1}
               max={space}
@@ -47,7 +47,7 @@ export const Refuel = ({
           )}
         </div>
       </div>
-      {+space > 0 ? (
+      {Math.floor(+space) > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
           <S.TextLg>H {Math.round(+selected)}</S.TextLg>
           <S.InlinePointer
