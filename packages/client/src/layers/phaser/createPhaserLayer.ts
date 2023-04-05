@@ -23,6 +23,7 @@ import {
   BuildWall,
   SelectedNftID,
   ShowWinGame,
+  MultiSelect,
 } from "../local/components";
 
 import {
@@ -84,6 +85,9 @@ import { buildPassengerSystem } from "../network/systems/build/passenger";
 import { displayPassengerSystem } from "../network/systems/view/passenger";
 import { movePassenger } from "../network/systems/action/move/movePassenger";
 import { clickMove } from "../network/systems/cursor-actions/click-move";
+import { multiSelectClickSystem } from "../network/systems/select/multi-select-click";
+import { multiSelectSystem } from "../network/systems/select/multi-select";
+import { multiMoveDrawLine } from "../network/systems/view/multi-move-draw-line";
 
 /**
  * The Phaser layer is responsible for rendering game objects to the screen.
@@ -98,6 +102,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const stationDetailsEntityIndex = createEntity(world);
   const nftId = createEntity(world);
   const modalIndex = createEntity(world);
+  const global = createEntity(world);
   const showCircleIndex = createEntity(world);
 
   const localIds = {
@@ -107,6 +112,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     modalIndex,
     showCircleIndex,
     nftId,
+    global,
   };
   // --- COMPONENTS -----------------------------------------------------------------
   const components = {
@@ -128,6 +134,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     BuildWall: BuildWall(world),
     SelectedNftID: SelectedNftID(world),
     ShowWinGame: ShowWinGame(world),
+    MultiSelect: MultiSelect(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -158,12 +165,18 @@ export async function createPhaserLayer(network: NetworkLayer) {
   const setShowStationDetails = (entityId?: EntityIndex) => {
     setComponent(components.ShowStationDetails, stationDetailsEntityIndex, { entityId });
   };
+  const getStationDetails = () => {
+    return getComponentValue(components.ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+  };
   const setTransportCords = (x: number, y: number) => {
     setComponent(components.TransportCords, modalIndex, { x, y });
   };
 
   const setNftId = (selectedNftId: number) => {
     setComponent(components.SelectedNftID, nftId, { selectedNftID: selectedNftId });
+  };
+  const setMultiSelect = (selectedNftId: number[]) => {
+    setComponent(components.MultiSelect, global, { entityIds: selectedNftId });
   };
 
   const setWinGame = (showWinGame: boolean) => {
@@ -262,6 +275,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const setMoveStation = (selected: boolean, x?: number, y?: number) => {
     setComponent(components.MoveStation, stationDetailsEntityIndex, { x, y, selected });
+  };
+
+  const setMultiMoveStation = (selected: boolean, x?: number, y?: number) => {
+    setComponent(components.MoveStation, global, { x, y, selected });
   };
   const setShowHighLight = (selected: boolean) => {
     setComponent(components.ShowHighLight, stationDetailsEntityIndex, { value: selected });
@@ -381,6 +398,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setBuildWall,
       setNftId,
       setWinGame,
+      setMultiSelect,
+      setMultiMoveStation,
+      getStationDetails,
     },
     getValues: {
       getWinState,
@@ -422,6 +442,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   //Select system for the station
   selectClickSystem(network, context);
   selectSystem(network, context);
+  multiSelectClickSystem(network, context);
+  multiSelectSystem(network, context);
 
   drawLine(network, context);
   missileAttackSystem(network, context);
@@ -448,6 +470,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   moveAttackShip(network, context);
   moveRefueller(network, context);
   movePassenger(network, context);
+  multiMoveDrawLine(network, context);
   //------transports----------------------------
   mineTransport(network, context);
   fuelTransport(network, context);

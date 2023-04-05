@@ -32,6 +32,15 @@ export const ShowStationDetails = (world: World) => {
     { id: "ShowStationDetails" }
   );
 };
+export const MultiSelect = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      entityIds: Type.NumberArray,
+    },
+    { id: "MultiSelect" }
+  );
+};
 
 export const ShowDestinationDetails = (world: World) => {
   return defineComponent(

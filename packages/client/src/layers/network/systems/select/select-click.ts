@@ -17,14 +17,26 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
     components: { ShowDestinationDetails, ShowLine },
     localIds: { stationDetailsEntityIndex },
     sounds,
-    localApi: { setShowStationDetails },
+    localApi: { setShowStationDetails, setMultiSelect },
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
     components: { Defence, EntityType },
   } = network;
-
+  let keyPressed = false;
+  const key = input.keyboard$.subscribe((p) => {
+    const keyboard = p as Phaser.Input.Keyboard.Key;
+    if (keyboard.ctrlKey && keyboard.isDown) {
+      keyPressed = true;
+    } else {
+      keyPressed = false;
+    }
+  });
   const click = input.click$.subscribe((p) => {
+    if (keyPressed) {
+      return;
+    }
+    setMultiSelect([]);
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const stationEntity = getEntityIndexAtPosition(x, y);
@@ -98,6 +110,7 @@ export function selectClickSystem(network: NetworkLayer, phaser: PhaserLayer) {
   });
 
   world.registerDisposer(() => click?.unsubscribe());
+  world.registerDisposer(() => key?.unsubscribe());
 }
 
 export function getPointsWithinRadius(radius: number): Array<[number, number]> {
