@@ -23,7 +23,7 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
     },
   } = phaser;
   const {
-    components: { OwnedBy, Position, Defence, Faction },
+    components: { OwnedBy, Position, Defence, Faction, Level },
   } = network;
 
   defineRxSystem(world, merge(Position.update$, ShowCircle.update$), () => {
@@ -35,7 +35,8 @@ export function highLightUserStations(network: NetworkLayer, phaser: PhaserLayer
       const ownedBy = getComponentValue(OwnedBy, entity)?.value as EntityID;
       const factionIndex = world.entities.indexOf(ownedBy);
       const factionNumber = getComponentValue(Faction, factionIndex)?.value;
-      if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber) {
+      const level = getComponentValue(Level, entity)?.value;
+      if (position && defence?.value && ownedBy && +defence.value > 0 && factionNumber && level && +level) {
         const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
         const stationBackground = config.sprites[Sprites.Asteroid12];
         const circle = objectPool.get(`circle-${entity}`, "Sprite");

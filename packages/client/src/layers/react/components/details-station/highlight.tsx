@@ -50,7 +50,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
         if (entityType && +entityType === Mapping.residential.id && prevEntity && prevEntity === positionOwnedByIndex) {
           const defence = getComponentValue(Defence, entity)?.value;
           const prePopulation = getComponentValue(Population, entity)?.value;
-          if (prePopulation && defence && +defence > 0) {
+          const level = getComponentValue(Level, entity)?.value;
+          if (prePopulation && defence && +defence > 0 && level && +level > 0) {
             preTotalPopulation += +prePopulation;
           }
         }
@@ -281,7 +282,6 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 setShowStationDetails(allHarvesterEntities[0]);
                 if (position && defence && +defence.value > 0) {
                   const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-                  console.log("sdflksj");
                   camera.setScroll(x, y);
                 }
               } else {
