@@ -9,7 +9,7 @@ import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../c
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, getPlayerFuel, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
+import { unOwnedObstacle, getCurrentPosition, getPlayerFuel, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionTransportCosts } from "../utils.sol";
 import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
 import { MULTIPLIER, MULTIPLIER2, Faction, Coordd } from "../constants.sol";
 import "../libraries/Math.sol";
@@ -73,12 +73,13 @@ contract TransportSystem is System {
     );
 
     require(
-      atleastOneObstacleOnTheWay(
+      unOwnedObstacle(
         sourcePosition.x,
         sourcePosition.y,
         destinationPosition.x,
         destinationPosition.y,
-        components
+        components,
+        playerID
       ) == false,
       "Obstacle on the way"
     );
