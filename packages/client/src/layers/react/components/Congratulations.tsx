@@ -178,6 +178,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                 async () => {
                   try {
                     await tutorial1CompleteSystem(nftDetails.tokenId);
+                    input.enableInput();
                   } catch (e: any) {
                     console.log(e);
                     throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
@@ -203,9 +204,18 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
               <Title>CONTINUE TO CADET TRAINING</Title>
             </Focus>
           ) : (
-            <Title style={{ marginRight: "20px" }}>CONTINUE TO CADET TRAINING</Title>
+            <>{isRookie && <Title style={{ marginRight: "20px" }}>CONTINUE TO CADET TRAINING</Title>}</>
           )}
-          {isCadet && <Title>CONQUER THE UNDERVERSE</Title>}
+          {isCadet && minted ? (
+            <Focus
+              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
+              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+            >
+              <Title>CONQUER THE UNDERVERSE</Title>
+            </Focus>
+          ) : (
+            <>{isCadet && <Title style={{ marginRight: "20px" }}>CONQUER THE UNDERVERSE</Title>}</>
+          )}
           <img src="../img/Conquer.png" style={{ marginRight: "20px" }} />
         </Conquer>
       </Container>

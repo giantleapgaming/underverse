@@ -436,7 +436,7 @@ export async function createNetworkLayer(config: GameConfig) {
     return systems["system.Refuel"].executeTyped(
       BigNumber.from(srcGodownEntity),
       BigNumber.from(destinationGodownEntity),
-      kgs,
+      Math.floor(kgs),
       nftIds,
       {
         gasPrice: 1500000,

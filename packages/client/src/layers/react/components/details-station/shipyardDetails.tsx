@@ -274,6 +274,7 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
+                      entityType={entityType}
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
                         const nftDetails = getNftId(layers);
@@ -462,8 +463,16 @@ export const ShipyardDetails = ({ layers }: { layers: Layers }) => {
           {isOwner && !destinationDetails && !isDestinationSelected && (
             <S.Row style={{ gap: "10px", marginTop: "5px" }}>
               <Focus
-                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"])}
-                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"])}
+                highlight={
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Ship"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Attack Ships"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Fuel Carriers"])
+                }
+                present={
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Ship"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Attack Ships"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Fuel Carriers"])
+                }
               >
                 <SelectButton
                   isActive={action === "build"}

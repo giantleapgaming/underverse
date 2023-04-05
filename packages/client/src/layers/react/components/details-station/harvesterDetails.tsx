@@ -277,6 +277,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
+                      entityType={entityType}
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
                         const nftDetails = getNftId(layers);
@@ -621,8 +622,18 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 />
               </Focus>
               <Focus
-                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Shipyard"])}
-                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Shipyard"])}
+                highlight={
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Shipyard"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Build Hab"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Depots"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Build Walls"])
+                }
+                present={
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Shipyard"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Hab"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Depots"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Build Walls"])
+                }
               >
                 <SelectButton
                   isActive={action === "build"}
