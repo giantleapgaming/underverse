@@ -27,7 +27,8 @@ export function displayShipyardSystem(network: NetworkLayer, phaser: PhaserLayer
     const entityTypeNumber = getComponentValueStrict(EntityType, entity)?.value;
     if (entityTypeNumber && +entityTypeNumber === Mapping.shipyard.id) {
       const defence = getComponentValueStrict(Defence, entity)?.value;
-      if (defence && +defence > 0) {
+      const level = getComponentValueStrict(Level, entity).value;
+      if (+defence > 0 && +level) {
         const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
         const level = getComponentValueStrict(Level, entity).value;
         const position = getComponentValueStrict(Position, entity);

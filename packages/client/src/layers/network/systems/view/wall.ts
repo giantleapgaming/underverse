@@ -32,7 +32,8 @@ export function displayWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
 
-      if (+defence > 0) {
+      const level = getComponentValueStrict(Level, entity).value;
+      if (+defence > 0 && +level) {
         const astroidObject = objectPool.get(`wall-${entity}`, "Sprite");
         const attack = config.sprites[Sprites.Asteroid12];
         astroidObject.setComponent({

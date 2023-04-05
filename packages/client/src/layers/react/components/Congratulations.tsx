@@ -32,7 +32,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
     return nftDetails?.tokenId === id;
   });
   const number = getComponentValue(TutorialStep, nftEntity)?.value;
-  const isCadet = number && +number == 250;
+  const isCadet = number && (+number == 250 || +number == 260);
   const isRookie = number && +number == 130;
 
   const purge = async () => {
@@ -46,7 +46,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
     }
   };
   useEffect(() => {
-    if (isCadet) {
+    if (number && +number == 250) {
       purge();
     }
   });
@@ -419,7 +419,7 @@ export const registerCongratulationsScreen = () => {
           });
           if (doesNftExist) {
             const number = getComponentValue(TutorialStep, nftEntity)?.value;
-            if (number && (+number === 130 || +number === 250)) {
+            if (number && (+number === 130 || +number === 250 || +number === 260)) {
               return { layers };
             } else {
               return;

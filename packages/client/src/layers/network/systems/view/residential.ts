@@ -31,7 +31,8 @@ export function displayResidentialSystem(network: NetworkLayer, phaser: PhaserLa
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.residential.id) {
         const defence = getComponentValueStrict(Defence, entity).value;
-        if (+defence > 0) {
+        const level = getComponentValueStrict(Level, entity).value;
+        if (+defence > 0 && +level) {
           const position = getComponentValueStrict(Position, entity);
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);

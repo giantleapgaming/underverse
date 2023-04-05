@@ -31,7 +31,8 @@ export function displayHarvesterSystem(network: NetworkLayer, phaser: PhaserLaye
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.harvester.id) {
         const defence = getComponentValueStrict(Defence, entity).value;
-        if (+defence > 0) {
+        const level = getComponentValueStrict(Level, entity).value;
+        if (+defence > 0 && +level) {
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const prevPosition = getComponentValueStrict(PrevPosition, entity);

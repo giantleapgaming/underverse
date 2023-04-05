@@ -31,7 +31,8 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
       const entityTypeNumber = getComponentValue(EntityType, entity)?.value;
       if (entityTypeNumber && +entityTypeNumber === Mapping.passenger.id) {
         const defence = getComponentValueStrict(Defence, entity).value;
-        if (+defence > 0) {
+        const level = getComponentValueStrict(Level, entity).value;
+        if (+defence > 0 && +level) {
           const ownedBy = getComponentValueStrict(OwnedBy, entity).value;
           const position = getComponentValueStrict(Position, entity);
           const population = getComponentValueStrict(Population, entity).value;
@@ -43,20 +44,20 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
           );
           const level = getComponentValueStrict(Level, entity).value;
           const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-          const passengerObjectGrayLayer = objectPool.get(` passenger-gray-${entity}`, "Sprite");
-          const levelSprite = objectPool.get(` passenger-level-${entity}`, "Sprite");
+          const passengerObjectGrayLayer = objectPool.get(`passenger-gray-${entity}`, "Sprite");
+          const levelSprite = objectPool.get(`passenger-level-${entity}`, "Sprite");
           const angle = Math.atan2(y - prevPositionY, x - prevPositionX) * (180 / Math.PI) + 90;
           // deleting the old health bar
           for (let i = 1; i < 11; i++) {
-            objectPool.remove(` passenger-health-${entity}-${i}`);
-            objectPool.remove(` passenger-cargo-${entity}-${i}`);
+            objectPool.remove(`passenger-health-${entity}-${i}`);
+            objectPool.remove(`passenger-cargo-${entity}-${i}`);
           }
           const [boxes, color] = calculateHealthBar(level * 100, +defence);
           // creating the new health bar
           for (let i = 1; i < (boxes >= 10 ? 11 : boxes); i++) {
-            const healthSprite = objectPool.get(` passenger-health-${entity}-${i}`, "Rectangle");
+            const healthSprite = objectPool.get(`passenger-health-${entity}-${i}`, "Rectangle");
             healthSprite.setComponent({
-              id: ` passenger-health-${entity}-${i}`,
+              id: `passenger-health-${entity}-${i}`,
               once: (gameObject) => {
                 gameObject.setPosition(x + i * 25, y + 256);
                 gameObject.setDepth(10);
@@ -69,9 +70,9 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
           }
           // creating the new Cargo capacity bar
           for (let i = 1; i < +level + 1; i++) {
-            const healthSprite = objectPool.get(` passenger-cargo-${entity}-${i}`, "Rectangle");
+            const healthSprite = objectPool.get(`passenger-cargo-${entity}-${i}`, "Rectangle");
             healthSprite.setComponent({
-              id: ` passenger-cargo-${entity}-${i}`,
+              id: `passenger-cargo-${entity}-${i}`,
               once: (gameObject) => {
                 gameObject.setPosition(x + i * 25, y + 281);
                 gameObject.setDepth(10);
@@ -85,9 +86,9 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
 
           const passenger = config.sprites[Sprites.Asteroid12];
 
-          const passengerObjectTop1Layer = objectPool.get(` passenger-top1-${entity}`, "Sprite");
+          const passengerObjectTop1Layer = objectPool.get(`passenger-top1-${entity}`, "Sprite");
           passengerObjectTop1Layer.setComponent({
-            id: ` passenger-top1-${entity}`,
+            id: `passenger-top1-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(passenger.assetKey, `passenger-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
@@ -98,7 +99,7 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
           });
 
           passengerObjectGrayLayer.setComponent({
-            id: ` passenger-gray-${entity}`,
+            id: `passenger-gray-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(passenger.assetKey, `passenger-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileHeight / 2);
@@ -110,7 +111,7 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
             },
           });
           levelSprite.setComponent({
-            id: ` passenger-level-${entity}`,
+            id: `passenger-level-${entity}`,
             once: (gameObject) => {
               gameObject.setTexture(passenger.assetKey, `upgrade-${+level}.png`);
               gameObject.setPosition(x, y + 12);
@@ -120,21 +121,21 @@ export function displayPassengerSystem(network: NetworkLayer, phaser: PhaserLaye
             },
           });
         } else {
-          objectPool.remove(` passenger-top1-${entity}`);
-          objectPool.remove(` passenger-gray-${entity}`);
-          objectPool.remove(` passenger-level-${entity}`);
+          objectPool.remove(`passenger-top1-${entity}`);
+          objectPool.remove(`passenger-gray-${entity}`);
+          objectPool.remove(`passenger-level-${entity}`);
           for (let i = 1; i < 11; i++) {
-            objectPool.remove(` passenger-health-${entity}-${i}`);
-            objectPool.remove(` passenger-cargo-${entity}-${i}`);
+            objectPool.remove(`passenger-health-${entity}-${i}`);
+            objectPool.remove(`passenger-cargo-${entity}-${i}`);
           }
         }
       } else {
-        objectPool.remove(` passenger-top1-${entity}`);
-        objectPool.remove(` passenger-gray-${entity}`);
-        objectPool.remove(` passenger-level-${entity}`);
+        objectPool.remove(`passenger-top1-${entity}`);
+        objectPool.remove(`passenger-gray-${entity}`);
+        objectPool.remove(`passenger-level-${entity}`);
         for (let i = 1; i < 11; i++) {
-          objectPool.remove(` passenger-health-${entity}-${i}`);
-          objectPool.remove(` passenger-cargo-${entity}-${i}`);
+          objectPool.remove(`passenger-health-${entity}-${i}`);
+          objectPool.remove(`passenger-cargo-${entity}-${i}`);
         }
       }
     }
