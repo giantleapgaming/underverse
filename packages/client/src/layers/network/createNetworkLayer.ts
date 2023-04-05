@@ -233,6 +233,12 @@ export async function createNetworkLayer(config: GameConfig) {
       gasLimit: 5000000,
     });
   };
+  const purgeUserEntities = async (nftID: number) => {
+    return systems["system.PurgeUserEntities"].executeTyped(nftID, {
+      gasPrice: 1500000,
+      gasLimit: 5000000,
+    });
+  };
 
   async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType, NftId, {
@@ -548,6 +554,7 @@ export async function createNetworkLayer(config: GameConfig) {
       transferCashSystem,
       transferEntitySystem,
       tutorial1CompleteSystem,
+      purgeUserEntities,
     },
     utils: {
       getEntityIndexAtPosition,

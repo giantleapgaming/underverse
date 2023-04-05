@@ -5,7 +5,7 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { getNftId } from "../../network/utils/getNftId";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "./utils/tutorialHighlightOrder";
 import { objectListTutorialDataListPart1 } from "./TutorialsList";
@@ -18,7 +18,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
       },
     },
     network: {
-      api: { tutorial1CompleteSystem },
+      api: { tutorial1CompleteSystem, purgeUserEntities },
       network: { connectedAddress },
       components: { NFTID, TutorialStep },
       nft: { rookieNft, cadetNft },
@@ -34,6 +34,22 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
   const number = getComponentValue(TutorialStep, nftEntity)?.value;
   const isCadet = number && +number == 250;
   const isRookie = number && +number == 130;
+
+  const purge = async () => {
+    const nftDetails = getNftId(layers);
+    if (nftDetails) {
+      try {
+        await purgeUserEntities(nftDetails.tokenId);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+  useEffect(() => {
+    if (isCadet) {
+      purge();
+    }
+  });
 
   return (
     <>
