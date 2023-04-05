@@ -194,9 +194,19 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             }
           }}
         >
-          {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>}
+          {/* {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>} */}
+          {isRookie && minted ? (
+            <Focus
+              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
+              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+            >
+              <Title>CONTINUE TO CADET TRAINING</Title>
+            </Focus>
+          ) : (
+            <Title style={{ marginRight: "20px" }}>CONTINUE TO CADET TRAINING</Title>
+          )}
           {isCadet && <Title>CONQUER THE UNDERVERSE</Title>}
-          <img src="../img/Conquer.png" />
+          <img src="../img/Conquer.png" style={{ marginRight: "20px" }} />
         </Conquer>
       </Container>
     </>
