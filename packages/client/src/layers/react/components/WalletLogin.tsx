@@ -44,14 +44,17 @@ const WalletLogin = () => {
                 marginBottom: "50px",
               }}
             >
-              <iframe
+              <p style={{ margin: "0px", color: "wheat", marginBottom: "20px", fontSize: "30px" }}>TUTORIAL CAMPAIGN</p>
+              <img src="../img/recruitTraining.png" />
+
+              {/* <iframe
                 width="653"
                 height="380"
                 src="https://www.youtube.com/embed/D0UnqGm_miA"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded youtube"
-              />
+              /> */}
               {loading ? (
                 <p
                   style={{
