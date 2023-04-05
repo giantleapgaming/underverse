@@ -159,10 +159,15 @@ contract RaptureSystem is System {
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - totalTransportCost);
 
     // update godown data
-    PopulationComponent(getAddressById(components, PopulationComponentID)).set(
-      sourceEntity,
-      sourcePopulation - peopleTransported
-    );
+    //If it is earth in tutorial mode we do not reduce the population so that we dont run out of ppl to rapture
+
+    if (sourceEntityType != 6) {
+      PopulationComponent(getAddressById(components, PopulationComponentID)).set(
+        sourceEntity,
+        sourcePopulation - peopleTransported
+      );
+    }
+
     PopulationComponent(getAddressById(components, PopulationComponentID)).set(
       destinationEntity,
       destinationPopulation + peopleTransported
