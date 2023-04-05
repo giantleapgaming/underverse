@@ -97,7 +97,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               }}
             >
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "35px" }}>
-                <p>LEADERBORAD</p>
+                <p>LEADERBOARD</p>
                 <a
                   target="_blank"
                   href={"https://giantleap-test.calderaexplorer.xyz/address/" + connectedAddress.get()}

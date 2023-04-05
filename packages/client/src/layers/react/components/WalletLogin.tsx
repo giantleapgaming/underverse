@@ -40,12 +40,12 @@ const WalletLogin = () => {
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: "column",
-                gap: "10px",
+                gap: "3px",
                 marginBottom: "50px",
               }}
             >
-              <p style={{ margin: "0px", color: "wheat", marginBottom: "20px", fontSize: "30px" }}>TUTORIAL CAMPAIGN</p>
-              <img src="../img/recruitTraining.png" />
+              <p style={{ margin: "0px", color: "wheat", marginBottom: "15px", fontSize: "30px" }}>TUTORIAL CAMPAIGN</p>
+              <img src="../img/recruitTraining.png" style={{ width: "350px", height: "280px" }} />
 
               {/* <iframe
                 width="653"

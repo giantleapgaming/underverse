@@ -43,7 +43,7 @@ const VideoModal = ({ layers, videoId }: { layers: Layers; videoId: string }) =>
           }}
           width="853"
           height="480"
-          src={`https://www.youtube.com/embed/${videoId}`}
+          src={`https://www.youtube.com/embed/${videoId}?rel=0`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           title="Embedded youtube"

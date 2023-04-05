@@ -145,6 +145,7 @@ export const ResidentialDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
+                      entityType={entityType}
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +population, factionNumber)}
                       scrapSystem={async () => {
                         const nftDetails = getNftId(layers);

@@ -8,8 +8,10 @@ import { getNftId } from "../../network/utils/getNftId";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { tutorialHighlightOrderCompleted, tutorialHighlightOrderPresent } from "./utils/tutorialHighlightOrder";
-import { objectListTutorialDataListPart1 } from "./TutorialsList";
+import { objectListTutorialDataListPart1, objectListTutorialDataListPart2 } from "./TutorialsList";
 import { Focus } from "./Focus";
+import Confetti from "react-confetti";
+
 const Congratulations = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
@@ -26,6 +28,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
   } = layers;
   const [loading, setLoading] = useState(false);
   const [minted, setMinter] = useState(false);
+  const [isPartyTime, setIsPartyTime] = useState(false);
   const nftDetails = getNftId(layers);
   const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
     const id = +getComponentValueStrict(NFTID, nftId).value;
@@ -56,6 +59,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
       <Container
         onMouseEnter={() => {
           input.disableInput();
+          setIsPartyTime(true);
         }}
         onMouseLeave={() => {
           input.enableInput();
@@ -69,7 +73,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         <RotatingAttackShip src="/img/attachShip.png" />
 
         <WalletText>
-          <img src="/img/Congratulations.png" />
+          {<Confetti recycle={false} numberOfPieces={600} width={window.innerWidth} height={window.innerHeight} />}
+          <img src="/img/Congratulations.png" style={{ width: "850px", height: "170px" }} />
           <Title>
             {isCadet && (
               <>
@@ -93,8 +98,14 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
               <Loading>Badge Minted!</Loading>
             ) : (
               <Focus
-                highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
-                present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+                highlight={
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"]) ||
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])
+                }
+                present={
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"]) ||
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])
+                }
               >
                 <img
                   style={{ cursor: "pointer" }}
@@ -195,7 +206,6 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             }
           }}
         >
-          {/* {isRookie && <Title>CONTINUE TO CADET TRAINING</Title>} */}
           {isRookie && minted ? (
             <Focus
               highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
@@ -208,8 +218,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
           )}
           {isCadet && minted ? (
             <Focus
-              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
-              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+              highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+              present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
             >
               <Title>CONQUER THE UNDERVERSE</Title>
             </Focus>
@@ -355,7 +365,7 @@ const WalletText = styled.div`
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  gap: 30px;
+  gap: 16px;
   margin: 20px auto;
   z-index: 100;
   letter-spacing: 1;
@@ -398,6 +408,7 @@ const Conquer = styled.div`
   justify-content: flex-end;
   flex-direction: column;
   margin-left: auto;
+  margin-top: -120px;
   margin-bottom: 15px;
   margin-right: 10px;
   cursor: pointer;

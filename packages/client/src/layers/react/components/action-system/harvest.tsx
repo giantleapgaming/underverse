@@ -24,15 +24,15 @@ export const Harvest = ({
           display: "flex",
           alignContent: "center",
           justifyContent: "center",
-          gap: "10px",
+          gap: "6px",
           marginTop: "15px",
           marginBottom: "15px",
-          marginLeft: "55px",
+          marginLeft: "65px",
         }}
       >
         <div>{totalAsteroid}</div>
         <div>
-          <img src="/build-stations/crystal.png" width="20px" height="20px" />
+          <img src="/build-stations/crystal.png" width="20px" height="20px" style={{ marginRight: "4px" }} />
         </div>
         <div
           style={{
