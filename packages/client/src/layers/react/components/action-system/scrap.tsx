@@ -1,13 +1,14 @@
 import styled from "styled-components";
+import { Mapping } from "../../../../utils/mapping";
 
-export const Scrap = ({ scrapSystem }: { scrapSystem: () => void; scrapCost: number }) => {
+export const Scrap = ({ scrapSystem, entityType }: { scrapSystem: () => void; scrapCost: number; entityType: any }) => {
   return (
     <S.Details>
       <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <S.Cost>
-          SCRAP FOR
+          SCRAP
           <br />
-          HARVESTER
+          {+entityType === Mapping.wall.id ? "WALL" : "FOR HARVESTER"}
         </S.Cost>
       </div>
       <S.InlinePointer onClick={scrapSystem}>
