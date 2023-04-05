@@ -130,7 +130,9 @@ contract AttackSystem is System {
       );
     }
 
-    TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 180);
+    if (TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).getValue(playerID) < 180) {
+      TutorialStepComponent(getAddressById(components, TutorialStepComponentID)).set(playerID, 180);
+    }
   }
 
   function executeTyped(
