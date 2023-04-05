@@ -13,7 +13,7 @@ export const Cash = ({
   playSound: () => void;
   sendCash: (amount: number) => void;
 }) => {
-  const [selected, setSelected] = useState<number | number[]>(1);
+  const [selected, setSelected] = useState<number | number[]>(0);
   return (
     <>
       <div
