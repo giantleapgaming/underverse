@@ -12,7 +12,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
   const {
     network: {
       world,
-      components: { Name, Cash, Faction, Population, OwnedBy, Position, EntityType, Defence, NFTID },
+      components: { Name, Cash, Faction, Population, OwnedBy, Position, EntityType, Defence, NFTID, Level },
       network: { connectedAddress },
     },
     phaser: {
@@ -144,7 +144,8 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   ) {
                     const population = getComponentValue(Population, entity)?.value;
                     const defence = getComponentValue(Defence, entity)?.value;
-                    if (population && defence && +defence > 0) {
+                    const level = getComponentValue(Level, entity)?.value;
+                    if (population && defence && +defence > 0 && level && +level > 0) {
                       totalPopulation += +population;
                     }
                   }
