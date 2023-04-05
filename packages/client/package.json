@@ -43,6 +43,8 @@
     "@latticexyz/std-client": "^1.41.0",
     "@latticexyz/utils": "^1.41.0",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
+    "@parcel/packager-raw-url": "2.8.3",
+    "@parcel/transformer-webmanifest": "2.8.3",
     "@types/color": "^3.0.3",
     "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.182",
