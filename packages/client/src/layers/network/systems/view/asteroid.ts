@@ -27,7 +27,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
     const entityTypeNumber = getComponentValueStrict(EntityType, entity).value;
     const balance = getComponentValueStrict(Balance, entity).value;
     const level = getComponentValueStrict(Level, entity).value;
-    if (+entityTypeNumber === Mapping.astroid.id && +level) {
+    if (+entityTypeNumber === Mapping.astroid.id && +level && level > 0) {
       const position = getComponentValueStrict(Position, entity);
       const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
       const astroidObject = objectPool.get(`astroid-${entity}`, "Sprite");
@@ -55,6 +55,8 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
           });
         },
       });
+    } else {
+      objectPool.remove(`astroid-${entity}`);
     }
   });
 }
