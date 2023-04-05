@@ -100,7 +100,10 @@ contract ProspectSystem is System {
       }
 
       BalanceComponent(getAddressById(components, BalanceComponentID)).set(destinationEntity, balance + 5);
-      FuelComponent(getAddressById(components, FuelComponentID)).set(destinationEntity, asteroidFuel + 100);
+      FuelComponent(getAddressById(components, FuelComponentID)).set(
+        destinationEntity,
+        asteroidFuel + 100 * MULTIPLIER
+      );
       ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(destinationEntity, 1);
       //Exit Encounter: Allow further moves
       EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, 0);
