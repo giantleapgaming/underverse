@@ -20,7 +20,7 @@ export const Rapture = ({
   const [selected, setSelected] = useState("0");
 
   return (
-    <>
+    <div style={{ marginRight: "10px" }}>
       <div
         style={{
           display: "grid",
@@ -67,7 +67,7 @@ export const Rapture = ({
       ) : (
         <p>No space to Transport More People</p>
       )}
-    </>
+    </div>
   );
 };
 

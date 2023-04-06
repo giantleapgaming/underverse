@@ -28,6 +28,7 @@ export const Weapon = ({
               marginTop: "15px",
               marginBottom: "15px",
               width: "330px",
+              marginLeft: "45px",
             }}
           >
             {new Array(level - +offence).fill(0).map((_, i) => {

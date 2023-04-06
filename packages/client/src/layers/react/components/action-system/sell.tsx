@@ -22,28 +22,45 @@ export const Sell = ({
     <>
       <div
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(8, 1fr)",
-          marginTop: "15px",
-          marginBottom: "15px",
-          minWidth: "330px",
-          marginLeft: "20px",
+          display: "flex",
+          alignContent: "center",
+          justifyContent: "center",
+          gap: "6px",
+          marginLeft: "44px",
         }}
       >
-        {new Array(+amount).fill(0).map((_, i) => {
-          return (
-            <S.Slanted
-              key={`red${i}`}
-              selected={+selected > i}
-              onClick={() => {
-                playSound();
-                setSelected((i + 1).toString());
-              }}
-            >
-              <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-            </S.Slanted>
-          );
-        })}
+        <div>
+          <img
+            src="/build-stations/crystal.png"
+            width="20px"
+            height="20px"
+            style={{ marginRight: "6px", marginTop: "12px" }}
+          />
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(8, 1fr)",
+            marginTop: "15px",
+            marginBottom: "15px",
+            minWidth: "330px",
+          }}
+        >
+          {new Array(+amount).fill(0).map((_, i) => {
+            return (
+              <S.Slanted
+                key={`red${i}`}
+                selected={+selected > i}
+                onClick={() => {
+                  playSound();
+                  setSelected((i + 1).toString());
+                }}
+              >
+                <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+              </S.Slanted>
+            );
+          })}
+        </div>
       </div>
       {+amount > 0 ? (
         <S.Row style={{ justifyContent: "space-around", width: "100%" }}>

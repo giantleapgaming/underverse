@@ -530,7 +530,7 @@ const S = {
   Weapon: styled.div`
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
   `,
   SideButton: styled.div`
     height: 100%;

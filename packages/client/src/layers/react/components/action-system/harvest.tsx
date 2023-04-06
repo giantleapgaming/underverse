@@ -24,7 +24,7 @@ export const Harvest = ({
           display: "flex",
           alignContent: "center",
           justifyContent: "center",
-          gap: "6px",
+          gap: "8px",
           marginTop: "15px",
           marginBottom: "15px",
           marginLeft: "65px",
@@ -38,7 +38,6 @@ export const Harvest = ({
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(8, 1fr)",
-
             minWidth: "330px",
           }}
         >
