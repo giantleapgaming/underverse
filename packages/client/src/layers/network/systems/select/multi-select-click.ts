@@ -18,7 +18,7 @@ export function multiSelectClickSystem(network: NetworkLayer, phaser: PhaserLaye
     components: { ShowDestinationDetails, ShowLine, MultiSelect },
     localIds: { stationDetailsEntityIndex, global },
     sounds,
-    localApi: { setMultiSelect, setShowStationDetails },
+    localApi: { setMultiSelect, setShowStationDetails, setMultiMoveStation, setShowLine },
   } = phaser;
   const {
     utils: { getEntityIndexAtPosition },
@@ -31,6 +31,11 @@ export function multiSelectClickSystem(network: NetworkLayer, phaser: PhaserLaye
       keyPressed = true;
     } else {
       keyPressed = false;
+    }
+    if (keyboard.isDown && keyboard.keyCode === 27) {
+      setMultiSelect([]);
+      setMultiMoveStation(false);
+      setShowLine(false, 0, 0);
     }
   });
   const click = input.click$.subscribe((p) => {
