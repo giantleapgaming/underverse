@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 import { factionData } from "../../../../utils/constants";
 import { Mapping } from "../../../../utils/mapping";
@@ -7,8 +7,16 @@ import { getNftId, isOwnedByIndex } from "../../../network/utils/getNftId";
 import { useEthBalance } from "../../hooks/useEthBalance";
 import { toast } from "sonner";
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
+import { useState } from "react";
 
 export const Highlight = ({ layers }: { layers: Layers }) => {
+  const [showActionName, setShowActionName] = useState({
+    cog: false,
+    centerMap: false,
+    harvester: false,
+    attack: false,
+    passenger: false,
+  });
   const {
     network: {
       world,
@@ -198,97 +206,294 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
           </S.DetailsContainer>
         )}
         <S.ActionButtons>
-          <img
-            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
-            src="/ui/Cog.png"
-            width={"30px"}
-            height={"30px"}
-            onMouseEnter={() => {
-              input.disableInput();
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-around",
+              alignItems: "flex-start",
+              gap: "15px",
             }}
-            onMouseLeave={() => {
-              input.enableInput();
+          >
+            {showActionName.cog && <p>LEADERBOARD</p>}
+            <img
+              style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+              src="/ui/Cog.png"
+              width={"30px"}
+              height={"30px"}
+              onMouseEnter={() => {
+                input.disableInput();
+                setShowActionName({ ...showActionName, cog: true });
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+                setShowActionName({ ...showActionName, cog: false });
+              }}
+              onClick={() => {
+                sounds["click"].play();
+                setShowHighLight(!showDetails);
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: "15px",
             }}
-            onClick={() => {
-              sounds["click"].play();
-              setShowHighLight(!showDetails);
+          >
+            {showActionName.centerMap && <p>CENTER MAP</p>}
+            <img
+              width={"30px"}
+              height={"30px"}
+              style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+              src="/ui/recenter.png"
+              onMouseEnter={() => {
+                input.disableInput();
+                setShowActionName({ ...showActionName, centerMap: true });
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+                setShowActionName({ ...showActionName, centerMap: false });
+              }}
+              onClick={() => {
+                sounds["click"].play();
+                camera.centerOn(0, -1);
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: "15px",
             }}
-          />
-          <img
-            width={"30px"}
-            height={"30px"}
-            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
-            src="/ui/recenter.png"
-            onMouseEnter={() => {
-              input.disableInput();
-            }}
-            onMouseLeave={() => {
-              input.enableInput();
-            }}
-            onClick={() => {
-              sounds["click"].play();
-              camera.centerOn(0, -1);
-            }}
-          />
-          <img
-            width={"30px"}
-            height={"30px"}
-            style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
-            src="/ui/harvester.png"
-            onMouseEnter={() => {
-              input.disableInput();
-            }}
-            onMouseLeave={() => {
-              input.enableInput();
-            }}
-            onClick={() => {
-              sounds["click"].play();
-              const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
-                const entityType = getComponentValue(EntityType, entity)?.value;
-                const isOwner = isOwnedByIndex(layers, entity);
-                const defence = getComponentValue(Defence, entity)?.value;
-                return defence && entityType && isOwner && +entityType === Mapping.harvester.id && +defence > 0;
-              });
-              const totalHarvesterEntities = allHarvesterEntities.length;
-              if (totalHarvesterEntities) {
-                const selectedStationEntity = getComponentValue(
-                  ShowStationDetails,
-                  stationDetailsEntityIndex
-                )?.entityId;
-                if (selectedStationEntity) {
-                  const entityType = getComponentValue(EntityType, selectedStationEntity)?.value;
-                  if (entityType && +entityType === Mapping.harvester.id) {
-                    const index = allHarvesterEntities.indexOf(selectedStationEntity);
-                    if (!(index === totalHarvesterEntities - 1)) {
-                      const defence = getComponentValue(Defence, allHarvesterEntities[index + 1]);
-                      const position = getComponentValue(Position, allHarvesterEntities[index + 1]);
-                      if (defence && defence.value > 0) {
-                        setShowStationDetails(allHarvesterEntities[index + 1]);
-                        if (position) {
-                          const { x, y } = tileCoordToPixelCoord(
-                            { x: position.x, y: position.y },
-                            tileWidth,
-                            tileHeight
-                          );
-                          camera.setScroll(x, y);
+          >
+            {showActionName.harvester && <p>HARVESTER</p>}
+
+            <img
+              width={"30px"}
+              height={"30px"}
+              style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+              src="/ui/harvester.png"
+              onMouseEnter={() => {
+                input.disableInput();
+                setShowActionName({ ...showActionName, harvester: true });
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+                setShowActionName({ ...showActionName, harvester: false });
+              }}
+              onClick={() => {
+                sounds["click"].play();
+                const allHarvesterEntities = [...getComponentEntities(Position)].filter((entity) => {
+                  const entityType = getComponentValue(EntityType, entity)?.value;
+                  const isOwner = isOwnedByIndex(layers, entity);
+                  const defence = getComponentValue(Defence, entity)?.value;
+                  const level = getComponentValueStrict(Level, entity)?.value;
+
+                  return (
+                    defence && entityType && isOwner && +entityType === Mapping.harvester.id && +defence && +level > 0
+                  );
+                });
+                const totalHarvesterEntities = allHarvesterEntities.length;
+                if (totalHarvesterEntities) {
+                  const selectedStationEntity = getComponentValue(
+                    ShowStationDetails,
+                    stationDetailsEntityIndex
+                  )?.entityId;
+                  if (selectedStationEntity) {
+                    const entityType = getComponentValue(EntityType, selectedStationEntity)?.value;
+                    if (entityType && +entityType === Mapping.harvester.id) {
+                      const index = allHarvesterEntities.indexOf(selectedStationEntity);
+                      if (!(index === totalHarvesterEntities - 1)) {
+                        const defence = getComponentValue(Defence, allHarvesterEntities[index + 1]);
+                        const position = getComponentValue(Position, allHarvesterEntities[index + 1]);
+                        if (defence && defence.value > 0) {
+                          setShowStationDetails(allHarvesterEntities[index + 1]);
+                          if (position) {
+                            const { x, y } = tileCoordToPixelCoord(
+                              { x: position.x, y: position.y },
+                              tileWidth,
+                              tileHeight
+                            );
+                            camera.setScroll(x, y);
+                          }
                         }
+                        return;
                       }
-                      return;
                     }
                   }
+                  const defence = getComponentValue(Defence, allHarvesterEntities[0]);
+                  const position = getComponentValue(Position, allHarvesterEntities[0]);
+                  setShowStationDetails(allHarvesterEntities[0]);
+                  if (position && defence && +defence.value > 0) {
+                    const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                    camera.setScroll(x, y);
+                  }
+                } else {
+                  toast.error("You don't have any Harvester, Please build one");
                 }
-                const defence = getComponentValue(Defence, allHarvesterEntities[0]);
-                const position = getComponentValue(Position, allHarvesterEntities[0]);
-                setShowStationDetails(allHarvesterEntities[0]);
-                if (position && defence && +defence.value > 0) {
-                  const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
-                  camera.setScroll(x, y);
-                }
-              } else {
-                toast.error("You don't have any Harvester, Please build one");
-              }
+              }}
+            />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: "15px",
             }}
-          />
+          >
+            {showActionName.attack && <p>ATTACK SHIP</p>}
+
+            <img
+              width={"30px"}
+              height={"30px"}
+              style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+              src="/ui/attack.png"
+              onMouseEnter={() => {
+                input.disableInput();
+                setShowActionName({ ...showActionName, attack: true });
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+                setShowActionName({
+                  ...showActionName,
+                  attack: false,
+                });
+              }}
+              onClick={() => {
+                sounds["click"].play();
+                const allAttackEntities = [...getComponentEntities(Position)].filter((entity) => {
+                  const entityType = getComponentValue(EntityType, entity)?.value;
+                  const isOwner = isOwnedByIndex(layers, entity);
+                  const defence = getComponentValue(Defence, entity)?.value;
+                  const level = getComponentValueStrict(Level, entity)?.value;
+
+                  return (
+                    defence && entityType && isOwner && +entityType === Mapping.attack.id && +defence && +level > 0
+                  );
+                });
+                const totalAttackEntities = allAttackEntities.length;
+                if (totalAttackEntities) {
+                  const selectedStationEntity = getComponentValue(
+                    ShowStationDetails,
+                    stationDetailsEntityIndex
+                  )?.entityId;
+                  if (selectedStationEntity) {
+                    const entityType = getComponentValue(EntityType, selectedStationEntity)?.value;
+                    if (entityType && +entityType === Mapping.attack.id) {
+                      const index = allAttackEntities.indexOf(selectedStationEntity);
+                      if (!(index === totalAttackEntities - 1)) {
+                        const defence = getComponentValue(Defence, allAttackEntities[index + 1]);
+                        const position = getComponentValue(Position, allAttackEntities[index + 1]);
+                        if (defence && defence.value > 0) {
+                          setShowStationDetails(allAttackEntities[index + 1]);
+                          if (position) {
+                            const { x, y } = tileCoordToPixelCoord(
+                              { x: position.x, y: position.y },
+                              tileWidth,
+                              tileHeight
+                            );
+                            camera.setScroll(x, y);
+                          }
+                        }
+                        return;
+                      }
+                    }
+                  }
+                  const defence = getComponentValue(Defence, allAttackEntities[0]);
+                  const position = getComponentValue(Position, allAttackEntities[0]);
+                  setShowStationDetails(allAttackEntities[0]);
+                  if (position && defence && +defence.value > 0) {
+                    const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                    camera.setScroll(x, y);
+                  }
+                } else {
+                  toast.error("You don't have any Attack Ship, Please build one");
+                }
+              }}
+            />
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-start",
+              gap: "15px",
+            }}
+          >
+            {showActionName.passenger && <p>PASSENGER</p>}
+
+            <img
+              width={"30px"}
+              height={"30px"}
+              style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
+              src="/ui/passengerShip.png"
+              onMouseEnter={() => {
+                input.disableInput();
+                setShowActionName({ ...showActionName, passenger: true });
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+                setShowActionName({ ...showActionName, passenger: false });
+              }}
+              onClick={() => {
+                sounds["click"].play();
+                const allPassengerEntities = [...getComponentEntities(Position)].filter((entity) => {
+                  const entityType = getComponentValue(EntityType, entity)?.value;
+                  const isOwner = isOwnedByIndex(layers, entity);
+                  const defence = getComponentValue(Defence, entity)?.value;
+                  const level = getComponentValueStrict(Level, entity)?.value;
+
+                  return (
+                    defence && entityType && isOwner && +entityType === Mapping.passenger.id && +defence && +level > 0
+                  );
+                });
+                const totalPassengerEntities = allPassengerEntities.length;
+                if (totalPassengerEntities) {
+                  const selectedStationEntity = getComponentValue(
+                    ShowStationDetails,
+                    stationDetailsEntityIndex
+                  )?.entityId;
+                  if (selectedStationEntity) {
+                    const entityType = getComponentValue(EntityType, selectedStationEntity)?.value;
+                    if (entityType && +entityType === Mapping.passenger.id) {
+                      const index = allPassengerEntities.indexOf(selectedStationEntity);
+                      if (!(index === totalPassengerEntities - 1)) {
+                        const defence = getComponentValue(Defence, allPassengerEntities[index + 1]);
+                        const position = getComponentValue(Position, allPassengerEntities[index + 1]);
+                        if (defence && defence.value > 0) {
+                          setShowStationDetails(allPassengerEntities[index + 1]);
+                          if (position) {
+                            const { x, y } = tileCoordToPixelCoord(
+                              { x: position.x, y: position.y },
+                              tileWidth,
+                              tileHeight
+                            );
+                            camera.setScroll(x, y);
+                          }
+                        }
+                        return;
+                      }
+                    }
+                  }
+                  const defence = getComponentValue(Defence, allPassengerEntities[0]);
+                  const position = getComponentValue(Position, allPassengerEntities[0]);
+                  setShowStationDetails(allPassengerEntities[0]);
+                  if (position && defence && +defence.value > 0) {
+                    const { x, y } = tileCoordToPixelCoord({ x: position.x, y: position.y }, tileWidth, tileHeight);
+                    camera.setScroll(x, y);
+                  }
+                } else {
+                  toast.error("You don't have any Passenger, Please build one");
+                }
+              }}
+            />
+          </div>
         </S.ActionButtons>
       </S.Container>
     );
@@ -307,10 +512,10 @@ const S = {
   ActionButtons: styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
     gap: 15px;
-    height: calc(100vh - 114px);
+    height: calc(100vh - 250px);
   `,
   HighLight: styled.h3`
     color: white;

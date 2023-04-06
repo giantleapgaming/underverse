@@ -54,6 +54,14 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
     }
   });
 
+  useEffect(() => {
+    if (isPartyTime) {
+      setTimeout(() => {
+        setIsPartyTime(false);
+      }, 8000);
+    }
+  }, []);
+
   return (
     <>
       <Container
@@ -100,11 +108,11 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
               <Focus
                 highlight={
                   tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"]) ||
-                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])
+                  tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])
                 }
                 present={
                   tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"]) ||
-                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])
+                  tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])
                 }
               >
                 <img

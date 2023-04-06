@@ -194,15 +194,16 @@ export function getObstacleListWhileOtherActions(arrayOfPointsOnThePath: any[], 
   const { network, phaser } = layer;
   const {
     utils: { getEntityIndexAtPosition },
-    components: { Defence, EntityType },
+    components: { Defence, EntityType, Level },
   } = network;
   const obstaclePoints: any[] = [];
   for (let i = 0; i < arrayOfPointsOnThePath.length - 1; i += 1) {
     const entityOnThatPoint = getEntityIndexAtPosition(arrayOfPointsOnThePath[i].x, arrayOfPointsOnThePath[i].y);
     const entityType = getComponentValue(EntityType, entityOnThatPoint)?.value as EntityID;
     const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
+    const level = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
 
-    if ((defence && +defence > 0) || (entityType && +entityType === Mapping.unprospected.id)) {
+    if ((defence && +defence && +level > 0) || (entityType && +entityType === Mapping.unprospected.id)) {
       obstaclePoints.push(entityOnThatPoint);
     }
   }
