@@ -214,10 +214,10 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               gap: "15px",
             }}
           >
-            {showActionName.cog && <p>LEADERBOARD</p>}
+            {showActionName.cog && !showDetails && <p>LEADERBOARD</p>}
             <img
               style={{ zIndex: 10, cursor: "pointer", pointerEvents: "fill" }}
-              src="/ui/Cog.png"
+              src="/ui/Trophy.png"
               width={"30px"}
               height={"30px"}
               onMouseEnter={() => {
@@ -242,7 +242,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               gap: "15px",
             }}
           >
-            {showActionName.centerMap && <p>CENTER MAP</p>}
+            {showActionName.centerMap && !showDetails && <p>CENTER MAP</p>}
             <img
               width={"30px"}
               height={"30px"}
@@ -270,7 +270,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               gap: "15px",
             }}
           >
-            {showActionName.harvester && <p>HARVESTER</p>}
+            {showActionName.harvester && !showDetails && <p>HARVESTER</p>}
 
             <img
               width={"30px"}
@@ -347,7 +347,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               gap: "15px",
             }}
           >
-            {showActionName.attack && <p>ATTACK SHIP</p>}
+            {showActionName.attack && !showDetails && <p>ATTACK SHIP</p>}
 
             <img
               width={"30px"}
@@ -426,7 +426,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
               gap: "15px",
             }}
           >
-            {showActionName.passenger && <p>PASSENGER</p>}
+            {showActionName.passenger && !showDetails && <p>PASSENGER</p>}
 
             <img
               width={"30px"}
