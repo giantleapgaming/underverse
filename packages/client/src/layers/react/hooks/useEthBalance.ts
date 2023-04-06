@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { ethers } from "ethers";
-const provider = new ethers.providers.JsonRpcProvider("https://giantleap.calderachain.xyz/http");
+const provider = new ethers.providers.JsonRpcProvider("https://giantleap-test.calderachain.xyz/http");
 
 // Get the user's ETH balance
 export const useEthBalance = (address?: string) => {
