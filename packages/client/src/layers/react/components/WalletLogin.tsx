@@ -44,17 +44,31 @@ const WalletLogin = () => {
                 marginBottom: "50px",
               }}
             >
-              <p style={{ margin: "0px", color: "wheat", marginBottom: "15px", fontSize: "30px" }}>TUTORIAL CAMPAIGN</p>
-              <img src="../img/recruitTraining.png" style={{ width: "350px", height: "280px" }} />
+              <p
+                style={{
+                  margin: "0px",
+                  color: "wheat",
+                  marginTop: "10px",
+                  marginBottom: "15px",
+                  fontSize: "18px",
+                  textAlign: "center",
+                  fontFamily: "MyOTFFontBold",
+                }}
+              >
+                New here? Play the Tutorial <br />
+                Campaign to create your account.
+              </p>
+              {/* <img src="../img/recruitTraining.png" style={{ width: "350px", height: "280px" }} /> */}
 
-              {/* <iframe
+              <iframe
                 width="653"
                 height="380"
-                src="https://www.youtube.com/embed/D0UnqGm_miA"
+                src="https://www.youtube.com/embed/Gdi9Bhpq_Gs?rel=0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded youtube"
-              /> */}
+                style={{ zIndex: 20 }}
+              />
               {loading ? (
                 <p
                   style={{
@@ -107,15 +121,17 @@ const WalletLogin = () => {
               )}
               <p
                 style={{
-                  fontSize: "20px",
+                  fontSize: "18px",
                   color: "#fffdd5",
                   fontFamily: "sans-serif",
                   fontWeight: "bolder",
                   marginTop: "20px",
                   marginBottom: "20px",
+                  lineHeight: "1.5",
                 }}
               >
-                USE EXISTING <br /> ACCOUNT
+                USE EXISTING ACCOUNT <br />
+                TO ENTER MAIN GAME
               </p>
             </div>
             {!!allKeys.length && (
@@ -341,7 +357,7 @@ const WalletText = styled.div`
   justify-content: center;
   text-align: center;
   gap: 50px;
-  margin: 20px auto;
+  margin: 10px auto;
   z-index: 100;
   letter-spacing: 1;
 `;

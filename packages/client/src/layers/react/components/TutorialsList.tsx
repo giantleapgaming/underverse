@@ -250,7 +250,7 @@ export const TutorialDataListPart1: TutorialDataItem<string>[] = [
   { id: 70, showId: 60, label: "Build Shipyard", videoId: "mcTJCeuGBFI" },
   { id: 80, showId: 70, label: "Transport", videoId: "CIa--7MQIjk" },
   { id: 90, showId: 80, label: "Build Ship", videoId: "uI0RF8MMOq4" },
-  { id: 100, showId: 90, label: "Rapture Zone", videoId: "uVs1xRNzDDg" },
+  { id: 100, showId: 90, label: "Rapture Zone", videoId: "YonQUyWTqO8" },
   { id: 110, showId: 100, label: "Rapture", videoId: "NBqeNdbMuhw" },
   { id: 120, showId: 110, label: "Build Hab", videoId: "UE0qHdwJ2wY" },
   { id: 130, showId: 120, label: "Transport PPL", videoId: "_DPn9KG0bsw" },

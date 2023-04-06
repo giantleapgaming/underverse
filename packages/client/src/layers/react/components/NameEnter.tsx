@@ -211,7 +211,7 @@ const Container = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   pointer-events: all;
-  overflow: hidden;
+  overflow-y: auto;
 `;
 
 const Button = styled.button`
