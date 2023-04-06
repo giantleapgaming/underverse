@@ -23,26 +23,39 @@ export const Weapon = ({
         <div>
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(8, 1fr)",
+              display: "flex",
+              alignContent: "center",
+              justifyContent: "center",
+              gap: "5px",
               marginTop: "15px",
               marginBottom: "15px",
-              width: "330px",
+              marginLeft: "25px",
             }}
           >
-            {new Array(level - +offence).fill(0).map((_, i) => {
-              return (
-                <S.Slanted
-                  key={`red${i}`}
-                  selected={+selected > i}
-                  onClick={() => {
-                    setSelected((i + 1).toString());
-                  }}
-                >
-                  <span style={{ marginLeft: "3px" }}>{i + 1}</span>
-                </S.Slanted>
-              );
-            })}
+            <div>
+              <img src="/build-stations/weapon.png" width="20px" height="20px" style={{ marginRight: "6px" }} />
+            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(8, 1fr)",
+                width: "330px",
+              }}
+            >
+              {new Array(level - +offence).fill(0).map((_, i) => {
+                return (
+                  <S.Slanted
+                    key={`red${i}`}
+                    selected={+selected > i}
+                    onClick={() => {
+                      setSelected((i + 1).toString());
+                    }}
+                  >
+                    <span style={{ marginLeft: "3px" }}>{i + 1}</span>
+                  </S.Slanted>
+                );
+              })}
+            </div>
           </div>
           <S.Row style={{ justifyContent: "space-around", width: "100%" }}>
             <S.OtherDetails>

@@ -136,6 +136,7 @@ export const RefuelDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "scrap" && (
                     <Scrap
+                      entityType={entityType}
                       scrapCost={scrapPrice(position.x, position.y, +level, +defence, +balance, +factionNumber)}
                       scrapSystem={async () => {
                         const nftDetails = getNftId(layers);
@@ -325,7 +326,7 @@ const S = {
   Weapon: styled.div`
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
   `,
   Slanted: styled.div<{ selected: boolean }>`
     position: relative;

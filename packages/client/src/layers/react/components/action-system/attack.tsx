@@ -26,6 +26,7 @@ export const Attack = ({
           marginTop: "15px",
           marginBottom: "15px",
           minWidth: "330px",
+          marginLeft: "25px",
         }}
       >
         {new Array(+offence).fill(0).map((_, i) => {

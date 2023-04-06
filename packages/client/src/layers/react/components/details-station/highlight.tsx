@@ -322,7 +322,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     camera.setScroll(x, y);
                   }
                 } else {
-                  toast.error("You don't have any Harvester, Please build one");
+                  toast.error("You don't have any Harvester Ships");
                 }
               }}
             />
@@ -401,7 +401,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     camera.setScroll(x, y);
                   }
                 } else {
-                  toast.error("You don't have any Attack Ship, Please build one");
+                  toast.error("You don't have any Attack Ships");
                 }
               }}
             />
@@ -477,7 +477,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                     camera.setScroll(x, y);
                   }
                 } else {
-                  toast.error("You don't have any Passenger, Please build one");
+                  toast.error("You don't have any Passenger Ships");
                 }
               }}
             />
