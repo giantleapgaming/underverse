@@ -88,10 +88,12 @@ export function multiMoveDrawLine(network: NetworkLayer, phaser: PhaserLayer) {
                 toast.promise(
                   async () => {
                     try {
+                      allGraphics.forEach((graphics, index) => {
+                        graphics.clear();
+                        objectPool.remove(`fuel-text-white-multi-select-${index}`);
+                      });
                       setMultiMoveStation(false);
                       setMultiSelect([]);
-                      objectPool.remove(`fuel-text-white`);
-                      objectPool.remove(`prospect-text-white`);
                       setShowAnimation({
                         showAnimation: true,
                         destinationX,

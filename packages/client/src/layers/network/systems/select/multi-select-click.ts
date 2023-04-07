@@ -10,6 +10,7 @@ export function multiSelectClickSystem(network: NetworkLayer, phaser: PhaserLaye
     scenes: {
       Main: {
         input,
+        objectPool,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -36,6 +37,10 @@ export function multiSelectClickSystem(network: NetworkLayer, phaser: PhaserLaye
       setMultiSelect([]);
       setMultiMoveStation(false);
       setShowLine(false, 0, 0);
+      objectPool.remove("fuel-text-white");
+      for (let index = 0; index < 100; index++) {
+        objectPool.remove(`fuel-text-white-multi-select-${index}`);
+      }
     }
   });
   const click = input.click$.subscribe((p) => {

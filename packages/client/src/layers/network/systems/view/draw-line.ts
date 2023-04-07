@@ -10,7 +10,6 @@ import { getNftId, isOwnedBy, isOwnedByIndex } from "../../utils/getNftId";
 import { toast } from "sonner";
 import { getDistance } from "../../utils/getDistance";
 import { getPointsWithinRadius } from "../select/select-click";
-
 export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     world,
@@ -48,7 +47,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     },
   } = phaser;
   const {
-    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, Fuel, Faction },
+    components: { Position, Defence, EntityType, OwnedBy, Prospected, Level, Fuel, Faction, Offence },
     utils: { getEntityIndexAtPosition },
     api: { moveSystem, prospectSystem },
   } = network;
@@ -65,6 +64,17 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     if (lineDetails && lineDetails.showLine && selectedEntity && lineDetails.type === "move" && !moveStation) {
       const textWhite = objectPool.get("fuel-text-white", "Text");
       const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+      const entity = getEntityIndexAtPosition(x, y);
+      const entityType = getComponentValue(EntityType, selectedEntity)?.value;
+      if (typeof entity === "number" && entityType && +entityType === Mapping.attack.id) {
+        const level = getComponentValue(Level, selectedEntity)?.value;
+        const weapon = getComponentValue(Offence, selectedEntity)?.value;
+        if (level && weapon && +level && +weapon) {
+          input.setCursor(`pointer`);
+        } else {
+          input.setCursor("pointer");
+        }
+      }
       const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
       obstacleHighlight.forEach((entity) => {
         objectPool.remove(`obstetrical-circle-${entity}`);
