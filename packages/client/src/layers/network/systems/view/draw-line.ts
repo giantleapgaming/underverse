@@ -104,15 +104,24 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   });
 
   const destinationClick = input.click$.subscribe(async (p) => {
+    const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
+    const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
     const obstacleHighlight = getComponentValue(ObstacleHighlight, showCircleIndex)?.selectedEntities || [];
     const pointer = p as Phaser.Input.Pointer;
     const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
     const stationEntity = getEntityIndexAtPosition(x, y);
-    const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
-    const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+    if (lineDetails && lineDetails.showLine && selectedEntity && lineDetails.type === "rapture-earth") {
+      if (getPointsWithinRadius(3).some(([x1, y1]) => x1 === x && y1 === y)) {
+        const stationEntity = getEntityIndexAtPosition(0, 0);
+        setDestinationDetails(stationEntity);
+        setShowLine(true, 0, 0, "rapture-earth");
+        return;
+      }
+    }
     if (lineDetails && lineDetails.showLine && selectedEntity && stationEntity) {
       const entityType = getComponentValue(EntityType, stationEntity)?.value;
       const defence = getComponentValue(Defence, stationEntity)?.value;
+
       if (!obstacleHighlight.length) {
         if (
           defence &&
