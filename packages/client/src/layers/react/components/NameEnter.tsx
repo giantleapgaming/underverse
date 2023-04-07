@@ -42,7 +42,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       <Container>
         {!showBuildingMap ? (
           <>
-            {"4242" == chainIdString || "100" == chainIdString || "11344216" == chainIdString || "9874612" == chainIdString ? (
+            {"4242" == chainIdString || "100" == chainIdString || "11344216" == chainIdString || "9874612" == chainIdString || "344215" == chainIdString ? (
               <>
                 {step === 1 && (
                   <Form
