@@ -272,7 +272,145 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
               </CadetDepartment>
             </div>
           )}
-          {isCadet && <Img src={"/faction/CadetWingImg.png"} />}
+          {isCadet && (
+            <div>
+              <Img src={"/faction/CadetWingImg.png"} />
+              <div style={{ marginTop: "20px" }}>
+                {loading ? (
+                  <Loading>Minting a Badge...</Loading>
+                ) : (
+                  <>
+                    {minted || (rookieNft && isRookie) || (cadetNft && isCadet) ? (
+                      <Loading>Badge Minted!</Loading>
+                    ) : (
+                      <Focus
+                        highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                        present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
+                      >
+                        <img
+                          style={{ cursor: "pointer" }}
+                          src="../img/MintBadge.png"
+                          onClick={async () => {
+                            const params = new URLSearchParams(window.location.search);
+                            const chainIdString = params.get("chainId");
+                            setLoading(true);
+                            try {
+                              const response = await fetch("https://api.giantleap.gg/api/tutorial-nft", {
+                                method: "POST",
+                                body: JSON.stringify({
+                                  address: connectedAddress.get(),
+                                  chainId: chainIdString && +chainIdString,
+                                  nftContractAddress:
+                                    (isRookie && "0xbAC949c145d7896085a90bD7B0F2333D0647D423") ||
+                                    (isCadet && "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3"),
+                                }),
+                                headers: {
+                                  "Content-Type": "application/json",
+                                },
+                              });
+                              const data = await response.json();
+                              if (data.status) {
+                                toast.success("Congratulations! You have successfully minted a badge!");
+                                setMinter(true);
+                              } else {
+                                toast.error("You have already minted a badge!");
+                              }
+                              setLoading(false);
+                            } catch (e) {
+                              console.log(e);
+                              toast.error("Something went wrong, please try again later!");
+                              setLoading(true);
+                            }
+                          }}
+                        />
+                      </Focus>
+                    )}
+                  </>
+                )}
+                <Twitter>
+                  <img
+                    onClick={() => {
+                      const text =
+                        (isCadet &&
+                          `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`) ||
+                        (isRookie &&
+                          `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`);
+                      const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
+                      console.log(twitterShareURL);
+                      const popupWidth = 550;
+                      const popupHeight = 420;
+                      const left = window.screen.width / 2 - popupWidth / 2;
+                      const top = window.screen.height / 2 - popupHeight / 2;
+                      const popup = window.open(
+                        twitterShareURL,
+                        "pop",
+                        "width=" + popupWidth + ",height=" + popupHeight + ",left=" + left + ",top=" + top
+                      );
+
+                      if (popup?.focus) {
+                        popup.focus();
+                      }
+
+                      return false;
+                    }}
+                    src="../img/TweetBox.png"
+                    style={{ marginLeft: "-60px", height: "120px", width: "350px" }}
+                  />
+                  <img src="../img/TwitterIcon.png" style={{ marginTop: "20px", width: "45px", height: "40px" }} />
+                </Twitter>
+                <Conquer
+                  onClick={async () => {
+                    if (isRookie) {
+                      const nftDetails = getNftId(layers);
+                      if (!nftDetails) {
+                        return;
+                      }
+                      toast.promise(
+                        async () => {
+                          try {
+                            await tutorial1CompleteSystem(nftDetails.tokenId);
+                            input.enableInput();
+                          } catch (e: any) {
+                            console.log(e);
+                            throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                          }
+                        },
+                        {
+                          loading: "Transaction in progress",
+                          success: `Transaction successful`,
+                          error: (e) => e.message,
+                        }
+                      );
+                    } else if (isCadet) {
+                      window.open("https://underverse.giantleap.gg/", "_blank");
+                    }
+                  }}
+                >
+                  {isRookie && minted ? (
+                    <Focus
+                      highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Mint NFT"])}
+                      present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Mint NFT"])}
+                    >
+                      <Title>CONTINUE TO CADET TRAINING</Title>
+                    </Focus>
+                  ) : (
+                    <>{isRookie && <Title style={{ marginRight: "20px" }}>CONTINUE TO CADET TRAINING</Title>}</>
+                  )}
+                  {isCadet && minted ? (
+                    <Focus
+                      highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
+                      present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
+                    >
+                      <Title>CONQUER THE UNDERVERSE</Title>
+                    </Focus>
+                  ) : (
+                    <>{isCadet && <Title style={{ marginRight: "20px" }}>CONQUER THE UNDERVERSE</Title>}</>
+                  )}
+                  <img src="../img/Conquer.png" style={{ marginRight: "20px" }} />
+                </Conquer>
+              </div>
+            </div>
+          )}
         </WalletText>
       </Container>
     </>
