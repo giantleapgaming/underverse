@@ -1,7 +1,18 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { ethers } from "ethers";
-const provider = new ethers.providers.JsonRpcProvider("https://giantleap-test.calderachain.xyz/http");
+
+const params = new URLSearchParams(window.location.search);
+const chainIdString = params.get("chainId");
+let rpcUrl;
+
+if (chainIdString == "9874612") {
+  rpcUrl = "https://giantleap-test.calderachain.xyz/http";
+} else {
+  rpcUrl = "https://giantleap-test1.calderachain.xyz/http"; // Chain ID = 344215
+}
+
+const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
 
 // Get the user's ETH balance
 export const useEthBalance = (address?: string) => {
