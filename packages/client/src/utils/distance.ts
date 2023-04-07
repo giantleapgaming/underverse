@@ -202,7 +202,7 @@ export function getObstacleListWhileOtherActions(arrayOfPointsOnThePath: any[], 
     const entityType = getComponentValue(EntityType, entityOnThatPoint)?.value as EntityID;
     const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
 
-    if ((defence && +defence > 0) || (entityType && +entityType === Mapping.unprospected.id)) {
+    if ((defence && +defence > 0 && +level > 0) || (entityType && +entityType === Mapping.unprospected.id)) {
       obstaclePoints.push(entityOnThatPoint);
     }
   }

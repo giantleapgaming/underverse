@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { useNFTData } from "../hooks/useAllNFT";
 import { NoNFT } from "./NoNFT";
@@ -20,6 +20,8 @@ export const Nft = ({
   address?: string;
 }) => {
   const { error, loading, allNfts } = useNFTData(address);
+  const [showNftBridge, setShowNftBridge] = useState(false);
+
   if (error) {
     return <div>Error</div>;
   }
@@ -46,6 +48,13 @@ export const Nft = ({
           {address?.toString().substring(0, 6)}
         </S.DeployText>
         <S.Container>
+          <S.BridgeNftButton
+            src="/img/BridgeNftButton.png"
+            onClick={() => {
+              console.log("hi");
+              setShowNftBridge(true);
+            }}
+          />
           <img src="/img/title.png" style={{ margin: "20px 0" }} />
           <p
             style={{
@@ -92,6 +101,7 @@ export const Nft = ({
         </S.Container>
       </div>
     );
+    showNftBridge && <NoNFT address={address} />;
   } else {
     return <NoNFT address={address} />;
   }
@@ -101,6 +111,14 @@ const S = {
   Container: styled.div`
     width: 100%;
     height: 100%;
+    overflow-y: auto;
+    max-height: 100vh;
+  `,
+  BridgeNftButton: styled.img`
+    position: absolute;
+    top: 50%;
+    left: 0;
+    cursor: pointer;
   `,
 
   Img: styled.img`
