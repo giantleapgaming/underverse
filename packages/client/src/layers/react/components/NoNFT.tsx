@@ -80,7 +80,7 @@ export const NoNFT = ({ address }: { address?: string }) => {
                     fontFamily: "monospace",
                     letterSpacing: "1.1",
                     fontWeight: "300",
-                    marginTop: "15px",
+                    marginTop: "5px",
                     color: "#FFFDD5",
                   }}
                 >

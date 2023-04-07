@@ -29,82 +29,89 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
+    console.log(showNftBridge);
+    if (showNftBridge) {
+      return <NoNFT address={address} />;
+    }
     return (
       <div>
-        <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
-          <S.ButtonImg src="/button/greenButton.png" />
-          <p>Balance</p>
-        </div>
-        <S.DeployText
-          onClick={() => {
-            try {
-              sessionStorage.removeItem("user-burner-wallet");
-              window.location.reload();
-            } catch (e) {
-              console.log(e);
-            }
-          }}
-        >
-          {address?.toString().substring(0, 6)}
-        </S.DeployText>
-        <S.Container>
-          <S.BridgeNftButton
-            src="/img/BridgeNftButton.png"
+        <div>
+          <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
+            <S.ButtonImg src="/button/greenButton.png" />
+            <p>Balance</p>
+          </div>
+          <S.DeployText
             onClick={() => {
-              console.log("hi");
-              setShowNftBridge(true);
-            }}
-          />
-          <img src="/img/title.png" style={{ margin: "20px 0" }} />
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: "14px",
-              fontFamily: "sans-serif",
-              letterSpacing: "1",
-              fontWeight: "600",
-              color: "wheat",
-              padding: "0",
-              margin: "10px 0",
+              try {
+                sessionStorage.removeItem("user-burner-wallet");
+                window.location.reload();
+              } catch (e) {
+                console.log(e);
+              }
             }}
           >
-            {allNfts.length} UNDERVERSE NFTS DETECTED
-          </p>
-          <p
-            style={{
-              textAlign: "center",
-              fontSize: "25px",
-              fontFamily: "sans-serif",
-              letterSpacing: "1.2",
-              fontWeight: "600",
-              color: "wheat",
-              padding: "0",
-              margin: "10px 0",
-            }}
-          >
-            SELECT YOUR GAME PROFILE
-          </p>
-          <S.NftSelectionContainer>
-            {allNfts.map((data, index) => (
-              <S.NftSelect
-                selectedNFT={data.tokenId === selectedNFT}
-                key={`index-${index}`}
-                onClick={() => {
-                  setSelectNft(data);
-                  clickSound();
-                }}
-              >
-                <S.Img src={data.imageUrl} />
-              </S.NftSelect>
-            ))}
-          </S.NftSelectionContainer>
-        </S.Container>
+            {address?.toString().substring(0, 6)}
+          </S.DeployText>
+          <S.Container>
+            <S.BridgeNftButton
+              src="/img/BridgeNftButton.png"
+              onClick={() => {
+                console.log("hi");
+                setShowNftBridge(true);
+              }}
+            />
+            <img src="/img/title.png" style={{ margin: "20px 0" }} />
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "14px",
+                fontFamily: "sans-serif",
+                letterSpacing: "1",
+                fontWeight: "600",
+                color: "wheat",
+                padding: "0",
+                margin: "10px 0",
+              }}
+            >
+              {allNfts.length} UNDERVERSE NFTS DETECTED
+            </p>
+            <p
+              style={{
+                textAlign: "center",
+                fontSize: "25px",
+                fontFamily: "sans-serif",
+                letterSpacing: "1.2",
+                fontWeight: "600",
+                color: "wheat",
+                padding: "0",
+                margin: "10px 0",
+              }}
+            >
+              SELECT YOUR NFT GAME PROFILE
+            </p>
+            <S.NftSelectionContainer>
+              {allNfts.map((data, index) => (
+                <S.NftSelect
+                  selectedNFT={data.tokenId === selectedNFT}
+                  key={`index-${index}`}
+                  onClick={() => {
+                    setSelectNft(data);
+                    clickSound();
+                  }}
+                >
+                  <S.Img src={data.imageUrl} />
+                </S.NftSelect>
+              ))}
+            </S.NftSelectionContainer>
+          </S.Container>
+        </div>
       </div>
     );
-    showNftBridge && <NoNFT address={address} />;
-  } else {
-    return <NoNFT address={address} />;
   }
+
+  // else {
+  //   return <NoNFT address={address} />;
+  // }
 };
 
 const S = {
