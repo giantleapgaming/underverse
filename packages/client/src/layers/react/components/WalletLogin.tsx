@@ -10,11 +10,8 @@ const WalletLogin = () => {
   const [input, setInput] = useState("");
   const allKeys = JSON.parse(localStorage.getItem("all-underverse-pk") ?? "[]");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [enterInputKey, setEnterInputKey] = useState(false);
   const [playGame, setPlayGame] = useState(false);
-  const params = new URLSearchParams(window.location.search);
-  const chainIdString = params.get("chainId");
 
   return (
     <Container>
@@ -48,31 +45,10 @@ const WalletLogin = () => {
             >
               <img
                 onClick={async () => {
-                  const wallet = Wallet.createRandom();
-                  try {
-                    setLoading(true);
-                    const response = await fetch("https://api.giantleap.gg/api/drip", {
-                      method: "POST",
-                      body: JSON.stringify({ address: wallet.address, chainId: chainIdString }),
-                      headers: {
-                        "Content-Type": "application/json",
-                      },
-                    });
-                    await response.json();
-                    sessionStorage.setItem("user-burner-wallet", wallet.privateKey);
-                    if (!allKeys.includes(wallet.privateKey)) {
-                      const newList = [...allKeys, wallet.privateKey];
-                      localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                    }
-                    window.location.reload();
-                  } catch (e) {
-                    console.log(e);
-                    setError("unexpected error");
-                    setLoading(false);
-                  }
+                  window.location.replace("https://tutorial.giantleap.gg/");
                 }}
-                src="../img/createAccount.png"
-                style={{ width: "180px", height: "70px", cursor: "pointer", marginTop: "15px" }}
+                src="../img/tutorial.png"
+                style={{ cursor: "pointer", marginTop: "15px" }}
               />
               <p
                 style={{
@@ -84,7 +60,7 @@ const WalletLogin = () => {
                   marginBottom: "20px",
                 }}
               >
-                USE EXISTING <br /> ACCOUNT
+                USE EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
               </p>
             </div>
             {!!allKeys.length && (
