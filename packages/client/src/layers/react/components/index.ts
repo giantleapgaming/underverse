@@ -10,6 +10,7 @@ import { registerWinScreen } from "./Win";
 import { registerTutorialsListScreen } from "./TutorialsList";
 import { registerModalScreen } from "./VideoModal";
 import { registerCongratulationsScreen } from "./Congratulations";
+import { registerTutorialCompletedModalScreen } from "./TutorialCompletedModal";
 
 export function registerUIComponents() {
   registerNameScreen();
@@ -24,4 +25,5 @@ export function registerUIComponents() {
   registerWinScreen();
   registerModalScreen();
   registerCongratulationsScreen();
+  registerTutorialCompletedModalScreen();
 }

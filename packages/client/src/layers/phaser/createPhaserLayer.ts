@@ -24,6 +24,7 @@ import {
   SelectedNftID,
   ShowWinGame,
   TutorialModalDetails,
+  ShowTutorialCompleteModal,
 } from "../local/components";
 
 import {
@@ -130,6 +131,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     SelectedNftID: SelectedNftID(world),
     ShowWinGame: ShowWinGame(world),
     TutorialModalDetails: TutorialModalDetails(world),
+    ShowTutorialCompleteModal: ShowTutorialCompleteModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -177,6 +179,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const getWinState = (): boolean => {
     return getComponentValue(components.ShowWinGame, modalIndex)?.showWinGame ? true : false;
+  };
+
+  const setTutorialCompleteModal = (showModal?: boolean, title?: string) => {
+    setComponent(components.ShowTutorialCompleteModal, modalIndex, { showModal: !!showModal, title: title });
   };
 
   const setBuildWall = ({
@@ -387,6 +393,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setNftId,
       setWinGame,
       setTutorial,
+      setTutorialCompleteModal,
     },
     getValues: {
       getWinState,

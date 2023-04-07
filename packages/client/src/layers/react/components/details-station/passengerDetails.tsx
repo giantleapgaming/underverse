@@ -23,13 +23,25 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       sounds,
-      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation },
+      localApi: { setShowLine, setDestinationDetails, showProgress, setShowAnimation, setTutorialCompleteModal },
       components: { ShowStationDetails, ShowDestinationDetails, MoveStation },
       localIds: { stationDetailsEntityIndex },
     },
     network: {
       world,
-      components: { EntityType, OwnedBy, Faction, Position, Population, Level, Defence, Fuel, NFTID, Cash },
+      components: {
+        EntityType,
+        OwnedBy,
+        Faction,
+        Position,
+        Population,
+        Level,
+        Defence,
+        Fuel,
+        NFTID,
+        Cash,
+        TutorialStep,
+      },
       api: {
         upgradeSystem,
         repairSystem,
@@ -58,7 +70,6 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
     const destinationPosition = getComponentValue(Position, destinationDetails);
     const destinationLevel = getComponentValue(Level, destinationDetails)?.value;
     const destinationFuel = getComponentValue(Fuel, destinationDetails)?.value;
-    const destinationEntityType = getComponentValue(EntityType, destinationDetails)?.value;
     const fuel = getComponentValueStrict(Fuel, selectedEntity).value;
     const isDestinationSelected =
       destinationDetails && typeof destinationPosition?.x === "number" && typeof destinationPosition?.y === "number";
@@ -140,6 +151,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                   )}
                   {action === "repair" && (
                     <Repair
+                      layers={layers}
                       defence={+defence}
                       level={+level}
                       repairCost={repairPrice(position.x, position.y, +level, +defence, +factionNumber)}
@@ -154,6 +166,14 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                               setAction("");
                               sounds["confirm"].play();
                               await repairSystem(world.entities[selectedEntity], nftDetails.tokenId);
+                              const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+                                const id = +getComponentValueStrict(NFTID, nftId).value;
+                                return nftDetails?.tokenId === id;
+                              });
+                              const number = getComponentValue(TutorialStep, nftEntity)?.value;
+                              if (number && (+number === 240 || +number === 250)) {
+                                setTutorialCompleteModal(true, "rookie training completed!");
+                              }
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                             }
@@ -268,7 +288,11 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                                 setShowLine(false);
                                 setAction("");
                                 const ownedBy = getComponentValueStrict(OwnedBy, destinationDetails)?.value;
-                                await transferEntitySystem(world.entities[selectedEntity], ownedBy, nftDetails.tokenId);
+                                const tx = await transferEntitySystem(
+                                  world.entities[selectedEntity],
+                                  ownedBy,
+                                  nftDetails.tokenId
+                                );
                               } catch (e: any) {
                                 throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                               }
@@ -334,12 +358,21 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                                   type: "humanTransport",
                                   entityID: destinationDetails,
                                 });
-                                await raptureSystem(
+                                const tx = await raptureSystem(
                                   world.entities[selectedEntity],
                                   world.entities[destinationDetails],
                                   weapons,
                                   nftDetails.tokenId
                                 );
+                                await tx.wait();
+                                const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+                                  const id = +getComponentValueStrict(NFTID, nftId).value;
+                                  return nftDetails?.tokenId === id;
+                                });
+                                const number = getComponentValue(TutorialStep, nftEntity)?.value;
+                                if (number && (+number === 120 || +number === 130)) {
+                                  setTutorialCompleteModal(true, "rookie training completed!");
+                                }
                               } catch (e: any) {
                                 throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                               }

@@ -247,3 +247,14 @@ export const TutorialModalDetails = (world: World) => {
     { id: "tutorialModalDetails" }
   );
 };
+
+export const ShowTutorialCompleteModal = (world: World) => {
+  return defineComponent(
+    world,
+    {
+      showModal: Type.Boolean,
+      title: Type.OptionalString,
+    },
+    { id: "ShowTutorialModal" }
+  );
+};

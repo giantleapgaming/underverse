@@ -495,14 +495,16 @@ export async function createNetworkLayer(config: GameConfig) {
           entityType &&
           (+entityType === Mapping.attack.id ||
             +entityType === Mapping.godown.id ||
+            +entityType === Mapping.astroid.id ||
             +entityType === Mapping.harvester.id ||
+            +entityType === Mapping.wall.id ||
             +entityType === Mapping.refuel.id ||
             +entityType === Mapping.residential.id ||
             +entityType === Mapping.unprospected.id ||
             +entityType === Mapping.shipyard.id)
         ) {
-          const defence = getComponentValue(components.Defence, b)?.value;
-          return defence && +defence;
+          const level = getComponentValue(components.Level, b)?.value;
+          return level && +level;
         } else {
           const item = getComponentValue(components.Position, b);
           return item;

@@ -328,35 +328,50 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                   </>
                 )}
                 <Twitter>
-                  <img
-                    onClick={() => {
-                      const text =
-                        (isCadet &&
-                          `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`) ||
-                        (isRookie &&
-                          `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`);
-                      const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
-                      console.log(twitterShareURL);
-                      const popupWidth = 550;
-                      const popupHeight = 420;
-                      const left = window.screen.width / 2 - popupWidth / 2;
-                      const top = window.screen.height / 2 - popupHeight / 2;
-                      const popup = window.open(
-                        twitterShareURL,
-                        "pop",
-                        "width=" + popupWidth + ",height=" + popupHeight + ",left=" + left + ",top=" + top
-                      );
+                  <div style={{ display: "flex", alignContent: "center", justifyContent: "center", gap: "10px" }}>
+                    <img
+                      onClick={() => {
+                        const text =
+                          (isCadet &&
+                            `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`) ||
+                          (isRookie &&
+                            `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`);
+                        const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
+                        console.log(twitterShareURL);
+                        const popupWidth = 550;
+                        const popupHeight = 420;
+                        const left = window.screen.width / 2 - popupWidth / 2;
+                        const top = window.screen.height / 2 - popupHeight / 2;
+                        const popup = window.open(
+                          twitterShareURL,
+                          "pop",
+                          "width=" + popupWidth + ",height=" + popupHeight + ",left=" + left + ",top=" + top
+                        );
 
-                      if (popup?.focus) {
-                        popup.focus();
-                      }
+                        if (popup?.focus) {
+                          popup.focus();
+                        }
 
-                      return false;
-                    }}
-                    src="../img/TweetBox.png"
-                    style={{ marginLeft: "-60px", height: "120px", width: "350px" }}
-                  />
-                  <img src="../img/TwitterIcon.png" style={{ marginTop: "20px", width: "45px", height: "40px" }} />
+                        return false;
+                      }}
+                      src="../img/TweetBox.png"
+                      style={{ marginLeft: "-60px", height: "120px", width: "350px" }}
+                    />
+                    <img src="../img/TwitterIcon.png" style={{ marginTop: "20px", width: "45px", height: "40px" }} />
+                  </div>
+                  {isCadet && (
+                    <div
+                      onClick={() => {
+                        if (isCadet) {
+                          window.open("https://underverse.giantleap.gg/", "_blank");
+                        }
+                      }}
+                      style={{ position: "absolute", right: 0 }}
+                    >
+                      <Title style={{ marginRight: "20px" }}>CONQUER THE UNDERVERSE</Title>
+                      <img src="../img/Conquer.png" style={{ marginRight: "20px" }} />
+                    </div>
+                  )}
                 </Twitter>
                 <Conquer
                   onClick={async () => {
@@ -396,17 +411,6 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                   ) : (
                     <>{isRookie && <Title style={{ marginRight: "20px" }}>CONTINUE TO CADET TRAINING</Title>}</>
                   )}
-                  {isCadet && minted ? (
-                    <Focus
-                      highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart2["Repairs"])}
-                      present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Repairs"])}
-                    >
-                      <Title>CONQUER THE UNDERVERSE</Title>
-                    </Focus>
-                  ) : (
-                    <>{isCadet && <Title style={{ marginRight: "20px" }}>CONQUER THE UNDERVERSE</Title>}</>
-                  )}
-                  <img src="../img/Conquer.png" style={{ marginRight: "20px" }} />
                 </Conquer>
               </div>
             </div>
@@ -616,6 +620,7 @@ const RookieDepartment = styled.div`
   justify-content: center;
   flex-direction: column;
   gap: 55px;
+  position: relative;
 `;
 
 const CadetDepartment = styled.div`
@@ -629,11 +634,13 @@ const CadetDepartment = styled.div`
 const Twitter = styled.div`
   display: flex;
   align-items: flex-start;
+  justify-content: space-between;
   justify-content: center;
   gap: 5px;
   margin-top: 45px;
   margin-bottom: 20px;
   cursor: pointer;
+  width: 100%;
 `;
 
 const Conquer = styled.div`
@@ -656,11 +663,17 @@ export const registerCongratulationsScreen = () => {
           network: { connectedAddress },
         },
         phaser: {
-          components: { SelectedNftID },
-          localIds: { nftId },
+          components: { SelectedNftID, ShowTutorialCompleteModal },
+          localIds: { nftId, modalIndex },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, TutorialStep.update$, SelectedNftID.update$).pipe(
+      return merge(
+        computedToStream(connectedAddress),
+        ShowTutorialCompleteModal.update$,
+        NFTID.update$,
+        TutorialStep.update$,
+        SelectedNftID.update$
+      ).pipe(
         map(() => connectedAddress.get()),
         map(() => {
           const nftDetails = getNftId(layers);
@@ -676,7 +689,8 @@ export const registerCongratulationsScreen = () => {
           });
           if (doesNftExist) {
             const number = getComponentValue(TutorialStep, nftEntity)?.value;
-            if (number && (+number === 130 || +number === 250 || +number === 260)) {
+            const modal = getComponentValue(ShowTutorialCompleteModal, modalIndex);
+            if (number && (+number === 130 || +number === 250 || +number === 260) && !modal?.showModal) {
               return { layers };
             } else {
               return;

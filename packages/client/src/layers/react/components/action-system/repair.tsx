@@ -1,17 +1,31 @@
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
+import { Layers } from "../../../../types";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getNftId } from "../../../network/utils/getNftId";
 
 export const Repair = ({
   level,
   repairSystem,
   defence,
   repairCost,
+  layers,
 }: {
   level: number;
   defence: number;
   repairSystem: () => void;
   repairCost: number;
+  layers: Layers;
 }) => {
+  const {
+    phaser: {
+      localApi: { setTutorialCompleteModal },
+    },
+    network: {
+      components: { NFTID, TutorialStep },
+    },
+  } = layers;
+
   return (
     <S.Details>
       {defence < level * 100 ? (
@@ -23,7 +37,20 @@ export const Repair = ({
               {convertPrice(repairCost / 2)}
             </S.Cost>
           </div>
-          <S.InlinePointer onClick={repairSystem}>
+          <S.InlinePointer
+            onClick={async () => {
+              repairSystem();
+              const nftDetails = getNftId(layers);
+              const nftEntity = [...getComponentEntities(NFTID)].find((nftId) => {
+                const id = +getComponentValueStrict(NFTID, nftId).value;
+                return nftDetails?.tokenId === id;
+              });
+              const number = getComponentValue(TutorialStep, nftEntity)?.value;
+              if (number && (+number === 240 || +number === 250)) {
+                setTutorialCompleteModal(true, "Cadet training completed!");
+              }
+            }}
+          >
             <S.Img src="/button/whiteButton.png" />
             <S.DeployText>REPAIR</S.DeployText>
           </S.InlinePointer>
