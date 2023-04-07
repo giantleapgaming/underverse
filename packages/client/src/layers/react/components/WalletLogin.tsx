@@ -44,21 +44,8 @@ const WalletLogin = () => {
                 marginBottom: "50px",
               }}
             >
-              <p
-                style={{
-                  margin: "0px",
-                  color: "wheat",
-                  marginTop: "10px",
-                  marginBottom: "15px",
-                  fontSize: "18px",
-                  textAlign: "center",
-                  fontFamily: "MyOTFFontBold",
-                }}
-              >
-                New here? Play the Tutorial <br />
-                Campaign to create your account.
-              </p>
-              {/* <img src="../img/recruitTraining.png" style={{ width: "350px", height: "280px" }} /> */}
+              <p style={{ margin: "0px", color: "wheat", marginBottom: "15px", fontSize: "30px" }}>TUTORIAL CAMPAIGN</p>
+              <img src="../img/recruitTraining.png" style={{ width: "350px", height: "280px" }} />
 
               <iframe
                 width="653"
@@ -121,17 +108,15 @@ const WalletLogin = () => {
               )}
               <p
                 style={{
-                  fontSize: "18px",
+                  fontSize: "20px",
                   color: "#fffdd5",
                   fontFamily: "sans-serif",
                   fontWeight: "bolder",
                   marginTop: "20px",
                   marginBottom: "20px",
-                  lineHeight: "1.5",
                 }}
               >
-                USE EXISTING ACCOUNT <br />
-                TO ENTER MAIN GAME
+                USE EXISTING <br /> ACCOUNT
               </p>
             </div>
             {!!allKeys.length && (
@@ -357,7 +342,7 @@ const WalletText = styled.div`
   justify-content: center;
   text-align: center;
   gap: 50px;
-  margin: 10px auto;
+  margin: 20px auto;
   z-index: 100;
   letter-spacing: 1;
 `;
