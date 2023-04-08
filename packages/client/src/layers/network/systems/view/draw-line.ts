@@ -55,6 +55,17 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(8, 0xffffff, 1);
 
+  const key = input.keyboard$.subscribe((p) => {
+    const keyboard = p as Phaser.Input.Keyboard.Key;
+    if (keyboard.isDown && keyboard.keyCode === 27) {
+      setShowLine(false, 0, 0);
+      objectPool.remove("fuel-text-white");
+      for (let index = 0; index < 100; index++) {
+        objectPool.remove(`fuel-text-white-multi-select-${index}`);
+      }
+    }
+  });
+
   const hoverSub = input.pointermove$.subscribe((p) => {
     const { pointer } = p;
     const lineDetails = getComponentValue(ShowLine, stationDetailsEntityIndex);
@@ -438,6 +449,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
 
   world.registerDisposer(() => hoverSub?.unsubscribe());
   world.registerDisposer(() => destinationClick?.unsubscribe());
+  world.registerDisposer(() => key?.unsubscribe());
   world.registerDisposer(() => holdRightClick?.unsubscribe());
   world.registerDisposer(() => leaveRightClick?.unsubscribe());
 
