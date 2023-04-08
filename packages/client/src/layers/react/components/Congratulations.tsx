@@ -85,7 +85,6 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
       <Container
         onMouseEnter={() => {
           input.disableInput();
-          setIsPartyTime(true);
         }}
         onMouseLeave={() => {
           input.enableInput();
@@ -99,7 +98,9 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
         <RotatingAttackShip src="/img/attachShip.png" />
 
         <WalletText>
-          {<Confetti recycle={false} numberOfPieces={300} width={window.innerWidth} height={window.innerHeight} />}
+          {isPartyTime && (
+            <Confetti recycle={false} numberOfPieces={300} width={window.innerWidth} height={window.innerHeight} />
+          )}
           <img src="/img/Congratulations.png" style={{ width: "850px", height: "170px" }} />
           <Title>
             {isCadet && (
@@ -117,8 +118,8 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
             <div style={{ display: "flex", justifyContent: "center", alignItems: "flex-start", gap: "100px" }}>
               <RookieDepartment>
                 <AnimatedRookieImage id="RookieImage">
-                  <Img src={"/faction/rookie.png"} />
-                  <div style={{ marginTop: "20px" }}>
+                  <Img src={"/faction/Rookie.gif"} style={{ width: "350px" }} />
+                  <div style={{ marginTop: "30px" }}>
                     {loading ? (
                       <Loading>Minting a Badge...</Loading>
                     ) : (
@@ -140,6 +141,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                               style={{ cursor: "pointer", width: "120px", height: "50px" }}
                               src="../img/MintBadge.png"
                               onClick={async () => {
+                                setIsPartyTime(true);
                                 const params = new URLSearchParams(window.location.search);
                                 const chainIdString = params.get("chainId");
                                 setLoading(true);
@@ -211,7 +213,7 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                 </Twitter>
               </RookieDepartment>
               <CadetDepartment>
-                <AnimatedCadetImage id="CadetImage" src={"/faction/CadetWingImg.png"} />
+                <AnimatedCadetImage id="CadetImage" src={"/faction/Cadet.gif"} style={{ width: "350px" }} />
                 <Conquer
                   onClick={async () => {
                     if (isRookie) {
