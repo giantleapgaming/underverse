@@ -1,18 +1,37 @@
 import styled from "styled-components";
 import { convertPrice } from "../../utils/priceConverter";
 import { factionData } from "../../../../utils/constants";
+import { Layers } from "../../../../types";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getNftId } from "../../../network/utils/getNftId";
+import { toast } from "sonner";
 
 export const Upgrade = ({
   level,
   upgradeSystem,
   defence,
   faction,
+  layers,
 }: {
   level: number;
   defence: number;
   upgradeSystem: () => void;
   faction: number;
+  layers: Layers;
 }) => {
+  const nftDetails = getNftId(layers);
+  const {
+    network: {
+      components: { Cash, NFTID },
+    },
+  } = layers;
+  const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+    return nftIdValue && +nftIdValue === nftDetails?.tokenId;
+  });
+
+  const cash = getComponentValue(Cash, ownedByIndex)?.value;
+
   const upgradeCost = Math.pow(level + 1, 2) * 1_000 * factionData[+faction]?.upgrade;
   return (
     <S.Details>
@@ -30,7 +49,15 @@ export const Upgrade = ({
               DEFENCE: <span style={{ color: "white" }}>{defence}</span> &rarr; {defence + 100}
             </S.OtherDetails>
           </div>
-          <S.InlinePointer onClick={upgradeSystem}>
+          <S.InlinePointer
+            onClick={() => {
+              if (cash && Math.floor(+cash / 10_00_000) >= upgradeCost) {
+                upgradeSystem();
+              } else {
+                toast.error("No enough cash to upgrade");
+              }
+            }}
+          >
             <S.Img src="/button/orangeButton.png" />
             <S.DeployText>UPGRADE</S.DeployText>
           </S.InlinePointer>

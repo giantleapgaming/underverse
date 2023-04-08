@@ -163,12 +163,13 @@ export function getObstacleListWhileMove(arrayOfPointsOnThePath: any[], layer: L
         +entityType === Mapping.residential.id ||
         +entityType === Mapping.shipyard.id)
     ) {
+      const level = getComponentValue(Level, entityOnThatPoint)?.value as EntityID;
       const defence = getComponentValue(Defence, entityOnThatPoint)?.value as EntityID;
       const ownedBy = getComponentValue(OwnedBy, entityOnThatPoint)?.value;
       const nftEntityIndex = world.entities.findIndex((e) => e === ownedBy);
       const nftId = getComponentValue(NFTID, nftEntityIndex)?.value;
       const nftDetails = getNftId(layer);
-      if (defence && +defence > 0) {
+      if (defence && +defence > 0 && level && +level > 0) {
         if (!(nftId && nftDetails && +nftId === nftDetails.tokenId)) {
           obstaclePoints.push(entityOnThatPoint);
         }

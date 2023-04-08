@@ -106,6 +106,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
                     <Upgrade
+                      layers={layers}
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {
