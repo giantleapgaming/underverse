@@ -580,7 +580,13 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
             )}
           </S.Container>
           {isOwner && !destinationDetails && !isDestinationSelected && !moveStationDetails?.selected && (
-            <S.Row style={{ gap: "10px", marginTop: "5px" }}>
+            <S.Row
+              style={{
+                gap: "5px",
+                marginRight: "5px",
+                marginTop: "5px",
+              }}
+            >
               <Focus
                 highlight={tutorialHighlightOrderPresent(layers, objectListTutorialDataListPart1["Prospect"])}
                 present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Prospect"])}

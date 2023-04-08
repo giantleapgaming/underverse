@@ -119,7 +119,6 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      background-color: ${({ selected }) => ` ${selected && "#62FEE6"}`};
       border: ${({ selected }) => `1px solid ${selected ? "#036e71" : "#ffffff"}`};
       z-index: 4;
       width: 140%;

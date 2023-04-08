@@ -30,7 +30,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Hab"])}
         >
           <S.Button onClick={() => build(Mapping.residential.id)}>
-            <S.Title>Habitat</S.Title>
+            <S.Title>HABITAT</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
             <S.Img src={`/build-stations/space-station.png`} width="30px" height="30px" />
             <S.ImgCrystal>
@@ -45,7 +45,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart2["Depots"])}
         >
           <S.Button onClick={() => build(Mapping.godown.id)}>
-            <S.Title>Depot</S.Title>
+            <S.Title>DEPOT</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
             <S.Img src={`/build-stations/cargo.png`} width="30px" height="30px" />
             <S.ImgCrystal>
@@ -60,7 +60,7 @@ export const BuildFromHarvesterLayout = ({ layers }: { layers: Layers }) => {
           present={tutorialHighlightOrderCompleted(layers, objectListTutorialDataListPart1["Build Shipyard"])}
         >
           <S.Button onClick={() => build(Mapping.shipyard.id)}>
-            <S.Title>Shipyard</S.Title>
+            <S.Title>SHIPYARD</S.Title>
             <S.Img src="/layout/hex.png" width="50px" height="44px" />
             <S.Img src={`/build-stations/shipyard.png`} width="30px" height="30px" />
             <S.ImgCrystal>

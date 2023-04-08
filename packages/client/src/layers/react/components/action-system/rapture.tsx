@@ -32,7 +32,7 @@ export const Rapture = ({
       >
         {+space > 0 && (
           <>
-            <img src="/img/user.png" />
+            <img src="/img/user.png" style={{ marginRight: "10px" }} />
             {new Array(+space).fill(0).map((_, i) => {
               return (
                 <S.Slanted
@@ -112,7 +112,6 @@ const S = {
       width: 100%;
       height: 100%;
       content: "";
-      background-color: ${({ selected }) => ` ${selected && "#62FEE6"}`};
       border: 1px solid ${({ selected }) => ` ${selected ? "#62FEE6" : "#ffffff"}`};
       z-index: 4;
       width: 140%;
