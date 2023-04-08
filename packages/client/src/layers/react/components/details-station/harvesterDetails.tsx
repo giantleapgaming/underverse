@@ -31,7 +31,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
     },
     network: {
       world,
-      components: { TutorialStep, EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel, NFTID, Cash },
+      components: { EntityType, OwnedBy, Faction, Position, Balance, Level, Defence, Fuel, NFTID, Cash },
       api: {
         upgradeSystem,
         repairSystem,
@@ -108,6 +108,7 @@ export const HarvesterDetails = ({ layers }: { layers: Layers }) => {
                 <S.Column style={{ width: "100%" }}>
                   {action === "upgrade" && (
                     <Upgrade
+                      layers={layers}
                       defence={+defence}
                       level={+level}
                       upgradeSystem={async () => {

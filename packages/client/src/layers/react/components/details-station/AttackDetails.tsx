@@ -95,6 +95,7 @@ export const AttackDetails = ({ layers }: { layers: Layers }) => {
                     <>
                       {action === "upgrade" && (
                         <Upgrade
+                          layers={layers}
                           defence={+defence}
                           level={+level}
                           upgradeSystem={async () => {
