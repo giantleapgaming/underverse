@@ -50,7 +50,7 @@ const WalletLogin = () => {
               <iframe
                 width="653"
                 height="380"
-                src="https://www.youtube.com/embed/Gdi9Bhpq_Gs?rel=0"
+                src="https://www.youtube.com/embed/6HDd5iflC8s?rel=0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 title="Embedded youtube"
