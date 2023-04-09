@@ -16,7 +16,7 @@ import { godownInitialLevel, baseInitialWeapons, baseInitialHealth } from "../co
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { checkNFT } from "../utils.sol";
+import { checkNFT, getSinValue } from "../utils.sol";
 import { Attribute1Component, ID as Attribute1ComponentID } from "../components/Attribute1Component.sol";
 import { Attribute2Component, ID as Attribute2ComponentID } from "../components/Attribute2Component.sol";
 import { Attribute3Component, ID as Attribute3ComponentID } from "../components/Attribute3Component.sol";

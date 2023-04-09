@@ -19,6 +19,174 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
+function getSinValue(uint256 angleInDegrees) pure returns (int32) {
+  int32[72] memory sinArr = [
+    int32(0),
+    int32(87),
+    int32(173),
+    int32(258),
+    int32(342),
+    int32(422),
+    int32(500),
+    int32(573),
+    int32(642),
+    int32(707),
+    int32(766),
+    int32(819),
+    int32(866),
+    int32(906),
+    int32(940),
+    int32(966),
+    int32(985),
+    int32(996),
+    int32(999),
+    int32(996),
+    int32(985),
+    int32(966),
+    int32(940),
+    int32(906),
+    int32(866),
+    int32(819),
+    int32(766),
+    int32(707),
+    int32(642),
+    int32(573),
+    int32(500),
+    int32(422),
+    int32(342),
+    int32(258),
+    int32(173),
+    int32(87),
+    int32(0),
+    int32(-87),
+    int32(-173),
+    int32(-258),
+    int32(-342),
+    int32(-422),
+    int32(-500),
+    int32(-573),
+    int32(-642),
+    int32(-707),
+    int32(-766),
+    int32(-819),
+    int32(-866),
+    int32(-906),
+    int32(-940),
+    int32(-966),
+    int32(-985),
+    int32(-996),
+    int32(-999),
+    int32(-996),
+    int32(-985),
+    int32(-966),
+    int32(-940),
+    int32(-906),
+    int32(-866),
+    int32(-819),
+    int32(-766),
+    int32(-707),
+    int32(-642),
+    int32(-573),
+    int32(-500),
+    int32(-422),
+    int32(-342),
+    int32(-258),
+    int32(-173),
+    int32(-87)
+  ];
+
+  uint256 roundedAngle = (angleInDegrees / 5) * 5;
+  if (angleInDegrees % 5 > 2) {
+    roundedAngle += 5;
+  }
+  uint256 index = roundedAngle / 5;
+  return sinArr[index];
+}
+
+function getCosValue(uint256 angleInDegrees) pure returns (int32) {
+  int32[72] memory cosArr = [
+    int32(1000),
+    int32(996),
+    int32(985),
+    int32(966),
+    int32(940),
+    int32(906),
+    int32(866),
+    int32(819),
+    int32(766),
+    int32(707),
+    int32(642),
+    int32(573),
+    int32(500),
+    int32(422),
+    int32(342),
+    int32(258),
+    int32(173),
+    int32(87),
+    int32(0),
+    int32(-87),
+    int32(-173),
+    int32(-258),
+    int32(-342),
+    int32(-422),
+    int32(-500),
+    int32(-573),
+    int32(-642),
+    int32(-707),
+    int32(-766),
+    int32(-819),
+    int32(-866),
+    int32(-906),
+    int32(-940),
+    int32(-966),
+    int32(-985),
+    int32(-996),
+    int32(-1000),
+    int32(-996),
+    int32(-985),
+    int32(-966),
+    int32(-940),
+    int32(-906),
+    int32(-866),
+    int32(-819),
+    int32(-766),
+    int32(-707),
+    int32(-642),
+    int32(-573),
+    int32(-500),
+    int32(-422),
+    int32(-342),
+    int32(-258),
+    int32(-173),
+    int32(-87),
+    int32(0),
+    int32(87),
+    int32(173),
+    int32(258),
+    int32(342),
+    int32(422),
+    int32(500),
+    int32(573),
+    int32(642),
+    int32(707),
+    int32(766),
+    int32(819),
+    int32(866),
+    int32(906),
+    int32(940),
+    int32(966),
+    int32(985),
+    int32(996)
+  ];
+
+  uint256 roundedAngle = (angleInDegrees / 5) * 5;
+  if (angleInDegrees % 5 > 2) {
+    roundedAngle += 5;
+  }
+  uint256 index = roundedAngle / 5;
+  return cosArr[index];
+}
+
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
   uint256 lastUpdatedTimeEntity
@@ -77,15 +245,6 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
 function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
   uint256 godownCreationCost = (50000 * MULTIPLIER); // 10^6
   return godownCreationCost;
-}
-
-function getCargoSellingPrice(int32 x, int32 y, uint256 kgs) pure returns (uint256) {
-  uint256 sumOfSquaresOfCoordsIntoMultiConstant = MULTIPLIER *
-    uint256((int256(x) * int256(x)) + (int256(y) * int256(y)));
-  uint256 totalPriceRaw = ((((100000 * MULTIPLIER) / (Math.sqrt(sumOfSquaresOfCoordsIntoMultiConstant))) * kgs * 9) /
-    10);
-  uint256 cargoSellingPrice = totalPriceRaw * MULTIPLIER2; // 10^6
-  return cargoSellingPrice;
 }
 
 function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns (uint256) {
