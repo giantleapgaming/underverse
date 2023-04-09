@@ -5,18 +5,14 @@ import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { NameComponent, ID as NameComponentID } from "../components/NameComponent.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
-import { playerInitialCash, asteroidType, nftContract, worldType } from "../constants.sol";
 import { PositionComponent, ID as PositionComponentID, Coord } from "../components/PositionComponent.sol";
-//import { createAsteroids } from "../utils.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { godownInitialLevel, baseInitialWeapons, baseInitialHealth } from "../constants.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { checkNFT, getSinValue } from "../utils.sol";
 import { Attribute1Component, ID as Attribute1ComponentID } from "../components/Attribute1Component.sol";
 import { Attribute2Component, ID as Attribute2ComponentID } from "../components/Attribute2Component.sol";
 import { Attribute3Component, ID as Attribute3ComponentID } from "../components/Attribute3Component.sol";
@@ -24,6 +20,8 @@ import { Attribute4Component, ID as Attribute4ComponentID } from "../components/
 import { Attribute5Component, ID as Attribute5ComponentID } from "../components/Attribute5Component.sol";
 import { Attribute6Component, ID as Attribute6ComponentID } from "../components/Attribute6Component.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
+import { playerInitialCash, asteroidType, nftContract, worldType, MULTIPLIER } from "../constants.sol";
+import { checkNFT, getSinValue, getCosValue, createAsteroids } from "../utils.sol";
 
 uint256 constant ID = uint256(keccak256("system.Init"));
 
@@ -53,6 +51,13 @@ contract InitSystem is System {
       StartTimeComponent(getAddressById(components, StartTimeComponentID)).set(worldEntityId, block.timestamp);
 
       //We will also initialize some random asteroids around the map
+      for (uint256 i = 0; i < 18; i += 1) {
+        uint256 angle = i * 20;
+        int256 radius = 5 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 45);
+        int32 x = (int32(radius) * getCosValue(i)) / int32(1000);
+        int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * getSinValue(i)) / int32(1000);
+        createAsteroids(world, components, x, y);
+      }
     }
     registeredPlayers[nftID] = true;
     playerCount += 1;
@@ -67,7 +72,10 @@ contract InitSystem is System {
     Attribute5Component(getAddressById(components, Attribute5ComponentID)).set(playerId, (random % 6) + 5);
     Attribute6Component(getAddressById(components, Attribute6ComponentID)).set(playerId, (random % 5) + 6);
 
-    CashComponent(getAddressById(components, CashComponentID)).set(playerId, playerInitialCash);
+    CashComponent(getAddressById(components, CashComponentID)).set(
+      playerId,
+      playerInitialCash + (((random % 10) + 1) * MULTIPLIER)
+    );
   }
 
   function executeTyped(string calldata name, uint256 nftID) public returns (bytes memory) {

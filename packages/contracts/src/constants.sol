@@ -10,8 +10,7 @@ uint256 constant playerInitialCash = 100000 * MULTIPLIER;
 uint256 constant offenceInitialAmount = 0;
 uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
-uint256 constant baseInitialWeapons = 0;
-uint256 constant baseInitialHealth = 1000;
+uint256 constant AsteroidHealth = 1000;
 
 int32 constant zeroCoord = 0;
 

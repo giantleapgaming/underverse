@@ -12,180 +12,12 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, OperationCost } from "./constants.sol";
+import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, OperationCost, AsteroidHealth } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-
-function getSinValue(uint256 angleInDegrees) pure returns (int32) {
-  int32[72] memory sinArr = [
-    int32(0),
-    int32(87),
-    int32(173),
-    int32(258),
-    int32(342),
-    int32(422),
-    int32(500),
-    int32(573),
-    int32(642),
-    int32(707),
-    int32(766),
-    int32(819),
-    int32(866),
-    int32(906),
-    int32(940),
-    int32(966),
-    int32(985),
-    int32(996),
-    int32(999),
-    int32(996),
-    int32(985),
-    int32(966),
-    int32(940),
-    int32(906),
-    int32(866),
-    int32(819),
-    int32(766),
-    int32(707),
-    int32(642),
-    int32(573),
-    int32(500),
-    int32(422),
-    int32(342),
-    int32(258),
-    int32(173),
-    int32(87),
-    int32(0),
-    int32(-87),
-    int32(-173),
-    int32(-258),
-    int32(-342),
-    int32(-422),
-    int32(-500),
-    int32(-573),
-    int32(-642),
-    int32(-707),
-    int32(-766),
-    int32(-819),
-    int32(-866),
-    int32(-906),
-    int32(-940),
-    int32(-966),
-    int32(-985),
-    int32(-996),
-    int32(-999),
-    int32(-996),
-    int32(-985),
-    int32(-966),
-    int32(-940),
-    int32(-906),
-    int32(-866),
-    int32(-819),
-    int32(-766),
-    int32(-707),
-    int32(-642),
-    int32(-573),
-    int32(-500),
-    int32(-422),
-    int32(-342),
-    int32(-258),
-    int32(-173),
-    int32(-87)
-  ];
-
-  uint256 roundedAngle = (angleInDegrees / 5) * 5;
-  if (angleInDegrees % 5 > 2) {
-    roundedAngle += 5;
-  }
-  uint256 index = roundedAngle / 5;
-  return sinArr[index];
-}
-
-function getCosValue(uint256 angleInDegrees) pure returns (int32) {
-  int32[72] memory cosArr = [
-    int32(1000),
-    int32(996),
-    int32(985),
-    int32(966),
-    int32(940),
-    int32(906),
-    int32(866),
-    int32(819),
-    int32(766),
-    int32(707),
-    int32(642),
-    int32(573),
-    int32(500),
-    int32(422),
-    int32(342),
-    int32(258),
-    int32(173),
-    int32(87),
-    int32(0),
-    int32(-87),
-    int32(-173),
-    int32(-258),
-    int32(-342),
-    int32(-422),
-    int32(-500),
-    int32(-573),
-    int32(-642),
-    int32(-707),
-    int32(-766),
-    int32(-819),
-    int32(-866),
-    int32(-906),
-    int32(-940),
-    int32(-966),
-    int32(-985),
-    int32(-996),
-    int32(-1000),
-    int32(-996),
-    int32(-985),
-    int32(-966),
-    int32(-940),
-    int32(-906),
-    int32(-866),
-    int32(-819),
-    int32(-766),
-    int32(-707),
-    int32(-642),
-    int32(-573),
-    int32(-500),
-    int32(-422),
-    int32(-342),
-    int32(-258),
-    int32(-173),
-    int32(-87),
-    int32(0),
-    int32(87),
-    int32(173),
-    int32(258),
-    int32(342),
-    int32(422),
-    int32(500),
-    int32(573),
-    int32(642),
-    int32(707),
-    int32(766),
-    int32(819),
-    int32(866),
-    int32(906),
-    int32(940),
-    int32(966),
-    int32(985),
-    int32(996)
-  ];
-
-  uint256 roundedAngle = (angleInDegrees / 5) * 5;
-  if (angleInDegrees % 5 > 2) {
-    roundedAngle += 5;
-  }
-  uint256 index = roundedAngle / 5;
-  return cosArr[index];
-}
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -443,3 +275,184 @@ function unOwnedObstacle(
   }
   return result;
 }
+
+function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y) {
+  uint256 ent = world.getUniqueEntityId();
+  PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
+  LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+  DefenceComponent(getAddressById(components, DefenceComponentID)).set(ent, AsteroidHealth);
+}
+
+function getSinValue(uint256 angleInDegrees) pure returns (int32) {
+  int32[72] memory sinArr = [
+    int32(0),
+    int32(87),
+    int32(173),
+    int32(258),
+    int32(342),
+    int32(422),
+    int32(500),
+    int32(573),
+    int32(642),
+    int32(707),
+    int32(766),
+    int32(819),
+    int32(866),
+    int32(906),
+    int32(940),
+    int32(966),
+    int32(985),
+    int32(996),
+    int32(999),
+    int32(996),
+    int32(985),
+    int32(966),
+    int32(940),
+    int32(906),
+    int32(866),
+    int32(819),
+    int32(766),
+    int32(707),
+    int32(642),
+    int32(573),
+    int32(500),
+    int32(422),
+    int32(342),
+    int32(258),
+    int32(173),
+    int32(87),
+    int32(0),
+    int32(-87),
+    int32(-173),
+    int32(-258),
+    int32(-342),
+    int32(-422),
+    int32(-500),
+    int32(-573),
+    int32(-642),
+    int32(-707),
+    int32(-766),
+    int32(-819),
+    int32(-866),
+    int32(-906),
+    int32(-940),
+    int32(-966),
+    int32(-985),
+    int32(-996),
+    int32(-999),
+    int32(-996),
+    int32(-985),
+    int32(-966),
+    int32(-940),
+    int32(-906),
+    int32(-866),
+    int32(-819),
+    int32(-766),
+    int32(-707),
+    int32(-642),
+    int32(-573),
+    int32(-500),
+    int32(-422),
+    int32(-342),
+    int32(-258),
+    int32(-173),
+    int32(-87)
+  ];
+
+  uint256 roundedAngle = (angleInDegrees / 5) * 5;
+  if (angleInDegrees % 5 > 2) {
+    roundedAngle += 5;
+  }
+  uint256 index = roundedAngle / 5;
+  return sinArr[index];
+}
+
+function getCosValue(uint256 angleInDegrees) pure returns (int32) {
+  int32[72] memory cosArr = [
+    int32(1000),
+    int32(996),
+    int32(985),
+    int32(966),
+    int32(940),
+    int32(906),
+    int32(866),
+    int32(819),
+    int32(766),
+    int32(707),
+    int32(642),
+    int32(573),
+    int32(500),
+    int32(422),
+    int32(342),
+    int32(258),
+    int32(173),
+    int32(87),
+    int32(0),
+    int32(-87),
+    int32(-173),
+    int32(-258),
+    int32(-342),
+    int32(-422),
+    int32(-500),
+    int32(-573),
+    int32(-642),
+    int32(-707),
+    int32(-766),
+    int32(-819),
+    int32(-866),
+    int32(-906),
+    int32(-940),
+    int32(-966),
+    int32(-985),
+    int32(-996),
+    int32(-1000),
+    int32(-996),
+    int32(-985),
+    int32(-966),
+    int32(-940),
+    int32(-906),
+    int32(-866),
+    int32(-819),
+    int32(-766),
+    int32(-707),
+    int32(-642),
+    int32(-573),
+    int32(-500),
+    int32(-422),
+    int32(-342),
+    int32(-258),
+    int32(-173),
+    int32(-87),
+    int32(0),
+    int32(87),
+    int32(173),
+    int32(258),
+    int32(342),
+    int32(422),
+    int32(500),
+    int32(573),
+    int32(642),
+    int32(707),
+    int32(766),
+    int32(819),
+    int32(866),
+    int32(906),
+    int32(940),
+    int32(966),
+    int32(985),
+    int32(996)
+  ];
+
+  uint256 roundedAngle = (angleInDegrees / 5) * 5;
+  if (angleInDegrees % 5 > 2) {
+    roundedAngle += 5;
+  }
+  uint256 index = roundedAngle / 5;
+  return cosArr[index];
+}
+
+//function to return world entity id
+//function to return the start time of the game based off the world entity id
+//function that returns the time elapsed since the start time
+//fucntion that determines if game is in setup mode or combat mode based on time elapsed

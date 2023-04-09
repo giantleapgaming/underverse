@@ -12,8 +12,9 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
+import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
 import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, checkNFT } from "../utils.sol";
-import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract } from "../constants.sol";
+import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract, worldType } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 
@@ -26,6 +27,18 @@ contract BuildSystem is System {
     (int32 x, int32 y, uint256 entity_type, uint256 nftID) = abi.decode(arguments, (int32, int32, uint256, uint256));
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
+
+    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
+    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
+
+    //Get the entity ID of the entity of type world, there will only be one of it
+    uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+      worldType
+    )[0];
+    //Get the start time of the world
+    uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+
+    require((block.timestamp - startTime) < 600, "Build phase is over");
 
     require(entity_type == 5, "Can only build Harvesters in spawning zone");
 
@@ -53,9 +66,6 @@ contract BuildSystem is System {
         }
       }
     }
-
-    uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
-    require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
     uint256 godownCreationCost = (50000 * MULTIPLIER);
 
