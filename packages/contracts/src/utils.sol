@@ -8,19 +8,16 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "./components/OwnedBy
 import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "./components/DefenceComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "./components/BalanceComponent.sol";
-import { FuelComponent, ID as FuelComponentID } from "./components/FuelComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "./components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { Coordd, MULTIPLIER, MULTIPLIER2, earthCenterPlanetDefence, planetType, asteroidType, Faction, OperationCost, freenavyUpgrade, freenavyBuild, russiaBuild, chinaBuild, indiaBuild, euBuild, usaBuild, freenavyWeapon, russiaWeapon, chinaWeapon, indiaWeapon, usaWeapon, chinaSell, indiaSell, euSell, usaSell, russiaTransport, chinaTransport, indiaTransport, freenavyAttack, russiaAttack, chinaAttack, indiaAttack, usaAttack, russiaScrap, chinaScrap, indiaScrap, usaScrap, chinaIncome, indiaIncome, euIncome, usaIncome, freenavyRepair, russiaRepair, chinaRepair, indiaRepair, euRepair, usaRepair, personType, unprospected } from "./constants.sol";
+import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, OperationCost } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
-import { ProspectedComponent, ID as ProspectedComponentID } from "./components/ProspectedComponent.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "./components/EncounterComponent.sol";
 
 function getLastUpdatedTimeOfEntity(
   LastUpdatedTimeComponent lastUpdatedTimeComponent,
@@ -164,65 +161,6 @@ function getCoords(uint256[] memory entities, IUint256Component components) retu
   return coords;
 }
 
-// function isThereAnyObstacleOnTheWay(
-//   int32 x1,
-//   int32 y1,
-//   int32 x2,
-//   int32 y2,
-//   IUint256Component components
-// )
-//   view
-//   returns (
-//     Coordd[] memory // bool
-//   )
-// {
-//   // (Coord[] memory) {
-//   Coordd[] memory pointsArray; // new Coord[];
-//   uint256 co;
-//   // int32 deltaX = x2 - x1;
-//   // int32 deltaY = y2 - y1;
-//   // int32 d = int32(int256(Math.sqrt(uint256(int256((deltaX * deltaX + deltaY * deltaY) * int32(int256(MULTIPLIER)))))) / int256(MULTIPLIER2));
-//   int32 d = int32(
-//     int256(Math.sqrt(uint256(int256(((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) * int32(int256(MULTIPLIER)))))) /
-//       int256(MULTIPLIER2)
-//   );
-//   int32 stepX = ((x2 - x1) * 100) / d;
-//   int32 stepY = ((y2 - y1) * 100) / d;
-//   int32 x = x1 * 100;
-//   int32 y = y1 * 100;
-//   // for (int32 i = 1; i <= d; i++) {
-//   for (uint256 i = 0; i <= uint256(int256(d - 1)); i++) {
-//     // pointsArray[uint256(int256(i))] = Coord({x: x / 100, y: y / 100});
-//     if (i > 0) {
-//       // int32 int32(x / 100) = int32(x / 100);
-//       // int32 int32(y / 100) = int32(y / 100);
-//       if (!(x1 == int32(x / 100) && y1 == int32(y / 100)) && !(x2 == int32(x / 100) && y2 == int32(y / 100))) {
-//         uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
-//           .getEntitiesWithValue(Coord({ x: int32(x / 100), y: int32(y / 100) }));
-
-//         if (arrayOfGodownsAtThatCoord.length > 0) {
-//           for (uint256 j = 0; j < arrayOfGodownsAtThatCoord.length; j++) {
-//             if (
-//               LevelComponent(getAddressById(components, LevelComponentID)).getValue(arrayOfGodownsAtThatCoord[j]) > 0
-//             ) {
-//               pointsArray[co] = Coordd({ x: int32(x / 100), y: int32(y / 100) });
-//               co++;
-//               // There is atleast one obstacle having level greater than 0
-//               // return true;
-//             }
-//           }
-//         }
-//       }
-//       x += stepX;
-//       y += stepY;
-//     }
-//   }
-//   // return pointsArray;
-//   // No obstacles along the path
-//   // return false;
-//   return pointsArray;
-// }
-
 function atleastOneObstacleOnTheWay(
   int32 x1,
   int32 y1,
@@ -258,156 +196,6 @@ function atleastOneObstacleOnTheWay(
     y += stepY;
   }
   return result;
-}
-
-// function createAsteroids(IWorld world, IUint256Component components, int32 x, int32 y, uint256 balance, uint256 fuel) {
-//   uint256 ent = world.getUniqueEntityId();
-//   PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
-//   BalanceComponent(getAddressById(components, BalanceComponentID)).set(ent, balance);
-//   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, asteroidType);
-//   LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(ent, block.timestamp);
-//   LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
-//   FuelComponent(getAddressById(components, FuelComponentID)).set(ent, fuel);
-//   ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
-// }
-
-// function getPlayerCount(PlayerCountComponent playerCountComponent, uint256 entity) view returns (uint256) {
-//   bytes memory playerCountBytes = playerCountComponent.getRawValue(entity);
-//   return playerCountBytes.length == 0 ? 0 : abi.decode(playerCountBytes, (uint256));
-// }
-
-function getFactionUpgradeCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.FREENAVY) {
-    return freenavyUpgrade;
-  }
-  return 100;
-}
-
-function getFactionBuildCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.FREENAVY) {
-    return freenavyBuild;
-  } else if (faction == Faction.RUSSIA) {
-    return russiaBuild;
-  } else if (faction == Faction.CHINA) {
-    return chinaBuild;
-  } else if (faction == Faction.INDIA) {
-    return indiaBuild;
-  } else if (faction == Faction.EU) {
-    return euBuild;
-  } else if (faction == Faction.USA) {
-    return usaBuild;
-  }
-  return 100;
-}
-
-function getFactionWeaponCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.FREENAVY) {
-    return freenavyWeapon;
-  } else if (faction == Faction.RUSSIA) {
-    return russiaWeapon;
-  } else if (faction == Faction.CHINA) {
-    return chinaWeapon;
-  } else if (faction == Faction.INDIA) {
-    return indiaWeapon;
-  } else if (faction == Faction.USA) {
-    return usaWeapon;
-  }
-  return 100;
-}
-
-function getFactionSellCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.CHINA) {
-    return chinaSell;
-  } else if (faction == Faction.INDIA) {
-    return indiaSell;
-  } else if (faction == Faction.EU) {
-    return euSell;
-  } else if (faction == Faction.USA) {
-    return usaSell;
-  }
-  return 100;
-}
-
-function getFactionTransportCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.RUSSIA) {
-    return russiaTransport;
-  } else if (faction == Faction.CHINA) {
-    return chinaTransport;
-  } else if (faction == Faction.INDIA) {
-    return indiaTransport;
-  }
-  return 100;
-}
-
-function getFactionAttackCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.FREENAVY) {
-    return freenavyAttack;
-  } else if (faction == Faction.RUSSIA) {
-    return russiaAttack;
-  } else if (faction == Faction.CHINA) {
-    return chinaAttack;
-  } else if (faction == Faction.INDIA) {
-    return indiaAttack;
-  } else if (faction == Faction.USA) {
-    return usaAttack;
-  }
-  return 100;
-}
-
-function getFactionScrapCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.RUSSIA) {
-    return russiaScrap;
-  } else if (faction == Faction.CHINA) {
-    return chinaScrap;
-  } else if (faction == Faction.INDIA) {
-    return indiaScrap;
-  } else if (faction == Faction.USA) {
-    return usaScrap;
-  }
-  return 100;
-}
-
-function getFactionIncomeCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.CHINA) {
-    return chinaIncome;
-  } else if (faction == Faction.INDIA) {
-    return indiaIncome;
-  } else if (faction == Faction.EU) {
-    return euIncome;
-  } else if (faction == Faction.USA) {
-    return usaIncome;
-  }
-  return 100;
-}
-
-function getFactionRepairCosts(Faction faction) pure returns (uint256) {
-  if (faction == Faction.FREENAVY) {
-    return freenavyRepair;
-  } else if (faction == Faction.RUSSIA) {
-    return russiaRepair;
-  } else if (faction == Faction.CHINA) {
-    return chinaRepair;
-  } else if (faction == Faction.INDIA) {
-    return indiaRepair;
-  } else if (faction == Faction.EU) {
-    return euRepair;
-  } else if (faction == Faction.USA) {
-    return usaRepair;
-  }
-  return 100;
-}
-
-function getPlayerFuel(FuelComponent fuelComponent, uint256 entity) view returns (uint256) {
-  bytes memory currentFuelBytes = fuelComponent.getRawValue(entity);
-  return currentFuelBytes.length == 0 ? 0 : abi.decode(currentFuelBytes, (uint256));
-}
-
-function createPerson(IWorld world, IUint256Component components, int32 x, int32 y) {
-  uint256 personID = world.getUniqueEntityId();
-  EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(personID, personType);
-  LastUpdatedTimeComponent(getAddressById(components, LastUpdatedTimeComponentID)).set(personID, block.timestamp);
-  PositionComponent(getAddressById(components, PositionComponentID)).set(personID, Coord({ x: x, y: y }));
-  LevelComponent(getAddressById(components, LevelComponentID)).set(personID, 1);
 }
 
 function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
@@ -449,8 +237,6 @@ function createEncounterEntity(IWorld world, IUint256Component components, int32
     uint256 ent = world.getUniqueEntityId();
     PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
     LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
-    ProspectedComponent(getAddressById(components, ProspectedComponentID)).set(ent, 0);
-    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(ent, unprospected);
     //We set the calling entity encounter ID to the newly created entity and vice versa
     //That way we know which 2 entities belong to a specific encounter
     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);

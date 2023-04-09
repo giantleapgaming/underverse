@@ -9,11 +9,9 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity, getPlayerFuel } from "../utils.sol";
+import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity } from "../utils.sol";
 import "../libraries/Math.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
 import { checkNFT } from "../utils.sol";
@@ -52,11 +50,6 @@ contract MoveShipSystem is System {
       "Source has to be an Harvester, Attack ship or fuel carrier or People Carrier"
     );
 
-    // require(
-    //   EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0,
-    //   "Cannot move ship while in an encounter"
-    // );
-
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       sourceEntity
@@ -81,10 +74,6 @@ contract MoveShipSystem is System {
     //Transport cost is a square function of the distance
     uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
 
-    uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
-
-    require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to make this move");
-
     // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
     // The greater the distance from center the higher the probability that the second condition will be satisfied
     // This means the odds of an asteroid discovery increase as you go further from the center
@@ -99,7 +88,6 @@ contract MoveShipSystem is System {
     }
 
     // update player data
-    FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
   }

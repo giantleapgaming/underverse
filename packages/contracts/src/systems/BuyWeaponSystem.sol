@@ -8,9 +8,8 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
-import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getFactionWeaponCosts } from "../utils.sol";
-import { MULTIPLIER, MISSILE_COST, Faction } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash } from "../utils.sol";
+import { MULTIPLIER, MISSILE_COST } from "../constants.sol";
 import "../libraries/Math.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -58,12 +57,8 @@ contract BuyWeaponSystem is System {
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
-
-    uint256 factionCostPercent = getFactionWeaponCosts(Faction(userFaction));
-
     // BUT NOW - its just 1000. Same price at any cell
-    uint256 totalPrice = ((MISSILE_COST * MULTIPLIER) * buyQuantity * factionCostPercent) / 100; // To convert in 10^6 format
+    uint256 totalPrice = ((MISSILE_COST * MULTIPLIER) * buyQuantity); // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such weapon quantity");
 

@@ -10,13 +10,9 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
-import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { getCurrentPosition, getPlayerCash, getTotalGodownUpgradeCostUntilLevel, getFactionRepairCosts } from "../utils.sol";
+import { getCurrentPosition, getPlayerCash, getTotalGodownUpgradeCostUntilLevel } from "../utils.sol";
 import "../libraries/Math.sol";
-import { Faction } from "../constants.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { checkNFT } from "../utils.sol";
 import { nftContract } from "../constants.sol";
 
@@ -53,11 +49,7 @@ contract RepairSystem is System {
     // Total amount spent on station so far TotalSpent = godownCreationCost + totalGodownUpgradeCostUntilLevel
     // Amount needed to repair = TotalSpent*damagePercent/100
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
-
-    uint256 factionCostPercent = getFactionRepairCosts(Faction(userFaction));
-
-    uint256 repairCash = ((((totalGodownUpgradeCostUntilLevel) * damagePercent) / 100) * factionCostPercent) / 100;
+    uint256 repairCash = ((totalGodownUpgradeCostUntilLevel) * damagePercent) / 100;
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 

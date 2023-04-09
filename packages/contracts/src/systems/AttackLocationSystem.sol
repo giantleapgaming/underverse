@@ -8,9 +8,8 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
-import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { atleastOneObstacleOnTheWay, getCurrentPosition, deleteGodown, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, getFactionAttackCosts } from "../utils.sol";
-import { MULTIPLIER2, Faction } from "../constants.sol";
+import { atleastOneObstacleOnTheWay, getCurrentPosition, deleteGodown, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
+import { MULTIPLIER2 } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract } from "../constants.sol";
@@ -71,10 +70,6 @@ contract AttackLocationSystem is System {
       "Can only attack upto a certain distance based on your level"
     );
 
-    // uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
-
-    // uint256 factionCostPercent = getFactionAttackCosts(Faction(userFaction));
-
     // reduce balance of weapons of source  by the amount used up,
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(sourceEntity, sourceWeapon - amount);
 
@@ -85,7 +80,6 @@ contract AttackLocationSystem is System {
     );
 
     if ((x == targetPosition.x) && (y == targetPosition.y)) {
-      //uint256 totalDamage = (amount * ((250 * MULTIPLIER2) / distance) * factionCostPercent) / 100;
       uint256 totalDamage = amount * ((250 * MULTIPLIER2) / distance);
       uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
         destinationEntity

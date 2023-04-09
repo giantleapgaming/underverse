@@ -8,32 +8,19 @@
     "OffenceComponent",
     "DefenceComponent",
     "LevelComponent",
-    "BalanceComponent",
-    "FactionComponent",
     "EntityTypeComponent",
-    "PopulationComponent",
-    "FuelComponent",
     "PlayerCountComponent",
-    "RankComponent",
-    "SectorEdgeComponent",
-    "ProspectedComponent",
     "PrevPositionComponent",
     "NFTIDComponent",
-    "EncounterComponent",
     "Attribute1Component",
     "Attribute2Component",
     "Attribute3Component",
     "Attribute4Component",
     "Attribute5Component",
-    "Attribute6Component"
+    "Attribute6Component",
+    "StartTimeComponent"
   ],
   "systems": [
-    {
-      "name": "ComponentDevSystem",
-      "writeAccess": [
-        "*"
-      ]
-    },
     {
       "name": "InitSystem",
       "writeAccess": [
@@ -45,19 +32,15 @@
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
-        "BalanceComponent",
-        "FactionComponent",
         "EntityTypeComponent",
-        "PopulationComponent",
-        "FuelComponent",
-        "PlayerCountComponent",
         "NFTIDComponent",
         "Attribute1Component",
         "Attribute2Component",
         "Attribute3Component",
         "Attribute4Component",
         "Attribute5Component",
-        "Attribute6Component"
+        "Attribute6Component",
+        "StartTimeComponent"
       ]
     },
     {
@@ -71,41 +54,8 @@
         "OffenceComponent",
         "DefenceComponent",
         "LevelComponent",
-        "BalanceComponent",
-        "FactionComponent",
         "EntityTypeComponent",
-        "FuelComponent",
-        "PopulationComponent",
-        "PrevPositionComponent",
-        "EncounterComponent"
-      ]
-    },
-    {
-      "name": "SellSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "BalanceComponent"
-      ]
-    },
-    {
-      "name": "TransportSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "BalanceComponent",
-        "FuelComponent",
-        "PositionComponent",
-        "LevelComponent"
-      ]
-    },
-    {
-      "name": "HarvestSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "BalanceComponent",
-        "FuelComponent"
+        "PrevPositionComponent"
       ]
     },
     {
@@ -126,8 +76,7 @@
         "PositionComponent",
         "OffenceComponent",
         "DefenceComponent",
-        "LevelComponent",
-        "FuelComponent"
+        "LevelComponent"
       ]
     },
     {
@@ -139,19 +88,7 @@
         "PositionComponent",
         "OffenceComponent",
         "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent"
-      ]
-    },
-    {
-      "name": "ScrapSystem",
-      "writeAccess": [
-        "LevelComponent",
-        "OffenceComponent",
-        "DefenceComponent",
-        "FuelComponent",
-        "BalanceComponent",
-        "EntityTypeComponent"
+        "LevelComponent"
       ]
     },
     {
@@ -163,84 +100,12 @@
       ]
     },
     {
-      "name": "RaptureSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "PopulationComponent",
-        "FuelComponent",
-        "EntityTypeComponent",
-        "PositionComponent",
-        "LevelComponent"
-      ]
-    },
-    {
       "name": "MoveShipSystem",
       "writeAccess": [
         "PositionComponent",
         "EntityTypeComponent",
         "LevelComponent",
-        "BalanceComponent",
-        "FuelComponent",
-        "ProspectedComponent",
-        "PrevPositionComponent",
-        "EncounterComponent"
-      ]
-    },
-    {
-      "name": "ProspectSystem",
-      "writeAccess": [
-        "CashComponent",
-        "BalanceComponent",
-        "FuelComponent",
-        "ProspectedComponent",
-        "DefenceComponent",
-        "EncounterComponent",
-        "OffenceComponent",
-        "EntityTypeComponent"
-      ]
-    },
-    {
-      "name": "RefuelSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "FuelComponent"
-      ]
-    },
-    {
-      "name": "BuildFromHarvesterSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "NameComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent",
-        "EntityTypeComponent",
-        "FuelComponent",
-        "PopulationComponent",
-        "OffenceComponent",
-        "PrevPositionComponent",
-        "EncounterComponent"
-      ]
-    },
-    {
-      "name": "BuildFromShipyardSystem",
-      "writeAccess": [
-        "LastUpdatedTimeComponent",
-        "NameComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent",
-        "EntityTypeComponent",
-        "FuelComponent",
-        "PopulationComponent",
-        "OffenceComponent",
-        "PrevPositionComponent",
-        "EncounterComponent"
+        "PrevPositionComponent"
       ]
     },
     {
@@ -251,7 +116,6 @@
         "PositionComponent",
         "DefenceComponent",
         "LevelComponent",
-        "BalanceComponent",
         "EntityTypeComponent"
       ]
     },
@@ -274,8 +138,7 @@
         "PositionComponent",
         "OffenceComponent",
         "DefenceComponent",
-        "LevelComponent",
-        "BalanceComponent"
+        "LevelComponent"
       ]
     }
   ]

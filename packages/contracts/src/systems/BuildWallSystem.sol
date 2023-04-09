@@ -7,7 +7,6 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "../components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
 import { getCurrentPosition, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay } from "../utils.sol";
@@ -71,8 +70,6 @@ contract BuildWallSystem is System {
     require(wallLength > 0, "Start and end point of the wall cannot be same");
 
     //Check the balance to ensure you have enough material to build
-    uint256 sourceBalance = BalanceComponent(getAddressById(components, BalanceComponentID)).getValue(sourceEntity);
-    require(sourceBalance >= wallLength, "Not enough material in harvester to build");
 
     //Check that the start point and end point are both less than 5 units away from the Harvester
     // Take current position of Harvester
@@ -140,8 +137,6 @@ contract BuildWallSystem is System {
         OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
       }
     }
-
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - wallLength);
   }
 
   function executeTyped(

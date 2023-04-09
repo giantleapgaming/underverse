@@ -12,13 +12,10 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { FactionComponent, ID as FactionComponentID } from "../components/FactionComponent.sol";
-import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
-import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, getFactionBuildCosts, checkNFT } from "../utils.sol";
-import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, godownInitialStorage, godownInitialBalance, MULTIPLIER, MULTIPLIER2, Faction, initialEntityPopulation, baseInitialfuel, nftContract } from "../constants.sol";
+import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, checkNFT } from "../utils.sol";
+import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -60,11 +57,7 @@ contract BuildSystem is System {
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
-    uint256 userFaction = FactionComponent(getAddressById(components, FactionComponentID)).getValue(playerID);
-
-    uint256 factionCostPercent = getFactionBuildCosts(Faction(userFaction));
-
-    uint256 godownCreationCost = (50000 * MULTIPLIER * factionCostPercent) / 100;
+    uint256 godownCreationCost = (50000 * MULTIPLIER);
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
@@ -79,9 +72,6 @@ contract BuildSystem is System {
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, godownInitialLevel);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, godownInitialBalance);
-    FuelComponent(getAddressById(components, FuelComponentID)).set(godownEntity, baseInitialfuel);
-    EncounterComponent(getAddressById(components, EncounterComponentID)).set(godownEntity, 0);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
