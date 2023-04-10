@@ -102,8 +102,6 @@
       "name": "MoveShipSystem",
       "writeAccess": [
         "PositionComponent",
-        "EntityTypeComponent",
-        "LevelComponent",
         "PrevPositionComponent"
       ]
     },
@@ -114,7 +112,8 @@
         "PositionComponent",
         "DefenceComponent",
         "LevelComponent",
-        "EntityTypeComponent"
+        "EntityTypeComponent",
+        "CashComponent"
       ]
     },
     {

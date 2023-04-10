@@ -79,6 +79,9 @@ contract BuildWallSystem is System {
 
     require(playerCash >= wallCost, "Insufficient in-game cash balance to create wall");
 
+    // update player data
+    CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - wallCost);
+
     //If wall is horizontal we take the start and end X coordinates as running variables
     //If wall is vertical we take the start and end Y coordinates as running variables
     //We set the smaller as i and bigger as j
