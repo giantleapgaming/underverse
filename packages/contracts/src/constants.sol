@@ -5,8 +5,7 @@ uint256 constant MULTIPLIER = 1000000;
 uint256 constant MULTIPLIER2 = 1000;
 uint256 constant MISSILE_COST = 1000;
 uint256 constant actionDelayInSeconds = 0;
-uint256 constant godownCreationCost = 20000 * MULTIPLIER;
-uint256 constant playerInitialCash = 100000 * MULTIPLIER;
+uint256 constant playerInitialCash = 500 * MULTIPLIER;
 uint256 constant offenceInitialAmount = 0;
 uint256 constant defenceInitialAmount = 100;
 uint256 constant godownInitialLevel = 1;
@@ -29,17 +28,15 @@ uint256 constant barrier = 10;
 // uint256 constant unprospected = 12;
 // uint256 constant pplCarrier = 13;
 uint256 constant worldType = 14;
+uint256 constant laserShip = 15;
+uint256 constant pdcShip = 16;
+uint256 constant railGunShip = 17;
+uint256 constant missileShip = 18;
+int32 constant startRadius = 50;
 
 struct Coordd {
   int32 x;
   int32 y;
-}
-
-struct OperationCost {
-  uint256 attack;
-  uint256 move;
-  uint256 transport;
-  uint256 repair;
 }
 
 address constant nftContract = 0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3;

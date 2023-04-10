@@ -14,7 +14,7 @@ import { BalanceComponent, ID as BalanceComponentID } from "../components/Balanc
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
 import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, checkNFT } from "../utils.sol";
-import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract, worldType } from "../constants.sol";
+import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract, worldType, startRadius } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 
@@ -40,13 +40,16 @@ contract BuildSystem is System {
 
     require((block.timestamp - startTime) < 600, "Build phase is over");
 
-    require(entity_type == 5, "Can only build Harvesters in spawning zone");
+    require(
+      (entity_type == 15 || entity_type == 16 || entity_type == 17 || entity_type == 18),
+      "Can only build various attack ships in this game mode"
+    );
 
     int32 distSq = x ** 2 + y ** 2;
 
     Coord memory coord = Coord({ x: x, y: y });
 
-    require(distSq < 225 && distSq > 9, "Can only build between 3 to 15 units from earth");
+    require((distSq < startRadius ** 2), "Can only build within the game zone");
 
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {
@@ -67,7 +70,7 @@ contract BuildSystem is System {
       }
     }
 
-    uint256 godownCreationCost = (50000 * MULTIPLIER);
+    uint256 godownCreationCost = (entity_type * MULTIPLIER);
 
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 

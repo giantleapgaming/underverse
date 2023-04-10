@@ -12,7 +12,7 @@ import { LevelComponent, ID as LevelComponentID } from "./components/LevelCompon
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, OperationCost, AsteroidHealth } from "./constants.sol";
+import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, AsteroidHealth } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
@@ -72,11 +72,6 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
   OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
   BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
   // PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
-}
-
-function getGodownCreationCost(int32 x, int32 y) pure returns (uint256) {
-  uint256 godownCreationCost = (50000 * MULTIPLIER); // 10^6
-  return godownCreationCost;
 }
 
 function getTotalGodownUpgradeCostUntilLevel(uint256 currentLevel) pure returns (uint256) {

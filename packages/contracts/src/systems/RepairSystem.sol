@@ -46,8 +46,6 @@ contract RepairSystem is System {
     // Simplifying it to ((selectedEntityLevel * 100) - defenceAmount)/selectedEntityLevel;
 
     uint256 damagePercent = ((selectedEntityLevel * 100) - defenceAmount) / (selectedEntityLevel * 100);
-    // Total amount spent on station so far TotalSpent = godownCreationCost + totalGodownUpgradeCostUntilLevel
-    // Amount needed to repair = TotalSpent*damagePercent/100
 
     uint256 repairCash = ((totalGodownUpgradeCostUntilLevel) * damagePercent) / 100;
 
