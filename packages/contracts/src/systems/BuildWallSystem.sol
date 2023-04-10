@@ -13,8 +13,10 @@ import { getCurrentPosition, getDistanceBetweenCoordinatesWithMultiplier, atleas
 import { godownInitialLevel, barrier } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { nftContract } from "../constants.sol";
-import { checkNFT } from "../utils.sol";
+import { nftContract, worldType, startRadius, MULTIPLIER } from "../constants.sol";
+import { checkNFT, unOwnedObstacle, getPlayerCash } from "../utils.sol";
+import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
+import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildWall"));
 
@@ -32,22 +34,14 @@ contract BuildWallSystem is System {
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
-    //Check if source entity owned by user,
+    //Get the entity ID of the entity of type world, there will only be one of it
+    uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+      worldType
+    )[0];
+    //Get the start time of the world
+    uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
 
-    require(
-      OwnedByComponent(getAddressById(components, OwnedByComponentID)).getValue(sourceEntity) == playerID,
-      "Ship not owned by user"
-    );
-
-    //is it level 1 or higher
-    uint256 sourceEntityLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(sourceEntity);
-    require(sourceEntityLevel >= 1, "Ship has already been destroyed");
-
-    //and is it of type Harvester
-    require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity) == 5,
-      "Source has to be an Harvester"
-    );
+    require((block.timestamp - startTime) < 600, "Build phase is over");
 
     //Check if wall is either vertical or horizontal
     require(y2 == y1 || x2 == x1, "Wall can be made only horizontal or vertical");
@@ -69,33 +63,21 @@ contract BuildWallSystem is System {
 
     require(wallLength > 0, "Start and end point of the wall cannot be same");
 
-    //Check the balance to ensure you have enough material to build
+    //Check that the start point and end point are both within build zone
 
-    //Check that the start point and end point are both less than 5 units away from the Harvester
-    // Take current position of Harvester
-    Coord memory sourcePosition = getCurrentPosition(
-      PositionComponent(getAddressById(components, PositionComponentID)),
-      sourceEntity
-    );
+    require((x1 ** 2 + y1 ** 2) <= startRadius ** 2, "Start point of wall is further than 5 units away from Harvester");
 
-    require(
-      ((x1 - sourcePosition.x) ** 2 + (y1 - sourcePosition.y) ** 2) <= 25,
-      " Start point of wall is further than 5 units away from Harvester"
-    );
-    require(
-      ((x2 - sourcePosition.x) ** 2 + (y2 - sourcePosition.y) ** 2) <= 25,
-      " End point of wall is further than 5 units away from Harvester"
-    );
+    require((x2 ** 2 + y2 ** 2) <= startRadius ** 2, "End point of wall is further than 5 units away from Harvester");
 
-    //Ensure Harvester is out of spawning zone
-    require(
-      sourcePosition.x ** 2 + sourcePosition.y ** 2 >= 225,
-      "Harvester has to be more than 15 units away from center"
-    );
+    //We want to check that every single point along the wall is currently unoccupied or is owned by the user
 
-    //We want to check that every single point along the wall is currently unoccupied
+    require(unOwnedObstacle(x1, y1, x2, y2, components, playerID) == false, "Obstacle on the way");
 
-    require(atleastOneObstacleOnTheWay(x1, y1, x2, y2, components) == false, "Obstacle on the way");
+    uint256 wallCost = (wallLength * MULTIPLIER);
+
+    uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
+
+    require(playerCash >= wallCost, "Insufficient in-game cash balance to create wall");
 
     //If wall is horizontal we take the start and end X coordinates as running variables
     //If wall is vertical we take the start and end Y coordinates as running variables

@@ -46,7 +46,6 @@
     {
       "name": "BuildSystem",
       "writeAccess": [
-        "LastUpdatedTimeComponent",
         "NameComponent",
         "OwnedByComponent",
         "PositionComponent",
@@ -111,7 +110,6 @@
     {
       "name": "BuildWallSystem",
       "writeAccess": [
-        "LastUpdatedTimeComponent",
         "OwnedByComponent",
         "PositionComponent",
         "DefenceComponent",
