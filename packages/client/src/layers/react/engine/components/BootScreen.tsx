@@ -1,14 +1,22 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Line } from "rc-progress";
 
-export const BootScreen: React.FC<{ initialOpacity?: number }> = ({ children, initialOpacity }) => {
+export const BootScreen: React.FC<{ initialOpacity?: number; percent?: number; message?: string }> = ({
+  initialOpacity,
+  message,
+  percent,
+}) => {
   const [opacity, setOpacity] = useState(initialOpacity ?? 0);
 
   useEffect(() => setOpacity(1), []);
 
   return (
     <Container>
-      <div>{children}</div>
+      <div>
+        <p style={{ marginBottom: "20px" }}>{message || "Connecting"}</p>
+        {!!percent && <Line percent={percent || 0} strokeWidth={4} strokeColor="#00fde4" trailWidth={4} />}
+      </div>
     </Container>
   );
 };
@@ -34,5 +42,6 @@ const Container = styled.div`
   div {
     font-family: "Space Grotesk", sans-serif;
     padding-top: 450px;
+    position: relative;
   }
 `;
