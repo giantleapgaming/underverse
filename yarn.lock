@@ -2726,6 +2726,14 @@
     globals "^13.2.0"
     nullthrows "^1.1.1"
 
+"@parcel/packager-raw-url@2.8.3":
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/@parcel/packager-raw-url/-/packager-raw-url-2.8.3.tgz#5994dca47f37a395deb0fd5b574a9d4656617f47"
+  integrity sha512-v8k/x2pnR3DDiIJrPTUcBd+MjH9ocpac0dsdJ02yeyGIQTecqL6nuCtu6W4m75CC7vFjjh/aCK9TJsOHOFnCFQ==
+  dependencies:
+    "@parcel/plugin" "2.8.3"
+    "@parcel/utils" "2.8.3"
+
 "@parcel/packager-raw@2.8.3":
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/@parcel/packager-raw/-/packager-raw-2.8.3.tgz#bdec826df991e186cb58691cc45d12ad5c06676e"
@@ -2953,6 +2961,16 @@
     posthtml-parser "^0.10.1"
     posthtml-render "^3.0.0"
     semver "^5.7.1"
+
+"@parcel/transformer-webmanifest@2.8.3":
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/@parcel/transformer-webmanifest/-/transformer-webmanifest-2.8.3.tgz#5858079bf5abaedcf42dc5e856248a596277dc71"
+  integrity sha512-v3NuQc1K1AMfD1+hvh/YYpxBEin52CvEX94MnjwYK6bDmJ35rNuttIs7T6DZxAOopRbGwoTchCShIbv15gTcvg==
+  dependencies:
+    "@mischnic/json-sourcemap" "^0.1.0"
+    "@parcel/diagnostic" "2.8.3"
+    "@parcel/plugin" "2.8.3"
+    "@parcel/utils" "2.8.3"
 
 "@parcel/types@2.8.3":
   version "2.8.3"
@@ -5669,13 +5687,13 @@ dpdm@^3.9.0:
     typescript "^5.0.2"
     yargs "^17.7.1"
 
-"ds-test@git+https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084":
-  version "1.0.0"
-  resolved "git+https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084"
-
 "ds-test@https://github.com/dapphub/ds-test.git#c7a36fb236f298e04edf28e2fee385b80f53945f":
   version "0.0.0"
   resolved "https://github.com/dapphub/ds-test.git#c7a36fb236f298e04edf28e2fee385b80f53945f"
+
+"ds-test@https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084":
+  version "1.0.0"
+  resolved "https://github.com/dapphub/ds-test.git#c9ce3f25bde29fc5eb9901842bf02850dfd2d084"
 
 duplexer@^0.1.1:
   version "0.1.2"
@@ -6583,13 +6601,13 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha512-j0KLYPhm6zeac4lz3oJ3o65qvgQCcPubiyotZrXqEaG4hNagNYO8qdlUrX5vwqv9ohqeT/Z3j6+yW067yWWdUw==
 
-"forge-std@git+https://github.com/foundry-rs/forge-std.git#b4f121555729b3afb3c5ffccb62ff4b6e2818fd3":
-  version "1.2.0"
-  resolved "git+https://github.com/foundry-rs/forge-std.git#b4f121555729b3afb3c5ffccb62ff4b6e2818fd3"
-
 "forge-std@https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c":
   version "0.0.0"
   resolved "https://github.com/foundry-rs/forge-std.git#4d36e3f7e2168c8155c641eb0f80e85cd584bd1c"
+
+"forge-std@https://github.com/foundry-rs/forge-std.git#b4f121555729b3afb3c5ffccb62ff4b6e2818fd3":
+  version "1.2.0"
+  resolved "https://github.com/foundry-rs/forge-std.git#b4f121555729b3afb3c5ffccb62ff4b6e2818fd3"
 
 form-data@^3.0.0:
   version "3.0.1"
@@ -11530,9 +11548,9 @@ solidity-comments-extractor@^0.0.7:
   resolved "https://registry.yarnpkg.com/solidity-comments-extractor/-/solidity-comments-extractor-0.0.7.tgz#99d8f1361438f84019795d928b931f4e5c39ca19"
   integrity sha512-wciNMLg/Irp8OKGrh3S2tfvZiZ0NEyILfcRCXCD4mp7SgK/i9gzLfhY2hY7VMCQJ3kH9UB9BzNdibIVMchzyYw==
 
-"solmate@git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
+"solmate@https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c":
   version "6.5.0"
-  resolved "git+https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
+  resolved "https://github.com/Rari-Capital/solmate.git#9cf1428245074e39090dceacb0c28b1f684f584c"
 
 sonner@^0.2.0:
   version "0.2.0"

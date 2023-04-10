@@ -41,8 +41,22 @@ const WalletLogin = () => {
                 flexDirection: "column",
                 gap: "10px",
                 marginBottom: "50px",
+                marginTop: "25px",
               }}
             >
+              <p
+                style={{
+                  fontSize: "14px",
+                  color: "#fffdd5",
+                  fontWeight: "bolder",
+                  fontFamily: "sans-serif",
+                  lineHeight: "1.6",
+                }}
+              >
+                New here? Create a free in- <br />
+                game account with the Tutorial
+                <br /> Campaign.
+              </p>
               <img
                 onClick={async () => {
                   window.location.replace("https://tutorial.giantleap.gg/");
@@ -52,15 +66,25 @@ const WalletLogin = () => {
               />
               <p
                 style={{
-                  fontSize: "20px",
+                  fontSize: "22px",
                   color: "#fffdd5",
-                  fontFamily: "sans-serif",
                   fontWeight: "bolder",
                   marginTop: "20px",
                   marginBottom: "20px",
                 }}
               >
                 USE EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
+                <p
+                  style={{
+                    fontSize: "12px",
+                    color: "#fffdd5",
+                    fontWeight: "700",
+                    marginTop: "6px",
+                    fontFamily: "sans-serif",
+                  }}
+                >
+                  + Genesis NFT Bridge & Reveal
+                </p>
               </p>
             </div>
             {!!allKeys.length && (
@@ -290,11 +314,13 @@ const WalletText = styled.div`
   margin: 20px auto;
   z-index: 100;
   letter-spacing: 1;
+  font-family: "MyOTFFont";
 `;
 const P = styled.p`
-  font-family: sans-serif;
   letter-spacing: 1;
   margin-bottom: 10px;
+  font-family: sans-serif;
+  font-size: 20px;
 
   &:hover {
     color: #00ffe6;
