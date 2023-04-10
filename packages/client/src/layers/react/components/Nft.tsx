@@ -29,9 +29,8 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
-    console.log(showNftBridge);
     if (showNftBridge) {
-      return <NoNFT address={address} />;
+      return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
     }
     return (
       <div>
@@ -107,11 +106,9 @@ export const Nft = ({
         </div>
       </div>
     );
+  } else {
+    return null;
   }
-
-  // else {
-  //   return <NoNFT address={address} />;
-  // }
 };
 
 const S = {
