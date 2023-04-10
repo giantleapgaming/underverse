@@ -14,13 +14,17 @@ export const PolygonToL2NftBridge = async (metaMaskSigner: any, metaMaskAddress:
   const urls = DATA.generateURLs("giantleap-test1");
   const L2_URL = urls.L2_HTTP;
   const ADDRESS_ENDPOINT = urls.ADDRESS_ENDPOINT;
-
+  console.log(L2_URL);
   // setup messenger(sdk)
   const l1Provider = new ethers.providers.JsonRpcProvider(L1_URL);
   // const l1Wallet = new ethers.Wallet(signer, l1Provider);
   const l2Provider = new ethers.providers.JsonRpcProvider(L2_URL);
   const l2Wallet: Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
-  const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, ADDRESS_ENDPOINT);
+  const messenger: CrossChainMessenger = await initializeMessenger(
+    metaMaskSigner,
+    l2Wallet,
+    "http://localhost:3000/addresses.json"
+  );
   const l1ERC1155 = new ethers.Contract(L1_ERC1155_CONTRACT_ADDRESS, GiantleapNft_ABI, metaMaskSigner);
   const l2ERC1155 = new ethers.Contract(L2_ERC1155_CONTRACT_ADDRESS, L2StandardERC1155.abi, l2Wallet);
 
