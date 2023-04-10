@@ -61,7 +61,9 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
         </S.DeployText>
       </div>
       <S.Container>
-        <img src="/img/title.png" style={{ margin: "20px 0" }} />
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <img src="/img/title.png" style={{ marginTop: "20px" }} />
+        </div>
         {connectNFTBridge ? (
           <div>
             <p
@@ -91,8 +93,13 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
                 }}
               >
                 <li>
-                  <span onClick={connectAccount}>Connect</span> your MetaMask and select your account which you used to
-                  mint the Genesis NFT
+                  <span
+                    onClick={connectAccount}
+                    style={{ cursor: "pointer", textDecorationLine: "underline", fontWeight: 700 }}
+                  >
+                    Connect
+                  </span>{" "}
+                  your MetaMask and select your account which you used to mint the Genesis NFT
                 </li>
                 <li>Click BRIDGE and approve transactions to bridge your NFT to your in-game wallet</li>
                 <li>

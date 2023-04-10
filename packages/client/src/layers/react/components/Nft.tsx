@@ -29,9 +29,6 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
-    if (showNftBridge) {
-      return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
-    }
     return (
       <div>
         <div>
@@ -55,7 +52,6 @@ export const Nft = ({
             <S.BridgeNftButton
               src="/img/BridgeNftButton.png"
               onClick={() => {
-                console.log("hi");
                 setShowNftBridge(true);
               }}
             />
@@ -89,25 +85,27 @@ export const Nft = ({
               SELECT YOUR NFT GAME PROFILE
             </p>
             <S.NftSelectionContainer>
-              {allNfts.map((data, index) => (
-                <S.NftSelect
-                  selectedNFT={data.tokenId === selectedNFT}
-                  key={`index-${index}`}
-                  onClick={() => {
-                    setSelectNft(data);
-                    clickSound();
-                  }}
-                >
-                  <S.Img src={data.imageUrl} />
-                </S.NftSelect>
-              ))}
+              <>
+                {allNfts.map((data, index) => (
+                  <S.NftSelect
+                    selectedNFT={data.tokenId === selectedNFT}
+                    key={`index-${index}`}
+                    onClick={() => {
+                      setSelectNft(data);
+                      clickSound();
+                    }}
+                  >
+                    <S.Img src={data.imageUrl} />
+                  </S.NftSelect>
+                ))}
+              </>
             </S.NftSelectionContainer>
           </S.Container>
         </div>
       </div>
     );
   } else {
-    return null;
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
   }
 };
 
