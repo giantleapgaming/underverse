@@ -2,12 +2,13 @@ import { ethers } from "ethers";
 import { CrossChainMessenger, initializeMessenger, MessageStatus } from "@constellation-labs/sdk";
 import { DATA } from "./data";
 import L2StandardERC1155 from "./artifacts/L2StandardERC1155.json";
+import { toast } from "sonner";
 
 export const L2ToPolygonNftBridge = async (
   metaMaskSigner: any,
-  metaMaskAddress: string,
   gamePrivateKey: string,
-  tokenId: number
+  tokenId: number,
+  setSuccess: () => void
 ) => {
   // input
   const L2_PRIVATE_KEY = gamePrivateKey;
@@ -24,15 +25,6 @@ export const L2ToPolygonNftBridge = async (
 
   const amount = 1;
 
-  const before = new Date();
-  console.log(
-    "L2 ERC1155 pre-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    await l2ERC1155.balanceOf(await l2Wallet.getAddress(), tokenId)
-  );
-
   const withdrawalTx = await messenger.withdrawERC1155(
     L1_ERC1155_CONTRACT_ADDRESS,
     L2_ERC1155_CONTRACT_ADDRESS,
@@ -45,8 +37,12 @@ export const L2ToPolygonNftBridge = async (
       },
     }
   );
-  console.log("withdrawalTx hash", withdrawalTx.hash);
-
+  toast("withdrawal Tx hash", {
+    action: {
+      label: "PolygonScan",
+      onClick: () => window.open(`https://polygonscan.com/tx/${withdrawalTx.hash}`, "_blank"),
+    },
+  });
   await messenger.waitForMessageStatus(withdrawalTx, MessageStatus.READY_FOR_RELAY);
   const finalizeTx = await messenger.finalizeMessage("withdrawalTx", {
     overrides: {
@@ -54,17 +50,13 @@ export const L2ToPolygonNftBridge = async (
       gasLimit: 5_000_000,
     },
   });
-  console.log("finalizeTx hash:", finalizeTx.hash);
+  toast("Finalize Tx hash", {
+    action: {
+      label: "PolygonScan",
+      onClick: () => window.open(`https://polygonscan.com/tx/${finalizeTx.hash}`, "_blank"),
+    },
+  });
   await messenger.waitForMessageReceipt(withdrawalTx);
-
-  // after
-  const after = new Date();
-  console.log("It takes " + (after.getTime() - before.getTime()) / 1000 + " seconds to finish");
-  console.log(
-    "L2 ERC1155 post-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    ethers.utils.formatUnits(await l2ERC1155.balanceOf(await l2Wallet.getAddress(), tokenId))
-  );
+  setSuccess();
+  toast.success("NFT bridged successfully");
 };

@@ -1,14 +1,13 @@
 import { ethers, Wallet } from "ethers";
 import { CrossChainMessenger, initializeMessenger, MessageStatus } from "@constellation-labs/sdk";
 import { DATA } from "./data";
-import L2StandardERC1155 from "./artifacts/L2StandardERC1155.json";
 import GiantleapNft_ABI from "./artifacts/GiantleapNft.json";
-
+import { toast } from "sonner";
 export const PolygonToL2NftBridge = async (
   metaMaskSigner: any,
-  metaMaskAddress: string,
   gamePrivateKey: string,
-  tokenId: number
+  tokenId: number,
+  setSuccess: () => void
 ) => {
   const L1_URL = "https://polygon-rpc.com/";
 
@@ -25,35 +24,21 @@ export const PolygonToL2NftBridge = async (
   const l2Wallet: Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
   const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, "/addresses.json");
   const l1ERC1155 = new ethers.Contract(L1_ERC1155_CONTRACT_ADDRESS, GiantleapNft_ABI, metaMaskSigner);
-  const l2ERC1155 = new ethers.Contract(L2_ERC1155_CONTRACT_ADDRESS, L2StandardERC1155.abi, l2Wallet);
-
-  console.log("NFT minting in progress");
 
   // mint
   const amount = 1;
 
-  const before = new Date();
   const approvalTx = await l1ERC1155.setApprovalForAll(messenger.contracts.l1.L1ERC1155Bridge.address, true, {
     gasLimit: 500000,
     gasPrice: await l1Provider.getGasPrice(),
     type: 0,
   });
-  console.log("approveTx hash", approvalTx.hash);
-
-  console.log(
-    "L1 ERC1155 pre-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    ethers.utils.formatUnits(await l1ERC1155.balanceOf(metaMaskAddress, tokenId))
-  );
-  console.log(
-    "L2 ERC1155 pre-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    ethers.utils.formatUnits(await l2ERC1155.balanceOf(metaMaskAddress, tokenId))
-  );
+  toast("Approved Tx hash", {
+    action: {
+      label: "PolygonScan",
+      onClick: () => window.open(`https://polygonscan.com/tx/${approvalTx.hash}`, "_blank"),
+    },
+  });
 
   const depositTx = await messenger.depositERC1155(
     L1_ERC1155_CONTRACT_ADDRESS,
@@ -67,7 +52,13 @@ export const PolygonToL2NftBridge = async (
       },
     }
   );
-  console.log("depositTx hash", depositTx.hash);
-
+  toast("Deposit Tx hash", {
+    action: {
+      label: "PolygonScan",
+      onClick: () => window.open(`https://polygonscan.com/tx/${depositTx.hash}`, "_blank"),
+    },
+  });
   await messenger.waitForMessageStatus(depositTx, MessageStatus.RELAYED);
+  setSuccess();
+  toast.success("NFT bridged successfully");
 };
