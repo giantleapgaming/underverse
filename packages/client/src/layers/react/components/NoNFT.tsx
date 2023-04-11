@@ -13,8 +13,13 @@ import { usePolygonIdNFTData } from "../hooks/usePolygonIdNFTData";
 export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: number }) => {
   const [copy, setCopy] = useState(false);
   const { allNfts: l1AllNfts, error: l1NftError, loading: l1NftLoading } = useL1AllNFT(address);
-  const { allNfts: polygonNft, error: ploygonNftError, loading: polygonNftLoading } = usePolygonIdNFTData(address);
   const [copyKey, setCopyKey] = useState(false);
+  const {
+    allNfts: polygonNft,
+    error: ploygonNftError,
+    loading: polygonNftLoading,
+    setCurrentAccount,
+  } = usePolygonIdNFTData();
   const [privateKeyButton, setPrivateKeyButton] = useState<string>("");
   const [privateKey, setPrivateKey] = useState<string>("");
   const [connectNFTBridge, setConnectNFTBridge] = useState(false);
@@ -39,6 +44,7 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
       const signerAddress = await signer.getAddress();
       if (signerAddress) {
         setMetamaskAccount(signerAddress);
+        setCurrentAccount(signerAddress);
       }
       setLoading(false);
     } catch (e) {

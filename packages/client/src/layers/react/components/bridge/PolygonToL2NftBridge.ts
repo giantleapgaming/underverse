@@ -70,22 +70,4 @@ export const PolygonToL2NftBridge = async (
   console.log("depositTx hash", depositTx.hash);
 
   await messenger.waitForMessageStatus(depositTx, MessageStatus.RELAYED);
-
-  // after
-  const after = new Date();
-  console.log("It takes " + (after.getTime() - before.getTime()) / 1000 + " seconds to finish");
-  console.log(
-    "L1 ERC1155 post-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    ethers.utils.formatUnits(await l1ERC1155.balanceOf(metaMaskAddress, tokenId))
-  );
-  console.log(
-    "L2 ERC1155 post-balance",
-    "tokenId",
-    tokenId,
-    "amount",
-    ethers.utils.formatUnits(await l2ERC1155.balanceOf(l2Wallet.address, tokenId))
-  );
 };
