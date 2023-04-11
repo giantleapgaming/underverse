@@ -4,7 +4,12 @@ import { DATA } from "./data";
 import L2StandardERC1155 from "./artifacts/L2StandardERC1155.json";
 import GiantleapNft_ABI from "./artifacts/GiantleapNft.json";
 
-export const PolygonToL2NftBridge = async (metaMaskSigner: any, metaMaskAddress: string, gamePrivateKey: string) => {
+export const PolygonToL2NftBridge = async (
+  metaMaskSigner: any,
+  metaMaskAddress: string,
+  gamePrivateKey: string,
+  tokenId: number
+) => {
   const L1_URL = "https://polygon-rpc.com/";
 
   const L2_PRIVATE_KEY = gamePrivateKey;
@@ -13,8 +18,6 @@ export const PolygonToL2NftBridge = async (metaMaskSigner: any, metaMaskAddress:
 
   const urls = DATA.generateURLs("giantleap-test1");
   const L2_URL = urls.L2_HTTP;
-  const ADDRESS_ENDPOINT = urls.ADDRESS_ENDPOINT;
-  console.log(L2_URL);
   // setup messenger(sdk)
   const l1Provider = new ethers.providers.JsonRpcProvider(L1_URL);
   // const l1Wallet = new ethers.Wallet(signer, l1Provider);
@@ -27,7 +30,6 @@ export const PolygonToL2NftBridge = async (metaMaskSigner: any, metaMaskAddress:
   console.log("NFT minting in progress");
 
   // mint
-  const tokenId = 0;
   const amount = 1;
 
   const before = new Date();

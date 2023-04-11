@@ -6,6 +6,7 @@ import detectEthereumProvider from "@metamask/detect-provider";
 import { toast } from "sonner";
 import { PolygonToL2NftBridge } from "./bridge/PolygonToL2NftBridge";
 import { BridgeButton } from "./BridgeButton";
+import { L2ToPolygonNftBridge } from "./bridge/L2ToPolygonNftBridge";
 export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: number }) => {
   const [copy, setCopy] = useState(false);
   const [copyKey, setCopyKey] = useState(false);
@@ -270,8 +271,15 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
                         const signerAddress = await signer.getAddress();
                         const privateKey = sessionStorage.getItem("user-burner-wallet");
                         if (privateKey) {
-                          await PolygonToL2NftBridge(signer, signerAddress, privateKey);
-                          setLoading(false);
+                          if (!swap) {
+                            await PolygonToL2NftBridge(signer, signerAddress, privateKey, 0);
+                            setLoading(false);
+                            toast.success("NFT bridged successfully");
+                          } else {
+                            await L2ToPolygonNftBridge(signer, signerAddress, privateKey, 0);
+                            setLoading(false);
+                            toast.success("NFT bridged successfully");
+                          }
                         }
                       } catch (e) {
                         setLoading(false);
