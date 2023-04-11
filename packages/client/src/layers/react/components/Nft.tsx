@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { NoNFT } from "./NoNFT";
 import { useL1AllNFT } from "../hooks/useL1AllNFT";
 
-interface Image {
+export interface Image {
   tokenId: number;
   imageUrl: string;
 }

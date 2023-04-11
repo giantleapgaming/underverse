@@ -7,12 +7,18 @@ import { toast } from "sonner";
 import { PolygonToL2NftBridge } from "./bridge/PolygonToL2NftBridge";
 import { BridgeButton } from "./BridgeButton";
 import { L2ToPolygonNftBridge } from "./bridge/L2ToPolygonNftBridge";
+import { useL1AllNFT } from "../hooks/useL1AllNFT";
+import { Image } from "./Nft";
+import { usePolygonIdNFTData } from "../hooks/usePolygonIdNFTData";
 export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: number }) => {
   const [copy, setCopy] = useState(false);
+  const { allNfts: l1AllNfts, error: l1NftError, loading: l1NftLoading } = useL1AllNFT(address);
+  const { allNfts: polygonNft, error: ploygonNftError, loading: polygonNftLoading } = usePolygonIdNFTData(address);
   const [copyKey, setCopyKey] = useState(false);
   const [privateKeyButton, setPrivateKeyButton] = useState<string>("");
   const [privateKey, setPrivateKey] = useState<string>("");
   const [connectNFTBridge, setConnectNFTBridge] = useState(false);
+  const [selectedNft, setSelectedNft] = useState<Image>();
   const [metaMaskAccount, setMetamaskAccount] = useState<string | undefined>();
   const [swap, setSwap] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -116,186 +122,228 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
                 <li>Export the private key for your in-game wallet and add to your MetaMask</li>
               </ol>
             </div>
-            <S.GetNFTBox>
-              <div>
-                <S.NFTBox onClick={() => setConnectNFTBridge(true)}>
-                  <img src="../img/nftExample.png" style={{ width: "370px", height: "390px" }} />
-                </S.NFTBox>
-                <p
-                  style={{
-                    fontSize: "21px",
-                    fontFamily: "monospace",
-                    letterSpacing: "1.1",
-                    fontWeight: "300",
-                    marginTop: "5px",
-                    color: "#FFFDD5",
-                  }}
-                >
-                  NFTs on Polygon
-                </p>
-              </div>
-              <S.BridgeFromPolygonBox>
-                <p
-                  style={{
-                    textAlign: "center",
-                    fontSize: "16px",
-                    fontFamily: "monospace",
-                    letterSpacing: "1.1",
-                    fontWeight: "bolder",
-                  }}
-                >
-                  BRIDGE YOUR GENESIS NFT <br /> FROM POLYGON TO THE GAME
-                </p>
-                {!swap ? (
-                  <div
+            {typeof selectedNft?.tokenId === "number" ? (
+              <S.GetNFTBox>
+                <div>
+                  <S.NFTBox onClick={() => setConnectNFTBridge(true)}>
+                    <img
+                      src={selectedNft?.imageUrl}
+                      style={{ width: "370px", height: "390px", objectFit: "contain" }}
+                    />
+                  </S.NFTBox>
+                  <p
                     style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      gap: "1px",
+                      fontSize: "21px",
+                      fontFamily: "monospace",
+                      letterSpacing: "1.1",
+                      fontWeight: "300",
+                      marginTop: "5px",
+                      color: "#FFFDD5",
                     }}
                   >
-                    <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                    <p
+                    {!swap ? "NFTs on Polygon" : "NFTs on Game"}
+                  </p>
+                </div>
+                <S.BridgeFromPolygonBox>
+                  <p
+                    style={{
+                      textAlign: "center",
+                      fontSize: "16px",
+                      fontFamily: "monospace",
+                      letterSpacing: "1.1",
+                      fontWeight: "bolder",
+                    }}
+                  >
+                    BRIDGE YOUR GENESIS NFT <br /> FROM POLYGON TO THE GAME
+                  </p>
+                  {!swap ? (
+                    <div
                       style={{
-                        fontSize: "14px",
-                        fontFamily: "monospace",
-                        fontWeight: "400",
-                        letterSpacing: "1.1",
-                        alignSelf: "flex-start",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        gap: "1px",
+                      }}
+                    >
+                      <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontFamily: "monospace",
+                          fontWeight: "400",
+                          letterSpacing: "1.1",
+                          alignSelf: "flex-start",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        gap: "1px",
                         marginLeft: "10px",
                       }}
                     >
-                      MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
-                    </p>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      gap: "1px",
-                      marginLeft: "10px",
+                      <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontFamily: "monospace",
+                          fontWeight: "400",
+                          letterSpacing: "1.1",
+                          alignSelf: "flex-start",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        GAME ACCOUNT: {address?.toString().substring(0, 10)}...
+                      </p>
+                    </div>
+                  )}
+                  <img
+                    onClick={() => {
+                      setSelectedNft(undefined);
                     }}
-                  >
-                    <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                    <p
+                    src="/img/switch.png"
+                    style={{ width: "35px", height: "42px", cursor: "pointer" }}
+                  />
+                  {!swap ? (
+                    <div
                       style={{
-                        fontSize: "14px",
-                        fontFamily: "monospace",
-                        fontWeight: "400",
-                        letterSpacing: "1.1",
-                        alignSelf: "flex-start",
-                        marginLeft: "5px",
-                      }}
-                    >
-                      GAME ACCOUNT: {address?.toString().substring(0, 10)}...
-                    </p>
-                  </div>
-                )}
-                <img
-                  onClick={() => setSwap(!swap)}
-                  src="/img/switch.png"
-                  style={{ width: "35px", height: "42px", cursor: "pointer" }}
-                />
-                {!swap ? (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      gap: "1px",
-                      marginLeft: "10px",
-                    }}
-                  >
-                    <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        fontFamily: "monospace",
-                        fontWeight: "400",
-                        letterSpacing: "1.1",
-                        alignSelf: "flex-start",
-                        marginLeft: "5px",
-                      }}
-                    >
-                      GAME ACCOUNT: {address?.toString().substring(0, 10)}...
-                    </p>
-                  </div>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "flex-start",
-                      justifyContent: "center",
-                      flexDirection: "column",
-                      gap: "1px",
-                    }}
-                  >
-                    <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        fontFamily: "monospace",
-                        fontWeight: "400",
-                        letterSpacing: "1.1",
-                        alignSelf: "flex-start",
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        gap: "1px",
                         marginLeft: "10px",
                       }}
                     >
-                      MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
-                    </p>
-                  </div>
-                )}
-                {metaMaskAccount ? (
-                  <BridgeButton
-                    isLoading={loading}
-                    onClick={async () => {
-                      try {
-                        setLoading(true);
-                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                        // @ts-ignore //
-                        await window.ethereum.request({ method: "eth_requestAccounts" });
-                        const provider = await detectEthereumProvider();
-                        if (!provider) {
-                          toast.error("Please install MetaMask to bridge the NFT");
-                          return;
-                        }
-                        const ethProvider = new ethers.providers.Web3Provider(provider);
-                        const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
-                        const signer = ethProvider.getSigner();
-                        const signerAddress = await signer.getAddress();
-                        const privateKey = sessionStorage.getItem("user-burner-wallet");
-                        if (privateKey) {
-                          if (!swap) {
-                            await PolygonToL2NftBridge(signer, signerAddress, privateKey, 0);
-                            setLoading(false);
-                            toast.success("NFT bridged successfully");
-                          } else {
-                            await L2ToPolygonNftBridge(signer, signerAddress, privateKey, 0);
-                            setLoading(false);
-                            toast.success("NFT bridged successfully");
+                      <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontFamily: "monospace",
+                          fontWeight: "400",
+                          letterSpacing: "1.1",
+                          alignSelf: "flex-start",
+                          marginLeft: "5px",
+                        }}
+                      >
+                        GAME ACCOUNT: {address?.toString().substring(0, 10)}...
+                      </p>
+                    </div>
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        gap: "1px",
+                      }}
+                    >
+                      <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                      <p
+                        style={{
+                          fontSize: "14px",
+                          fontFamily: "monospace",
+                          fontWeight: "400",
+                          letterSpacing: "1.1",
+                          alignSelf: "flex-start",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
+                      </p>
+                    </div>
+                  )}
+                  {metaMaskAccount ? (
+                    <BridgeButton
+                      isLoading={loading}
+                      onClick={async () => {
+                        try {
+                          setLoading(true);
+                          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                          // @ts-ignore //
+                          await window.ethereum.request({ method: "eth_requestAccounts" });
+                          const provider = await detectEthereumProvider();
+                          if (!provider) {
+                            toast.error("Please install MetaMask to bridge the NFT");
+                            return;
                           }
+                          const ethProvider = new ethers.providers.Web3Provider(provider);
+                          const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
+                          const signer = ethProvider.getSigner();
+                          const signerAddress = await signer.getAddress();
+                          const privateKey = sessionStorage.getItem("user-burner-wallet");
+                          if (privateKey && selectedNft) {
+                            if (!swap) {
+                              await PolygonToL2NftBridge(signer, signerAddress, privateKey, selectedNft.tokenId);
+                              setLoading(false);
+                              toast.success("NFT bridged successfully");
+                            } else {
+                              await L2ToPolygonNftBridge(signer, signerAddress, privateKey, selectedNft.tokenId);
+                              setLoading(false);
+                              toast.success("NFT bridged successfully");
+                            }
+                          }
+                        } catch (e) {
+                          setLoading(false);
+                          console.log(e);
                         }
-                      } catch (e) {
-                        setLoading(false);
-                        console.log(e);
-                      }
-                    }}
-                  >
-                    {loading ? "Bridging..." : "Bridge"}
-                  </BridgeButton>
-                ) : (
-                  <BridgeButton isLoading={loading} onClick={connectAccount}>
-                    {loading ? "Connecting" : "Connect"}
-                  </BridgeButton>
-                )}
-              </S.BridgeFromPolygonBox>
-            </S.GetNFTBox>
+                      }}
+                    >
+                      {loading ? "Bridging..." : "Bridge"}
+                    </BridgeButton>
+                  ) : (
+                    <BridgeButton isLoading={loading} onClick={connectAccount}>
+                      {loading ? "Connecting" : "Connect"}
+                    </BridgeButton>
+                  )}
+                </S.BridgeFromPolygonBox>
+              </S.GetNFTBox>
+            ) : (
+              <div>
+                <p>NFTs on game</p>
+                <S.NftSelectionContainer>
+                  {l1AllNfts?.map((data, index) => (
+                    <S.NftSelect
+                      selectedNFT={data.tokenId === selectedNft?.tokenId}
+                      key={`index-${index}`}
+                      onClick={() => {
+                        setSwap(true);
+                        setSelectedNft(data);
+                      }}
+                    >
+                      <S.Img src={data.imageUrl} />
+                    </S.NftSelect>
+                  ))}
+                  {l1AllNfts?.length === 0 && <div>No Nft</div>}
+                </S.NftSelectionContainer>
+                <p>NFTs on Polygon</p>
+                <S.NftSelectionContainer>
+                  {polygonNft?.map((data, index) => (
+                    <S.NftSelect
+                      selectedNFT={data.tokenId === selectedNft?.tokenId}
+                      key={`index-${index}`}
+                      onClick={() => {
+                        setSwap(false);
+                        setSelectedNft(data);
+                      }}
+                    >
+                      <S.Img src={data.imageUrl} />
+                    </S.NftSelect>
+                  ))}
+                  {polygonNft?.length === 0 && <div>No Nft</div>}
+                </S.NftSelectionContainer>
+              </div>
+            )}
           </div>
         ) : (
           <div>
@@ -463,7 +511,17 @@ const S = {
     background: transparent;
     cursor: pointer;
   `,
-
+  NftSelectionContainer: styled.div`
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    background-color: rgba(253, 249, 249, 0.1);
+    border-radius: 15px;
+    margin-bottom: 20px;
+  `,
   DeployText: styled.p`
     position: absolute;
     top: 6px;
@@ -565,7 +623,27 @@ const S = {
     line-height: 1.5;
     font-family: "MyOTFFont";
   `,
+  NftSelect: styled.div<{ selectedNFT: boolean }>`
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-image: ${({ selectedNFT }) => {
+      return selectedNFT ? "url(/img/BlueBorderNFT.png)" : "url(/img/WhiteBorderNFT.png)";
+    }};
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
 
+    &:hover {
+      border-radius: 2%;
+      scale: 1.05;
+    }
+  `,
   NftTextImg: styled.img`
     width: 220px;
     height: 90px;

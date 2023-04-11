@@ -14,7 +14,7 @@ export const BootScreen: React.FC<{ initialOpacity?: number; percent?: number; m
   return (
     <Container>
       <div>
-        <p style={{ marginBottom: "20px" }}>{message || "Connecting"}</p>
+        <p style={{ marginBottom: "20px", color: "white" }}>{message || "Connecting"}</p>
         {!!percent && <Line percent={percent || 0} strokeWidth={4} strokeColor="#00fde4" trailWidth={4} />}
       </div>
     </Container>
