@@ -8,6 +8,8 @@ import { PolygonToL2NftBridge } from "./bridge/PolygonToL2NftBridge";
 import { BridgeButton } from "./BridgeButton";
 export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: number }) => {
   const [copy, setCopy] = useState(false);
+  const [copyKey, setCopyKey] = useState(false);
+  const [privateKeyButton, setPrivateKeyButton] = useState<string>("");
   const [privateKey, setPrivateKey] = useState<string>("");
   const [connectNFTBridge, setConnectNFTBridge] = useState(false);
   const [metaMaskAccount, setMetamaskAccount] = useState<string | undefined>();
@@ -338,9 +340,12 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
               margin: "10px 0",
             }}
           >
-            IN-GAME WALLET: {copy ? "Copied" : address && walletAddressLoginDisplay(address)}
+            IN-GAME WALLET ADDRESS:{" "}
+            {(copy && (copy ? "Wallet Address Copied" : address && walletAddressLoginDisplay(address))) ||
+              (copyKey && (copyKey ? "Private Key Copied" : address && walletAddressLoginDisplay(address))) ||
+              (address && walletAddressLoginDisplay(address))}
           </p>
-          <div>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
             <img
               src="/img/copy.png"
               style={{ cursor: "pointer" }}
@@ -350,6 +355,23 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
                 setTimeout(() => {
                   setCopy(false);
                 }, 1000);
+              }}
+            />
+            <img
+              src="/img/exportKey.png"
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                try {
+                  const data = sessionStorage.getItem("user-burner-wallet");
+                  setCopyKey(true);
+                  data ? setPrivateKeyButton(data) : setPrivateKeyButton("");
+                  navigator.clipboard.writeText(privateKeyButton);
+                  setTimeout(() => {
+                    setCopyKey(false);
+                  }, 1000);
+                } catch (e) {
+                  console.log(e);
+                }
               }}
             />
           </div>
@@ -376,7 +398,7 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
               }
             }}
           >
-            {privateKey ? `${privateKey}` : `Click here to show your private key.`}
+            {privateKey ? `${privateKey}` : `Click here to export your private key.`}
           </S.Span>
         </S.Description>
       </S.Container>
