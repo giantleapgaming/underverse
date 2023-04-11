@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNFTData } from "../hooks/useAllNFT";
 import { NoNFT } from "./NoNFT";
+import { useL1AllNFT } from "../hooks/useL1AllNFT";
 
 interface Image {
   tokenId: number;
@@ -14,14 +14,17 @@ export const Nft = ({
   clickSound,
   address,
 }: {
-  setSelectNft: (image: Image) => void;
+  setSelectNft: (image?: Image) => void;
   selectedNFT?: number;
   clickSound: () => void;
   address?: string;
 }) => {
-  const { error, loading, allNfts } = useNFTData(address);
+  const { error, loading, allNfts } = useL1AllNFT(address);
   const [showNftBridge, setShowNftBridge] = useState(false);
 
+  if (showNftBridge) {
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
+  }
   if (error) {
     return <div>Error</div>;
   }
@@ -52,6 +55,7 @@ export const Nft = ({
             <S.BridgeNftButton
               src="/img/BridgeNftButton.png"
               onClick={() => {
+                setSelectNft();
                 setShowNftBridge(true);
               }}
             />

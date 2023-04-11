@@ -5,13 +5,16 @@ import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { toast } from "sonner";
 import { PolygonToL2NftBridge } from "./bridge/PolygonToL2NftBridge";
+import { BridgeButton } from "./BridgeButton";
 export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: number }) => {
   const [copy, setCopy] = useState(false);
   const [privateKey, setPrivateKey] = useState<string>("");
   const [connectNFTBridge, setConnectNFTBridge] = useState(false);
   const [metaMaskAccount, setMetamaskAccount] = useState<string | undefined>();
   const [swap, setSwap] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const connectAccount = async () => {
+    setLoading(true);
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore //
@@ -28,7 +31,9 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
       if (signerAddress) {
         setMetamaskAccount(signerAddress);
       }
+      setLoading(false);
     } catch (e) {
+      setLoading(false);
       console.log(e);
     }
   };
@@ -64,7 +69,7 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
           <img src="/img/title.png" style={{ marginTop: "20px" }} />
         </div>
-        {connectNFTBridge ? (
+        {connectNFTBridge || totalNft ? (
           <div>
             <p
               style={{
@@ -243,35 +248,42 @@ export const NoNFT = ({ address, totalNft }: { address?: string; totalNft: numbe
                     </p>
                   </div>
                 )}
-                <img
-                  src="/img/bridge.png"
-                  onClick={async () => {
-                    try {
-                      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                      // @ts-ignore //
-                      await window.ethereum.request({ method: "eth_requestAccounts" });
-                      const provider = await detectEthereumProvider();
-                      if (!provider) {
-                        toast.error("Please install MetaMask to bridge the NFT");
-                        return;
+                {metaMaskAccount ? (
+                  <BridgeButton
+                    isLoading={loading}
+                    onClick={async () => {
+                      try {
+                        setLoading(true);
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-ignore //
+                        await window.ethereum.request({ method: "eth_requestAccounts" });
+                        const provider = await detectEthereumProvider();
+                        if (!provider) {
+                          toast.error("Please install MetaMask to bridge the NFT");
+                          return;
+                        }
+                        const ethProvider = new ethers.providers.Web3Provider(provider);
+                        const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
+                        const signer = ethProvider.getSigner();
+                        const signerAddress = await signer.getAddress();
+                        const privateKey = sessionStorage.getItem("user-burner-wallet");
+                        if (privateKey) {
+                          await PolygonToL2NftBridge(signer, signerAddress, privateKey);
+                          setLoading(false);
+                        }
+                      } catch (e) {
+                        setLoading(false);
+                        console.log(e);
                       }
-                      const ethProvider = new ethers.providers.Web3Provider(provider);
-                      const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
-                      const signer = ethProvider.getSigner();
-                      const signerAddress = await signer.getAddress();
-                      const privateKey = sessionStorage.getItem("user-burner-wallet");
-                      if (privateKey) {
-                        PolygonToL2NftBridge(signer, signerAddress, privateKey);
-                      }
-                      if (signerAddress) {
-                        setMetamaskAccount(signerAddress);
-                      }
-                    } catch (e) {
-                      console.log(e);
-                    }
-                  }}
-                  style={{ width: "180px", height: "60px", cursor: "pointer" }}
-                />
+                    }}
+                  >
+                    {loading ? "Bridging..." : "Bridge"}
+                  </BridgeButton>
+                ) : (
+                  <BridgeButton isLoading={loading} onClick={connectAccount}>
+                    {loading ? "Connecting" : "Connect"}
+                  </BridgeButton>
+                )}
               </S.BridgeFromPolygonBox>
             </S.GetNFTBox>
           </div>
