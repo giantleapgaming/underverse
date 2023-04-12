@@ -10,7 +10,6 @@ export const L2ToPolygonNftBridge = async (
   tokenId: number,
   setSuccess: () => void
 ) => {
-  // input
   const L2_PRIVATE_KEY = gamePrivateKey;
   const L1_ERC1155_CONTRACT_ADDRESS = "0xfA4F088838A53Cdcc6A9E233Ff60B86c1AFFb07d";
   const L2_ERC1155_CONTRACT_ADDRESS = "0x4aBc486F4a8e35f4cF74B8E3c6bD30D019d3A4F7";
@@ -21,7 +20,6 @@ export const L2ToPolygonNftBridge = async (
   const l2Provider = new ethers.providers.JsonRpcProvider(L2_URL);
   const l2Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
   const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, "/addresses.json");
-  const l2ERC1155 = new ethers.Contract(L2_ERC1155_CONTRACT_ADDRESS, L2StandardERC1155.abi, l2Wallet);
 
   const amount = 1;
 
@@ -43,11 +41,11 @@ export const L2ToPolygonNftBridge = async (
       onClick: () => window.open(`https://polygonscan.com/tx/${withdrawalTx.hash}`, "_blank"),
     },
   });
-  await messenger.waitForMessageStatus(withdrawalTx, MessageStatus.READY_FOR_RELAY);
-  const finalizeTx = await messenger.finalizeMessage("withdrawalTx", {
+  await messenger.waitForMessageStatus(withdrawalTx.hash, MessageStatus.READY_FOR_RELAY);
+  const finalizeTx = await messenger.finalizeMessage(withdrawalTx, {
     overrides: {
       gasPrice: await metaMaskSigner.getGasPrice(),
-      gasLimit: 5_000_000,
+      gasLimit: 2_000_000,
     },
   });
   toast("Finalize Tx hash", {
@@ -56,7 +54,7 @@ export const L2ToPolygonNftBridge = async (
       onClick: () => window.open(`https://polygonscan.com/tx/${finalizeTx.hash}`, "_blank"),
     },
   });
-  await messenger.waitForMessageReceipt(withdrawalTx);
+  await messenger.waitForMessageReceipt(withdrawalTx.hash);
   setSuccess();
   toast.success("NFT bridged successfully");
 };
