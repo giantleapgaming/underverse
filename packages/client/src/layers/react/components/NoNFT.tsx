@@ -137,25 +137,25 @@ export const NoNFT = ({
                 <li>Export the private key for your in-game wallet and add to your MetaMask</li>
               </ol>
             </div>
-            {typeof selectedNft?.tokenId === "number" ? (
-              <div style={{ display: "flex", alignItems: "center", gap: "30px" }}>
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (selectedNft) {
-                      setSelectedNft(undefined);
-                      return;
-                    } else if (connectNFTBridge) {
-                      setConnectNFTBridge(false);
-                    } else {
-                      setShowNftBridge(false);
-                    }
-                  }}
-                >
-                  <img src="/img/back.png" />
-                  <p>Back</p>
-                </div>
-                <S.GetNFTBox>
+            <div style={{ display: "flex", alignItems: "center", gap: "30px" }}>
+              <div
+                style={{ cursor: "pointer" }}
+                onClick={() => {
+                  if (selectedNft) {
+                    setSelectedNft(undefined);
+                    return;
+                  } else if (connectNFTBridge) {
+                    setConnectNFTBridge(false);
+                  } else {
+                    setShowNftBridge(false);
+                  }
+                }}
+              >
+                <img src="/img/back.png" />
+                <p>Back</p>
+              </div>
+              <S.GetNFTBox>
+                {selectedNft ? (
                   <div>
                     <S.NFTBox onClick={() => setConnectNFTBridge(true)}>
                       <img
@@ -176,227 +176,287 @@ export const NoNFT = ({
                       {!swap ? "NFTs on Polygon" : "NFTs on Game"}
                     </p>
                   </div>
-                  {!success ? (
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "30px" }}>
+                    <div style={{ flex: 1 }}>
+                      {/* <p>NFTs on game</p>
+                      <S.NftSelectionContainer>
+                        {l1AllNfts?.map((data, index) => (
+                          <S.NftSelect
+                            selectedNFT={false}
+                            key={`index-${index}`}
+                            onClick={() => {
+                              setSwap(true);
+                              setSelectedNft(data);
+                            }}
+                          >
+                            <S.Img src={data.imageUrl} />
+                          </S.NftSelect>
+                        ))}
+                        {l1AllNfts?.length === 0 && <div>No Nft</div>}
+                      </S.NftSelectionContainer> */}
+                      {!metaMaskAccount ? (
+                        <S.ConnectAccount onClick={connectAccount}>
+                          <p style={{ fontSize: "30px", textAlign: "center", fontWeight: "bold", padding: "20px" }}>
+                            CLICK HERE TO CONNECT YOUR METAMASK TO DETECT YOUR NFTS ON POLYGON
+                          </p>
+                        </S.ConnectAccount>
+                      ) : (
+                        <S.NftSelectionContainer>
+                          <p style={{ textAlign: "center", fontSize: "30px" }}>
+                            Connected to
+                            <br />
+                            {metaMaskAccount?.toString().substring(0, 10)}...
+                            <br />
+                            <br />
+                            {polygonNft?.length} NFTs Detected
+                          </p>
+                          {polygonNft?.map((data, index) => (
+                            <S.NftSelect
+                              selectedNFT={false}
+                              key={`index-${index}`}
+                              onClick={() => {
+                                setSwap(false);
+                                setSelectedNft(data);
+                              }}
+                            >
+                              <S.Img src={data.imageUrl} />
+                            </S.NftSelect>
+                          ))}
+                          {polygonNft?.length === 0 && <div>No Nft</div>}
+                        </S.NftSelectionContainer>
+                      )}
+                    </div>
+                  </div>
+                )}
+                {!success ? (
+                  <S.BridgeFromPolygonBox>
+                    <p
+                      style={{
+                        textAlign: "center",
+                        fontSize: "16px",
+                        fontFamily: "monospace",
+                        letterSpacing: "1.1",
+                        fontWeight: "bolder",
+                      }}
+                    >
+                      BRIDGE YOUR GENESIS NFT <br /> FROM {!swap ? "POLYGON" : "GAME"} TO THE{" "}
+                      {swap ? "POLYGON" : "GAME"}
+                    </p>
+                    {!swap ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: "1px",
+                        }}
+                      >
+                        <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "monospace",
+                            fontWeight: "400",
+                            letterSpacing: "1.1",
+                            alignSelf: "flex-start",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
+                        </p>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: "1px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "monospace",
+                            fontWeight: "400",
+                            letterSpacing: "1.1",
+                            alignSelf: "flex-start",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          GAME ACCOUNT: {address?.toString().substring(0, 10)}...
+                        </p>
+                      </div>
+                    )}
+                    <img
+                      onClick={() => {
+                        setSelectedNft(undefined);
+                      }}
+                      src="/img/switch.png"
+                      style={{ width: "35px", height: "42px", cursor: "pointer" }}
+                    />
+                    {!swap ? (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: "1px",
+                          marginLeft: "10px",
+                        }}
+                      >
+                        <img src="/img/underverse.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "monospace",
+                            fontWeight: "400",
+                            letterSpacing: "1.1",
+                            alignSelf: "flex-start",
+                            marginLeft: "5px",
+                          }}
+                        >
+                          GAME ACCOUNT: {address?.toString().substring(0, 10)}...
+                        </p>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-start",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          gap: "1px",
+                        }}
+                      >
+                        <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
+                        <p
+                          style={{
+                            fontSize: "14px",
+                            fontFamily: "monospace",
+                            fontWeight: "400",
+                            letterSpacing: "1.1",
+                            alignSelf: "flex-start",
+                            marginLeft: "10px",
+                          }}
+                        >
+                          MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
+                        </p>
+                      </div>
+                    )}
+                    {metaMaskAccount ? (
+                      <BridgeButton
+                        isLoading={loading}
+                        onClick={async () => {
+                          try {
+                            setLoading(true);
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore //
+                            await window.ethereum.request({ method: "eth_requestAccounts" });
+                            const provider = await detectEthereumProvider();
+                            if (!provider) {
+                              toast.error("Please install MetaMask to bridge the NFT");
+                              return;
+                            }
+                            const ethProvider = new ethers.providers.Web3Provider(provider);
+                            const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
+                            const signer = ethProvider.getSigner();
+                            const signerAddress = await signer.getAddress();
+                            const privateKey = sessionStorage.getItem("user-burner-wallet");
+                            if (privateKey && selectedNft) {
+                              if (!swap) {
+                                await PolygonToL2NftBridge(signer, privateKey, selectedNft.tokenId, () =>
+                                  setSuccess(true)
+                                );
+                                setLoading(false);
+                                toast.success("NFT bridged successfully");
+                              } else {
+                                await L2ToPolygonNftBridge(signer, privateKey, selectedNft.tokenId, () =>
+                                  setSuccess(true)
+                                );
+                                setLoading(false);
+                                toast.success("NFT bridged successfully");
+                              }
+                            }
+                          } catch (e) {
+                            setLoading(false);
+                            console.log(e);
+                          }
+                        }}
+                      >
+                        {loading ? "Bridging..." : "Bridge"}
+                      </BridgeButton>
+                    ) : (
+                      <BridgeButton isLoading={loading} onClick={connectAccount}>
+                        {loading ? "Connecting" : "Connect"}
+                      </BridgeButton>
+                    )}
+                  </S.BridgeFromPolygonBox>
+                ) : (
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "30px" }}>
                     <S.BridgeFromPolygonBox>
+                      <p
+                        style={{
+                          textAlign: "center",
+                          fontSize: "24px",
+                          fontFamily: "monospace",
+                          letterSpacing: "1.1",
+                          fontWeight: "bolder",
+                          color: "#6e25b0",
+                        }}
+                      >
+                        NFT
+                        <br />
+                        SUCCESSFULLY
+                        <br />
+                        BRIDGED!
+                        <br />
+                      </p>
                       <p
                         style={{
                           textAlign: "center",
                           fontSize: "16px",
                           fontFamily: "monospace",
                           letterSpacing: "1.1",
+                          padding: "10px",
+                        }}
+                      >
+                        Add your in-game account to MetaMask to ensure you always have access.
+                      </p>
+
+                      <p
+                        style={{
+                          textAlign: "center",
+                          fontSize: "16px",
+                          fontFamily: "monospace",
+                          letterSpacing: "1.1",
+                          padding: "10px",
                           fontWeight: "bolder",
                         }}
                       >
-                        BRIDGE YOUR GENESIS NFT <br /> FROM {!swap ? "POLYGON" : "GAME"} TO THE{" "}
-                        {swap ? "POLYGON" : "GAME"}
+                        Click here to export your private key.
                       </p>
-                      {!swap ? (
+                      {address && (
                         <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            gap: "1px",
+                          onClick={() => {
+                            setCopy(true);
+                            navigator.clipboard.writeText(`${privateKey}`);
+                            setTimeout(() => {
+                              setCopy(false);
+                            }, 1000);
                           }}
+                          style={{ display: "flex", alignItems: "center", cursor: "pointer", gap: "20px" }}
                         >
-                          <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                          <p
-                            style={{
-                              fontSize: "14px",
-                              fontFamily: "monospace",
-                              fontWeight: "400",
-                              letterSpacing: "1.1",
-                              alignSelf: "flex-start",
-                              marginLeft: "10px",
-                            }}
-                          >
-                            MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
-                          </p>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            gap: "1px",
-                            marginLeft: "10px",
-                          }}
-                        >
+                          <p>{walletAddressLoginDisplay(address)}</p>
                           <img
-                            src="/img/underverse.png"
-                            style={{ width: "300px", height: "55px", cursor: "pointer" }}
-                          />
-                          <p
-                            style={{
-                              fontSize: "14px",
-                              fontFamily: "monospace",
-                              fontWeight: "400",
-                              letterSpacing: "1.1",
-                              alignSelf: "flex-start",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            GAME ACCOUNT: {address?.toString().substring(0, 10)}...
-                          </p>
-                        </div>
-                      )}
-                      <img
-                        onClick={() => {
-                          setSelectedNft(undefined);
-                        }}
-                        src="/img/switch.png"
-                        style={{ width: "35px", height: "42px", cursor: "pointer" }}
-                      />
-                      {!swap ? (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            gap: "1px",
-                            marginLeft: "10px",
-                          }}
-                        >
-                          <img
-                            src="/img/underverse.png"
-                            style={{ width: "300px", height: "55px", cursor: "pointer" }}
-                          />
-                          <p
-                            style={{
-                              fontSize: "14px",
-                              fontFamily: "monospace",
-                              fontWeight: "400",
-                              letterSpacing: "1.1",
-                              alignSelf: "flex-start",
-                              marginLeft: "5px",
-                            }}
-                          >
-                            GAME ACCOUNT: {address?.toString().substring(0, 10)}...
-                          </p>
-                        </div>
-                      ) : (
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "flex-start",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            gap: "1px",
-                          }}
-                        >
-                          <img src="/img/polygon.png" style={{ width: "300px", height: "55px", cursor: "pointer" }} />
-                          <p
-                            style={{
-                              fontSize: "14px",
-                              fontFamily: "monospace",
-                              fontWeight: "400",
-                              letterSpacing: "1.1",
-                              alignSelf: "flex-start",
-                              marginLeft: "10px",
-                            }}
-                          >
-                            MM ACCOUNT: {metaMaskAccount?.toString().substring(0, 10)}...
-                          </p>
-                        </div>
-                      )}
-                      {metaMaskAccount ? (
-                        <BridgeButton
-                          isLoading={loading}
-                          onClick={async () => {
-                            try {
-                              setLoading(true);
-                              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                              // @ts-ignore //
-                              await window.ethereum.request({ method: "eth_requestAccounts" });
-                              const provider = await detectEthereumProvider();
-                              if (!provider) {
-                                toast.error("Please install MetaMask to bridge the NFT");
-                                return;
-                              }
-                              const ethProvider = new ethers.providers.Web3Provider(provider);
-                              const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
-                              const signer = ethProvider.getSigner();
-                              const signerAddress = await signer.getAddress();
-                              const privateKey = sessionStorage.getItem("user-burner-wallet");
-                              if (privateKey && selectedNft) {
-                                if (!swap) {
-                                  await PolygonToL2NftBridge(signer, privateKey, selectedNft.tokenId, () =>
-                                    setSuccess(true)
-                                  );
-                                  setLoading(false);
-                                  toast.success("NFT bridged successfully");
-                                } else {
-                                  await L2ToPolygonNftBridge(signer, privateKey, selectedNft.tokenId, () =>
-                                    setSuccess(true)
-                                  );
-                                  setLoading(false);
-                                  toast.success("NFT bridged successfully");
-                                }
-                              }
-                            } catch (e) {
-                              setLoading(false);
-                              console.log(e);
-                            }
-                          }}
-                        >
-                          {loading ? "Bridging..." : "Bridge"}
-                        </BridgeButton>
-                      ) : (
-                        <BridgeButton isLoading={loading} onClick={connectAccount}>
-                          {loading ? "Connecting" : "Connect"}
-                        </BridgeButton>
-                      )}
-                    </S.BridgeFromPolygonBox>
-                  ) : (
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "30px" }}>
-                      <S.BridgeFromPolygonBox>
-                        <p
-                          style={{
-                            textAlign: "center",
-                            fontSize: "24px",
-                            fontFamily: "monospace",
-                            letterSpacing: "1.1",
-                            fontWeight: "bolder",
-                            color: "#6e25b0",
-                          }}
-                        >
-                          NFT
-                          <br />
-                          SUCCESSFULLY
-                          <br />
-                          BRIDGED!
-                          <br />
-                        </p>
-                        <p
-                          style={{
-                            textAlign: "center",
-                            fontSize: "16px",
-                            fontFamily: "monospace",
-                            letterSpacing: "1.1",
-                            padding: "10px",
-                          }}
-                        >
-                          Add your in-game account to MetaMask to ensure you always have access.
-                        </p>
-
-                        <p
-                          style={{
-                            textAlign: "center",
-                            fontSize: "16px",
-                            fontFamily: "monospace",
-                            letterSpacing: "1.1",
-                            padding: "10px",
-                            fontWeight: "bolder",
-                          }}
-                        >
-                          Click here to export your private key.
-                        </p>
-                        {address && (
-                          <div
+                            src="/img/copy.png"
+                            style={{ cursor: "pointer" }}
                             onClick={() => {
                               setCopy(true);
                               navigator.clipboard.writeText(`${privateKey}`);
@@ -404,85 +464,18 @@ export const NoNFT = ({
                                 setCopy(false);
                               }, 1000);
                             }}
-                            style={{ display: "flex", alignItems: "center", cursor: "pointer", gap: "20px" }}
-                          >
-                            <p>{walletAddressLoginDisplay(address)}</p>
-                            <img
-                              src="/img/copy.png"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => {
-                                setCopy(true);
-                                navigator.clipboard.writeText(`${privateKey}`);
-                                setTimeout(() => {
-                                  setCopy(false);
-                                }, 1000);
-                              }}
-                            />
-                          </div>
-                        )}
-                      </S.BridgeFromPolygonBox>
-                      <div style={{ cursor: "pointer" }} onClick={() => setShowNftBridge(false)}>
-                        <img src="/img/next.png" />
-                        <p>Continue To Game </p>
-                      </div>
+                          />
+                        </div>
+                      )}
+                    </S.BridgeFromPolygonBox>
+                    <div style={{ cursor: "pointer" }} onClick={() => setShowNftBridge(false)}>
+                      <img src="/img/next.png" />
+                      <p>Continue To Game </p>
                     </div>
-                  )}
-                </S.GetNFTBox>
-              </div>
-            ) : (
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "30px" }}>
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    if (selectedNft) {
-                      setSelectedNft(undefined);
-                      return;
-                    } else if (connectNFTBridge) {
-                      setConnectNFTBridge(false);
-                    } else {
-                      setShowNftBridge(false);
-                    }
-                  }}
-                >
-                  <img src="/img/back.png" />
-                  <p>Back</p>
-                </div>
-                <div style={{ flex: 1 }}>
-                  <p>NFTs on game</p>
-                  <S.NftSelectionContainer>
-                    {l1AllNfts?.map((data, index) => (
-                      <S.NftSelect
-                        selectedNFT={data.tokenId === selectedNft?.tokenId}
-                        key={`index-${index}`}
-                        onClick={() => {
-                          setSwap(true);
-                          setSelectedNft(data);
-                        }}
-                      >
-                        <S.Img src={data.imageUrl} />
-                      </S.NftSelect>
-                    ))}
-                    {l1AllNfts?.length === 0 && <div>No Nft</div>}
-                  </S.NftSelectionContainer>
-                  <p>NFTs on Polygon</p>
-                  <S.NftSelectionContainer>
-                    {polygonNft?.map((data, index) => (
-                      <S.NftSelect
-                        selectedNFT={data.tokenId === selectedNft?.tokenId}
-                        key={`index-${index}`}
-                        onClick={() => {
-                          setSwap(false);
-                          setSelectedNft(data);
-                        }}
-                      >
-                        <S.Img src={data.imageUrl} />
-                      </S.NftSelect>
-                    ))}
-                    {polygonNft?.length === 0 && <div>No Nft</div>}
-                  </S.NftSelectionContainer>
-                </div>
-              </div>
-            )}
+                  </div>
+                )}
+              </S.GetNFTBox>
+            </div>
           </div>
         ) : (
           <div>
@@ -571,14 +564,6 @@ export const NoNFT = ({
             />
           </div>
         </S.AddressBox>
-        <S.RecheckNFT>
-          <S.Button type="button" onClick={() => window.location.reload()}>
-            <img src="/button/recheckNFTbtn.png" />
-          </S.Button>
-          <S.Button type="button" onClick={() => window.location.reload()}>
-            <img src="/button/refresh.png" />
-          </S.Button>
-        </S.RecheckNFT>
         <S.Description>
           We recommend adding your in-game
           <br /> account to MetaMask.
@@ -628,8 +613,8 @@ const S = {
   `,
 
   Img: styled.img`
-    width: 130px;
-    height: 130px;
+    width: 230px;
+    height: 230px;
   `,
 
   ButtonImg: styled.img`
@@ -652,14 +637,27 @@ const S = {
   `,
   NftSelectionContainer: styled.div`
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 10px;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    padding: 30px;
-    background-color: rgba(253, 249, 249, 0.1);
+    background-color: rgba(77, 25, 129, 0.6);
     border-radius: 15px;
-    margin-bottom: 20px;
+    width: 370px;
+    height: 390px;
+  `,
+  ConnectAccount: styled.div`
+    cursor: pointer;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    background-color: rgba(77, 25, 129, 0.6);
+    border-radius: 15px;
+    width: 370px;
+    height: 390px;
   `,
   DeployText: styled.p`
     position: absolute;
@@ -777,6 +775,8 @@ const S = {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
+    width: 100px;
+    height: 100px;
 
     &:hover {
       border-radius: 2%;
