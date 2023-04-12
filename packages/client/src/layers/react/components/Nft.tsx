@@ -23,7 +23,7 @@ export const Nft = ({
   const [showNftBridge, setShowNftBridge] = useState(false);
 
   if (showNftBridge) {
-    return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
   }
   if (error) {
     return <div>Error</div>;
@@ -109,7 +109,7 @@ export const Nft = ({
       </div>
     );
   } else {
-    return <NoNFT address={address} totalNft={allNfts?.length || 0} />;
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
   }
 };
 
