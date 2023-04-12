@@ -1,14 +1,42 @@
 import styled from "styled-components";
-import Slider from "rc-slider";
 import { Layers } from "../../../types";
-import "rc-slider/assets/index.css";
+import { Line } from "rc-progress";
+import { getNftId } from "../../network/utils/getNftId";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 
 export const AttributeMenu = ({ layers }: { layers: Layers }) => {
   const {
+    network: {
+      components: { NFTID, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6 },
+    },
     phaser: {
       localApi: { setShowAttributeModal },
     },
   } = layers;
+  const nftDetails = getNftId(layers);
+  if (!nftDetails) {
+    return null;
+  }
+  const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+    return nftIdValue && +nftIdValue === nftDetails.tokenId;
+  });
+  const attribute1 = getComponentValue(Attribute1, ownedByIndex)?.value;
+  const attribute2 = getComponentValue(Attribute2, ownedByIndex)?.value;
+  const attribute3 = getComponentValue(Attribute3, ownedByIndex)?.value;
+  const attribute4 = getComponentValue(Attribute4, ownedByIndex)?.value;
+  const attribute5 = getComponentValue(Attribute5, ownedByIndex)?.value;
+  const attribute6 = getComponentValue(Attribute6, ownedByIndex)?.value;
+
+  console.log(
+    attribute1 && +attribute1,
+    attribute2 && +attribute2,
+    attribute3 && +attribute3,
+    attribute4 && +attribute4,
+    attribute5 && +attribute5,
+    attribute6 && +attribute6
+  );
+
   return (
     <MenuContainer>
       <Container>
@@ -49,24 +77,7 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
                 <img src="/ui/PILOTING.png" />
                 <div style={{ width: "100px" }}>
-                  <Slider
-                    min={1}
-                    max={100}
-                    value={50}
-                    // onChange={(value) => {
-                    //   setSelected(value);
-                    // }}
-                    handleStyle={{
-                      borderColor: "#008073",
-                      height: 20,
-                      width: 14,
-                      marginLeft: 0,
-                      marginTop: -9,
-                      backgroundColor: "#008073",
-                      opacity: 1,
-                      borderRadius: 2,
-                    }}
-                  />
+                  <Line percent={attribute1 && +attribute1} strokeWidth={10} strokeColor="#00fde4" trailWidth={10} />
                 </div>
               </div>
             </Stat>
@@ -75,23 +86,11 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
                 <img src="/ui/PILOTING.png" />
                 <div style={{ width: "100px" }}>
-                  <Slider
-                    min={1}
-                    max={100}
-                    value={50}
-                    // onChange={(value) => {
-                    //   setSelected(value);
-                    // }}
-                    handleStyle={{
-                      borderColor: "#008073",
-                      height: 20,
-                      width: 14,
-                      marginLeft: 0,
-                      marginTop: -9,
-                      backgroundColor: "#008073",
-                      opacity: 1,
-                      borderRadius: 2,
-                    }}
+                  <Line
+                    percent={attribute2 && +attribute2 * 10}
+                    strokeWidth={10}
+                    strokeColor="#00fde4"
+                    trailWidth={10}
                   />
                 </div>
               </div>
@@ -101,23 +100,11 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
                 <img src="/ui/PILOTING.png" />
                 <div style={{ width: "100px" }}>
-                  <Slider
-                    min={1}
-                    max={100}
-                    value={50}
-                    // onChange={(value) => {
-                    //   setSelected(value);
-                    // }}
-                    handleStyle={{
-                      borderColor: "#008073",
-                      height: 20,
-                      width: 14,
-                      marginLeft: 0,
-                      marginTop: -9,
-                      backgroundColor: "#008073",
-                      opacity: 1,
-                      borderRadius: 2,
-                    }}
+                  <Line
+                    percent={attribute3 && +attribute3 * 10}
+                    strokeWidth={10}
+                    strokeColor="#00fde4"
+                    trailWidth={10}
                   />
                 </div>
               </div>
@@ -127,23 +114,11 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
                 <img src="/ui/PILOTING.png" />
                 <div style={{ width: "100px" }}>
-                  <Slider
-                    min={1}
-                    max={100}
-                    value={50}
-                    // onChange={(value) => {
-                    //   setSelected(value);
-                    // }}
-                    handleStyle={{
-                      borderColor: "#008073",
-                      height: 20,
-                      width: 14,
-                      marginLeft: 0,
-                      marginTop: -9,
-                      backgroundColor: "#008073",
-                      opacity: 1,
-                      borderRadius: 2,
-                    }}
+                  <Line
+                    percent={attribute4 && +attribute4 * 10}
+                    strokeWidth={10}
+                    strokeColor="#00fde4"
+                    trailWidth={10}
                   />
                 </div>
               </div>
@@ -153,23 +128,25 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
                 <img src="/ui/PILOTING.png" />
                 <div style={{ width: "100px" }}>
-                  <Slider
-                    min={1}
-                    max={100}
-                    value={50}
-                    // onChange={(value) => {
-                    //   setSelected(value);
-                    // }}
-                    handleStyle={{
-                      borderColor: "#008073",
-                      height: 20,
-                      width: 14,
-                      marginLeft: 0,
-                      marginTop: -9,
-                      backgroundColor: "#008073",
-                      opacity: 1,
-                      borderRadius: 2,
-                    }}
+                  <Line
+                    percent={attribute5 && +attribute5 * 10}
+                    strokeWidth={10}
+                    strokeColor="#00fde4"
+                    trailWidth={10}
+                  />
+                </div>
+              </div>
+            </Stat>
+            <Stat>
+              <p>Name</p>
+              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                <img src="/ui/PILOTING.png" />
+                <div style={{ width: "100px" }}>
+                  <Line
+                    percent={attribute6 && +attribute6 * 10}
+                    strokeWidth={10}
+                    strokeColor="#00fde4"
+                    trailWidth={10}
                   />
                 </div>
               </div>
