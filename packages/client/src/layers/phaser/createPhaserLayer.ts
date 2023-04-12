@@ -24,6 +24,7 @@ import {
   SelectedNftID,
   ShowWinGame,
   MultiSelect,
+  ShowAttributeModal,
 } from "../local/components";
 
 import {
@@ -135,6 +136,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
     SelectedNftID: SelectedNftID(world),
     ShowWinGame: ShowWinGame(world),
     MultiSelect: MultiSelect(world),
+    ShowAttributeModal: ShowAttributeModal(world),
   };
 
   // --- API ------------------------------------------------------------------------
@@ -185,6 +187,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   const getWinState = (): boolean => {
     return getComponentValue(components.ShowWinGame, modalIndex)?.showWinGame ? true : false;
+  };
+
+  const setShowAttributeModal = (ShowAttributeModal: boolean) => {
+    setComponent(components.ShowAttributeModal, modalIndex, { value: ShowAttributeModal });
   };
 
   const setBuildWall = ({
@@ -401,6 +407,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
       setMultiSelect,
       setMultiMoveStation,
       getStationDetails,
+      setShowAttributeModal,
     },
     getValues: {
       getWinState,
