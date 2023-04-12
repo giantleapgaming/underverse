@@ -4,6 +4,9 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Layers } from "../../../types";
 import { getComponentValue } from "@latticexyz/recs";
+import Slider from "rc-slider";
+import "rc-slider/assets/index.css";
+import { AttributeMenu } from "./AttributeMenu";
 
 const AttributeModal = ({ layers }: { layers: Layers }) => {
   const {
@@ -16,43 +19,17 @@ const AttributeModal = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
 
-  return (
-    <Container
-      onMouseEnter={() => {
-        input.disableInput();
-      }}
-    >
-      <P>{"rookie training completed!"}</P>
-    </Container>
-  );
+  return <AttributeMenu layers={layers} />;
 };
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const P = styled.p`
-  max-width: 40%;
-  font-size: 70px;
-  font-weight: 600;
-  text-align: center;
-  color: #01ffef;
-  font-weight: 600;
-  text-transform: uppercase;
-`;
 
 export const registerAttributeModalScreen = () => {
   registerUIComponent(
     "registerTutorialCompletedModalScreen",
     {
-      colStart: 1,
-      colEnd: 13,
-      rowStart: 1,
-      rowEnd: 13,
+      colStart: 4,
+      colEnd: 10,
+      rowStart: 3,
+      rowEnd: 10,
     },
     (layers) => {
       const {

@@ -5,7 +5,6 @@ import { Layers } from "../../../../types";
 import { getNftId } from "../../../network/utils/getNftId";
 import { walletAddress } from "../../utils/walletAddress";
 import { NFTImg } from "../NFTImg";
-import { ShowAttributeModal } from "../../../local/components";
 
 export const UserDetails = ({ layers }: { layers: Layers }) => {
   const [copy, setCopy] = useState(false);
@@ -30,7 +29,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     <S.Container>
       {nftDetails ? (
         <div
-          style={{ position: "relative", width: "64px", height: "64px", overflow: "hidden" }}
+          style={{ position: "relative", width: "64px", height: "64px", cursor: "pointer" }}
           onClick={() => {
             setShowAttributeModal(true);
           }}
