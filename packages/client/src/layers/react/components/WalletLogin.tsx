@@ -204,9 +204,22 @@ const WalletLogin = () => {
 
 const CopyAddress = ({ address, index, pk }: { address: string; index: number; pk: string }) => {
   const [copy, setCopy] = useState(false);
+  const [copyKey, setCopyKey] = useState(false);
+  const [showActionName, setShowActionName] = useState({ copy: false, export: false });
   return (
     <>
-      <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px" }} key={address}>
+      <div
+        style={{
+          position: "relative",
+          marginTop: "-33px",
+          marginLeft: "-50px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "15px",
+        }}
+        key={address}
+      >
         <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}></span>
         <AccountMenu>
           <p
@@ -220,17 +233,75 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
           </p>
         </AccountMenu>
         <img src="/img/accBorderMenu.png" />
-        <img
-          src="/img/copy.png"
-          style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "60px", zIndex: 10 }}
-          onClick={() => {
-            setCopy(true);
-            navigator.clipboard.writeText(`${address}`);
-            setTimeout(() => {
-              setCopy(false);
-            }, 1000);
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "6px",
+            flexDirection: "column",
+            marginBottom: "40px",
+            marginTop: "10px",
           }}
-        />
+        >
+          <div
+            style={{ cursor: "pointer", position: "relative" }}
+            onMouseOver={() => {
+              setShowActionName({ ...showActionName, copy: true });
+            }}
+            onMouseLeave={() => {
+              setShowActionName({ ...showActionName, copy: false });
+            }}
+            onClick={() => {
+              setCopy(true);
+              navigator.clipboard.writeText(`${address}`);
+              setTimeout(() => {
+                setCopy(false);
+              }, 1000);
+            }}
+          >
+            <img src="/img/copy.png" />
+            {showActionName.copy && (
+              <p
+                style={{ position: "absolute", bottom: "3px", width: "180px", color: "wheat", fontFamily: "MyOTFFont" }}
+              >
+                Copy address
+              </p>
+            )}
+          </div>
+          <div
+            style={{ cursor: "pointer", position: "relative" }}
+            onMouseEnter={() => {
+              setShowActionName({ ...showActionName, export: true });
+            }}
+            onMouseLeave={() => {
+              setShowActionName({ ...showActionName, export: false });
+            }}
+            onClick={() => {
+              setCopyKey(true);
+              navigator.clipboard.writeText(`${pk}`);
+              setTimeout(() => {
+                setCopyKey(false);
+              }, 2000);
+            }}
+          >
+            <img src="/img/exportKey.png" />
+            {showActionName.export && (
+              <p
+                style={{
+                  position: "absolute",
+                  bottom: "3px",
+                  left: "20px",
+                  width: "200px",
+                  color: "wheat",
+                  fontFamily: "MyOTFFont",
+                }}
+              >
+                {copyKey ? `${walletAddressLoginDisplay(pk)}` : "Export private key"}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
