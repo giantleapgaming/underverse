@@ -40,6 +40,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
     },
   } = layers;
   const selectedEntities = getComponentValue(ShowCircle, showCircleIndex)?.selectedEntities ?? [];
+  const lowCashNames: string[] = [];
 
   const nftDetails = getNftId(layers);
   const allUserNameEntityId = [...getComponentEntities(Name)]
@@ -135,6 +136,9 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                 let totalPopulation = 0;
                 const name = getComponentValue(Name, nameEntity);
                 const cash = getComponentValue(Cash, nameEntity)?.value;
+                if (cash && +cash < 100000 * 10e5) { //10e5 = 1000000 i.e. Multiplier for cash component
+                  lowCashNames.push(nameEntity);
+                }
                 const nftId = getComponentValue(NFTID, nameEntity)?.value;
                 const owner = !!(nftId && nftDetails.tokenId === +nftId);
                 const indexOf = selectedEntities.indexOf(nameEntity);
@@ -202,6 +206,7 @@ export const Highlight = ({ layers }: { layers: Layers }) => {
                   </div>
                 );
               })}
+              {console.log(` Total accounts: ${allUserNameEntityId.length}\n Active accounts: ${lowCashNames.length}\n Inactive accounts: ${allUserNameEntityId.length - lowCashNames.length}`)}
             </S.List>
           </S.DetailsContainer>
         )}
