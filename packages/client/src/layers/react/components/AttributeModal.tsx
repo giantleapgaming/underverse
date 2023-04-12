@@ -9,16 +9,6 @@ import "rc-slider/assets/index.css";
 import { AttributeMenu } from "./AttributeMenu";
 
 const AttributeModal = ({ layers }: { layers: Layers }) => {
-  const {
-    phaser: {
-      components: { ShowAttributeModal },
-      localIds: { modalIndex },
-      scenes: {
-        Main: { input },
-      },
-    },
-  } = layers;
-
   return <AttributeMenu layers={layers} />;
 };
 

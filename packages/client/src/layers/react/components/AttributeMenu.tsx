@@ -67,7 +67,7 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "flex-end",
-              gap: "20px",
+              gap: "15px",
               flexDirection: "column",
             }}
           >
@@ -75,7 +75,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>PILOTING RANGE</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/PILOTING.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line percent={attribute1 && +attribute1} strokeWidth={10} strokeColor="#00fde4" trailWidth={10} />
                 </div>
@@ -84,7 +87,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>HULL REPAIR</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/REPAIR.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line
                     percent={attribute2 && +attribute2 * 10}
@@ -98,7 +104,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>SHIELD CHARGE</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/CHARGE.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line
                     percent={attribute3 && +attribute3 * 10}
@@ -112,7 +121,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>WEAPON LOCK</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/LOCK.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line
                     percent={attribute4 && +attribute4 * 10}
@@ -126,7 +138,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>RELOAD SPEED</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/RELOAD.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line
                     percent={attribute5 && +attribute5 * 10}
@@ -140,7 +155,10 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             <Stat>
               <p>Name</p>
               <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img src="/ui/PILOTING.png" />
+                <img
+                  src="/ui/PILOTING.png"
+                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
+                />
                 <div style={{ width: "100px" }}>
                   <Line
                     percent={attribute6 && +attribute6 * 10}
