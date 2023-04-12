@@ -7,6 +7,9 @@ interface IGradientButtonProps {
 const GradientButton = styled.button<IGradientButtonProps>`
   background: linear-gradient(to right, #ffcc70, #c850c0, #4158d0);
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 10px 20px;
   border: none;
   border-radius: 20px;

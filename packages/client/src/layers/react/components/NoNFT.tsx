@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
 import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
@@ -158,10 +158,7 @@ export const NoNFT = ({
                 {selectedNft ? (
                   <div>
                     <S.NFTBox onClick={() => setConnectNFTBridge(true)}>
-                      <img
-                        src={selectedNft?.imageUrl}
-                        style={{ width: "370px", height: "390px", objectFit: "contain" }}
-                      />
+                      <img src={selectedNft?.imageUrl} />
                     </S.NFTBox>
                     <p
                       style={{
@@ -211,18 +208,30 @@ export const NoNFT = ({
                             <br />
                             {polygonNft?.length} NFTs Detected
                           </p>
-                          {polygonNft?.map((data, index) => (
-                            <S.NftSelect
-                              selectedNFT={false}
-                              key={`index-${index}`}
-                              onClick={() => {
-                                setSwap(false);
-                                setSelectedNft(data);
-                              }}
-                            >
-                              <S.Img src={data.imageUrl} />
-                            </S.NftSelect>
-                          ))}
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              flexWrap: "wrap",
+                              gap: "10px",
+                            }}
+                          >
+                            {polygonNftLoading && <Loader />}
+                            {!polygonNftLoading &&
+                              polygonNft?.map((data, index) => (
+                                <S.NftSelect
+                                  selectedNFT={false}
+                                  key={`index-${index}`}
+                                  onClick={() => {
+                                    setSwap(false);
+                                    setSelectedNft(data);
+                                  }}
+                                >
+                                  <S.Img src={data.imageUrl} />
+                                </S.NftSelect>
+                              ))}
+                          </div>
                           {polygonNft?.length === 0 && <div>No Nft</div>}
                         </S.NftSelectionContainer>
                       )}
@@ -390,7 +399,7 @@ export const NoNFT = ({
                           }
                         }}
                       >
-                        {loading ? "Bridging..." : "Bridge"}
+                        {loading ? <Loader /> : "Bridge"}
                       </BridgeButton>
                     ) : (
                       <BridgeButton isLoading={loading} onClick={connectAccount}>
@@ -636,16 +645,14 @@ const S = {
     cursor: pointer;
   `,
   NftSelectionContainer: styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
     justify-content: center;
     flex-wrap: wrap;
     background-color: rgba(77, 25, 129, 0.6);
     border-radius: 15px;
     width: 370px;
     height: 390px;
+    overflow-x: auto;
+    padding: 20px;
   `,
   ConnectAccount: styled.div`
     cursor: pointer;
@@ -788,3 +795,21 @@ const S = {
     height: 90px;
   `,
 };
+
+const spin = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;
+
+const Loader = styled.div`
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: ${spin} 2s linear infinite;
+`;
