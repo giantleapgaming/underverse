@@ -199,41 +199,83 @@ export const NoNFT = ({
                           </p>
                         </S.ConnectAccount>
                       ) : (
-                        <S.NftSelectionContainer>
-                          <p style={{ textAlign: "center", fontSize: "30px" }}>
-                            Connected to
-                            <br />
-                            {metaMaskAccount?.toString().substring(0, 10)}...
-                            <br />
-                            <br />
-                            {polygonNft?.length} NFTs Detected
-                          </p>
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              flexWrap: "wrap",
-                              gap: "10px",
-                            }}
-                          >
-                            {polygonNftLoading && <Loader />}
-                            {!polygonNftLoading &&
-                              polygonNft?.map((data, index) => (
-                                <S.NftSelect
-                                  selectedNFT={false}
-                                  key={`index-${index}`}
-                                  onClick={() => {
-                                    setSwap(false);
-                                    setSelectedNft(data);
-                                  }}
-                                >
-                                  <S.Img src={data.imageUrl} />
-                                </S.NftSelect>
-                              ))}
-                          </div>
-                          {polygonNft?.length === 0 && <div>No Nft</div>}
-                        </S.NftSelectionContainer>
+                        <>
+                          {swap ? (
+                            <S.NftSelectionContainer>
+                              <p style={{ textAlign: "center", fontSize: "30px" }}>
+                                Connected to
+                                <br />
+                                {metaMaskAccount?.toString().substring(0, 10)}...
+                                <br />
+                                <br />
+                                {l1AllNfts?.length} NFTs Detected
+                              </p>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  flexWrap: "wrap",
+                                  gap: "10px",
+                                }}
+                              >
+                                {l1NftLoading && <Loader />}
+                                {!l1NftLoading &&
+                                  l1AllNfts?.map((data, index) => (
+                                    <S.NftSelect
+                                      selectedNFT={false}
+                                      key={`index-${index}`}
+                                      onClick={() => {
+                                        setSwap(true);
+                                        setSelectedNft(data);
+                                      }}
+                                    >
+                                      <S.Img src={data.imageUrl} />
+                                    </S.NftSelect>
+                                  ))}
+                              </div>
+                              {l1AllNfts?.length === 0 && <div>No Nft</div>}
+                              {l1NftError && <div>Error Unable to load the Nft</div>}
+                            </S.NftSelectionContainer>
+                          ) : (
+                            <S.NftSelectionContainer>
+                              <p style={{ textAlign: "center", fontSize: "30px" }}>
+                                Connected to
+                                <br />
+                                {metaMaskAccount?.toString().substring(0, 10)}...
+                                <br />
+                                <br />
+                                {polygonNft?.length} NFTs Detected
+                              </p>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  flexWrap: "wrap",
+                                  gap: "10px",
+                                }}
+                              >
+                                {polygonNftLoading && <Loader />}
+                                {!polygonNftLoading &&
+                                  polygonNft?.map((data, index) => (
+                                    <S.NftSelect
+                                      selectedNFT={false}
+                                      key={`index-${index}`}
+                                      onClick={() => {
+                                        setSwap(false);
+                                        setSelectedNft(data);
+                                      }}
+                                    >
+                                      <S.Img src={data.imageUrl} />
+                                    </S.NftSelect>
+                                  ))}
+                              </div>
+                              {polygonNft?.length === 0 && <div>No Nft</div>}
+                              {ploygonNftError && <div>Error Unable to load the Nft</div>}
+                            </S.NftSelectionContainer>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -305,6 +347,7 @@ export const NoNFT = ({
                     <img
                       onClick={() => {
                         setSelectedNft(undefined);
+                        setSwap(!swap);
                       }}
                       src="/img/switch.png"
                       style={{ width: "35px", height: "42px", cursor: "pointer" }}
