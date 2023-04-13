@@ -4,6 +4,7 @@ import { Line } from "rc-progress";
 import { getNftId } from "../../network/utils/getNftId";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
+import ProgressIndicator from "./ProgressIndicator";
 
 export const AttributeMenu = ({ layers }: { layers: Layers }) => {
   const {
@@ -28,15 +29,6 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
   const attribute4 = getComponentValue(Attribute4, ownedByIndex)?.value;
   const attribute5 = getComponentValue(Attribute5, ownedByIndex)?.value;
   const attribute6 = getComponentValue(Attribute6, ownedByIndex)?.value;
-
-  const [isHovering, setIsHovering] = useState({
-    att1: false,
-    att2: false,
-    att3: false,
-    att4: false,
-    att5: false,
-    att6: false,
-  });
 
   return (
     <MenuContainer>
@@ -68,179 +60,73 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "flex-end",
-              gap: "15px",
+              gap: "25px",
               flexDirection: "column",
             }}
           >
             <P style={{ marginRight: "20px" }}>STATS</P>
-            <Stat>
-              <p>PILOTING RANGE</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/PILOTING.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att1: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att1: false })}
-                >
-                  <Line
-                    percent={attribute1 && +attribute1 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+            <StatContainer>
+              <Stat>
+                <p style={{ justifyItems: "center" }}>PILOTING RANGE</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/PILOTING.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att1 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute1 && +attribute1}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute1 ? +attribute1 : 0} />
                 </div>
-              </div>
-            </Stat>
-            <Stat>
-              <p>HULL REPAIR</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/REPAIR.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att2: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att2: false })}
-                >
-                  <Line
-                    percent={attribute2 && +attribute2 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+              </Stat>
+              <Stat>
+                <p>HULL REPAIR</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/REPAIR.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att2 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute2 && +attribute2}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute2 ? +attribute2 : 0} />
                 </div>
-              </div>
-            </Stat>
-            <Stat>
-              <p>SHIELD CHARGE</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/CHARGE.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att3: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att3: false })}
-                >
-                  <Line
-                    percent={attribute3 && +attribute3 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+              </Stat>
+              <Stat>
+                <p>SHIELD CHARGE</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/CHARGE.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att3 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute3 && +attribute3}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute3 ? +attribute3 : 0} />
                 </div>
-              </div>
-            </Stat>
-            <Stat>
-              <p>WEAPON LOCK</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/LOCK.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att4: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att4: false })}
-                >
-                  <Line
-                    percent={attribute4 && +attribute4 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+              </Stat>
+              <Stat>
+                <p>WEAPON LOCK</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/LOCK.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att4 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute4 && +attribute4}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute4 ? +attribute4 : 0} />
                 </div>
-              </div>
-            </Stat>
-            <Stat>
-              <p>RELOAD SPEED</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/RELOAD.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att5: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att5: false })}
-                >
-                  <Line
-                    percent={attribute5 && +attribute5 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+              </Stat>
+              <Stat>
+                <p>RELOAD SPEED</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/RELOAD.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att5 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute5 && +attribute5}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute5 ? +attribute5 : 0} />
                 </div>
-              </div>
-            </Stat>
-            <Stat>
-              <p>Name</p>
-              <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                <img
-                  src="/ui/PILOTING.png"
-                  style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                />
-                <div
-                  style={{ width: "100px", position: "relative" }}
-                  onMouseEnter={() => setIsHovering({ ...isHovering, att6: true })}
-                  onMouseLeave={() => setIsHovering({ ...isHovering, att6: false })}
-                >
-                  <Line
-                    percent={attribute6 && +attribute6 * 10}
-                    strokeWidth={10}
-                    strokeColor="#00fde4"
-                    trailWidth={10}
+              </Stat>
+              <Stat>
+                <p>DRONES</p>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
+                  <img
+                    src="/ui/DRONES.png"
+                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
                   />
-                  {isHovering.att6 && (
-                    <div style={{ textAlign: "center", position: "absolute", top: "10px", left: "50%" }}>
-                      <span style={{ fontSize: "12px", fontWeight: "bold", color: "#00f9ff" }}>
-                        {attribute6 && +attribute6}
-                      </span>
-                    </div>
-                  )}
+                  <ProgressIndicator progress={attribute6 ? +attribute6 : 0} />
                 </div>
-              </div>
-            </Stat>
+              </Stat>
+            </StatContainer>
           </div>
         </div>
       </Container>
@@ -275,6 +161,14 @@ const Container = styled.div`
   background-position: center center;
   display: flex;
   font-family: "MyOTFFont";
+`;
+
+const StatContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-auto-flow: row;
+  grid-gap: 16px;
+  justify-items: end;
 `;
 
 const P = styled.p`
