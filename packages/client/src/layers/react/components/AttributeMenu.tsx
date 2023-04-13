@@ -38,7 +38,7 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "flex-start",
-            margin: "20px 40px",
+            margin: "20px 50px",
             width: "670px",
           }}
         >
@@ -60,7 +60,7 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               display: "flex",
               justifyContent: "flex-start",
               alignItems: "flex-end",
-              gap: "25px",
+              gap: "20px",
               flexDirection: "column",
             }}
           >
@@ -69,61 +69,67 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
               <Stat>
                 <p style={{ justifyItems: "center" }}>PILOTING RANGE</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/PILOTING.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute1 ? +attribute1 : 0} />
+                  <Img src="/ui/PILOTING.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute1 ? +attribute1 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
               <Stat>
                 <p>HULL REPAIR</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/REPAIR.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute2 ? +attribute2 : 0} />
+                  <Img src="/ui/REPAIR.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute2 ? +attribute2 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
               <Stat>
                 <p>SHIELD CHARGE</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/CHARGE.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute3 ? +attribute3 : 0} />
+                  <Img src="/ui/CHARGE.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute3 ? +attribute3 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
               <Stat>
                 <p>WEAPON LOCK</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/LOCK.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute4 ? +attribute4 : 0} />
+                  <Img src="/ui/LOCK.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute4 ? +attribute4 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
               <Stat>
                 <p>RELOAD SPEED</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/RELOAD.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute5 ? +attribute5 : 0} />
+                  <Img src="/ui/RELOAD.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute5 ? +attribute5 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
               <Stat>
                 <p>DRONES</p>
                 <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginLeft: "30px" }}>
-                  <img
-                    src="/ui/DRONES.png"
-                    style={{ backgroundColor: "black", border: "1px solid #ffffff", borderRadius: "50%" }}
-                  />
-                  <ProgressIndicator progress={attribute6 ? +attribute6 : 0} />
+                  <Img src="/ui/DRONES.png" />
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <TopBorder></TopBorder>
+                    <ProgressIndicator progress={attribute6 ? +attribute6 : 0} />
+                    <BottomBorder></BottomBorder>
+                  </div>
                 </div>
               </Stat>
             </StatContainer>
@@ -167,10 +173,14 @@ const StatContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-auto-flow: row;
-  grid-gap: 16px;
+  grid-gap: 18px;
   justify-items: end;
 `;
-
+const Img = styled.img`
+  background-color: black;
+  border: 1px solid white;
+  border-radius: 50%;
+`;
 const P = styled.p`
   font-size: 20px;
   font-weight: 600;
@@ -198,4 +208,23 @@ const Stat = styled.div`
   align-items: center;
   gap: "10px";
   font-family: "MyOTFFont";
+`;
+
+const TopBorder = styled.div`
+  height: 5px; /* adjust height as needed */
+  width: 40px; /* adjust width as needed */
+  background-color: #000000; /* color of the rectangle */
+  border-top: 2px solid #ffffff; /* color and thickness of the top border */
+  border-left: 2px solid #ffffff; /* color and thickness of the left border */
+  border-right: 2px solid #ffffff;
+  border-radius: 2px;
+`;
+const BottomBorder = styled.div`
+  height: 5px; /* adjust height as needed */
+  width: 40px; /* adjust width as needed */
+  background-color: #000000; /* color of the rectangle */
+  border-bottom: 2px solid #ffffff; /* color and thickness of the top border */
+  border-left: 2px solid #ffffff; /* color and thickness of the left border */
+  border-right: 2px solid #ffffff;
+  border-radius: 2px;
 `;
