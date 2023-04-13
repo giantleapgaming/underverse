@@ -24,7 +24,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const name = getComponentValue(Name, factionIndex)?.value;
   const nftDetails = getNftId(layers);
   const nftId = getComponentValue(NFTID, factionIndex)?.value;
-  console.log(nftDetails);
+
   return (
     <S.Container>
       {nftDetails ? (
