@@ -185,9 +185,9 @@ const Congratulations = ({ layers }: { layers: Layers }) => {
                     onClick={() => {
                       const text =
                         (isCadet &&
-                          `I've just earned my Cadet Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`) ||
+                          `I've just earned my Cadet Wings NFT for The Underverse MMORTS [@giantleapgg](https://twitter.com/giantleapgg)! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/ \n\n #freenft #web3games`) ||
                         (isRookie &&
-                          `I've just earned my Rookie Wings NFT for The Underverse MMORTS @giantleapgg! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/`);
+                          `I've just earned my Rookie Wings NFT for The Underverse MMORTS [@giantleapgg](https://twitter.com/giantleapgg)! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/ \n\n #freenft #web3games`);
                       const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
                       console.log(twitterShareURL);
                       const popupWidth = 550;
