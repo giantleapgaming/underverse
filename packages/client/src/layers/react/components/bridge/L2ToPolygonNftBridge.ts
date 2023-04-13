@@ -20,41 +20,44 @@ export const L2ToPolygonNftBridge = async (
   const l2Provider = new ethers.providers.JsonRpcProvider(L2_URL);
   const l2Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
   const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, "/addresses.json");
-
   const amount = 1;
-
-  const withdrawalTx = await messenger.withdrawERC1155(
-    L1_ERC1155_CONTRACT_ADDRESS,
-    L2_ERC1155_CONTRACT_ADDRESS,
-    tokenId,
-    amount,
-    {
-      overrides: {
-        gasLimit: 1000000,
-        gasPrice: 0,
+  try {
+    const withdrawalTx = await messenger.withdrawERC1155(
+      L1_ERC1155_CONTRACT_ADDRESS,
+      L2_ERC1155_CONTRACT_ADDRESS,
+      tokenId,
+      amount,
+      {
+        overrides: {
+          gasLimit: 1000000,
+          gasPrice: 0,
+        },
+      }
+    );
+    toast("withdrawal Tx hash", {
+      action: {
+        label: "PolygonScan",
+        onClick: () => window.open(`https://polygonscan.com/tx/${withdrawalTx.hash}`, "_blank"),
       },
-    }
-  );
-  toast("withdrawal Tx hash", {
-    action: {
-      label: "PolygonScan",
-      onClick: () => window.open(`https://polygonscan.com/tx/${withdrawalTx.hash}`, "_blank"),
-    },
-  });
-  await messenger.waitForMessageStatus(withdrawalTx.hash, MessageStatus.READY_FOR_RELAY);
-  const finalizeTx = await messenger.finalizeMessage(withdrawalTx, {
-    overrides: {
-      gasPrice: await metaMaskSigner.getGasPrice(),
-      gasLimit: 2_000_000,
-    },
-  });
-  toast("Finalize Tx hash", {
-    action: {
-      label: "PolygonScan",
-      onClick: () => window.open(`https://polygonscan.com/tx/${finalizeTx.hash}`, "_blank"),
-    },
-  });
-  await messenger.waitForMessageReceipt(withdrawalTx.hash);
-  setSuccess();
-  toast.success("NFT bridged successfully");
+    });
+    await messenger.waitForMessageStatus(withdrawalTx.hash, MessageStatus.READY_FOR_RELAY);
+    const finalizeTx = await messenger.finalizeMessage(withdrawalTx, {
+      overrides: {
+        gasPrice: await metaMaskSigner.getGasPrice(),
+        gasLimit: 2_000_000,
+      },
+    });
+    toast("Finalize Tx hash", {
+      action: {
+        label: "PolygonScan",
+        onClick: () => window.open(`https://polygonscan.com/tx/${finalizeTx.hash}`, "_blank"),
+      },
+    });
+    await messenger.waitForMessageReceipt(withdrawalTx.hash);
+    setSuccess();
+    toast.success("NFT bridged successfully");
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong");
+  }
 };
