@@ -13,7 +13,7 @@ export const getNftData = async (
       method: "POST",
       body: JSON.stringify({
         address: walletAddress,
-        nftContract: "0x4aBc486F4a8e35f4cF74B8E3c6bD30D019d3A4F7",
+        nftContract: "0x113113aE1Bb7204453406c2228934737e5bBCc26",
         chainId: chainIdString,
       }),
       headers: {
