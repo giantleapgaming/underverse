@@ -1,21 +1,33 @@
 import styled from "styled-components";
 import { Layers } from "../../../types";
 import { Line } from "rc-progress";
-import { getNftId } from "../../network/utils/getNftId";
+import { getNftId, getSelectedOwnedByIndex, isOwnedBy } from "../../network/utils/getNftId";
 import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 import { useState } from "react";
 import ProgressIndicator from "./ProgressIndicator";
+import { NFTImg } from "./NFTImg";
 
 export const AttributeMenu = ({ layers }: { layers: Layers }) => {
   const {
     network: {
-      components: { NFTID, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6 },
+      world,
+      network: { connectedAddress },
+      components: { OwnedBy, NFTID, Attribute1, Attribute2, Attribute3, Attribute4, Attribute5, Attribute6 },
     },
     phaser: {
+      components: { ShowStationDetails },
+      localIds: { stationDetailsEntityIndex },
       localApi: { setShowAttributeModal },
     },
   } = layers;
+  const selectedOwnedByIndex = getSelectedOwnedByIndex(layers);
+  const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
+  const address = connectedAddress.get();
+  const ownedBy = getComponentValue(OwnedBy, selectedEntity)?.value;
+  const factionIndex = world.entities.indexOf(ownedBy);
   const nftDetails = getNftId(layers);
+  const nftId = getComponentValue(NFTID, factionIndex && factionIndex)?.value;
+  const isOwner = isOwnedBy(layers);
   if (!nftDetails) {
     return null;
   }
@@ -23,12 +35,12 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
     const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
     return nftIdValue && +nftIdValue === nftDetails.tokenId;
   });
-  const attribute1 = getComponentValue(Attribute1, ownedByIndex)?.value;
-  const attribute2 = getComponentValue(Attribute2, ownedByIndex)?.value;
-  const attribute3 = getComponentValue(Attribute3, ownedByIndex)?.value;
-  const attribute4 = getComponentValue(Attribute4, ownedByIndex)?.value;
-  const attribute5 = getComponentValue(Attribute5, ownedByIndex)?.value;
-  const attribute6 = getComponentValue(Attribute6, ownedByIndex)?.value;
+  const attribute1 = getComponentValue(Attribute1, selectedOwnedByIndex || ownedByIndex)?.value;
+  const attribute2 = getComponentValue(Attribute2, selectedOwnedByIndex || ownedByIndex)?.value;
+  const attribute3 = getComponentValue(Attribute3, selectedOwnedByIndex || ownedByIndex)?.value;
+  const attribute4 = getComponentValue(Attribute4, selectedOwnedByIndex || ownedByIndex)?.value;
+  const attribute5 = getComponentValue(Attribute5, selectedOwnedByIndex || ownedByIndex)?.value;
+  const attribute6 = getComponentValue(Attribute6, selectedOwnedByIndex || ownedByIndex)?.value;
 
   return (
     <MenuContainer>
@@ -52,7 +64,12 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
             }}
           >
             <P style={{ marginLeft: "20px" }}>UNDERLING #3221</P>
-            <img src="/ui/exampleNFT.png" width={250} height={250} />
+            {<>{nftId && <NFTImg size={230} id={+nftId} />}</>}
+            {/* {nftDetails ? (
+              <img src={nftDetails.imageUrl} width={250} height={250} />
+            ) : (
+              <>{nftId && <NFTImg size={250} id={+nftId} />}</>
+            )} */}
           </div>
 
           <div
@@ -137,7 +154,6 @@ export const AttributeMenu = ({ layers }: { layers: Layers }) => {
         </div>
       </Container>
       <Button
-        type="button"
         onClick={() => {
           setShowAttributeModal(false);
         }}
@@ -197,7 +213,7 @@ const Button = styled.button`
   background: transparent;
   cursor: pointer;
   color: #01ffef;
-  font-size: 28px;
+  font-size: 24px;
   margin-top: -12px;
   margin-left: -15px;
 `;
