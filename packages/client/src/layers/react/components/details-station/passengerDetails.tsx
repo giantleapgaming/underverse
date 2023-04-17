@@ -173,7 +173,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                               });
                               const number = getComponentValue(TutorialStep, nftEntity)?.value;
                               if (number && (+number === 240 || +number === 250)) {
-                                setTutorialCompleteModal(true, "rookie training completed!");
+                                setTutorialCompleteModal(true, "Cadet training completed!");
                               }
                             } catch (e: any) {
                               throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
@@ -372,7 +372,7 @@ export const PassengerDetails = ({ layers }: { layers: Layers }) => {
                                 });
                                 const number = getComponentValue(TutorialStep, nftEntity)?.value;
                                 if (number && (+number === 120 || +number === 130)) {
-                                  setTutorialCompleteModal(true, "rookie training completed!");
+                                  setTutorialCompleteModal(true, "Rookie training completed!");
                                 }
                               } catch (e: any) {
                                 throw new Error(e?.reason.replace("execution reverted:", "") || e.message);

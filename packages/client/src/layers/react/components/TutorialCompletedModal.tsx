@@ -28,6 +28,8 @@ const TutorialCompletedModal = ({ layers }: { layers: Layers }) => {
     }, 7000);
   }, []);
 
+  console.log("title: ", title);
+
   return (
     <Container
       onMouseEnter={() => {
