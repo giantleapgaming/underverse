@@ -37,7 +37,7 @@ const TutorialCompletedModal = ({ layers }: { layers: Layers }) => {
       }}
     >
       <Confetti recycle={true} numberOfPieces={300} width={window.innerWidth} height={window.innerHeight} />
-      <P>{title || "rookie training completed!"}</P>
+      <P>{title || "Training Completed!"}</P>
     </Container>
   );
 };
