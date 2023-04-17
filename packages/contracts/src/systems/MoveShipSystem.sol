@@ -62,13 +62,13 @@ contract MoveShipSystem is System {
     require(elapsedTime >= 600, "Move phase has not started yet");
 
     //Find the new outer boundary of the game based on move phase elapsed
-    //We run move phase for 2500 seconds after build phase which runs for 600 seconds
+    //We run move phase for 2500 seconds or 41 minutes after build phase which runs for 600 seconds
     //Every second the boundary radius will keep shrinking
     //Last man standing within the boundary wins
     //You can not access ships that are outside the new boundary radius
     //Nor can you move to locations which are outside boundary
 
-    require(elapsedTime < 3100, "Game time is over");
+    require(elapsedTime > 3100, "Game time is over");
 
     uint256 currentOuterRadiusSq = 2500 + 600 - elapsedTime;
 

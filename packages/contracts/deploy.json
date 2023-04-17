@@ -59,15 +59,6 @@
       ]
     },
     {
-      "name": "UpgradeSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "LevelComponent",
-        "DefenceComponent"
-      ]
-    },
-    {
       "name": "BuyWeaponSystem",
       "writeAccess": [
         "CashComponent",
@@ -92,14 +83,6 @@
       ]
     },
     {
-      "name": "RepairSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "DefenceComponent"
-      ]
-    },
-    {
       "name": "MoveShipSystem",
       "writeAccess": [
         "PositionComponent",
@@ -114,18 +97,6 @@
         "DefenceComponent",
         "LevelComponent",
         "EntityTypeComponent",
-        "CashComponent"
-      ]
-    },
-    {
-      "name": "TransferEntitySystem",
-      "writeAccess": [
-        "OwnedByComponent"
-      ]
-    },
-    {
-      "name": "TransferCashSystem",
-      "writeAccess": [
         "CashComponent"
       ]
     },

@@ -25,9 +25,9 @@ contract BuildWallSystem is System {
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
   function execute(bytes memory arguments) public returns (bytes memory) {
-    (uint256 sourceEntity, int32 x1, int32 y1, int32 x2, int32 y2, uint256 nftID) = abi.decode(
+    (int32 x1, int32 y1, int32 x2, int32 y2, uint256 nftID) = abi.decode(
       arguments,
-      (uint256, int32, int32, int32, int32, uint256)
+      (int32, int32, int32, int32, uint256)
     );
 
     require(checkNFT(nftContract, nftID), "User wallet does not have the required NFT");
@@ -65,7 +65,7 @@ contract BuildWallSystem is System {
       orientation = false;
     }
 
-    require(wallLength > 0, "Start and end point of the wall cannot be same");
+    require(wallLength > 0, "Wall has to be atleast 1 unit long");
 
     //Check that the start point and end point are both within build zone
 
@@ -145,14 +145,7 @@ contract BuildWallSystem is System {
     }
   }
 
-  function executeTyped(
-    uint256 sourceEntity,
-    int32 x1,
-    int32 y1,
-    int32 x2,
-    int32 y2,
-    uint256 nftID
-  ) public returns (bytes memory) {
-    return execute(abi.encode(sourceEntity, x1, y1, x2, y2, nftID));
+  function executeTyped(int32 x1, int32 y1, int32 x2, int32 y2, uint256 nftID) public returns (bytes memory) {
+    return execute(abi.encode(x1, y1, x2, y2, nftID));
   }
 }
