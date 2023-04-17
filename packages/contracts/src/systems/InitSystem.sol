@@ -20,6 +20,7 @@ import { Attribute4Component, ID as Attribute4ComponentID } from "../components/
 import { Attribute5Component, ID as Attribute5ComponentID } from "../components/Attribute5Component.sol";
 import { Attribute6Component, ID as Attribute6ComponentID } from "../components/Attribute6Component.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 import { playerInitialCash, asteroidType, nftContract, worldType, MULTIPLIER } from "../constants.sol";
 import { checkNFT, getSinValue, getCosValue, createAsteroids } from "../utils.sol";
 
@@ -62,7 +63,11 @@ contract InitSystem is System {
     registeredPlayers[nftID] = true;
     playerCount += 1;
 
+    require(playerCount <= 4, "Only a maximum of 4 players can join this game");
+
     NFTIDComponent(getAddressById(components, NFTIDComponentID)).set(playerId, nftID);
+
+    PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).set(playerId, playerCount);
 
     uint256 random = uint256(keccak256(abi.encodePacked(nftID)));
     Attribute1Component(getAddressById(components, Attribute1ComponentID)).set(playerId, (random % 10) + 1);

@@ -14,9 +14,10 @@ import { godownInitialLevel, barrier } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract, worldType, startRadius, MULTIPLIER } from "../constants.sol";
-import { checkNFT, unOwnedObstacle, getPlayerCash } from "../utils.sol";
+import { checkNFT, unOwnedObstacle, getPlayerCash, isCoordinateAllowed, createBarriersHorizontal, createBarriersVertical } from "../utils.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
 import { CashComponent, ID as CashComponentID } from "../components/CashComponent.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.BuildWall"));
 
@@ -39,9 +40,12 @@ contract BuildWallSystem is System {
       worldType
     )[0];
     //Get the start time of the world
-    uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+    // uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
 
-    require((block.timestamp - startTime) < 600, "Build phase is over");
+    require(
+      (block.timestamp - StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID)) < 600,
+      "Build phase is over"
+    );
 
     //Check if wall is either vertical or horizontal
     require(y2 == y1 || x2 == x1, "Wall can be made only horizontal or vertical");
@@ -65,9 +69,22 @@ contract BuildWallSystem is System {
 
     //Check that the start point and end point are both within build zone
 
-    require((x1 ** 2 + y1 ** 2) <= startRadius ** 2, "Start point of wall is further than 5 units away from Harvester");
+    require(
+      ((x1 ** 2 + y1 ** 2) <= startRadius ** 2) && ((x1 ** 2 + y1 ** 2) <= (startRadius / 2) ** 2),
+      "Start point of wall is outside allowed build zone"
+    );
 
-    require((x2 ** 2 + y2 ** 2) <= startRadius ** 2, "End point of wall is further than 5 units away from Harvester");
+    require(
+      ((x2 ** 2 + y2 ** 2) <= startRadius ** 2) && ((x2 ** 2 + y2 ** 2) <= (startRadius / 2) ** 2),
+      "End point of wall is outside allowed build zone"
+    );
+
+    //We check if the player is building in the allowed zone (25 to 50 radii) and in the quadrant allowed to him
+    uint256 playerCount = PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).getValue(playerID);
+
+    //We check if the player is building in the quadrant allowed to him
+    require(isCoordinateAllowed(playerCount, x1, y1), "Start point is not in the correct player quadrant");
+    require(isCoordinateAllowed(playerCount, x2, y2), "Start point is not in the correct player quadrant");
 
     //We want to check that every single point along the wall is currently unoccupied or is owned by the user
 
@@ -88,39 +105,43 @@ contract BuildWallSystem is System {
 
     if (orientation) //horizontal
     {
-      if (x1 > x2) {
-        //We swap x1 and x2 to ensure we take the lower value first
-        int32 tempX = x1;
-        x1 = x2;
-        x2 = tempX;
-      }
-      for (int32 i = x1; i <= x2; i++) {
-        Coord memory coord = Coord({ x: i, y: y1 });
-        uint256 barrierEntity = world.getUniqueEntityId();
-        PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
-        LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
-        EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
-        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
-        OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
-      }
+      createBarriersHorizontal(world, components, x1, x2, y1, playerID);
+
+      // if (x1 > x2) {
+      //   //We swap x1 and x2 to ensure we take the lower value first
+      //   int32 tempX = x1;
+      //   x1 = x2;
+      //   x2 = tempX;
+      // }
+      // for (int32 i = x1; i <= x2; i++) {
+      //   Coord memory coord = Coord({ x: i, y: y1 });
+      //   uint256 barrierEntity = world.getUniqueEntityId();
+      //   PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
+      //   LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
+      //   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
+      //   DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
+      //   OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
+      // }
     }
     //vertical
     else {
-      if (y1 > y2) {
-        //We swap y1 and y2 to ensure we take the lower value first
-        int32 tempY = y1;
-        y1 = y2;
-        y2 = tempY;
-      }
-      for (int32 i = y1; i <= y2; i++) {
-        Coord memory coord = Coord({ x: x1, y: i });
-        uint256 barrierEntity = world.getUniqueEntityId();
-        PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
-        LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
-        EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
-        DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
-        OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
-      }
+      createBarriersVertical(world, components, x1, y1, y2, playerID);
+
+      // if (y1 > y2) {
+      //   //We swap y1 and y2 to ensure we take the lower value first
+      //   int32 tempY = y1;
+      //   y1 = y2;
+      //   y2 = tempY;
+      // }
+      // for (int32 i = y1; i <= y2; i++) {
+      //   Coord memory coord = Coord({ x: x1, y: i });
+      //   uint256 barrierEntity = world.getUniqueEntityId();
+      //   PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
+      //   LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, godownInitialLevel);
+      //   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, barrier);
+      //   DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
+      //   OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
+      // }
     }
   }
 

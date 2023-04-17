@@ -447,6 +447,72 @@ function getCosValue(uint256 angleInDegrees) pure returns (int32) {
   return cosArr[index];
 }
 
+function isCoordinateAllowed(uint playerNumber, int x, int y) pure returns (bool) {
+  bool inAllowedQuadrant;
+
+  if (playerNumber == 1 && x >= 0 && y >= 0) {
+    inAllowedQuadrant = true;
+  } else if (playerNumber == 2 && x <= 0 && y >= 0) {
+    inAllowedQuadrant = true;
+  } else if (playerNumber == 3 && x <= 0 && y <= 0) {
+    inAllowedQuadrant = true;
+  } else if (playerNumber == 4 && x >= 0 && y <= 0) {
+    inAllowedQuadrant = true;
+  } else {
+    inAllowedQuadrant = false;
+  }
+
+  return inAllowedQuadrant;
+}
+
+function createBarriersHorizontal(
+  IWorld world,
+  IUint256Component components,
+  int32 x1,
+  int32 x2,
+  int32 y1,
+  uint256 playerID
+) {
+  if (x1 > x2) {
+    // Swap x1 and x2 to ensure we take the lower value first
+    (x1, x2) = (x2, x1);
+  }
+
+  for (int32 i = x1; i <= x2; i++) {
+    Coord memory coord = Coord({ x: i, y: y1 });
+    uint256 barrierEntity = world.getUniqueEntityId();
+    PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
+    LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, 1);
+    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, 10);
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
+    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
+  }
+}
+
+function createBarriersVertical(
+  IWorld world,
+  IUint256Component components,
+  int32 x1,
+  int32 y1,
+  int32 y2,
+  uint256 playerID
+) {
+  if (y1 > y2) {
+    // Swap y1 and y2 to ensure we take the lower value first
+    (y1, y2) = (y2, y1);
+  }
+
+  for (int32 i = y1; i <= y2; i++) {
+    Coord memory coord = Coord({ x: x1, y: i });
+    uint256 barrierEntity = world.getUniqueEntityId();
+    PositionComponent(getAddressById(components, PositionComponentID)).set(barrierEntity, coord);
+    LevelComponent(getAddressById(components, LevelComponentID)).set(barrierEntity, 1);
+    EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, 10);
+    DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
+    OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
+  }
+}
+
 //function to return world entity id
 //function to return the start time of the game based off the world entity id
 //function that returns the time elapsed since the start time

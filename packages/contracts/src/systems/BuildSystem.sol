@@ -13,7 +13,8 @@ import { LevelComponent, ID as LevelComponentID } from "../components/LevelCompo
 import { BalanceComponent, ID as BalanceComponentID } from "../components/BalanceComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
-import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, checkNFT } from "../utils.sol";
+import { PlayerCountComponent, ID as PlayerCountComponentID } from "../components/PlayerCountComponent.sol";
+import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMultiplier, checkNFT, isCoordinateAllowed } from "../utils.sol";
 import { offenceInitialAmount, defenceInitialAmount, godownInitialLevel, MULTIPLIER, MULTIPLIER2, nftContract, worldType, startRadius } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -49,7 +50,16 @@ contract BuildSystem is System {
 
     Coord memory coord = Coord({ x: x, y: y });
 
-    require((distSq < startRadius ** 2), "Can only build within the game zone");
+    //We check if the player is building in the allowed zone (25 to 50 radii) and in the quadrant allowed to him
+    uint256 playerCount = PlayerCountComponent(getAddressById(components, PlayerCountComponentID)).getValue(playerID);
+
+    //We check if the player is building in the quadrant allowed to him
+    require(isCoordinateAllowed(playerCount, x, y), "Player cannot build in this quadrant");
+
+    require(
+      (distSq < startRadius ** 2) && (distSq >= (startRadius / 2) ** 2),
+      "Can only build within the game build zone"
+    );
 
     for (int32 i = coord.x - 1; i <= coord.x + 1; i++) {
       for (int32 j = coord.y - 1; j <= coord.y + 1; j++) {

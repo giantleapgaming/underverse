@@ -40,7 +40,8 @@
         "Attribute4Component",
         "Attribute5Component",
         "Attribute6Component",
-        "StartTimeComponent"
+        "StartTimeComponent",
+        "PlayerCountComponent"
       ]
     },
     {
