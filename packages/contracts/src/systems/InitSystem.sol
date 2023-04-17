@@ -11,7 +11,6 @@ import { DefenceComponent, ID as DefenceComponentID } from "../components/Defenc
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
-import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { Attribute1Component, ID as Attribute1ComponentID } from "../components/Attribute1Component.sol";
 import { Attribute2Component, ID as Attribute2ComponentID } from "../components/Attribute2Component.sol";

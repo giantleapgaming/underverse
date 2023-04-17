@@ -10,11 +10,11 @@ import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity } from "../utils.sol";
+import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { nftContract, worldType } from "../constants.sol";
-import { checkNFT } from "../utils.sol";
+import { nftContract, worldType, MULTIPLIER2 } from "../constants.sol";
+import { checkNFT, getElapsedTime } from "../utils.sol";
 import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
@@ -49,15 +49,17 @@ contract MoveShipSystem is System {
       "Can only move attack ships in this game mode"
     );
 
-    //Get the entity ID of the entity of type world, there will only be one of it
-    uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
-      worldType
-    )[0];
+    // //Get the entity ID of the entity of type world, there will only be one of it
+    // uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+    //   worldType
+    // )[0];
 
-    //Get the start time of the world
-    uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+    // //Get the start time of the world
+    // uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
 
-    uint256 elapsedTime = block.timestamp - startTime;
+    // uint256 elapsedTime = block.timestamp - startTime;
+
+    uint256 elapsedTime = getElapsedTime(components);
 
     require(elapsedTime >= 600, "Move phase has not started yet");
 
@@ -96,6 +98,13 @@ contract MoveShipSystem is System {
 
     //Add code to check if you are passing through PDC controlled territory and cause damage accordingly
     //Add code to check that the distance you are covering is less than the range allowed for that entity type
+
+    require(
+      (getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) <=
+        entity_type * MULTIPLIER2 * 2),
+      "Cannot move this class of ships beyond a certain range in one move"
+    );
+
     //Add code to ensure that the target is in a manouverable range (semi circle or rectangle in front?)
 
     // update player data

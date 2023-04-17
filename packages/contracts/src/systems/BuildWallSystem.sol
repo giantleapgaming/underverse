@@ -9,7 +9,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "../components/DefenceComponent.sol";
-import { getCurrentPosition, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay } from "../utils.sol";
+import { getCurrentPosition, getDistanceBetweenCoordinatesWithMultiplier, atleastOneObstacleOnTheWay, getElapsedTime } from "../utils.sol";
 import { godownInitialLevel, barrier } from "../constants.sol";
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -35,17 +35,19 @@ contract BuildWallSystem is System {
     uint256 playerID = NFTIDComponent(getAddressById(components, NFTIDComponentID)).getEntitiesWithValue(nftID)[0];
     require(playerID != 0, "NFT ID to Player ID mapping has to be 1:1");
 
-    //Get the entity ID of the entity of type world, there will only be one of it
-    uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
-      worldType
-    )[0];
-    //Get the start time of the world
-    // uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+    // //Get the entity ID of the entity of type world, there will only be one of it
+    // uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+    //   worldType
+    // )[0];
+    // //Get the start time of the world
+    // // uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
 
-    require(
-      (block.timestamp - StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID)) < 600,
-      "Build phase is over"
-    );
+    // require(
+    //   (block.timestamp - StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID)) < 600,
+    //   "Build phase is over"
+    // );
+
+    require(getElapsedTime(components) < 600, "Build phase is over");
 
     //Check if wall is either vertical or horizontal
     require(y2 == y1 || x2 == x1, "Wall can be made only horizontal or vertical");

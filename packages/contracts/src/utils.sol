@@ -5,18 +5,19 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "./component
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "./components/PrevPositionComponent.sol";
 import { LastUpdatedTimeComponent, ID as LastUpdatedTimeComponentID } from "./components/LastUpdatedTimeComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "./components/OwnedByComponent.sol";
-import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
 import { DefenceComponent, ID as DefenceComponentID } from "./components/DefenceComponent.sol";
-import { BalanceComponent, ID as BalanceComponentID } from "./components/BalanceComponent.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "./components/OffenceComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "./components/LevelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "./components/EntityTypeComponent.sol";
 import { getAddressById, addressToEntity } from "solecs/utils.sol";
 import { CashComponent } from "./components/CashComponent.sol";
-import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, AsteroidHealth } from "./constants.sol";
+import { Coordd, MULTIPLIER, MULTIPLIER2, asteroidType, AsteroidHealth, worldType } from "./constants.sol";
 import "./libraries/Math.sol";
 import { IUint256Component } from "solecs/interfaces/IUint256Component.sol";
 import { IWorld } from "solecs/interfaces/IWorld.sol";
 import { PlayerCountComponent, ID as PlayerCountComponentID } from "./components/PlayerCountComponent.sol";
+import { StartTimeComponent, ID as StartTimeComponentID } from "./components/StartTimeComponent.sol";
+
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 function getLastUpdatedTimeOfEntity(
@@ -69,8 +70,8 @@ function deleteGodown(uint256 godownEntity, IUint256Component components) {
   // LevelComponent(getAddressById(components, LevelComponentID)).remove(godownEntity);
   LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, 0);
   DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, 0);
-  OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
-  BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
+  // OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
+  //BalanceComponent(getAddressById(components, BalanceComponentID)).set(godownEntity, 0);
   // PositionComponent(getAddressById(components, PositionComponentID)).remove(godownEntity);
 }
 
@@ -135,7 +136,7 @@ function findEnclosedPoints(
 }
 
 // Takes array of entities and returns their coordinates in a coord array ( Coord[] )
-function getCoords(uint256[] memory entities, IUint256Component components) returns (Coord[] memory) {
+function getCoords(uint256[] memory entities, IUint256Component components) view returns (Coord[] memory) {
   Coord[] memory coords = new Coord[](entities.length);
   for (uint256 i = 0; i < entities.length; i++) {
     Coord memory position = getCurrentPosition(
@@ -194,41 +195,41 @@ function checkNFT(address nftContract, uint256 nftID) view returns (bool) {
   }
 }
 
-function createEncounterEntity(IWorld world, IUint256Component components, int32 x, int32 y, uint256 sourceEntity) {
-  bool occupied25 = false;
-  for (int32 i = x - 2; i <= x + 2; i++) {
-    for (int32 j = y - 2; j <= y + 2; j++) {
-      uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
-        .getEntitiesWithValue(Coord({ x: i, y: j }));
+// function createEncounterEntity(IWorld world, IUint256Component components, int32 x, int32 y, uint256 sourceEntity) {
+//   bool occupied25 = false;
+//   for (int32 i = x - 2; i <= x + 2; i++) {
+//     for (int32 j = y - 2; j <= y + 2; j++) {
+//       uint256[] memory arrayOfGodownsAtThatCoord = PositionComponent(getAddressById(components, PositionComponentID))
+//         .getEntitiesWithValue(Coord({ x: i, y: j }));
 
-      if (arrayOfGodownsAtThatCoord.length > 0) {
-        for (int32 k = 0; k < int32(int256(arrayOfGodownsAtThatCoord.length)); k++) {
-          uint256 itsGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
-            arrayOfGodownsAtThatCoord[uint256(uint32(k))]
-          );
+//       if (arrayOfGodownsAtThatCoord.length > 0) {
+//         for (int32 k = 0; k < int32(int256(arrayOfGodownsAtThatCoord.length)); k++) {
+//           uint256 itsGodownLevel = LevelComponent(getAddressById(components, LevelComponentID)).getValue(
+//             arrayOfGodownsAtThatCoord[uint256(uint32(k))]
+//           );
 
-          if (itsGodownLevel > 0) {
-            occupied25 = true;
-          }
-          // require(
-          //   itsGodownLevel == 0,
-          //   "A godown has already been placed on this position or in the adjacent 8 cells"
-          // );
-        }
-      }
-    }
-  }
+//           if (itsGodownLevel > 0) {
+//             occupied25 = true;
+//           }
+//           // require(
+//           //   itsGodownLevel == 0,
+//           //   "A godown has already been placed on this position or in the adjacent 8 cells"
+//           // );
+//         }
+//       }
+//     }
+//   }
 
-  if (occupied25 == false) {
-    uint256 ent = world.getUniqueEntityId();
-    PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
-    LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
-    //We set the calling entity encounter ID to the newly created entity and vice versa
-    //That way we know which 2 entities belong to a specific encounter
-    // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
-    // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
-  }
-}
+//   if (occupied25 == false) {
+//     uint256 ent = world.getUniqueEntityId();
+//     PositionComponent(getAddressById(components, PositionComponentID)).set(ent, Coord({ x: x, y: y }));
+//     LevelComponent(getAddressById(components, LevelComponentID)).set(ent, 1);
+//     //We set the calling entity encounter ID to the newly created entity and vice versa
+//     //That way we know which 2 entities belong to a specific encounter
+//     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(sourceEntity, ent);
+//     // EncounterComponent(getAddressById(components, EncounterComponentID)).set(ent, sourceEntity);
+//   }
+// }
 
 function unOwnedObstacle(
   int32 x1,
@@ -510,6 +511,102 @@ function createBarriersVertical(
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(barrierEntity, 10);
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(barrierEntity, 100);
     OwnedByComponent(getAddressById(components, OwnedByComponentID)).set(barrierEntity, playerID);
+  }
+}
+
+function getCurrentOuterRadiusSq(IUint256Component components) view returns (uint256) {
+  // Get the entity ID of the entity of type world, there will only be one of it
+  uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+    worldType
+  )[0];
+
+  // Get the start time of the world
+  uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+
+  uint256 elapsedTime = block.timestamp - startTime;
+
+  require(elapsedTime >= 600, "Attack phase has not started yet");
+  require(elapsedTime <= 3100, "Game time is over");
+
+  uint256 currentOuterRadiusSq = (2500 + 600 - elapsedTime) * (2500 + 600 - elapsedTime);
+  return currentOuterRadiusSq;
+}
+
+function getElapsedTime(IUint256Component components) view returns (uint256) {
+  // Get the entity ID of the entity of type world, there will only be one of it
+  uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+    worldType
+  )[0];
+
+  // Get the start time of the world
+  uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+
+  uint256 elapsedTime = block.timestamp - startTime;
+
+  return elapsedTime;
+}
+
+function reduceWeaponBalanceAndAttack(
+  IUint256Component components,
+  uint256 sourceEntity,
+  uint256 destinationEntity,
+  uint256 amount,
+  uint256 entity_type,
+  uint256 distance
+) {
+  uint256 sourceWeapon = OffenceComponent(getAddressById(components, OffenceComponentID)).getValue(sourceEntity);
+  require(sourceWeapon >= amount, "Not enough ammo");
+  OffenceComponent(getAddressById(components, OffenceComponentID)).set(sourceEntity, sourceWeapon - amount);
+
+  Coord memory targetPosition = getCurrentPosition(
+    PositionComponent(getAddressById(components, PositionComponentID)),
+    destinationEntity
+  );
+
+  int32 x = targetPosition.x;
+  int32 y = targetPosition.y;
+
+  if ((x == targetPosition.x) && (y == targetPosition.y)) {
+    uint256 totalDamage = amount * ((entity_type * 10000) / distance);
+    uint256 destinationDefenceAmount = DefenceComponent(getAddressById(components, DefenceComponentID)).getValue(
+      destinationEntity
+    );
+    if (totalDamage >= destinationDefenceAmount) {
+      deleteGodown(destinationEntity, components);
+    } else {
+      DefenceComponent(getAddressById(components, DefenceComponentID)).set(
+        destinationEntity,
+        destinationDefenceAmount - totalDamage
+      );
+    }
+  }
+}
+
+function checkAttackConstraints(
+  IUint256Component components,
+  uint256 entity_type,
+  Coord memory sourcePosition,
+  Coord memory destinationPosition,
+  uint256 distance,
+  uint256 sourceEntity,
+  int32 x,
+  int32 y
+) view {
+  if (entity_type == 15) {
+    Coord memory prevPosition = getPrevPosition(
+      PrevPositionComponent(getAddressById(components, PrevPositionComponentID)),
+      sourceEntity
+    );
+
+    require(
+      getDistanceBetweenCoordinatesWithMultiplier(prevPosition, destinationPosition) > distance,
+      "Laser Ships can only fire in the forward direction"
+    );
+  } else {
+    require(
+      atleastOneObstacleOnTheWay(sourcePosition.x, sourcePosition.y, x, y, components) == false,
+      "Obstacle on the way"
+    );
   }
 }
 

@@ -71,18 +71,6 @@
       ]
     },
     {
-      "name": "AttackSystem",
-      "writeAccess": [
-        "CashComponent",
-        "LastUpdatedTimeComponent",
-        "OwnedByComponent",
-        "PositionComponent",
-        "OffenceComponent",
-        "DefenceComponent",
-        "LevelComponent"
-      ]
-    },
-    {
       "name": "MoveShipSystem",
       "writeAccess": [
         "PositionComponent",
