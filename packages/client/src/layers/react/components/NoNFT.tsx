@@ -61,7 +61,7 @@ export const NoNFT = ({
       console.log(e);
     }
   };
-
+  console.log("in NOnft page");
   return (
     <div>
       <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
@@ -95,6 +95,7 @@ export const NoNFT = ({
         </div>
         {connectNFTBridge || totalNft ? (
           <div>
+            console.log("segh")
             <p
               style={{
                 textAlign: "center",

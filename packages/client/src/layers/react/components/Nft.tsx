@@ -23,9 +23,9 @@ export const Nft = ({
   const { error, loading, allNfts } = useL1AllNFT(address);
   const [showNftBridge, setShowNftBridge] = useState(false);
   const { balance } = useEthBalance(address);
-  if (showNftBridge) {
-    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
-  }
+  // if (showNftBridge) {
+  //   return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
+  // }
   if (error) {
     return <div>Error</div>;
   }
@@ -33,6 +33,9 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
+    if (allNfts.length < 0) {
+      return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
+    }
     return (
       <div>
         <div>
@@ -56,13 +59,13 @@ export const Nft = ({
           </div>
 
           <S.Container>
-            <S.BridgeNftButton
+            {/* <S.BridgeNftButton
               src="/img/BridgeNftButton.png"
               onClick={() => {
                 setSelectNft();
                 setShowNftBridge(true);
               }}
-            />
+            /> */}
             <img src="/img/title.png" style={{ margin: "20px 0" }} />
             <p
               style={{
@@ -113,6 +116,7 @@ export const Nft = ({
       </div>
     );
   } else {
+    console.log("hiii");
     return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
   }
 };
