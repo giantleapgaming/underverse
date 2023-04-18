@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { NoNFT } from "./NoNFT";
 import { useL1AllNFT } from "../hooks/useL1AllNFT";
 import { useEthBalance } from "../hooks/useEthBalance";
+import { NoNFT } from "./NoNFT";
+import WalletLogin from "./WalletLogin";
 
 export interface Image {
   tokenId: number;
@@ -33,9 +34,6 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
-    if (allNfts.length < 0) {
-      return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
-    }
     return (
       <div>
         <div>
@@ -117,7 +115,7 @@ export const Nft = ({
     );
   } else {
     console.log("hiii");
-    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
+    return <NoNFT address={address} />;
   }
 };
 
