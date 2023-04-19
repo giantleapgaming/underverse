@@ -28,6 +28,7 @@ export const Attack = ({
           minWidth: "330px",
         }}
       >
+        <img src="/build-stations/weapon.png" />
         {new Array(+offence).fill(0).map((_, i) => {
           return (
             <S.Slanted

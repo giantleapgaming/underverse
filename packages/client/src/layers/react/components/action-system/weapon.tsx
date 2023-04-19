@@ -28,9 +28,9 @@ export const Weapon = ({
               marginTop: "15px",
               marginBottom: "15px",
               width: "330px",
-              marginLeft: "45px",
             }}
           >
+            <img src="/build-stations/weapon.png" />
             {new Array(level - +offence).fill(0).map((_, i) => {
               return (
                 <S.Slanted
