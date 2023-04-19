@@ -42,105 +42,95 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       <Container>
         {!showBuildingMap ? (
           <>
-            {"4242" == chainIdString ||
-            "100" == chainIdString ||
-            "11344216" == chainIdString ||
-            "9874612" == chainIdString ||
-            "344215" == chainIdString ? (
-              <>
-                {step === 1 && (
-                  <Form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      sounds["click"].play();
-                      if (reactNftId) {
-                        setNftId(reactNftId);
-                        setStep(2);
-                      }
-                    }}
-                  >
-                    <div>
-                      <Nft
-                        setSelectNft={(selectNft) => {
-                          if (typeof selectNft?.tokenId === "number") {
-                            const allNameEntities = [...getComponentEntities(Name)];
-                            allNameEntities.find((entity) => {
-                              const name = getComponentValueStrict(Name, entity)?.value;
-                              const nftId = getComponentValueStrict(NFTID, entity).value;
-                              if (+nftId === selectNft?.tokenId) {
-                                setDisplayName(name);
-                              } else {
-                                setDisplayName("");
-                              }
-                            });
-                            setReactNftId(selectNft?.tokenId);
+            {step === 1 && (
+              <Form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  sounds["click"].play();
+                  if (reactNftId) {
+                    setNftId(reactNftId);
+                    setStep(2);
+                  }
+                }}
+              >
+                <div>
+                  <Nft
+                    setSelectNft={(selectNft) => {
+                      if (typeof selectNft?.tokenId === "number") {
+                        const allNameEntities = [...getComponentEntities(Name)];
+                        allNameEntities.find((entity) => {
+                          const name = getComponentValueStrict(Name, entity)?.value;
+                          const nftId = getComponentValueStrict(NFTID, entity).value;
+                          if (+nftId === selectNft?.tokenId) {
+                            setDisplayName(name);
                           } else {
-                            setReactNftId(undefined);
+                            setDisplayName("");
                           }
-                        }}
-                        selectedNFT={reactNftId}
-                        clickSound={() => {
-                          sounds["click"].play();
-                        }}
-                        address={connectedAddress.get()}
-                      />
-                      {typeof reactNftId === "number" && (
-                        <S.Inline>
-                          {displayName ? (
-                            <div>
-                              <Input disabled value={displayName} />
-                            </div>
-                          ) : (
-                            <div>
-                              <Input
-                                disabled={loading}
-                                onChange={(e) => {
-                                  setName(e.target.value);
-                                }}
-                                value={name}
-                                placeholder="ENTER NAME"
-                              />
-                            </div>
-                          )}
-                          <Button type="submit" disabled={loading}>
-                            <img src="/button/enterNameBtn.png" />
-                          </Button>
-                        </S.Inline>
-                      )}
-                    </div>
-                  </Form>
-                )}
-                {step === 2 && (
-                  <Faction
-                    setSelectFaction={async (selectFaction) => {
-                      if (name && selectedId && typeof selectFaction === "number") {
-                        setBuildingMap(true);
-                        toast.promise(
-                          async () => {
-                            try {
-                              setLoading(true);
-                              await initSystem(name, selectFaction, selectedId);
-                            } catch (e: any) {
-                              setBuildingMap(false);
-                              throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                            }
-                          },
-                          {
-                            loading: "Transaction in progress",
-                            success: `Transaction successful`,
-                            error: (e) => e.message,
-                          }
-                        );
+                        });
+                        setReactNftId(selectNft?.tokenId);
+                      } else {
+                        setReactNftId(undefined);
                       }
                     }}
+                    selectedNFT={reactNftId}
                     clickSound={() => {
                       sounds["click"].play();
                     }}
+                    address={connectedAddress.get()}
                   />
-                )}
-              </>
-            ) : (
-              <p>Chain Id not supported it will only work on lattice chain that is 4242</p>
+                  {typeof reactNftId === "number" && (
+                    <S.Inline>
+                      {displayName ? (
+                        <div>
+                          <Input disabled value={displayName} />
+                        </div>
+                      ) : (
+                        <div>
+                          <Input
+                            disabled={loading}
+                            onChange={(e) => {
+                              setName(e.target.value);
+                            }}
+                            value={name}
+                            placeholder="ENTER NAME"
+                          />
+                        </div>
+                      )}
+                      <Button type="submit" disabled={loading}>
+                        <img src="/button/enterNameBtn.png" />
+                      </Button>
+                    </S.Inline>
+                  )}
+                </div>
+              </Form>
+            )}
+            {step === 2 && (
+              <Faction
+                setSelectFaction={async (selectFaction) => {
+                  if (name && selectedId && typeof selectFaction === "number") {
+                    setBuildingMap(true);
+                    toast.promise(
+                      async () => {
+                        try {
+                          setLoading(true);
+                          await initSystem(name, selectFaction, selectedId);
+                        } catch (e: any) {
+                          setBuildingMap(false);
+                          throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                        }
+                      },
+                      {
+                        loading: "Transaction in progress",
+                        success: `Transaction successful`,
+                        error: (e) => e.message,
+                      }
+                    );
+                  }
+                }}
+                clickSound={() => {
+                  sounds["click"].play();
+                }}
+              />
             )}
           </>
         ) : (
