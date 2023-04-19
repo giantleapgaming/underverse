@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";

@@ -31,9 +31,9 @@ async function bootGame() {
     const params = new URLSearchParams(window.location.search);
     const worldAddress = params.get("worldAddress");
     const privateKey = sessionStorage.getItem("user-burner-wallet");
-    const chainIdString = params.get("chainId");
-    const jsonRpc = params.get("rpc") || undefined;
-    const wsRpc = params.get("wsRpc") || undefined;
+    const chainIdString = params.get("chainId") || "344215";
+    const jsonRpc = params.get("rpc") || "https://giantleap-test1.calderachain.xyz/http";
+    const wsRpc = params.get("wsRpc") || "wss://giantleap-test1.calderachain.xyz/ws";
     const checkpointUrl = params.get("checkpoint") || undefined;
     const devMode = params.get("dev") === "true";
     const initialBlockNumberString = params.get("initialBlockNumber");
