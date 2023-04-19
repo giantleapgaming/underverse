@@ -230,7 +230,7 @@ export const NoNFT = ({
                                         setSelectedNft(data);
                                       }}
                                     >
-                                      <S.Img src={data.imageUrl} />
+                                      <S.Img src={data.imageUrl} width={100} height={100} />
                                     </S.NftSelect>
                                   ))}
                               </div>
@@ -267,7 +267,7 @@ export const NoNFT = ({
                                         setSelectedNft(data);
                                       }}
                                     >
-                                      <S.Img src={data.imageUrl} />
+                                      <S.Img src={data.imageUrl} width={100} height={100} />
                                     </S.NftSelect>
                                   ))}
                               </div>
@@ -665,8 +665,8 @@ const S = {
   `,
 
   Img: styled.img`
-    width: 230px;
-    height: 230px;
+    width: 60px;
+    object-fit: contain;
   `,
 
   ButtonImg: styled.img`
