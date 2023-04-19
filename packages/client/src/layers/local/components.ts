@@ -86,6 +86,10 @@ export const ShowSellModal = (world: World) => {
   return defineBoolComponent(world, { id: "ShowSellModal" });
 };
 
+export const ShowAttributeModal = (world: World) => {
+  return defineBoolComponent(world, { id: "ShowAttributeModal" });
+};
+
 export const ShowAnimation = (world: World) => {
   return defineComponent(
     world,

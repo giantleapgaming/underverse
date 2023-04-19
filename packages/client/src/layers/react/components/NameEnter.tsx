@@ -62,16 +62,20 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                     <div>
                       <Nft
                         setSelectNft={(selectNft) => {
-                          if (selectNft?.tokenId) {
+                          if (typeof selectNft?.tokenId === "number") {
                             const allNameEntities = [...getComponentEntities(Name)];
                             allNameEntities.find((entity) => {
                               const name = getComponentValueStrict(Name, entity)?.value;
                               const nftId = getComponentValueStrict(NFTID, entity).value;
                               if (+nftId === selectNft?.tokenId) {
                                 setDisplayName(name);
+                              } else {
+                                setDisplayName("");
                               }
                             });
                             setReactNftId(selectNft?.tokenId);
+                          } else {
+                            setReactNftId(undefined);
                           }
                         }}
                         selectedNFT={reactNftId}

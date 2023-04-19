@@ -9,11 +9,11 @@ export const getNftData = async (
   const params = new URLSearchParams(window.location.search);
   const chainIdString = params.get("chainId");
   try {
-    const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
+    const response = await fetch("https://api.giantleap.gg/api/l1-nfts", {
       method: "POST",
       body: JSON.stringify({
         address: walletAddress,
-        nftContract: "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3",
+        nftContract: "0x113113aE1Bb7204453406c2228934737e5bBCc26",
         chainId: chainIdString,
       }),
       headers: {

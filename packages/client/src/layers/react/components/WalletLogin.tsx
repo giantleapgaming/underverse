@@ -41,26 +41,48 @@ const WalletLogin = () => {
                 flexDirection: "column",
                 gap: "10px",
                 marginBottom: "50px",
+                marginTop: "25px",
               }}
             >
+              <p
+                style={{
+                  fontSize: "16px",
+                  color: "#fffdd5",
+                  fontFamily: "MyOTFFont",
+                  lineHeight: "1.6",
+                }}
+              >
+                New here? Create a free in- <br />
+                game account with the Tutorial
+                <br /> Campaign.
+              </p>
               <img
                 onClick={async () => {
-                  window.location.replace("https://tutorial.giantleap.gg/");
+                  window.open("https://tutorial.giantleap.gg/", "_blank");
                 }}
                 src="../img/tutorial.png"
                 style={{ cursor: "pointer", marginTop: "15px" }}
               />
               <p
                 style={{
-                  fontSize: "20px",
+                  fontSize: "22px",
                   color: "#fffdd5",
-                  fontFamily: "sans-serif",
                   fontWeight: "bolder",
                   marginTop: "20px",
                   marginBottom: "20px",
                 }}
               >
-                USE EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
+                EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "#fffdd5",
+                    marginTop: "6px",
+                    fontFamily: "MyOTFFont",
+                  }}
+                >
+                  + Genesis NFT Bridge & Reveal
+                </p>
               </p>
             </div>
             {!!allKeys.length && (
@@ -149,9 +171,24 @@ const WalletLogin = () => {
 
 const CopyAddress = ({ address, index, pk }: { address: string; index: number; pk: string }) => {
   const [copy, setCopy] = useState(false);
+  const [copyKey, setCopyKey] = useState(false);
+
+  const [showActionName, setShowActionName] = useState({ copy: false, export: false });
+
   return (
     <>
-      <div style={{ position: "relative", marginTop: "-43px", marginLeft: "-50px" }} key={address}>
+      <div
+        style={{
+          position: "relative",
+          marginTop: "-33px",
+          marginLeft: "-50px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "15px",
+        }}
+        key={address}
+      >
         <span style={{ fontSize: "20px", color: "wheat", fontWeight: "bold", marginRight: "5px" }}></span>
         <AccountMenu>
           <p
@@ -165,17 +202,75 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
           </p>
         </AccountMenu>
         <img src="/img/accBorderMenu.png" />
-        <img
-          src="/img/copy.png"
-          style={{ marginLeft: "10px", cursor: "pointer", marginBottom: "60px", zIndex: 10 }}
-          onClick={() => {
-            setCopy(true);
-            navigator.clipboard.writeText(`${address}`);
-            setTimeout(() => {
-              setCopy(false);
-            }, 1000);
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "6px",
+            flexDirection: "column",
+            marginBottom: "40px",
+            marginTop: "10px",
           }}
-        />
+        >
+          <div
+            style={{ cursor: "pointer", position: "relative" }}
+            onMouseOver={() => {
+              setShowActionName({ ...showActionName, copy: true });
+            }}
+            onMouseLeave={() => {
+              setShowActionName({ ...showActionName, copy: false });
+            }}
+            onClick={() => {
+              setCopy(true);
+              navigator.clipboard.writeText(`${address}`);
+              setTimeout(() => {
+                setCopy(false);
+              }, 1000);
+            }}
+          >
+            <img src="/img/copy.png" />
+            {showActionName.copy && (
+              <p
+                style={{ position: "absolute", bottom: "3px", width: "180px", color: "wheat", fontFamily: "MyOTFFont" }}
+              >
+                Copy address
+              </p>
+            )}
+          </div>
+          <div
+            style={{ cursor: "pointer", position: "relative" }}
+            onMouseEnter={() => {
+              setShowActionName({ ...showActionName, export: true });
+            }}
+            onMouseLeave={() => {
+              setShowActionName({ ...showActionName, export: false });
+            }}
+            onClick={() => {
+              setCopyKey(true);
+              navigator.clipboard.writeText(`${pk}`);
+              setTimeout(() => {
+                setCopyKey(false);
+              }, 1000);
+            }}
+          >
+            <img src="/img/exportKey.png" />
+            {showActionName.export && (
+              <p
+                style={{
+                  position: "absolute",
+                  bottom: "3px",
+                  left: "10px",
+                  width: "195px",
+                  color: "wheat",
+                  fontFamily: "MyOTFFont",
+                }}
+              >
+                {copyKey ? `${pk}` : "Export private key"}
+              </p>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
@@ -290,11 +385,13 @@ const WalletText = styled.div`
   margin: 20px auto;
   z-index: 100;
   letter-spacing: 1;
+  font-family: "MyOTFFont";
 `;
 const P = styled.p`
-  font-family: sans-serif;
   letter-spacing: 1;
   margin-bottom: 10px;
+  font-family: sans-serif;
+  font-size: 20px;
 
   &:hover {
     color: #00ffe6;
@@ -311,8 +408,8 @@ const AccountMenu = styled.div`
   color: #fffdd5;
   font-weight: 300;
   font-size: 20px;
-  top: 20px;
-  left: 40px;
+  top: 25px;
+  left: 20px;
   z-index: 5;
 `;
 const Error = styled.p`

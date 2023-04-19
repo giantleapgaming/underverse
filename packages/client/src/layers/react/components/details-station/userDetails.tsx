@@ -18,6 +18,7 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     phaser: {
       localIds: { stationDetailsEntityIndex },
       components: { ShowStationDetails },
+      localApi: { setShowAttributeModal },
     },
   } = layers;
   const selectedEntity = getComponentValue(ShowStationDetails, stationDetailsEntityIndex)?.entityId;
@@ -28,13 +29,35 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
     const nftId = getComponentValue(NFTID, factionIndex)?.value;
     const nftDetails = getNftId(layers);
     const isOwner = isOwnedBy(layers);
+
     return (
       <S.Container>
-        {nftDetails && isOwner ? (
-          <img src={nftDetails.imageUrl} width={64} height={64} />
-        ) : (
-          <>{nftId && <NFTImg size={64} id={+nftId} />}</>
-        )}
+        <div>
+          {nftDetails && isOwner ? (
+            <img
+              style={{ cursor: "pointer" }}
+              src={nftDetails.imageUrl}
+              width={64}
+              height={64}
+              onClick={() => {
+                setShowAttributeModal(true);
+              }}
+            />
+          ) : (
+            <>
+              {nftId && (
+                <div
+                  onClick={() => {
+                    setShowAttributeModal(true);
+                  }}
+                  style={{ cursor: "pointer" }}
+                >
+                  <NFTImg size={64} id={+nftId} />
+                </div>
+              )}
+            </>
+          )}
+        </div>
         <p
           style={{ cursor: "pointer" }}
           onClick={() => {

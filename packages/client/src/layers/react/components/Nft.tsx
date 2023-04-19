@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useNFTData } from "../hooks/useAllNFT";
 import { NoNFT } from "./NoNFT";
+import { useL1AllNFT } from "../hooks/useL1AllNFT";
+import { useEthBalance } from "../hooks/useEthBalance";
 
-interface Image {
+export interface Image {
   tokenId: number;
   imageUrl: string;
 }
@@ -14,14 +15,17 @@ export const Nft = ({
   clickSound,
   address,
 }: {
-  setSelectNft: (image: Image) => void;
+  setSelectNft: (image?: Image) => void;
   selectedNFT?: number;
   clickSound: () => void;
   address?: string;
 }) => {
-  const { error, loading, allNfts } = useNFTData(address);
+  const { error, loading, allNfts } = useL1AllNFT(address);
   const [showNftBridge, setShowNftBridge] = useState(false);
-
+  const { balance } = useEthBalance(address);
+  if (showNftBridge) {
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
+  }
   if (error) {
     return <div>Error</div>;
   }
@@ -29,16 +33,11 @@ export const Nft = ({
     return <div>Loading NFT Details</div>;
   }
   if (allNfts && allNfts.length) {
-    console.log(showNftBridge);
-    if (showNftBridge) {
-      return <NoNFT address={address} />;
-    }
     return (
       <div>
         <div>
-          <div style={{ textAlign: "center", position: "absolute", right: "30px", top: "30px" }}>
+          <div style={{ position: "absolute", right: "10px", top: "10px" }}>
             <S.ButtonImg src="/button/greenButton.png" />
-            <p>Balance</p>
           </div>
           <S.DeployText
             onClick={() => {
@@ -52,11 +51,15 @@ export const Nft = ({
           >
             {address?.toString().substring(0, 6)}
           </S.DeployText>
+          <div style={{ position: "absolute", right: "10px", top: "50px" }}>
+            <p style={{ fontSize: "12px" }}>WALLET GAS {Math.floor(+balance)}</p>
+          </div>
+
           <S.Container>
             <S.BridgeNftButton
               src="/img/BridgeNftButton.png"
               onClick={() => {
-                console.log("hi");
+                setSelectNft();
                 setShowNftBridge(true);
               }}
             />
@@ -90,28 +93,28 @@ export const Nft = ({
               SELECT YOUR NFT GAME PROFILE
             </p>
             <S.NftSelectionContainer>
-              {allNfts.map((data, index) => (
-                <S.NftSelect
-                  selectedNFT={data.tokenId === selectedNFT}
-                  key={`index-${index}`}
-                  onClick={() => {
-                    setSelectNft(data);
-                    clickSound();
-                  }}
-                >
-                  <S.Img src={data.imageUrl} />
-                </S.NftSelect>
-              ))}
+              <>
+                {allNfts.map((data, index) => (
+                  <S.NftSelect
+                    selectedNFT={data.tokenId === selectedNFT}
+                    key={`index-${index}`}
+                    onClick={() => {
+                      setSelectNft(data);
+                      clickSound();
+                    }}
+                  >
+                    <S.Img src={data.imageUrl} />
+                  </S.NftSelect>
+                ))}
+              </>
             </S.NftSelectionContainer>
           </S.Container>
         </div>
       </div>
     );
+  } else {
+    return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;
   }
-
-  // else {
-  //   return <NoNFT address={address} />;
-  // }
 };
 
 const S = {
@@ -133,15 +136,12 @@ const S = {
     height: 130px;
   `,
 
-  ButtonImg: styled.img`
-    margin: auto;
-    width: 100%;
-  `,
+  ButtonImg: styled.img``,
 
   DeployText: styled.p`
     position: absolute;
-    top: 35px;
-    right: 50px;
+    top: 15px;
+    right: 32px;
     font-size: 16;
     font-weight: bold;
     cursor: pointer;

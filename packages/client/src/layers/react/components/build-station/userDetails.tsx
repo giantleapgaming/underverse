@@ -14,6 +14,9 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
       world,
       network: { connectedAddress },
     },
+    phaser: {
+      localApi: { setShowAttributeModal },
+    },
   } = layers;
 
   const address = connectedAddress.get();
@@ -21,10 +24,30 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
   const name = getComponentValue(Name, factionIndex)?.value;
   const nftDetails = getNftId(layers);
   const nftId = getComponentValue(NFTID, factionIndex)?.value;
+
   return (
     <S.Container>
       {nftDetails ? (
-        <img src={nftDetails.imageUrl} width={64} height={64} />
+        <div
+          style={{ position: "relative", width: "64px", height: "64px", cursor: "pointer" }}
+          onClick={() => {
+            setShowAttributeModal(true);
+          }}
+        >
+          <img src={nftDetails.imageUrl} width={64} height={64} />
+          <div
+            style={{
+              content: "",
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              boxShadow: "5px 5px 60px rgb(255, 250, 250)",
+              borderRadius: "70%",
+            }}
+          ></div>
+        </div>
       ) : (
         <>{nftId && <NFTImg size={64} id={+nftId} />}</>
       )}
