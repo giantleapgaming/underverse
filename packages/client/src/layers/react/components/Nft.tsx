@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useL1AllNFT } from "../hooks/useL1AllNFT";
+import { useNFTData } from "../hooks/useAllNft";
 import { useEthBalance } from "../hooks/useEthBalance";
 import { NoNFT } from "./NoNFT";
 import WalletLogin from "./WalletLogin";
@@ -21,8 +21,8 @@ export const Nft = ({
   clickSound: () => void;
   address?: string;
 }) => {
-  const { error, loading, allNfts } = useL1AllNFT(address);
-  const [showNftBridge, setShowNftBridge] = useState(false);
+  const { error, loading, allNfts } = useNFTData(address);
+  // const [showNftBridge, setShowNftBridge] = useState(false);
   const { balance } = useEthBalance(address);
   // if (showNftBridge) {
   //   return <NoNFT address={address} totalNft={allNfts?.length || 0} setShowNftBridge={setShowNftBridge} />;

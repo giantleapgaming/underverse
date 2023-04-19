@@ -34,7 +34,8 @@ export const UserDetails = ({ layers }: { layers: Layers }) => {
             setShowAttributeModal(true);
           }}
         >
-          <img src={nftDetails.imageUrl} width={64} height={64} />
+          {/* <img src={nftDetails.imageUrl} width={64} height={64} /> */}
+          <img src="https://gateway.pinata.cloud/ipfs/Qmbtpp6KvwUStAuZqGhFTpoXiKkVpTgpesdK3L8o11BAXu" width={64} height={64} />
           <div
             style={{
               content: "",
