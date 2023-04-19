@@ -458,20 +458,20 @@ export async function createPhaserLayer(network: NetworkLayer) {
   highlightObstacles(network, context);
 
   // --- Log Action ------------------------------------------------------------------
-  systemBuild(network, context);
-  systemInit(network, context);
-  systemUpgrade(network, context);
-  systemBuyWeapon(network, context);
-  systemAttack(network, context);
-  systemRepaired(network, context);
-  systemScraped(network, context);
-  systemSell(network, context);
-  systemTransport(network, context);
-  systemHarvest(network, context);
-  systemRapture(network, context);
-  systemMoveShip(network, context);
-  systemProspect(network, context);
-  systemRefuel(network, context);
+  // systemBuild(network, context);
+  // systemInit(network, context);
+  // systemUpgrade(network, context);
+  // systemBuyWeapon(network, context);
+  // systemAttack(network, context);
+  // systemRepaired(network, context);
+  // systemScraped(network, context);
+  // systemSell(network, context);
+  // systemTransport(network, context);
+  // systemHarvest(network, context);
+  // systemRapture(network, context);
+  // systemMoveShip(network, context);
+  // systemProspect(network, context);
+  // systemRefuel(network, context);
   //-----animations---------------------------------------
   moveHarvester(network, context);
   moveAttackShip(network, context);
