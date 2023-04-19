@@ -9,14 +9,13 @@ import { PositionComponent, ID as PositionComponentID, Coord } from "../componen
 import { PrevPositionComponent, ID as PrevPositionComponentID, Coord } from "../components/PrevPositionComponent.sol";
 import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedByComponent.sol";
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
-import { FuelComponent, ID as FuelComponentID } from "../components/FuelComponent.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
-import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier, createEncounterEntity, getPlayerFuel } from "../utils.sol";
+import { unOwnedObstacle, getCurrentPosition, getEntityLevel, getDistanceBetweenCoordinatesWithMultiplier } from "../utils.sol";
 import "../libraries/Math.sol";
-import { EncounterComponent, ID as EncounterComponentID } from "../components/EncounterComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
-import { nftContract } from "../constants.sol";
-import { checkNFT } from "../utils.sol";
+import { nftContract, worldType, MULTIPLIER2 } from "../constants.sol";
+import { checkNFT, getElapsedTime } from "../utils.sol";
+import { StartTimeComponent, ID as StartTimeComponentID } from "../components/StartTimeComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.MoveShip"));
 
@@ -43,63 +42,72 @@ contract MoveShipSystem is System {
       "Ship has already been destroyed"
     );
 
-    uint256 sourceEntityType = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(
-      sourceEntity
-    );
+    uint256 entity_type = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(sourceEntity);
 
     require(
-      sourceEntityType == 4 || sourceEntityType == 5 || sourceEntityType == 9 || sourceEntityType == 13,
-      "Source has to be an Harvester, Attack ship or fuel carrier or People Carrier"
+      (entity_type == 15 || entity_type == 16 || entity_type == 17 || entity_type == 18),
+      "Can only move attack ships in this game mode"
     );
 
-    // require(
-    //   EncounterComponent(getAddressById(components, EncounterComponentID)).getValue(sourceEntity) == 0,
-    //   "Cannot move ship while in an encounter"
-    // );
+    // //Get the entity ID of the entity of type world, there will only be one of it
+    // uint256 worldID = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getEntitiesWithValue(
+    //   worldType
+    // )[0];
+
+    // //Get the start time of the world
+    // uint256 startTime = StartTimeComponent(getAddressById(components, StartTimeComponentID)).getValue(worldID);
+
+    // uint256 elapsedTime = block.timestamp - startTime;
+
+    uint256 elapsedTime = getElapsedTime(components);
+
+    require(elapsedTime >= 600, "Move phase has not started yet");
+
+    //Find the new outer boundary of the game based on move phase elapsed
+    //We run move phase for 2500 seconds or 41 minutes after build phase which runs for 600 seconds
+    //Every second the boundary radius will keep shrinking
+    //Last man standing within the boundary wins
+    //You can not access ships that are outside the new boundary radius
+    //Nor can you move to locations which are outside boundary
+
+    require(elapsedTime > 3100, "Game time is over");
+
+    uint256 currentOuterRadiusSq = 2500 + 600 - elapsedTime;
 
     Coord memory sourcePosition = getCurrentPosition(
       PositionComponent(getAddressById(components, PositionComponentID)),
       sourceEntity
     );
 
-    //Destination position
+    require(
+      uint256(int256(sourcePosition.x ** 2 + sourcePosition.y ** 2)) <= currentOuterRadiusSq,
+      "Selected entity has to be within the current boundary"
+    );
+
+    require(
+      uint256(int256(x ** 2 + y ** 2)) <= currentOuterRadiusSq,
+      "Destination has to be within the current boundary"
+    );
 
     Coord memory destinationPosition = Coord({ x: x, y: y });
-
-    uint256 distFromCenterSq = uint256(int256(x) ** 2 + int256(y) ** 2);
-    require(distFromCenterSq < 2500, "Cannot move beyond 50 orbits");
 
     require(
       unOwnedObstacle(sourcePosition.x, sourcePosition.y, x, y, components, playerID) == false,
       "Obstacle on the way"
     );
 
-    //Calculate cost of transport
+    //Add code to check if you are passing through PDC controlled territory and cause damage accordingly
+    //Add code to check that the distance you are covering is less than the range allowed for that entity type
 
-    //uint256 distanceBetweenGodowns = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition);
+    require(
+      (getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) <=
+        entity_type * MULTIPLIER2 * 2),
+      "Cannot move this class of ships beyond a certain range in one move"
+    );
 
-    //Transport cost is a square function of the distance
-    uint256 totalTransportCost = getDistanceBetweenCoordinatesWithMultiplier(sourcePosition, destinationPosition) ** 2;
-
-    uint256 sourceEntityFuel = FuelComponent(getAddressById(components, FuelComponentID)).getValue(sourceEntity);
-
-    require(sourceEntityFuel >= totalTransportCost, "Not enough Fuel to make this move");
-
-    // We check if destination is out of spawning zone and then we generate a random number from 0 - 9999 using time stamp and distance from center squared as seed
-    // The greater the distance from center the higher the probability that the second condition will be satisfied
-    // This means the odds of an asteroid discovery increase as you go further from the center
-    // We check that the ship is of class harvester to ensure it can discover stuff
-
-    if (
-      (sourceEntityType == 5) &&
-      (distFromCenterSq > 225) &&
-      (distFromCenterSq > uint256(keccak256(abi.encodePacked(block.timestamp, distFromCenterSq))) % 2500)
-    ) {
-      createEncounterEntity(world, components, destinationPosition.x + 2, destinationPosition.y + 2, sourceEntity);
-    }
+    //Add code to ensure that the target is in a manouverable range (semi circle or rectangle in front?)
 
     // update player data
-    FuelComponent(getAddressById(components, FuelComponentID)).set(sourceEntity, sourceEntityFuel - totalTransportCost);
     PositionComponent(getAddressById(components, PositionComponentID)).set(sourceEntity, destinationPosition);
     PrevPositionComponent(getAddressById(components, PrevPositionComponentID)).set(sourceEntity, sourcePosition);
   }

@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: Unlicense
-// Added new by Moresh to support faction
 pragma solidity >=0.8.0;
 import "std-contracts/components/Uint256Component.sol";
 
-uint256 constant ID = uint256(keccak256("component.Rank"));
+uint256 constant ID = uint256(keccak256("component.StartTime"));
 
-contract RankComponent is Uint256Component {
+contract StartTimeComponent is Uint256Component {
   constructor(address world) Uint256Component(world, ID) {}
 }
