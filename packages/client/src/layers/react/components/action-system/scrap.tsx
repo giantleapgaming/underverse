@@ -5,9 +5,7 @@ export const Scrap = ({ scrapSystem }: { scrapSystem: () => void; scrapCost: num
     <S.Details>
       <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
         <S.Cost>
-          SCRAP FOR
-          <br />
-          HARVESTER
+          SCRAP
         </S.Cost>
       </div>
       <S.InlinePointer onClick={scrapSystem}>
