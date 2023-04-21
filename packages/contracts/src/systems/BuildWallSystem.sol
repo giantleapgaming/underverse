@@ -141,7 +141,13 @@ contract BuildWallSystem is System {
       }
     }
 
-    BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - wallLength);
+    uint256 wall_cost = wallLength / 4;
+
+    if (wall_cost == 0) {
+      wall_cost = 1;
+    }
+
+    BalanceComponent(getAddressById(components, BalanceComponentID)).set(sourceEntity, sourceBalance - wall_cost);
   }
 
   function executeTyped(
