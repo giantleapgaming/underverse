@@ -20,11 +20,13 @@ export const PolygonToL2NftBridge = async (
   const l1Provider = new ethers.providers.JsonRpcProvider(L1_URL);
   const l2Provider = new ethers.providers.JsonRpcProvider(L2_URL);
   const l2Wallet: Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
-  const messenger: CrossChainMessenger = await initializeMessenger(
-    metaMaskSigner,
-    l2Wallet,
-    "http://localhost:3000/addresses.json"
-  );
+
+  const protocol = window.location.protocol;
+  const domainName = window.location.hostname;
+  const jsonPath = "/addresses.json";
+  const addresses = `${protocol}//${domainName}${jsonPath}`;
+
+  const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, addresses);
   const l1ERC1155 = new ethers.Contract(L1_ERC1155_CONTRACT_ADDRESS, GiantleapNft_ABI, metaMaskSigner);
   const NftImageUrl = await l1ERC1155.uri(tokenId);
   const hex = "0x" + Buffer.from(NftImageUrl, "utf8").toString("hex");

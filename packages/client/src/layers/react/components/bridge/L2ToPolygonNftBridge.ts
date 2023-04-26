@@ -23,14 +23,15 @@ export const L2ToPolygonNftBridge = async (
   const getLogsProvider = new ethers.providers.JsonRpcProvider(
     "https://polygon-mainnet.g.alchemy.com/v2/GVHy1QYi6r-r1SAI3iK6zU6kpvnjrfdA"
   );
-  const messenger: CrossChainMessenger = await initializeMessenger(
-    metaMaskSigner,
-    l2Wallet,
-    "http://localhost:3000/addresses.json",
-    {
-      getLogsProvider: getLogsProvider,
-    }
-  );
+
+  const protocol = window.location.protocol;
+  const domainName = window.location.hostname;
+  const jsonPath = "/addresses.json";
+  const addresses = `${protocol}//${domainName}${jsonPath}`;
+
+  const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, addresses, {
+    getLogsProvider: getLogsProvider,
+  });
   const amount = 1;
   try {
     console.log(L1_ERC1155_CONTRACT_ADDRESS, L2_ERC1155_CONTRACT_ADDRESS, tokenId);
