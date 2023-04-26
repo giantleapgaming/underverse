@@ -42,11 +42,11 @@ export const usePolygonIdNFTData = (): {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
+      const response = await fetch("https://api.giantleap.gg/api/l1-nfts", {
         method: "POST",
         body: JSON.stringify({
           address: currentAccount,
-          nftContract: "0xfA4F088838A53Cdcc6A9E233Ff60B86c1AFFb07d",
+          nftContract: "0x97854678E04Ae9c03A109C1184A8Cbf684F6c819",
           chainId: 137,
         }),
         headers: {

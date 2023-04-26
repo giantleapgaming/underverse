@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { CrossChainMessenger, initializeMessenger, MessageStatus } from "@constellation-labs/sdk";
 import { DATA } from "./data";
-import L2StandardERC1155 from "./artifacts/L2StandardERC1155.json";
 import { toast } from "sonner";
 
 export const L2ToPolygonNftBridge = async (
@@ -11,17 +10,30 @@ export const L2ToPolygonNftBridge = async (
   setSuccess: () => void
 ) => {
   const L2_PRIVATE_KEY = gamePrivateKey;
-  const L1_ERC1155_CONTRACT_ADDRESS = "0xfA4F088838A53Cdcc6A9E233Ff60B86c1AFFb07d";
-  const L2_ERC1155_CONTRACT_ADDRESS = "0x113113aE1Bb7204453406c2228934737e5bBCc26";
+  const L1_ERC1155_CONTRACT_ADDRESS = "0x97854678E04Ae9c03A109C1184A8Cbf684F6c819";
+  const L2_ERC1155_CONTRACT_ADDRESS = "0x382FdcB10d799E028a6337E12B0C9DE49F70504B";
 
   const urls = DATA.generateURLs("giantleap-test1");
+  const L1_URL = "https://polygon-mainnet.g.alchemy.com/v2/g4Z3TxhdJXDADVIOxRru9Pxyt4fK2942";
   const L2_URL = urls.L2_HTTP;
 
+  const l1Provider = new ethers.providers.JsonRpcProvider(L1_URL);
   const l2Provider = new ethers.providers.JsonRpcProvider(L2_URL);
   const l2Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
-  const messenger: CrossChainMessenger = await initializeMessenger(metaMaskSigner, l2Wallet, "/addresses.json");
+  const getLogsProvider = new ethers.providers.JsonRpcProvider(
+    "https://polygon-mainnet.g.alchemy.com/v2/GVHy1QYi6r-r1SAI3iK6zU6kpvnjrfdA"
+  );
+  const messenger: CrossChainMessenger = await initializeMessenger(
+    metaMaskSigner,
+    l2Wallet,
+    "http://localhost:3000/addresses.json",
+    {
+      getLogsProvider: getLogsProvider,
+    }
+  );
   const amount = 1;
   try {
+    console.log(L1_ERC1155_CONTRACT_ADDRESS, L2_ERC1155_CONTRACT_ADDRESS, tokenId);
     const withdrawalTx = await messenger.withdrawERC1155(
       L1_ERC1155_CONTRACT_ADDRESS,
       L2_ERC1155_CONTRACT_ADDRESS,
@@ -30,20 +42,21 @@ export const L2ToPolygonNftBridge = async (
       {
         overrides: {
           gasLimit: 1000000,
-          gasPrice: 0,
+          gasPrice: 1800000,
         },
       }
     );
     toast("withdrawal Tx hash", {
       action: {
-        label: "PolygonScan",
-        onClick: () => window.open(`https://polygonscan.com/tx/${withdrawalTx.hash}`, "_blank"),
+        label: "Giantleap L2 Explorer",
+        onClick: () => window.open(`https://giantleap-test1.calderaexplorer.xyz/tx/${withdrawalTx.hash}`, "_blank"),
       },
     });
+    console.log(withdrawalTx.hash, MessageStatus.READY_FOR_RELAY, "data", withdrawalTx);
     await messenger.waitForMessageStatus(withdrawalTx.hash, MessageStatus.READY_FOR_RELAY);
     const finalizeTx = await messenger.finalizeMessage(withdrawalTx, {
       overrides: {
-        gasPrice: await metaMaskSigner.getGasPrice(),
+        gasPrice: await l1Provider.getGasPrice(),
         gasLimit: 2_000_000,
       },
     });

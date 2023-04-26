@@ -48,7 +48,61 @@ export const NoNFT = ({
         return;
       }
       const ethProvider = new ethers.providers.Web3Provider(provider);
-      const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
+      const polygonProvider = new ethers.providers.JsonRpcProvider(
+        "https://polygon-mainnet.g.alchemy.com/v2/g4Z3TxhdJXDADVIOxRru9Pxyt4fK2942"
+      );
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore //
+      const networkId = await window.ethereum.networkVersion;
+      if (networkId !== "137") {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore //
+        await window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: ethers.utils.hexlify(137) }],
+          })
+          .then(() => {
+            console.log("network has been set");
+            setLoading(false);
+          })
+          .catch((e) => {
+            if (e.code === 4902) {
+              console.log("network is not available, add it");
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore //
+              window.ethereum
+                .request({
+                  method: "wallet_addEthereumChain",
+                  params: [
+                    {
+                      chainId: ethers.utils.hexlify(137),
+                      chainName: "Polygon",
+                      nativeCurrency: {
+                        name: "MATIC",
+                        symbol: "MATIC",
+                        decimals: 18,
+                      },
+                      rpcUrls: ["https://polygon-rpc.com"],
+                      blockExplorerUrls: ["https://www.polygonscan.com"],
+                    },
+                  ],
+                })
+                .then(() => {
+                  console.log("network added");
+                  setLoading(false);
+                })
+                .catch(() => {
+                  toast.error("Could not add network");
+                  return false;
+                });
+            } else {
+              toast.error("Could not set network");
+            }
+          });
+      }
+
+      // const signer = polygonProvider.getSigner();
       const signer = ethProvider.getSigner();
       const signerAddress = await signer.getAddress();
       if (signerAddress) {
@@ -132,7 +186,7 @@ export const NoNFT = ({
                 </li>
                 <li>Click BRIDGE and approve transactions to bridge your NFT to your in-game wallet</li>
                 <li>
-                  It may take up to 5 minutes for the bridging to complete. The screen will auto refresh on completion
+                  It may take up to 10 minutes for the bridging to complete. The screen will auto refresh on completion
                 </li>
                 <li>Export the private key for your in-game wallet and add to your MetaMask</li>
               </ol>
@@ -158,7 +212,7 @@ export const NoNFT = ({
                 {selectedNft ? (
                   <div>
                     <S.NFTBox onClick={() => setConnectNFTBridge(true)}>
-                      <img src={selectedNft?.imageUrl} />
+                      <img src={selectedNft?.imageUrl} width="200" />
                     </S.NFTBox>
                     <p
                       style={{
@@ -416,24 +470,32 @@ export const NoNFT = ({
                               toast.error("Please install MetaMask to bridge the NFT");
                               return;
                             }
-                            const ethProvider = new ethers.providers.Web3Provider(provider);
-                            const polygonProvider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/");
-                            const signer = ethProvider.getSigner();
-                            const signerAddress = await signer.getAddress();
-                            const privateKey = sessionStorage.getItem("user-burner-wallet");
-                            if (privateKey && selectedNft) {
-                              if (!swap) {
-                                await PolygonToL2NftBridge(signer, privateKey, selectedNft.tokenId, () =>
-                                  setSuccess(true)
-                                );
-                                setLoading(false);
-                                toast.success("NFT bridged successfully");
-                              } else {
-                                await L2ToPolygonNftBridge(signer, privateKey, selectedNft.tokenId, () =>
-                                  setSuccess(true)
-                                );
-                                setLoading(false);
-                                toast.success("NFT bridged successfully");
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore //
+                            const networkId = await window.ethereum.networkVersion;
+                            if (networkId !== "137") {
+                              toast.error("Please set network to Polygon in your metamask");
+                              setLoading(false);
+                            } else {
+                              const ethProvider = new ethers.providers.Web3Provider(provider);
+                              const polygonProvider = new ethers.providers.JsonRpcProvider(
+                                "https://polygon-mainnet.g.alchemy.com/v2/g4Z3TxhdJXDADVIOxRru9Pxyt4fK2942"
+                              );
+                              const signer = ethProvider.getSigner();
+                              // const signer = polygonProvider.getSigner();
+                              const privateKey = sessionStorage.getItem("user-burner-wallet");
+                              if (privateKey && selectedNft) {
+                                if (!swap) {
+                                  await PolygonToL2NftBridge(signer, privateKey, selectedNft.tokenId, () =>
+                                    setSuccess(true)
+                                  );
+                                  setLoading(false);
+                                } else {
+                                  await L2ToPolygonNftBridge(signer, privateKey, selectedNft.tokenId, () =>
+                                    setSuccess(true)
+                                  );
+                                  setLoading(false);
+                                }
                               }
                             }
                           } catch (e) {
