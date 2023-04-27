@@ -399,12 +399,12 @@ export const NoNFT = ({
                       </div>
                     )}
                     <img
-                      onClick={() => {
-                        setSelectedNft(undefined);
-                        setSwap(!swap);
-                      }}
+                      // onClick={() => {
+                      //   setSelectedNft(undefined);
+                      //   setSwap(!swap);
+                      // }}
                       src="/img/switch.png"
-                      style={{ width: "35px", height: "42px", cursor: "pointer" }}
+                      // style={{ width: "35px", height: "42px", cursor: "pointer" }}
                     />
                     {!swap ? (
                       <div
