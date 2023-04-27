@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
+import CreateWorld from "./CreateWorld";
 
 const WalletLogin = () => {
   const [output, setOutput] = useState("");
@@ -12,159 +13,174 @@ const WalletLogin = () => {
   const [error, setError] = useState("");
   const [enterInputKey, setEnterInputKey] = useState(false);
   const [playGame, setPlayGame] = useState(false);
+  const [createWorld, setCreateWorld] = useState(false);
+  const [pk, setPk] = useState("");
 
   return (
     <Container>
-      <RotatingGreenAsteroid src="../img/greenAsteroid.png" />
-      <RotatingOrangeAsteroid src="/img/orangeAsteroid.png" />
-      <RotatingResidential src="../img/residential.png" />
-      <RotatingBlueAsteroid src="../img/blueAsteroid.png" />
-      <RotatingHarvester src="/img/harvester.png" />
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          if (playGame) {
-            window.location.reload();
-            return;
-          }
-        }}
-      >
-        <WalletText>
-          <div>
-            <p style={{ margin: "0px", color: "wheat", marginBottom: "20px" }}>WELCOME TO</p>
-            <img src="/img/title.png" />
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
-                gap: "10px",
-                marginBottom: "50px",
-                marginTop: "25px",
-              }}
-            >
-              <p
-                style={{
-                  fontSize: "16px",
-                  color: "#fffdd5",
-                  fontFamily: "MyOTFFont",
-                  lineHeight: "1.6",
-                }}
-              >
-                New here? Create a free in- <br />
-                game account with the Tutorial
-                <br /> Campaign.
-              </p>
-              <img
-                onClick={async () => {
-                  window.open("https://tutorial.giantleap.gg/", "_blank");
-                }}
-                src="../img/tutorial.png"
-                style={{ cursor: "pointer", marginTop: "15px" }}
-              />
-              <p
-                style={{
-                  fontSize: "22px",
-                  color: "#fffdd5",
-                  fontWeight: "bolder",
-                  marginTop: "20px",
-                  marginBottom: "20px",
-                }}
-              >
-                EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
-                <p
+      {createWorld ? (
+        <CreateWorld pk={pk} />
+      ) : (
+        <div>
+          <RotatingGreenAsteroid src="../img/greenAsteroid.png" />
+          <RotatingOrangeAsteroid src="/img/orangeAsteroid.png" />
+          <RotatingResidential src="../img/residential.png" />
+          <RotatingBlueAsteroid src="../img/blueAsteroid.png" />
+          <RotatingHarvester src="/img/harvester.png" />
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (playGame) {
+                window.location.reload();
+                return;
+              }
+            }}
+          >
+            <WalletText>
+              <div>
+                <p style={{ margin: "0px", color: "wheat", marginBottom: "20px" }}>WELCOME TO</p>
+                <img src="/img/title.png" />
+                <div
                   style={{
-                    fontSize: "14px",
-                    color: "#fffdd5",
-                    marginTop: "6px",
-                    fontFamily: "MyOTFFont",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    gap: "10px",
+                    marginBottom: "50px",
+                    marginTop: "25px",
                   }}
                 >
-                  + Genesis NFT Bridge & Reveal
-                </p>
-              </p>
-            </div>
-            {!!allKeys.length && (
-              <>
-                {allKeys.map((pk: string, index: number) => {
-                  const wallet = new Wallet(pk);
-                  const address = wallet.address;
-                  return (
-                    <>
-                      <CopyAddress address={address} index={index} pk={pk} />
-                    </>
-                  );
-                })}
-              </>
-            )}
-          </div>
-        </WalletText>
-
-        <InputBox>
-          <P
-            onClick={() => {
-              setEnterInputKey(!enterInputKey);
-            }}
-          >
-            Import Wallet Private Key{" "}
-          </P>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginLeft: "60px",
-              marginBottom: "40px",
-              flexDirection: "column",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-                gap: "10px",
-              }}
-            >
-              {enterInputKey && (
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
-                  <Input ref={pkRef} value={input} onChange={(e) => setInput(e.target.value)} />
-                  <div>
-                    <Button
-                      type="submit"
-                      onClick={() => {
-                        setError("");
-                        try {
-                          const wallet = new Wallet(input);
-                          const address = wallet.address;
-                          sessionStorage.setItem("user-burner-wallet", input);
-                          setOutput(`${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`);
-                          if (!allKeys.includes(wallet.privateKey)) {
-                            const newList = [...allKeys, input];
-                            localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
-                          }
-                          setInput("");
-                          setPlayGame(true);
-                          setTimeout(() => {
-                            buttonRef.current?.focus();
-                          });
-                        } catch (e) {
-                          setError("Enter a valid private key");
-                        }
+                  <p
+                    style={{
+                      fontSize: "16px",
+                      color: "#fffdd5",
+                      fontFamily: "MyOTFFont",
+                      lineHeight: "1.6",
+                    }}
+                  >
+                    New here? Create a free in- <br />
+                    game account with the Tutorial
+                    <br /> Campaign.
+                  </p>
+                  <img
+                    onClick={async () => {
+                      window.open("https://tutorial.giantleap.gg/", "_blank");
+                    }}
+                    src="../img/tutorial.png"
+                    style={{ cursor: "pointer", marginTop: "15px" }}
+                  />
+                  <p
+                    style={{
+                      fontSize: "22px",
+                      color: "#fffdd5",
+                      fontWeight: "bolder",
+                      marginTop: "20px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    EXISTING ACCOUNT <br /> TO ENTER MAIN GAME
+                    <p
+                      style={{
+                        fontSize: "14px",
+                        color: "#fffdd5",
+                        marginTop: "6px",
+                        fontFamily: "MyOTFFont",
                       }}
                     >
-                      <img src="/button/enterNameBtn.png" style={{ width: "40px", height: "40px" }} />
-                    </Button>
-                  </div>
+                      + Genesis NFT Bridge & Reveal
+                    </p>
+                  </p>
                 </div>
-              )}
-            </div>
-            {error && enterInputKey && <Error>{error}</Error>}
-          </div>
-        </InputBox>
-      </form>
+                {!!allKeys.length && (
+                  <>
+                    {allKeys.map((pk: string, index: number) => {
+                      const wallet = new Wallet(pk);
+                      const address = wallet.address;
+                      return (
+                        <div
+                          onClick={() => {
+                            setCreateWorld(true);
+                            setPk(pk);
+                          }}
+                        >
+                          <CopyAddress address={address} index={index} pk={pk} />
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+              </div>
+            </WalletText>
+
+            <InputBox>
+              <P
+                onClick={() => {
+                  setEnterInputKey(!enterInputKey);
+                }}
+              >
+                Import Wallet Private Key{" "}
+              </P>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginLeft: "60px",
+                  marginBottom: "40px",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    gap: "10px",
+                  }}
+                >
+                  {enterInputKey && (
+                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "8px" }}>
+                      <Input ref={pkRef} value={input} onChange={(e) => setInput(e.target.value)} />
+                      <div>
+                        <Button
+                          type="submit"
+                          onClick={() => {
+                            setError("");
+                            try {
+                              const wallet = new Wallet(input);
+                              const address = wallet.address;
+                              sessionStorage.setItem("user-burner-wallet", input);
+                              setOutput(
+                                `${output} \n $ wallet address - ${address} \n \n $ Press Enter to play the game`
+                              );
+                              if (!allKeys.includes(wallet.privateKey)) {
+                                const newList = [...allKeys, input];
+                                localStorage.setItem("all-underverse-pk", JSON.stringify(newList));
+                              }
+                              setInput("");
+                              setPlayGame(true);
+                              setTimeout(() => {
+                                buttonRef.current?.focus();
+                              });
+                            } catch (e) {
+                              setError("Enter a valid private key");
+                            }
+                          }}
+                        >
+                          <img src="/button/enterNameBtn.png" style={{ width: "40px", height: "40px" }} />
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                {error && enterInputKey && <Error>{error}</Error>}
+              </div>
+            </InputBox>
+          </form>
+        </div>
+      )}
     </Container>
   );
 };
@@ -193,8 +209,9 @@ const CopyAddress = ({ address, index, pk }: { address: string; index: number; p
         <AccountMenu>
           <p
             onClick={() => {
-              sessionStorage.setItem("user-burner-wallet", pk);
-              window.location.reload();
+              // setCreateWorld(true);
+              // sessionStorage.setItem("user-burner-wallet", pk);
+              // window.location.reload();
             }}
             style={{ cursor: "pointer" }}
           >
