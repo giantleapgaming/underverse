@@ -1,7 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
-const CreateWorld = ({ pk }: { pk: string }) => {
+const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
+  const [data, setData] = useState("");
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = new URLSearchParams(window.location.search);
+      const chainIdString = params.get("chainId");
+      try {
+        const response = await fetch("https://api.giantleap.gg/api/l1-nfts", {
+          method: "POST",
+          body: JSON.stringify({
+            address: address,
+            nftContract: "0x382FdcB10d799E028a6337E12B0C9DE49F70504B",
+            chainId: chainIdString,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        if (data.status) {
+          console.log(data);
+          setData(data.address);
+          return data.nftData.userWalletNftData;
+        } else {
+          return [];
+        }
+      } catch (e) {
+        return [];
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Container>
       (<img src="/img/title.png" style={{ margin: "20px 0" }} />
@@ -35,12 +67,36 @@ const CreateWorld = ({ pk }: { pk: string }) => {
             <p style={{ color: "white", position: "absolute", left: "45px", bottom: "70px" }}>World Address</p>
             <img src="/img/copy.png" style={{ marginBottom: "12px" }} />
             <WorldImage src="/ui/WorldAddBox.png" style={{ marginTop: "100px" }} />
-            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px" }}>Hiiiiiii</p>
+            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px", fontSize: "20pxs" }}>
+              {walletAddressLoginDisplay(data)}
+            </p>
           </div>
 
           <WorldImage src="/img/WorldSelect.png" />
 
-          <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "6px" }}>
+          <div
+            style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "6px" }}
+            onClick={() => {
+              const text = `I've just played The Underverse Game! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/ \n\n #freenft #web3games #underverse`;
+              const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
+              console.log(twitterShareURL);
+              const popupWidth = 550;
+              const popupHeight = 420;
+              const left = window.screen.width / 2 - popupWidth / 2;
+              const top = window.screen.height / 2 - popupHeight / 2;
+              const popup = window.open(
+                twitterShareURL,
+                "pop",
+                "width=" + popupWidth + ",height=" + popupHeight + ",left=" + left + ",top=" + top
+              );
+
+              if (popup?.focus) {
+                popup.focus();
+              }
+
+              return false;
+            }}
+          >
             <WorldImage src="/ui/TweeterBox.png" style={{ marginBottom: "100px" }} />
             <WorldImage src="/ui/TwitterIcon.png" style={{ marginBottom: "100px", marginTop: "12px" }} />
           </div>
@@ -52,6 +108,7 @@ const CreateWorld = ({ pk }: { pk: string }) => {
             window.location.reload();
           }}
         >
+          <p style={{ color: "white", fontSize: "26px" }}>Play Game</p>
           <img src="/button/enterNameBtn.png" />
         </Button>
       </ParentContainer>
@@ -79,7 +136,11 @@ const Button = styled.button`
   border: none;
   background: transparent;
   cursor: pointer;
-  margin-left: 20px;
+  margin-left: 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
   &:hover {
     border-radius: 2%;
     scale: 1.02;

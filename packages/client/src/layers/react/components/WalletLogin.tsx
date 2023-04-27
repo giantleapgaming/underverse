@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { Wallet } from "ethers";
 import { walletAddressLoginDisplay } from "../utils/walletAddress";
 import CreateWorld from "./CreateWorld";
+import { SocketAddress } from "net";
 
 const WalletLogin = () => {
   const [output, setOutput] = useState("");
@@ -15,11 +16,12 @@ const WalletLogin = () => {
   const [playGame, setPlayGame] = useState(false);
   const [createWorld, setCreateWorld] = useState(false);
   const [pk, setPk] = useState("");
+  const [address, setAddress] = useState("");
 
   return (
     <Container>
       {createWorld ? (
-        <CreateWorld pk={pk} />
+        <CreateWorld pk={pk} address={address} />
       ) : (
         <div>
           <RotatingGreenAsteroid src="../img/greenAsteroid.png" />
@@ -102,6 +104,7 @@ const WalletLogin = () => {
                           onClick={() => {
                             setCreateWorld(true);
                             setPk(pk);
+                            setAddress(address);
                           }}
                         >
                           <CopyAddress address={address} index={index} pk={pk} />
