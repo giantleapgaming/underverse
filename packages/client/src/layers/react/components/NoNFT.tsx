@@ -582,7 +582,12 @@ export const NoNFT = ({
                         </div>
                       )}
                     </S.BridgeFromPolygonBox>
-                    <div style={{ cursor: "pointer" }} onClick={() => setShowNftBridge(false)}>
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        window.location.reload();
+                      }}
+                    >
                       <img src="/img/next.png" />
                       <p>Continue To Game </p>
                     </div>
