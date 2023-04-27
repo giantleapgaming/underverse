@@ -21,14 +21,12 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       api: { initSystem },
       network: { connectedAddress },
       components: { Name, NFTID },
-      world,
     },
     phaser: {
       sounds,
       localApi: { setNftId },
     },
   } = layers;
-  console.log("world", world);
   return (
     <>
       <Container>
