@@ -15,8 +15,6 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
   const [reactNftId, setReactNftId] = useState<number>();
   const [loading, setLoading] = useState(false);
-  const params = new URLSearchParams(window.location.search);
-  const chainIdString = params.get("chainId");
   const [displayName, setDisplayName] = useState("");
   const [showBuildingMap, setBuildingMap] = useState(false);
 
