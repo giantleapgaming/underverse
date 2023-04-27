@@ -220,17 +220,17 @@ export async function createNetworkLayer(config: GameConfig) {
   // --- ACTION SYSTEM --------------------------------------------------------------
   const actions = createActionSystem(world, txReduced$);
   // --- API ------------------------------------------------------------------------
-  const initSystem = async (name: string, faction: number, nftID: number) => {
+  const initSystem = async (name: string, nftID: number) => {
     return systems["system.Init"].executeTyped(name, nftID, {
       gasPrice: 1500000,
-      gasLimit: 5000000,
+      gasLimit: 15000000,
     });
   };
 
   async function buildSystem({ x, y, entityType, NftId }: { x: number; y: number; entityType: number; NftId: number }) {
     return systems["system.Build"].executeTyped(x, y, entityType, NftId, {
       gasPrice: 1500000,
-      gasLimit: 5000000,
+      gasLimit: 15000000,
     });
   }
 
@@ -247,7 +247,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.MoveShip"].executeTyped(BigNumber.from(entityType), x, y, NftId, {
       gasPrice: 1500000,
-      gasLimit: 5000000,
+      gasLimit: 15000000,
     });
   }
 
@@ -267,7 +267,7 @@ export async function createNetworkLayer(config: GameConfig) {
   }) {
     return systems["system.BuildWall"].executeTyped(x1, y1, x2, y2, nftId, {
       gasPrice: 1500000,
-      gasLimit: 5000000,
+      gasLimit: 15000000,
     });
   }
 
