@@ -10,8 +10,8 @@ export const L2ToPolygonNftBridge = async (
   setSuccess: () => void
 ) => {
   const L2_PRIVATE_KEY = gamePrivateKey;
-  const L1_ERC1155_CONTRACT_ADDRESS = "0x97854678E04Ae9c03A109C1184A8Cbf684F6c819";
-  const L2_ERC1155_CONTRACT_ADDRESS = "0x382FdcB10d799E028a6337E12B0C9DE49F70504B";
+  const L1_ERC1155_CONTRACT_ADDRESS = "0xC2c59d9C945C19FC82A2d771AC2B84A665d2300E";
+  const L2_ERC1155_CONTRACT_ADDRESS = "0xd06E3Df5753baB6047Ef2d8cb0381D99dDF999Bb";
 
   const urls = DATA.generateURLs("giantleap-test1");
   const L1_URL = "https://polygon-mainnet.g.alchemy.com/v2/g4Z3TxhdJXDADVIOxRru9Pxyt4fK2942";

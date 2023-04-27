@@ -46,7 +46,7 @@ export const usePolygonIdNFTData = (): {
         method: "POST",
         body: JSON.stringify({
           address: currentAccount,
-          nftContract: "0x97854678E04Ae9c03A109C1184A8Cbf684F6c819",
+          nftContract: "0xC2c59d9C945C19FC82A2d771AC2B84A665d2300E",
           chainId: 137,
         }),
         headers: {
