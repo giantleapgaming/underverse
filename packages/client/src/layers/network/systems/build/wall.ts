@@ -228,7 +228,9 @@ export function buildWallSystem(network: NetworkLayer, phaser: PhaserLayer) {
                 destinationTilePositionY + tileWidth + tileHeight / 2
               );
               gameObject.setDepth(4);
-              gameObject.setText(`${allCords.length}`);
+              gameObject.setText(
+                `${allCords.length && (Math.floor(allCords.length / 4) === 0 ? "1" : Math.floor(allCords.length / 4))}`
+              );
               gameObject.setFontSize(100);
               gameObject.setFontStyle("bold");
               gameObject.setColor("#ffffff");
