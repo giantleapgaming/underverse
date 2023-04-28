@@ -3,6 +3,7 @@ import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { nameSpaceWorld } from "./nameSpaceWorld";
 import { components, getValue, setValue } from "./components";
+import { createMapSystem } from "./systems/circle";
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   nameSpaceWorld.registerDisposer(disposePhaser);
@@ -39,6 +40,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
   sounds["bg"].play();
 
   const context = { nameSpaceWorld, network, components, game, scenes, getValue, setValue, sounds };
+
+  createMapSystem(network, context);
 
   return context;
 }

@@ -13,8 +13,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
   const [reactNftId, setReactNftId] = useState<number>();
   const [loading, setLoading] = useState(false);
-  const [displayName, setDisplayName] = useState("");
-  const [showBuildingMap, setBuildingMap] = useState(false);
+  const [alreadyLoggedIn, setAlreadyLoggedIn] = useState(false);
 
   const {
     network: {
@@ -27,94 +26,76 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
   return (
     <>
       <Container>
-        {!showBuildingMap ? (
-          <Form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              sounds["click"].play();
-              if (displayName && typeof reactNftId === "number") {
-                setValue.SelectedNftID(reactNftId);
-                return;
-              } else {
-                if (reactNftId) {
-                  setValue.SelectedNftID(reactNftId);
-                  toast.promise(
-                    async () => {
-                      try {
-                        setLoading(true);
-                        await initSystem(name, reactNftId);
-                      } catch (e: any) {
-                        setBuildingMap(false);
-                        throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
-                      }
-                    },
-                    {
-                      loading: "Transaction in progress",
-                      success: `Transaction successful`,
-                      error: (e) => e.message,
-                    }
-                  );
-                }
-              }
-            }}
-          >
-            <div>
-              <Nft
-                setSelectNft={(selectNft) => {
-                  if (typeof selectNft?.tokenId === "number") {
-                    const allNameEntities = [...getComponentEntities(Name)];
-                    allNameEntities.find((entity) => {
-                      const name = getComponentValueStrict(Name, entity)?.value;
-                      const nftId = getComponentValueStrict(NFTID, entity).value;
-                      if (+nftId === selectNft?.tokenId) {
-                        setDisplayName(name);
-                      } else {
-                        setDisplayName("");
-                      }
-                    });
-                    setReactNftId(selectNft?.tokenId);
-                  } else {
-                    setReactNftId(undefined);
+        <Form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            sounds["click"].play();
+            if (alreadyLoggedIn && typeof reactNftId === "number") {
+              setValue.SelectedNftID(reactNftId);
+              return;
+            } else if (reactNftId) {
+              setValue.SelectedNftID(reactNftId);
+              toast.promise(
+                async () => {
+                  try {
+                    setLoading(true);
+                    await initSystem(name, reactNftId);
+                  } catch (e: any) {
+                    throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                   }
-                }}
-                selectedNFT={reactNftId}
-                clickSound={() => {
-                  sounds["click"].play();
-                }}
-                address={connectedAddress.get()}
-              />
-              {typeof reactNftId === "number" && (
-                <S.Inline>
-                  {displayName ? (
-                    <div>
-                      <Input disabled value={displayName} />
-                    </div>
-                  ) : (
-                    <div>
-                      <Input
-                        disabled={loading}
-                        onChange={(e) => {
-                          setName(e.target.value);
-                        }}
-                        value={name}
-                        placeholder="ENTER NAME"
-                      />
-                    </div>
-                  )}
-                  <Button type="submit" disabled={loading}>
-                    <img src="/button/enterNameBtn.png" />
-                  </Button>
-                </S.Inline>
-              )}
-            </div>
-          </Form>
-        ) : (
-          <div
-            style={{ height: "100%", width: "100%", alignItems: "center", display: "flex", justifyContent: "center" }}
-          >
-            <S.Loader />
+                },
+                {
+                  loading: "Transaction in progress",
+                  success: `Transaction successful`,
+                  error: (e) => e.message,
+                }
+              );
+            }
+          }}
+        >
+          <div>
+            <Nft
+              setSelectNft={(selectNft) => {
+                if (typeof selectNft?.tokenId === "number") {
+                  const allNameEntities = [...getComponentEntities(Name)];
+                  allNameEntities.find((entity) => {
+                    const name = getComponentValueStrict(Name, entity)?.value;
+                    const nftId = getComponentValueStrict(NFTID, entity).value;
+                    if (+nftId === selectNft?.tokenId) {
+                      setAlreadyLoggedIn(true);
+                      setName(name);
+                    }
+                  });
+                  setReactNftId(selectNft?.tokenId);
+                } else {
+                  setReactNftId(undefined);
+                }
+              }}
+              selectedNFT={reactNftId}
+              clickSound={() => {
+                sounds["click"].play();
+              }}
+              address={connectedAddress.get()}
+            />
+            {typeof reactNftId === "number" && (
+              <S.Inline>
+                <div>
+                  <Input
+                    disabled={loading}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                    }}
+                    value={name}
+                    placeholder="ENTER NAME"
+                  />
+                </div>
+                <Button type="submit" disabled={loading}>
+                  <img src="/button/enterNameBtn.png" />
+                </Button>
+              </S.Inline>
+            )}
           </div>
-        )}
+        </Form>
       </Container>
     </>
   );
@@ -245,7 +226,6 @@ export const registerNameScreen = () => {
         map(() => connectedAddress.get()),
         map(() => {
           const selectedNftId = getValue.SelectedNftID();
-          console.log(selectedNftId);
           const allNftsEntityIds = [...getComponentEntities(NFTID)];
           const doesNftExist = allNftsEntityIds.some((entityId) => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
