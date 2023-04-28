@@ -40,7 +40,6 @@ export const registerBgScreen = () => {
         },
         phaser: {
           components: { SelectedNftID },
-          localIds: { nftId },
         },
       } = layers;
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
@@ -49,7 +48,7 @@ export const registerBgScreen = () => {
         })
       );
     },
-    ({ layers }) => {
+    () => {
       return <Bg />;
     }
   );

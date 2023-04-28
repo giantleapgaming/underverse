@@ -96,7 +96,6 @@ import { multiMoveDrawLine } from "../network/systems/view/multi-move-draw-line"
 export async function createPhaserLayer(network: NetworkLayer) {
   // --- WORLD ----------------------------------------------------------------------
   const world = namespaceWorld(network.world, "phaser");
-
   // ---ENTITY ID------
   const progressId = createEntity(world);
   const buildId = createEntity(world);

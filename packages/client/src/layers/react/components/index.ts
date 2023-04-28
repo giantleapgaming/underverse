@@ -4,8 +4,8 @@ import { registerBgScreen } from "./GameBg";
 import { registerTostScreen } from "./toast";
 
 export function registerUIComponents() {
-  registerNameScreen();
   registerLoadingState();
+  registerNameScreen();
   registerBgScreen();
   registerTostScreen();
 }

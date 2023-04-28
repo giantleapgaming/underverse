@@ -3,6 +3,20 @@ import { world } from "./world";
 import { Type, defineComponent, overridableComponent } from "@latticexyz/recs";
 
 export const components = {
+  LoadingState: defineComponent(
+    world,
+    {
+      state: Type.Number,
+      msg: Type.String,
+      percentage: Type.Number,
+    },
+    {
+      id: "LoadingState",
+      metadata: {
+        contractId: "component.LoadingState",
+      },
+    }
+  ),
   Name: overridableComponent(
     defineStringComponent(world, { id: "Name", indexed: true, metadata: { contractId: "component.Name" } })
   ),

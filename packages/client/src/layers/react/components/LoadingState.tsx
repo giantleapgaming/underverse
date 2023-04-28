@@ -3,7 +3,6 @@ import { BootScreen, registerUIComponent } from "../engine";
 import { concat, map } from "rxjs";
 import { getComponentValue } from "@latticexyz/recs";
 import { GodID, SyncState } from "@latticexyz/network";
-import styled from "styled-components";
 
 export function registerLoadingState() {
   registerUIComponent(

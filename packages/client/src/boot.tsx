@@ -3,7 +3,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { Time } from "./utils/time";
 import { createNetworkLayer as createNetworkLayerImport } from "./network/createNetworkLayer";
-import { createPhaserLayer as createPhaserLayerImport } from "./layers/phaser";
+import { createPhaserLayer as createPhaserLayerImport } from "./phaser/createPhaserLayer";
 import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
 import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
@@ -28,8 +28,7 @@ async function bootGame() {
 
   async function rebootGame(): Promise<Layers> {
     mountReact.current(false);
-
-    if (!checkInvalidConfig()) throw new Error("Invalid config");
+    if (checkInvalidConfig()) throw new Error("Invalid config");
 
     if (!layers.network) layers.network = await createNetworkLayer();
     if (!layers.phaser) layers.phaser = await createPhaserLayer(layers.network);
