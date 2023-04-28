@@ -3,7 +3,7 @@ import { registerUIComponent } from "../engine";
 import { Layers } from "../../../types";
 import { map, merge } from "rxjs";
 import { useState } from "react";
-import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { Nft } from "./Nft";
 import { computedToStream } from "@latticexyz/utils";
 import { toast } from "sonner";
@@ -22,10 +22,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
       network: { connectedAddress },
       components: { Name, NFTID },
     },
-    phaser: {
-      sounds,
-      localApi: { setNftId },
-    },
+    phaser: { sounds, setValue },
   } = layers;
   return (
     <>
@@ -36,7 +33,7 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
               e.preventDefault();
               sounds["click"].play();
               if (reactNftId) {
-                setNftId(reactNftId);
+                setValue.SelectedNftID(reactNftId);
                 toast.promise(
                   async () => {
                     try {
@@ -233,7 +230,7 @@ export const registerNameScreen = () => {
         },
         phaser: {
           components: { SelectedNftID },
-          localIds: { nftId },
+          getValue,
           scenes: {
             Main: { input },
           },
@@ -242,7 +239,7 @@ export const registerNameScreen = () => {
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
-          const selectedNftId = getComponentValue(SelectedNftID, nftId)?.selectedNftID;
+          const selectedNftId = getValue.SelectedNftID;
           const allNftsEntityIds = [...getComponentEntities(NFTID)];
           const doesNftExist = allNftsEntityIds.some((entityId) => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;

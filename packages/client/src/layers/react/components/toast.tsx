@@ -2,9 +2,8 @@ import { registerUIComponent } from "../engine";
 import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { Toaster } from "sonner";
-import { Layers } from "../../../types";
 
-const Toast = ({ layers }: { layers: Layers }) => {
+const Toast = () => {
   return (
     <Toaster
       expand={true}
@@ -42,8 +41,8 @@ export const registerTostScreen = () => {
         })
       );
     },
-    ({ layers }) => {
-      return <Toast layers={layers} />;
+    () => {
+      return <Toast />;
     }
   );
 };

@@ -1,6 +1,6 @@
 import { boot } from "./boot";
-import { NetworkLayer } from "./layers/network";
-import { PhaserLayer } from "./layers/phaser";
+import { NetworkLayer } from "./network/types";
+import { PhaserLayer } from "./phaser/types";
 
 export type EmberWindow = Awaited<ReturnType<typeof boot>>;
 
