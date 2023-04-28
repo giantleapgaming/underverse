@@ -77,7 +77,8 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
           <div
             style={{ display: "flex", justifyContent: "flex-start", alignItems: "flex-start", gap: "6px" }}
             onClick={() => {
-              const text = `I've just played The Underverse Game! \n\nThink you've got what it takes? \n\nGet one for yourself here and join me in the Underverse - https://tutorial.giantleap.gg/ \n\n #freenft #web3games #underverse`;
+              const text = `Join me for a game of Underverse Arena!
+ https://underverse.giantleap.gg/ \n\n  #web3games #underverse`;
               const twitterShareURL = "https://twitter.com/share?" + "text=" + encodeURIComponent(text || "");
               console.log(twitterShareURL);
               const popupWidth = 550;
