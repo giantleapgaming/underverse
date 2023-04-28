@@ -2,13 +2,14 @@ import { getComponentValue, removeComponent, setComponent } from "@latticexyz/re
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Time } from "./utils/time";
-import { createNetworkLayer as createNetworkLayerImport } from "./layers/network";
+import { createNetworkLayer as createNetworkLayerImport } from "./network/createNetworkLayer";
 import { createPhaserLayer as createPhaserLayerImport } from "./layers/phaser";
 import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
 import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
 import { Wallet } from "ethers";
 import WalletLogin from "./layers/react/components/WalletLogin";
+import { checkInvalidConfig } from "./helpers/checkConfig";
 
 // Assign variables that can be overridden by HMR
 let createNetworkLayer = createNetworkLayerImport;
@@ -28,35 +29,9 @@ async function bootGame() {
   async function rebootGame(): Promise<Layers> {
     mountReact.current(false);
 
-    const params = new URLSearchParams(window.location.search);
-    const worldAddress = params.get("worldAddress");
-    const privateKey = sessionStorage.getItem("user-burner-wallet");
-    const chainIdString = params.get("chainId") || "344215";
-    const jsonRpc = params.get("rpc") || "https://giantleap-test1.calderachain.xyz/http";
-    const wsRpc = params.get("wsRpc") || "wss://giantleap-test1.calderachain.xyz/ws";
-    const checkpointUrl = params.get("checkpoint") || undefined;
-    const devMode = params.get("dev") === "true";
-    const initialBlockNumberString = params.get("initialBlockNumber");
-    const initialBlockNumber = initialBlockNumberString ? parseInt(initialBlockNumberString) : 0;
-    const snapshotServiceUrl = params.get("snapshot") ?? "https://ecs-snapshot.giantleap.gg";
-    let networkLayerConfig;
-    if (worldAddress && privateKey && chainIdString && jsonRpc && snapshotServiceUrl) {
-      networkLayerConfig = {
-        worldAddress,
-        privateKey,
-        chainId: parseInt(chainIdString),
-        jsonRpc,
-        wsRpc,
-        checkpointUrl,
-        devMode,
-        initialBlockNumber,
-        snapshotServiceUrl,
-      };
-    }
+    if (!checkInvalidConfig()) throw new Error("Invalid config");
 
-    if (!networkLayerConfig) throw new Error("Invalid config");
-
-    if (!layers.network) layers.network = await createNetworkLayer(networkLayerConfig);
+    if (!layers.network) layers.network = await createNetworkLayer();
     if (!layers.phaser) layers.phaser = await createPhaserLayer(layers.network);
 
     // Sync global time with phaser clock
