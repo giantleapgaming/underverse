@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "./Button";
+import { Layers } from "../../types";
 
-const BuildButtons = () => {
-  const [activeButton, setActiveButton] = useState(0);
+const BuildButtons = ({ layers }: { layers: Layers }) => {
+  const {
+    phaser: { setValue, getValue },
+  } = layers;
 
-  const handleClick = (buttonId: number) => {
-    setActiveButton(buttonId);
+  const handleClick = (buttonId: string) => {
+    setValue.ShowModal(buttonId);
   };
 
   return (
     <div className="flex flex-col items-center justify-center gap-0.5">
-      <Button buttonImg="/game-2/kestrel.png" onClick={() => handleClick(1)} isActive={activeButton === 1} />
-      <Button buttonImg="/game-2/block.png" onClick={() => handleClick(2)} isActive={activeButton === 2} />
+      <Button
+        buttonImg="/game-2/ship.png"
+        onClick={() => handleClick("ship")}
+        isActive={getValue.ShowModal() === "ship"}
+      />
+      <Button
+        buttonImg="/game-2/defence.png"
+        onClick={() => handleClick("defence")}
+        isActive={getValue.ShowModal() === "defence"}
+      />
     </div>
   );
 };

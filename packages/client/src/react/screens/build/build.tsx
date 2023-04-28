@@ -3,11 +3,12 @@ import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 import BuildButtons from "../../components/BuildButtons";
+import { Layers } from "../../../types";
 
-const Build = () => {
+const Build = ({ layers }: { layers: Layers }) => {
   return (
     <div className="flex h-full items-center pointer-events-auto ml-0.5">
-      <BuildButtons />
+      <BuildButtons layers={layers} />
     </div>
   );
 };
@@ -28,10 +29,10 @@ export const registerBuildScreen = () => {
           network: { connectedAddress },
         },
         phaser: {
-          components: { SelectedNftID },
+          components: { SelectedNftID, ShowModal },
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$, ShowModal.update$).pipe(
         map(() => {
           const doesNftExist = checkLoggedIn(layers);
           if (doesNftExist) {
@@ -42,8 +43,8 @@ export const registerBuildScreen = () => {
         })
       );
     },
-    () => {
-      return <Build />;
+    ({ layers }) => {
+      return <Build layers={layers} />;
     }
   );
 };
