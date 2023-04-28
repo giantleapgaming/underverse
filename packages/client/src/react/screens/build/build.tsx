@@ -2,28 +2,12 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
+import BuildButtons from "../../components/BuildButtons";
 
 const Build = () => {
   return (
-    <div className="flex h-full items-center pointer-events-auto ml-1">
-      <div className="flex flex-col items-center justify-center gap-3">
-        <div
-          className="bg-cover bg-center bg-no-repeat p-5 z-50"
-          style={{
-            backgroundImage: `url(/game-2/whiteBorderOfBuild.png)`,
-          }}
-        >
-          <img src="/game-2/kestrel.png" className="z-10" />
-        </div>
-        <div
-          className="bg-cover bg-center bg-no-repeat p-5 z-50"
-          style={{
-            backgroundImage: `url(/game-2/whiteBorderOfBuild.png)`,
-          }}
-        >
-          <img src="/game-2/block.png" className="z-10" />
-        </div>
-      </div>
+    <div className="flex h-full items-center pointer-events-auto ml-0.5">
+      <BuildButtons />
     </div>
   );
 };
