@@ -4,7 +4,7 @@ import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 
 const Build = () => {
-  return <div>Test build</div>;
+  return <div className="flex h-full items-center">Test build</div>;
 };
 
 export const registerBuildScreen = () => {
