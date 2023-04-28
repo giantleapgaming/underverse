@@ -7,7 +7,7 @@ export const components = {
 };
 
 export const getValue = {
-  SelectedNftID: getComponentValue(components.SelectedNftID, entityIndexes.userEntity)?.value,
+  SelectedNftID: () => getComponentValue(components.SelectedNftID, entityIndexes.userEntity)?.value,
 };
 
 export const setValue = {

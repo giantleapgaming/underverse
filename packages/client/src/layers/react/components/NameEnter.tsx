@@ -32,24 +32,29 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
             onSubmit={async (e) => {
               e.preventDefault();
               sounds["click"].play();
-              if (reactNftId) {
+              if (displayName && typeof reactNftId === "number") {
                 setValue.SelectedNftID(reactNftId);
-                toast.promise(
-                  async () => {
-                    try {
-                      setLoading(true);
-                      await initSystem(name, reactNftId);
-                    } catch (e: any) {
-                      setBuildingMap(false);
-                      throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                return;
+              } else {
+                if (reactNftId) {
+                  setValue.SelectedNftID(reactNftId);
+                  toast.promise(
+                    async () => {
+                      try {
+                        setLoading(true);
+                        await initSystem(name, reactNftId);
+                      } catch (e: any) {
+                        setBuildingMap(false);
+                        throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                      }
+                    },
+                    {
+                      loading: "Transaction in progress",
+                      success: `Transaction successful`,
+                      error: (e) => e.message,
                     }
-                  },
-                  {
-                    loading: "Transaction in progress",
-                    success: `Transaction successful`,
-                    error: (e) => e.message,
-                  }
-                );
+                  );
+                }
               }
             }}
           >
@@ -239,7 +244,8 @@ export const registerNameScreen = () => {
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
-          const selectedNftId = getValue.SelectedNftID;
+          const selectedNftId = getValue.SelectedNftID();
+          console.log(selectedNftId);
           const allNftsEntityIds = [...getComponentEntities(NFTID)];
           const doesNftExist = allNftsEntityIds.some((entityId) => {
             const selectedNft = getComponentValueStrict(NFTID, entityId).value;
