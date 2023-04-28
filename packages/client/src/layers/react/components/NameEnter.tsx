@@ -8,6 +8,7 @@ import { Nft } from "./Nft";
 import { computedToStream } from "@latticexyz/utils";
 import { toast } from "sonner";
 import { keyframes } from "styled-components";
+import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 
 const NameEnter = ({ layers }: { layers: Layers }) => {
   const [name, setName] = useState("");
@@ -216,7 +217,6 @@ export const registerNameScreen = () => {
         },
         phaser: {
           components: { SelectedNftID },
-          getValue,
           scenes: {
             Main: { input },
           },
@@ -225,12 +225,7 @@ export const registerNameScreen = () => {
       return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
         map(() => connectedAddress.get()),
         map(() => {
-          const selectedNftId = getValue.SelectedNftID();
-          const allNftsEntityIds = [...getComponentEntities(NFTID)];
-          const doesNftExist = allNftsEntityIds.some((entityId) => {
-            const selectedNft = getComponentValueStrict(NFTID, entityId).value;
-            return +selectedNft === selectedNftId;
-          });
+          const doesNftExist = checkLoggedIn(layers);
           if (doesNftExist) {
             input.enableInput();
             return;
