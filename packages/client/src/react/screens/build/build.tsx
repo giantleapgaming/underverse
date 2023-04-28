@@ -2,14 +2,15 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
-import BuildButtons from "../../components/BuildButtons";
+import BuildButtons from "./BuildButtons";
 import { Layers } from "../../../types";
+import styled from "styled-components";
 
 const Build = ({ layers }: { layers: Layers }) => {
   return (
-    <div className="flex h-full items-center pointer-events-auto ml-0.5">
+    <ButtonContainer>
       <BuildButtons layers={layers} />
-    </div>
+    </ButtonContainer>
   );
 };
 
@@ -48,3 +49,11 @@ export const registerBuildScreen = () => {
     }
   );
 };
+
+const ButtonContainer = styled.div`
+  pointer-events: fill;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100vh;
+`;

@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 
 const Button = ({ buttonImg, onClick, isActive }: { buttonImg: string; onClick: () => void; isActive: boolean }) => {
   const buttonBG = {
@@ -7,11 +8,19 @@ const Button = ({ buttonImg, onClick, isActive }: { buttonImg: string; onClick: 
 
   return (
     <div>
-      <div onClick={onClick} className="bg-auto bg-center bg-no-repeat p-6 z-50 cursor-pointer" style={buttonBG}>
-        <img src={buttonImg} className="z-10" />
-      </div>
+      <ButtonImg onClick={onClick} style={buttonBG}>
+        <img src={buttonImg} />
+      </ButtonImg>
     </div>
   );
 };
 
 export default Button;
+
+const ButtonImg = styled.div`
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  padding: 20px;
+  cursor: pointer;
+`;

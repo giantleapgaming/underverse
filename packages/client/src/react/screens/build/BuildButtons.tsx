@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "./Button";
-import { Layers } from "../../types";
+import { Layers } from "../../../types";
+import styled from "styled-components";
 
 const BuildButtons = ({ layers }: { layers: Layers }) => {
   const {
@@ -12,7 +13,7 @@ const BuildButtons = ({ layers }: { layers: Layers }) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center gap-0.5">
+    <Buttons>
       <Button
         buttonImg="/game-2/ship.png"
         onClick={() => handleClick("ship")}
@@ -23,8 +24,16 @@ const BuildButtons = ({ layers }: { layers: Layers }) => {
         onClick={() => handleClick("defence")}
         isActive={getValue.ShowModal() === "defence"}
       />
-    </div>
+    </Buttons>
   );
 };
 
 export default BuildButtons;
+
+const Buttons = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+`;
