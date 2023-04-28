@@ -51,6 +51,7 @@ export const components = {
       metadata: { contractId: "component.Attribute3" },
     })
   ),
+
   Attribute4: overridableComponent(
     defineNumberComponent(world, {
       id: "Attribute4",
@@ -203,6 +204,13 @@ export const components = {
       id: "Encounter",
       indexed: true,
       metadata: { contractId: "component.Encounter" },
+    })
+  ),
+  StartTime: overridableComponent(
+    defineNumberComponent(world, {
+      id: "StartTime",
+      indexed: true,
+      metadata: { contractId: "component.StartTime" },
     })
   ),
 };
