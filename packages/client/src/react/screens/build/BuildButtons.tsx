@@ -5,7 +5,13 @@ import styled from "styled-components";
 
 const BuildButtons = ({ layers }: { layers: Layers }) => {
   const {
-    phaser: { setValue, getValue },
+    phaser: {
+      setValue,
+      getValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
 
   const handleClick = (buttonId: string) => {
@@ -15,11 +21,23 @@ const BuildButtons = ({ layers }: { layers: Layers }) => {
   return (
     <Buttons>
       <Button
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
         buttonImg="/game-2/ship.png"
         onClick={() => handleClick("ship")}
         isActive={getValue.ShowModal() === "ship"}
       />
       <Button
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
         buttonImg="/game-2/defence.png"
         onClick={() => handleClick("defence")}
         isActive={getValue.ShowModal() === "defence"}

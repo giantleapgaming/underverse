@@ -51,7 +51,6 @@ export const registerBuildScreen = () => {
 };
 
 const ButtonContainer = styled.div`
-  pointer-events: fill;
   display: flex;
   justify-content: flex-start;
   align-items: center;

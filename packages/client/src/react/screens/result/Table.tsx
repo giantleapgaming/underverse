@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Layers } from "../../../types";
-import { Mapping } from "../../../utils/mapping";
 import { NFTImg } from "../../../layers/react/components/NFTImg";
 import { walletAddressLoginDisplay } from "../../../layers/react/utils/walletAddress";
 import styled from "styled-components";
 import { getComponentEntities, getComponentValue } from "@latticexyz/recs";
+import { Mapping } from "../../../helpers/mapping";
 
 const Table = ({ layers }: { layers: Layers }) => {
   const {
