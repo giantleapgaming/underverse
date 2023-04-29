@@ -5,6 +5,8 @@ import { nameSpaceWorld } from "./nameSpaceWorld";
 import { components, getValue, setValue } from "./components";
 import { createMapSystem } from "./systems/circle";
 import { shrinkingRadius } from "./systems/shrinkingRadius";
+import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
+
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
   nameSpaceWorld.registerDisposer(disposePhaser);
@@ -38,7 +40,23 @@ export async function createPhaserLayer(network: NetworkLayer) {
     await asyncFileLoader(loader);
     sounds[soundKey] = scenes.Main.phaserScene.sound.add(soundKey, { loop: true, volume: 0.06 });
   }
+
   sounds["bg"].play();
+
+  setInterval(() => {
+    const showResult = getValue.ShowResults();
+    if (!showResult) {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timerEntity = [...getComponentEntities(network.components.StartTime)][0];
+      if (timerEntity) {
+        const startTime = getComponentValueStrict(network.components.StartTime, timerEntity)?.value;
+        const timeLeft = startTime - currentTime;
+        if (timeLeft < 0) {
+          setValue.ShowResults(true);
+        }
+      }
+    }
+  }, 1000);
 
   const context = { nameSpaceWorld, network, components, game, scenes, getValue, setValue, sounds };
 

@@ -3,10 +3,9 @@ import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 import { Layers } from "../../../types";
-import styled from "styled-components";
 
 const Result = ({ layers }: { layers: Layers }) => {
-  return <ButtonContainer>Show Results screen</ButtonContainer>;
+  return <div>Show Results screen</div>;
 };
 
 export const registerResultScreen = () => {
@@ -25,13 +24,21 @@ export const registerResultScreen = () => {
           network: { connectedAddress },
         },
         phaser: {
-          components: { SelectedNftID, ShowModal },
+          components: { SelectedNftID, ShowModal, ShowResults },
+          getValue,
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$, ShowModal.update$).pipe(
+      return merge(
+        computedToStream(connectedAddress),
+        NFTID.update$,
+        SelectedNftID.update$,
+        ShowModal.update$,
+        ShowResults.update$
+      ).pipe(
         map(() => {
+          const showResults = getValue.ShowResults();
           const doesNftExist = checkLoggedIn(layers);
-          if (doesNftExist) {
+          if (doesNftExist && showResults) {
             return { layers };
           } else {
             return;
@@ -44,11 +51,3 @@ export const registerResultScreen = () => {
     }
   );
 };
-
-const ButtonContainer = styled.div`
-  pointer-events: fill;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100vh;
-`;
