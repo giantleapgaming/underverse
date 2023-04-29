@@ -10,25 +10,25 @@ import PriceContainer from "./PriceContainer";
 import React from "react";
 
 const BuildMenu = ({ layers }: { layers: Layers }) => {
-  const [closeMenu, setCloseMenu] = React.useState(false);
+  const {
+    phaser: { setValue },
+  } = layers;
   return (
     <Menu>
-      {!closeMenu && (
-        <MenuContainer>
-          <Border>
-            <Title>
-              <p style={{ color: "black" }}>DEFENCES</p>
-              <p style={{ color: "white" }}>$50,000</p>
-            </Title>
-            <Details>
-              <ButtonContainer layers={layers} />
-              <Information />
-              <PriceContainer />
-            </Details>
-          </Border>
-          <Button onClick={() => setCloseMenu(true)}>X</Button>
-        </MenuContainer>
-      )}
+      <MenuContainer>
+        <Border>
+          <Title>
+            <p style={{ color: "black" }}>DEFENCES</p>
+            <p style={{ color: "white" }}>$50,000</p>
+          </Title>
+          <Details>
+            <ButtonContainer layers={layers} />
+            <Information />
+            <PriceContainer />
+          </Details>
+        </Border>
+        <Button onClick={() => setValue.ShowModal("")}>X</Button>
+      </MenuContainer>
     </Menu>
   );
 };
@@ -49,13 +49,15 @@ export const registerBuildMenuScreen = () => {
           network: { connectedAddress },
         },
         phaser: {
-          components: { SelectedNftID },
+          components: { SelectedNftID, ShowModal },
+          getValue,
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$).pipe(
+      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$, ShowModal.update$).pipe(
         map(() => {
+          const showMenu = getValue.ShowModal();
           const doesNftExist = checkLoggedIn(layers);
-          if (doesNftExist) {
+          if (doesNftExist && showMenu) {
             return { layers };
           } else {
             return;

@@ -27,7 +27,7 @@ export const GameTimer = ({ layers }: { layers: Layers }) => {
   }, [startTime]);
 
   const remainingSeconds = Math.max(0, MAX_TIMER_SECONDS - timeElapsed);
-  if (remainingSeconds <= 0 || remainingSeconds >= 2600) {
+  if (remainingSeconds <= 0 || remainingSeconds >= 2500) {
     return null;
   }
 
