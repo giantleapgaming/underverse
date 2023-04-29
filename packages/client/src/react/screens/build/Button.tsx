@@ -19,6 +19,7 @@ export default Button;
 
 const ButtonImg = styled.div`
   background-position: center;
+  width: 80px;
   background-repeat: no-repeat;
   background-size: contain;
   padding: 20px;
