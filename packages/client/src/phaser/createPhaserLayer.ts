@@ -50,8 +50,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
       const timerEntity = [...getComponentEntities(network.components.StartTime)][0];
       if (timerEntity) {
         const startTime = getComponentValueStrict(network.components.StartTime, timerEntity)?.value;
-        const timeLeft = startTime - currentTime;
-        if (timeLeft < 0) {
+        const elapsedTime = currentTime - startTime;
+        if (elapsedTime > 3100) {
           setValue.ShowResults(true);
         }
       }

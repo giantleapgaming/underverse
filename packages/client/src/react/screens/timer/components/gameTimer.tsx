@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { Layers } from "../../../../types";
 
-const MAX_TIMER_SECONDS = 2500;
+const MAX_TIMER_SECONDS = 3100;
 
 export const GameTimer = ({ layers }: { layers: Layers }) => {
   const {
@@ -27,7 +27,7 @@ export const GameTimer = ({ layers }: { layers: Layers }) => {
   }, [startTime]);
 
   const remainingSeconds = Math.max(0, MAX_TIMER_SECONDS - timeElapsed);
-  if (remainingSeconds <= 0) {
+  if (remainingSeconds <= 0 || remainingSeconds >= 2600) {
     return null;
   }
 
