@@ -3,10 +3,16 @@ import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 import { Layers } from "../../../types";
-import styled from "styled-components";
+import { BuildTimer } from "./components/buildTimer";
+import { GameTimer } from "./components/gameTimer";
 
 const Timer = ({ layers }: { layers: Layers }) => {
-  return <ButtonContainer>Show Timers screen</ButtonContainer>;
+  return (
+    <div>
+      <BuildTimer layers={layers} />
+      <GameTimer layers={layers} />
+    </div>
+  );
 };
 
 export const registerTimerScreen = () => {
@@ -44,11 +50,3 @@ export const registerTimerScreen = () => {
     }
   );
 };
-
-const ButtonContainer = styled.div`
-  pointer-events: fill;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  height: 100vh;
-`;
