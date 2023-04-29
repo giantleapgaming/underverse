@@ -82,6 +82,7 @@ const MenuContainer = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   font-family: "MyOTFFont";
+  z-index: 200;
 `;
 
 const Border = styled.div`

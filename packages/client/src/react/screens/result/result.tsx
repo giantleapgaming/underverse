@@ -6,7 +6,7 @@ import { Layers } from "../../../types";
 import ResultContainer from "./ResultContainer";
 
 const Result = ({ layers }: { layers: Layers }) => {
-  return <ResultContainer />;
+  return <ResultContainer layers={layers} />;
 };
 
 export const registerResultScreen = () => {
