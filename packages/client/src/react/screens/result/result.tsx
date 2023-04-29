@@ -3,9 +3,10 @@ import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
 import { Layers } from "../../../types";
+import ResultContainer from "./ResultContainer";
 
 const Result = ({ layers }: { layers: Layers }) => {
-  return <div>Show Results screen</div>;
+  return <ResultContainer />;
 };
 
 export const registerResultScreen = () => {

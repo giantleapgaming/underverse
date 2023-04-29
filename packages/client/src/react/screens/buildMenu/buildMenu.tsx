@@ -7,24 +7,28 @@ import ButtonContainer from "./ButtonContainer";
 import { Layers } from "../../../types";
 import Information from "./Information";
 import PriceContainer from "./PriceContainer";
+import React from "react";
 
 const BuildMenu = ({ layers }: { layers: Layers }) => {
+  const [closeMenu, setCloseMenu] = React.useState(false);
   return (
     <Menu>
-      <MenuContainer>
-        <Border>
-          <Title>
-            <p style={{ color: "black" }}>DEFENCES</p>
-            <p style={{ color: "white" }}>$50,000</p>
-          </Title>
-          <Details>
-            <ButtonContainer layers={layers} />
-            <Information />
-            <PriceContainer />
-          </Details>
-        </Border>
-        <Button>X</Button>
-      </MenuContainer>
+      {!closeMenu && (
+        <MenuContainer>
+          <Border>
+            <Title>
+              <p style={{ color: "black" }}>DEFENCES</p>
+              <p style={{ color: "white" }}>$50,000</p>
+            </Title>
+            <Details>
+              <ButtonContainer layers={layers} />
+              <Information />
+              <PriceContainer />
+            </Details>
+          </Border>
+          <Button onClick={() => setCloseMenu(true)}>X</Button>
+        </MenuContainer>
+      )}
     </Menu>
   );
 };

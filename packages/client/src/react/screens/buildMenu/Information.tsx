@@ -14,7 +14,7 @@ const Information = () => {
           </P>
         </Text>
         <Image>
-          <h4>$100 PER BLOCK</h4>
+          <p>$100 PER BLOCK</p>
           <img src="/game-2/defence.png" style={{ width: "90px" }} />
         </Image>
       </Description>
@@ -60,5 +60,9 @@ const Image = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -2;
 `;
