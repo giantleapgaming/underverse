@@ -6,7 +6,7 @@ import { createNetworkLayer as createNetworkLayerImport } from "./network/create
 import { createPhaserLayer as createPhaserLayerImport } from "./phaser/createPhaserLayer";
 import { Layers } from "./types";
 import { Engine as EngineImport } from "./layers/react/engine/Engine";
-import { registerUIComponents as registerUIComponentsImport } from "./layers/react/components";
+import { registerUIComponents as registerUIComponentsImport } from "./react";
 import { Wallet } from "ethers";
 import WalletLogin from "./layers/react/components/WalletLogin";
 import { checkInvalidConfig } from "./helpers/checkConfig";
