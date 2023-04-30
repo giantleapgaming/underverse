@@ -21,7 +21,7 @@ const Button = ({
   return (
     <div>
       <ButtonImg onClick={onClick} style={buttonBG} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
-        <img src={buttonImg} />
+        <img src={buttonImg} width={40} height={40} style={{ objectFit: "contain" }} />
       </ButtonImg>
     </div>
   );
