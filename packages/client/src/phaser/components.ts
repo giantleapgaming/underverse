@@ -18,6 +18,23 @@ export const components = {
     },
     { id: "build" }
   ),
+  BuildWall: defineComponent(
+    nameSpaceWorld,
+    {
+      sourcePositionX: Type.OptionalNumber,
+      sourcePositionY: Type.OptionalNumber,
+      destinationPositionX: Type.OptionalNumber,
+      destinationPositionY: Type.OptionalNumber,
+      type: Type.OptionalString,
+      action: Type.OptionalNumber,
+      showBuildWall: Type.Boolean,
+      stopBuildWall: Type.Boolean,
+      showHover: Type.Boolean,
+      hoverX: Type.OptionalNumber,
+      hoverY: Type.OptionalNumber,
+    },
+    { id: "BuildWall" }
+  ),
 };
 
 export const getValue = {
@@ -25,6 +42,7 @@ export const getValue = {
   ShowModal: () => getComponentValue(components.ShowModal, entityIndexes.userEntity)?.modalName,
   ShowResults: () => getComponentValue(components.ShowResults, entityIndexes.userEntity)?.showResults,
   Build: () => getComponentValue(components.Build, entityIndexes.userEntity),
+  BuildWall: () => getComponentValue(components.BuildWall, entityIndexes.userEntity),
 };
 
 export const setValue = {
@@ -54,5 +72,43 @@ export const setValue = {
       canPlace: !!canPlace,
       entityType,
       isBuilding: !!isBuilding,
+    }),
+  BuildWall: ({
+    sourcePositionX,
+    sourcePositionY,
+    destinationPositionX,
+    destinationPositionY,
+    type,
+    action,
+    showBuildWall,
+    stopBuildWall,
+    showHover,
+    hoverX,
+    hoverY,
+  }: {
+    sourcePositionX?: number;
+    sourcePositionY?: number;
+    destinationPositionX?: number;
+    destinationPositionY?: number;
+    type?: string;
+    action?: number;
+    showBuildWall?: boolean;
+    stopBuildWall?: boolean;
+    showHover?: boolean;
+    hoverX?: number;
+    hoverY?: number;
+  }) =>
+    setComponent(components.BuildWall, entityIndexes.userEntity, {
+      sourcePositionX,
+      sourcePositionY,
+      destinationPositionX,
+      destinationPositionY,
+      type,
+      action,
+      showBuildWall: !!showBuildWall,
+      stopBuildWall: !!stopBuildWall,
+      showHover: !!showHover,
+      hoverX,
+      hoverY,
     }),
 };

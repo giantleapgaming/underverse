@@ -54,7 +54,7 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
     astroidObject.setComponent({
       id: `astroidc-${x}-${y}`,
       once: (gameObject) => {
-        gameObject.setTexture("MainAtlas", `asteroid-12.png`);
+        gameObject.setTexture("MainAtlas", `asteroid.png`);
         gameObject.setOrigin(0.5, 0.5);
         gameObject.setDepth(1);
         gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);

@@ -12,6 +12,7 @@ import { movePointer } from "./mouse/move-pointer";
 import { buildPointer } from "./mouse/build-pointer";
 import { rightClick } from "./mouse/right-click";
 import { leftClick } from "./mouse/left-click";
+import { buildWallSystem } from "./build/wall";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -72,6 +73,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayAsteroidSystem(network, context);
 
   buildLaserShipSystem(network, context);
+  buildWallSystem(network, context);
 
   movePointer(network, context);
   buildPointer(network, context);

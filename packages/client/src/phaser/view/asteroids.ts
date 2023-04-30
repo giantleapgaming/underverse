@@ -29,7 +29,7 @@ export function displayAsteroidSystem(network: NetworkLayer, phaser: PhaserLayer
       astroidObject.setComponent({
         id: `astroid-${entity}`,
         once: (gameObject) => {
-          gameObject.setTexture("MainAtlas", `asteroid-12.png`);
+          gameObject.setTexture("MainAtlas", `asteroid.png`);
           gameObject.setOrigin(0.5, 0.5);
           gameObject.setDepth(1);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);

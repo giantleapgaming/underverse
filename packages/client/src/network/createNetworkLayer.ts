@@ -48,7 +48,6 @@ export const createNetworkLayer = async () => {
   }: {
     x1: number;
     y1: number;
-    entityType: EntityID;
     x2: number;
     y2: number;
     nftId: number;

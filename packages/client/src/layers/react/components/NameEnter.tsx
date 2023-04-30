@@ -40,7 +40,8 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
                 async () => {
                   try {
                     setLoading(true);
-                    await initSystem(name, reactNftId);
+                    const tx = await initSystem(name, reactNftId);
+                    await tx.wait();
                   } catch (e: any) {
                     throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                   }

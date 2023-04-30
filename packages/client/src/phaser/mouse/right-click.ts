@@ -11,5 +11,6 @@ export function rightClick(network: NetworkLayer, phaser: PhaserLayer) {
 
   input.rightClick$.subscribe(() => {
     setValue.Build({});
+    setValue.BuildWall({});
   });
 }
