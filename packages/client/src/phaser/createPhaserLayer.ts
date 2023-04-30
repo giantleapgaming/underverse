@@ -7,6 +7,9 @@ import { createMapSystem } from "./systems/circle";
 import { shrinkingRadius } from "./systems/shrinkingRadius";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { displayAsteroidSystem } from "./view/asteroids";
+import { buildLaserShipSystem } from "./build/laserShip";
+import { clickMove } from "./mouse/click-move";
+import { buildPointer } from "./mouse/build-pointer";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -66,5 +69,9 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   displayAsteroidSystem(network, context);
 
+  buildLaserShipSystem(network, context);
+
+  clickMove(network, context);
+  buildPointer(network, context);
   return context;
 }

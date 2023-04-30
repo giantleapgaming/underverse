@@ -11,6 +11,10 @@ export const Mapping = {
   pirateShip: { id: 11 },
   unprospected: { id: 12 },
   passenger: { id: 13 },
+  laserShip: { id: 15 },
+  pdcShip: { id: 16 },
+  railGunShip: { id: 17 },
+  missileShip: { id: 18 },
 };
 export const numberMapping: { [key: number]: { id: number; name: string; frameName: string } } = {
   1: {

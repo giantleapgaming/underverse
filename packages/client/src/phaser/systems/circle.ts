@@ -15,15 +15,6 @@ export function createMapSystem(network: NetworkLayer, phaser: PhaserLayer) {
       },
     },
   } = phaser;
-  for (let i = 1; i < 11; i++) {
-    const circle = phaserScene.add.circle(tileWidth / 2, tileWidth / 2);
-    if (i < 3) {
-      circle.setStrokeStyle(0, 0x2d2d36);
-    } else if (i === 3) {
-      circle.setStrokeStyle(3, 0x2d2d36);
-    } else circle.setStrokeStyle(0, 0x2d2d36);
-    circle.setDisplaySize(tileHeight * 10 * i, tileHeight * 10 * i);
-  }
 
   // Define the number of points on the circle
   const N = 80;
