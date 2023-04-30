@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const UpgradesMenu = () => {
+const DefenceUpgradesMenu = () => {
   return (
     <Container>
       <Title>
@@ -18,7 +18,7 @@ const UpgradesMenu = () => {
   );
 };
 
-export default UpgradesMenu;
+export default DefenceUpgradesMenu;
 
 const Container = styled.div`
   position: relative;

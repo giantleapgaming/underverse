@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import UpgradesMenu from "./UpgradesMenu";
+import ShipsUpgradesMenu from "./ShipsUpgradesMenu";
 
-const Information = () => {
+const ShipsInformation = () => {
   return (
     <Container>
       <Description>
@@ -18,12 +18,12 @@ const Information = () => {
           <img src="/game-2/defence.png" style={{ width: "90px" }} />
         </Image>
       </Description>
-      <UpgradesMenu />
+      <ShipsUpgradesMenu />
     </Container>
   );
 };
 
-export default Information;
+export default ShipsInformation;
 
 const Container = styled.div`
   display: flex;

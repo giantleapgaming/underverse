@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const PriceContainer = () => {
+const DefencePriceContainer = () => {
   return (
     <Container>
       <Text>
@@ -37,7 +37,7 @@ const PriceContainer = () => {
   );
 };
 
-export default PriceContainer;
+export default DefencePriceContainer;
 
 const Container = styled.div`
   display: flex;
