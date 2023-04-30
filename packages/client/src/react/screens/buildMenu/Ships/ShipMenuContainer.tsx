@@ -5,6 +5,7 @@ import ShipsButtonContainer from "./ShipsButtonContainer";
 import ShipsInformation from "./ShipsInformation";
 import ShipsPriceContainer from "./ShipsPriceContainer";
 import { Mapping } from "../../../../helpers/mapping";
+import ShipArrayContext, { MyObject } from "./ShipDetailsContext";
 
 const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
   const {
@@ -15,22 +16,60 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
     setValue.Build({ canPlace: true, entityType: Mapping.laserShip.id, isBuilding: true, show: true, x: 0, y: 0 });
     setValue.ShowModal("");
   };
+
+  const shipDetails: MyObject[] = [
+    {
+      id: "15",
+      name: "laserShip",
+      title: "THE KESTREL",
+      description: "laserShip details here...",
+      imageURL: "/game-2/laserShip.png",
+      price: "",
+    },
+    {
+      id: "16",
+      name: "pdcShip",
+      title: "THE KESTREL",
+      description: "pdcShip details here...",
+      imageURL: "/game-2/pdcShip.png",
+      price: "",
+    },
+    {
+      id: "17",
+      name: "railGunShip",
+      title: "THE KESTREL",
+      description: "railGunShip details here...",
+      imageURL: "/game-2/railGunShip.png",
+      price: "",
+    },
+    {
+      id: "18",
+      name: "missileShip",
+      title: "THE KESTREL",
+      description: "missileShip details here...",
+      imageURL: "/game-2/missileShip.png",
+      price: "",
+    },
+  ];
+
   return (
     <div>
-      <ShipsMenu>
-        <Border>
-          <Title onClick={onPlace}>
-            <p style={{ color: "black" }}>SHIPS</p>
-            <p style={{ color: "white" }}>$50,000</p>
-          </Title>
-          <Details>
-            <ShipsButtonContainer layers={layers} />
-            <ShipsInformation />
-            <ShipsPriceContainer />
-          </Details>
-        </Border>
-        <Button onClick={() => setValue.ShowModal("")}>X</Button>
-      </ShipsMenu>
+      <ShipArrayContext.Provider value={shipDetails}>
+        <ShipsMenu>
+          <Border>
+            <Title onClick={onPlace}>
+              <p style={{ color: "black", marginLeft: "10px" }}>SHIPS</p>
+              <p style={{ color: "white" }}>$50,000</p>
+            </Title>
+            <Details>
+              <ShipsButtonContainer layers={layers} />
+              <ShipsInformation />
+              <ShipsPriceContainer />
+            </Details>
+          </Border>
+          <Button onClick={() => setValue.ShowModal("")}>X</Button>
+        </ShipsMenu>
+      </ShipArrayContext.Provider>
     </div>
   );
 };

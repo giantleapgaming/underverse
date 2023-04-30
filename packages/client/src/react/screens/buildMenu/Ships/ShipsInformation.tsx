@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import ShipArrayContext from "./ShipDetailsContext";
 import ShipsUpgradesMenu from "./ShipsUpgradesMenu";
 
 const ShipsInformation = () => {
+  const ShipDetails = useContext(ShipArrayContext);
+
   return (
     <Container>
       <Description>

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import Button from "../../build/Button";
 import { Layers } from "../../../../types";
+import DefenceArrayContext from "./DefenceDetailsContext";
 
 const DefenceButtonContainer = ({ layers }: { layers: Layers }) => {
   const {
@@ -17,41 +18,26 @@ const DefenceButtonContainer = ({ layers }: { layers: Layers }) => {
   const handleClick = (buttonId: string) => {
     setValue.ShowModal(buttonId);
   };
+
+  const defenceDetails = useContext(DefenceArrayContext);
+
   return (
     <Buttons>
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
+      {defenceDetails.map((defence, index) => {
+        return (
+          <Button
+            buttonImg={defence.imageURL}
+            onClick={() => handleClick(defence.name)}
+            isActive={getValue.ShowModal() === `${defence.name}`}
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
+          />
+        );
+      })}
     </Buttons>
   );
 };

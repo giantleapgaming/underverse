@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import Button from "../../build/Button";
 import { Layers } from "../../../../types";
+import ShipArrayContext from "./ShipDetailsContext";
 
 const ShipsButtonContainer = ({ layers }: { layers: Layers }) => {
   const {
@@ -17,46 +18,32 @@ const ShipsButtonContainer = ({ layers }: { layers: Layers }) => {
   const handleClick = (buttonId: string) => {
     setValue.ShowModal(buttonId);
   };
+  const shipDetails = useContext(ShipArrayContext);
   return (
     <Buttons>
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
-      <Button
-        buttonImg="/game-2/ship.png"
-        onClick={() => handleClick("ship")}
-        isActive={getValue.ShowModal() === ""}
-        onMouseEnter={() => {
-          input.disableInput();
-        }}
-        onMouseLeave={() => {
-          input.enableInput();
-        }}
-      />
+      <div>
+        {shipDetails.map((ship, index) => {
+          return (
+            <Button
+              buttonImg={ship.imageURL}
+              onClick={() => handleClick(ship.name)}
+              isActive={getValue.ShowModal() === `${ship.name}`}
+              onMouseEnter={() => {
+                input.disableInput();
+              }}
+              onMouseLeave={() => {
+                input.enableInput();
+              }}
+            />
+          );
+        })}
+      </div>
     </Buttons>
   );
 };
 
 export default ShipsButtonContainer;
+
 const Buttons = styled.div`
   display: flex;
   flex-direction: column;

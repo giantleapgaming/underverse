@@ -1,30 +1,61 @@
 import React from "react";
-import ButtonContainer from "../Ships/ShipsButtonContainer";
-import Information from "../Ships/ShipsInformation";
-import PriceContainer from "../Ships/ShipsPriceContainer";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import DefenceButtonContainer from "./DefenceButtonContainer";
+import DefenceInformation from "./DefenceInformation";
+import DefencePriceContainer from "./DefencePriceContainer";
+import DefenceArrayContext, { MyObject } from "./DefenceDetailsContext";
 
 const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
   const {
     phaser: { setValue },
   } = layers;
+
+  const defenceDetails: MyObject[] = [
+    {
+      id: "10",
+      name: "wall",
+      title: "THE wall",
+      description: "wall details here...",
+      imageURL: "/game-2/defence.png",
+      price: "",
+    },
+    {
+      id: "12",
+      name: "unprospected",
+      title: "THE unprospected",
+      description: "unprospected details here...",
+      imageURL: "/game-2/unprospected.png",
+      price: "",
+    },
+    {
+      id: "11",
+      name: "pirateShip",
+      title: "THE pirateShip",
+      description: "pirateShip details here...",
+      imageURL: "/game-2/pirateShip.png",
+      price: "",
+    },
+  ];
+
   return (
     <div>
-      <DefencesMenu>
-        <Border>
-          <Title>
-            <p style={{ color: "black" }}>DEFENCES</p>
-            <p style={{ color: "white" }}>$50,000</p>
-          </Title>
-          <Details>
-            <ButtonContainer layers={layers} />
-            <Information />
-            <PriceContainer />
-          </Details>
-        </Border>
-        <Button onClick={() => setValue.ShowModal("")}>X</Button>
-      </DefencesMenu>
+      <DefenceArrayContext.Provider value={defenceDetails}>
+        <DefencesMenu>
+          <Border>
+            <Title>
+              <p style={{ color: "black" }}>DEFENCES</p>
+              <p style={{ color: "white" }}>$50,000</p>
+            </Title>
+            <Details>
+              <DefenceButtonContainer layers={layers} />
+              <DefenceInformation />
+              <DefencePriceContainer />
+            </Details>
+          </Border>
+          <Button onClick={() => setValue.ShowModal("")}>X</Button>
+        </DefencesMenu>
+      </DefenceArrayContext.Provider>
     </div>
   );
 };
