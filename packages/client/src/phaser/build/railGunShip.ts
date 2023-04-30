@@ -5,7 +5,7 @@ import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 import { Mapping } from "../../helpers/mapping";
 import { generateColorsFromWalletAddress } from "../../helpers/hexToColour";
 
-export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer) {
+export function buildRailGunShipSystem(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     scenes: {
       Main: {
@@ -31,7 +31,6 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
-
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -39,18 +38,18 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
       canPlace &&
       isBuilding &&
       !(xCoord === 0 && yCoord === 0) &&
-      buildDetails.entityType === Mapping.laserShip.id
+      buildDetails.entityType === Mapping.railGunShip.id
     ) {
-      const textWhite = objectPool.get("build-attack-station-text-white", "Text");
+      const textWhite = objectPool.get("build-rail-gun-station-text-white", "Text");
       const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
-      const attackShipObjectTop1Layer = objectPool.get(`attack-top1-hover`, "Sprite");
-      const attackShipObjectTop2Layer = objectPool.get(`attack-top2-hover`, "Sprite");
+      const attackShipObjectTop1Layer = objectPool.get(`rail-gun-top1-hover`, "Sprite");
+      const attackShipObjectTop2Layer = objectPool.get(`rail-gun-top2-hover`, "Sprite");
 
       attackShipObjectTop1Layer.setComponent({
-        id: `attack-top1-hover`,
+        id: `rail-gun-top1-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-1-1.png`);
+          gameObject.setTexture("MainAtlas", `ship-4-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -58,10 +57,10 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       });
       attackShipObjectTop2Layer.setComponent({
-        id: `attack-top2-hover`,
+        id: `rail-gun-top2-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-1-2.png`);
+          gameObject.setTexture("MainAtlas", `ship-4-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -73,7 +72,7 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
       });
       const textPosition = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
       textWhite.setComponent({
-        id: "build-attack-station-text-white",
+        id: "build-rail-gun-station-text-white",
         once: (gameObject) => {
           gameObject.setPosition(textPosition.x + 90, textPosition.y - 60);
           gameObject.depth = 4;
@@ -84,9 +83,9 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
         },
       });
     } else {
-      objectPool.remove("attack-top1-hover");
-      objectPool.remove("attack-top2-hover");
-      objectPool.remove("build-attack-station-text-white");
+      objectPool.remove("rail-gun-top1-hover");
+      objectPool.remove("rail-gun-top2-hover");
+      objectPool.remove("build-rail-gun-station-text-white");
     }
   });
 }

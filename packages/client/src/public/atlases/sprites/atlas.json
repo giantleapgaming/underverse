@@ -1,398 +1,398 @@
 {
-	"textures": [
-		{
-			"image": "atlas.png",
-			"format": "RGBA8888",
-			"size": {
-				"w": 774,
-				"h": 1548
-			},
-			"scale": 1,
-			"frames": [
-				{
-					"filename": "asteroid.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 1,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "mine.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 1,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "passenger-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 517,
-						"y": 1,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "passenger-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 259,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "ship-1-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 259,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "ship-1-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 517,
-						"y": 259,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "ship-2-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "ship-2-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-3-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 517,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-3-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 775,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-4-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 1033,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-4-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1,
-						"y": 1291,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-5-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 775,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-5-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 517,
-						"y": 775,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-6-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 1033,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-6-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 259,
-						"y": 1291,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "wall.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 517,
-						"y": 1033,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "passenger-3.png",
-					"rotated": false,
-					"trimmed": true,
-					"sourceSize": {
-						"w": 60,
-						"h": 135
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 60,
-						"h": 134
-					},
-					"frame": {
-						"x": 517,
-						"y": 1291,
-						"w": 60,
-						"h": 134
-					}
-				}
-			]
-		}
-	],
-	"meta": {
-		"app": "https://www.codeandweb.com/texturepacker",
-		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:9400a31290df9094af5e2c9417828d15:6e2a60e3a565074453560b6332483068:cbce6b53f0f49e0bf15173c25c41f876$"
-	}
+  "textures": [
+    {
+      "image": "atlas.png",
+      "format": "RGBA8888",
+      "size": {
+        "w": 774,
+        "h": 1548
+      },
+      "scale": 1,
+      "frames": [
+        {
+          "filename": "asteroid.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 1,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "mine.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 1,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "passenger-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 517,
+            "y": 1,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "passenger-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 259,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-1-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 259,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-1-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 517,
+            "y": 259,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-2-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 517,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-2-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 517,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "Ship-3-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 517,
+            "y": 517,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "Ship-3-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 775,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-4-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 1033,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-4-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 1,
+            "y": 1291,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-5-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 775,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-5-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 517,
+            "y": 775,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-6-1.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 1033,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "ship-6-2.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 259,
+            "y": 1291,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "wall.png",
+          "rotated": false,
+          "trimmed": false,
+          "sourceSize": {
+            "w": 256,
+            "h": 256
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 256,
+            "h": 256
+          },
+          "frame": {
+            "x": 517,
+            "y": 1033,
+            "w": 256,
+            "h": 256
+          }
+        },
+        {
+          "filename": "passenger-3.png",
+          "rotated": false,
+          "trimmed": true,
+          "sourceSize": {
+            "w": 60,
+            "h": 135
+          },
+          "spriteSourceSize": {
+            "x": 0,
+            "y": 0,
+            "w": 60,
+            "h": 134
+          },
+          "frame": {
+            "x": 517,
+            "y": 1291,
+            "w": 60,
+            "h": 134
+          }
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "app": "https://www.codeandweb.com/texturepacker",
+    "version": "3.0",
+    "smartupdate": "$TexturePacker:SmartUpdate:9400a31290df9094af5e2c9417828d15:6e2a60e3a565074453560b6332483068:cbce6b53f0f49e0bf15173c25c41f876$"
+  }
 }

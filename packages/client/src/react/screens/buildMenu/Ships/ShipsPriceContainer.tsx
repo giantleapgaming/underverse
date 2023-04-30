@@ -1,7 +1,11 @@
 import React from "react";
 import styled from "styled-components";
+import { Layers } from "../../../../types";
 
-const ShipsPriceContainer = () => {
+const ShipsPriceContainer = ({ layers, selectedShip }: { layers: Layers; selectedShip: number }) => {
+  const {
+    phaser: { setValue },
+  } = layers;
   return (
     <Container>
       <Text>
@@ -22,14 +26,27 @@ const ShipsPriceContainer = () => {
             <p style={{ marginLeft: "30px", color: "#01ffef" }}>$50</p>
           </Parameter>
         </div>
-
         <Price>
           <p>$150</p>
         </Price>
       </Text>
 
       <img src="/game-2/priceContainer.png" />
-      <Button>
+      <Button
+        onClick={() => {
+          if (selectedShip) {
+            setValue.Build({
+              canPlace: true,
+              entityType: selectedShip,
+              isBuilding: true,
+              show: true,
+              x: 0,
+              y: 0,
+            });
+            setValue.ShowModal("");
+          }
+        }}
+      >
         <ButtonName>PLACE</ButtonName>
         <img src="/game-2/placeButton.png" />
       </Button>
@@ -76,6 +93,7 @@ const Price = styled.div`
 `;
 
 const Button = styled.div`
+  cursor: pointer;
   position: relative;
 `;
 

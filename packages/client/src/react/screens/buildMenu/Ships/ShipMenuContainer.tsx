@@ -24,7 +24,7 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
           <Details>
             <ShipsButtonContainer layers={layers} setSelectedShip={setSelectedShip} selectedShip={selectedShip} />
             <ShipsInformation selectedShip={selectedShip} />
-            <ShipsPriceContainer />
+            <ShipsPriceContainer layers={layers} selectedShip={selectedShip} />
           </Details>
         </Border>
         <Button onClick={() => setValue.ShowModal("")}>X</Button>
