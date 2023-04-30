@@ -14,7 +14,7 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
       <ShipsMenu>
         <Border>
           <Title>
-            <p style={{ color: "black" }}>Ships</p>
+            <p style={{ color: "black" }}>SHIPS</p>
             <p style={{ color: "white" }}>$50,000</p>
           </Title>
           <Details>
