@@ -9,11 +9,11 @@ export const components = {
   Build: defineComponent(
     nameSpaceWorld,
     {
-      x: Type.Number,
-      y: Type.Number,
+      x: Type.OptionalNumber,
+      y: Type.OptionalNumber,
       show: Type.Boolean,
       canPlace: Type.Boolean,
-      entityType: Type.Number,
+      entityType: Type.OptionalNumber,
       isBuilding: Type.Boolean,
     },
     { id: "build" }
@@ -40,11 +40,19 @@ export const setValue = {
     entityType,
     isBuilding,
   }: {
-    x: number;
-    y: number;
-    show: boolean;
-    canPlace: boolean;
-    entityType: number;
-    isBuilding: boolean;
-  }) => setComponent(components.Build, entityIndexes.userEntity, { x, y, show, canPlace, entityType, isBuilding }),
+    x?: number;
+    y?: number;
+    show?: boolean;
+    canPlace?: boolean;
+    entityType?: number;
+    isBuilding?: boolean;
+  }) =>
+    setComponent(components.Build, entityIndexes.userEntity, {
+      x,
+      y,
+      show: !!show,
+      canPlace: !!canPlace,
+      entityType,
+      isBuilding: !!isBuilding,
+    }),
 };

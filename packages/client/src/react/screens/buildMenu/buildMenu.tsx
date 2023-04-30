@@ -9,10 +9,14 @@ import ShipMenuContainer from "./Ships/ShipMenuContainer";
 import DefenceMenuContainer from "./Defence/DefenceMenuContainer";
 
 const BuildMenu = ({ layers }: { layers: Layers }) => {
+  const {
+    phaser: { getValue },
+  } = layers;
+  const showModal = getValue.ShowModal();
   return (
     <Menu>
-      <ShipMenuContainer layers={layers} />
-      <DefenceMenuContainer layers={layers} />
+      {showModal === "ship" && <ShipMenuContainer layers={layers} />}
+      {showModal === "defence" && <DefenceMenuContainer layers={layers} />}
     </Menu>
   );
 };

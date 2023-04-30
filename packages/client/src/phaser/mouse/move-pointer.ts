@@ -1,7 +1,7 @@
 import { NetworkLayer } from "../../network/types";
 import { PhaserLayer } from "../types";
 
-export function clickMove(network: NetworkLayer, phaser: PhaserLayer) {
+export function movePointer(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     scenes: {
       Main: { camera, input },
@@ -9,6 +9,7 @@ export function clickMove(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
 
   input.pointermove$.subscribe(({ pointer }) => {
+    // below function is to move the camera
     if (pointer.leftButtonDown()) {
       camera.setScroll(
         camera.phaserCamera.scrollX - (pointer.x - pointer.prevPosition.x) / camera.phaserCamera.zoom,

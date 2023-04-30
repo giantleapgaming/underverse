@@ -4,16 +4,22 @@ import { Layers } from "../../../../types";
 import ShipsButtonContainer from "./ShipsButtonContainer";
 import ShipsInformation from "./ShipsInformation";
 import ShipsPriceContainer from "./ShipsPriceContainer";
+import { Mapping } from "../../../../helpers/mapping";
 
 const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
   const {
     phaser: { setValue },
   } = layers;
+
+  const onPlace = () => {
+    setValue.Build({ canPlace: true, entityType: Mapping.laserShip.id, isBuilding: true, show: true, x: 0, y: 0 });
+    setValue.ShowModal("");
+  };
   return (
     <div>
       <ShipsMenu>
         <Border>
-          <Title>
+          <Title onClick={onPlace}>
             <p style={{ color: "black" }}>SHIPS</p>
             <p style={{ color: "white" }}>$50,000</p>
           </Title>

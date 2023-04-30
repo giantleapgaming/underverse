@@ -31,10 +31,7 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
     const yCoord = buildDetails?.y;
     const showOnHover = buildDetails?.show;
     const isBuilding = buildDetails?.isBuilding;
-    const distanceFromCenter = xCoord && yCoord ? Math.sqrt(xCoord ** 2 + yCoord ** 2) : 0;
-    if (!isBuilding) {
-      objectPool.remove("select-box-radius-attack");
-    }
+
     if (
       typeof xCoord === "number" &&
       typeof yCoord == "number" &&
@@ -42,8 +39,7 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
       canPlace &&
       isBuilding &&
       !(xCoord === 0 && yCoord === 0) &&
-      buildDetails.entityType === Mapping.laserShip.id &&
-      distanceFromCenter > 15
+      buildDetails.entityType === Mapping.laserShip.id
     ) {
       const textWhite = objectPool.get("build-attack-station-text-white", "Text");
       const { x, y } = tileCoordToPixelCoord({ x: xCoord, y: yCoord }, tileWidth, tileHeight);
