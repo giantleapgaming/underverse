@@ -16,6 +16,10 @@ import { buildWallSystem } from "./build/wall";
 import { buildMissileShipSystem } from "./build/missileShip";
 import { buildRailGunShipSystem } from "./build/railGunShip";
 import { buildPdcShipSystem } from "./build/pdcShip";
+import { displayLaserSystem } from "./view/laser";
+import { displayMissileSystem } from "./view/missile";
+import { displayRailGunSystem } from "./view/railGun";
+import { displayPdcSystem } from "./view/pdc";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -73,6 +77,10 @@ export async function createPhaserLayer(network: NetworkLayer) {
   createMapSystem(network, context);
   shrinkingRadius(network, context);
 
+  displayLaserSystem(network, context);
+  displayMissileSystem(network, context);
+  displayRailGunSystem(network, context);
+  displayPdcSystem(network, context);
   displayAsteroidSystem(network, context);
 
   buildLaserShipSystem(network, context);

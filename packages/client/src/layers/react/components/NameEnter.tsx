@@ -30,6 +30,9 @@ const NameEnter = ({ layers }: { layers: Layers }) => {
         <Form
           onSubmit={async (e) => {
             e.preventDefault();
+            if (!name) {
+              return;
+            }
             sounds["click"].play();
             if (alreadyLoggedIn && typeof reactNftId === "number") {
               setValue.SelectedNftID(reactNftId);

@@ -103,7 +103,7 @@ export const Nft = ({
                       clickSound();
                     }}
                   >
-                    <S.Img src={data.imageUrl} />
+                    <S.Img src={data.imageUrl} style={{ objectFit: "contain" }} />
                   </S.NftSelect>
                 ))}
               </>
