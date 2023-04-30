@@ -4,8 +4,9 @@ import { world } from "./world";
 import { SystemTypes } from "contracts/types/SystemTypes";
 import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
-import { EntityID } from "@latticexyz/recs";
+import { EntityID, EntityIndex, getComponentValue, getComponentEntities } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
+import { Mapping } from "../helpers/mapping";
 
 export const createNetworkLayer = async () => {
   const { gasLimit, gasPrice } = systemConfig;
@@ -55,6 +56,40 @@ export const createNetworkLayer = async () => {
     return systems["system.BuildWall"].executeTyped(x1, y1, x2, y2, nftId, { gasPrice, gasLimit });
   }
 
+  function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
+    const entitiesAtPosition = [...getComponentEntities(components.Position)].filter((position) => {
+      const positionX = getComponentValue(components.Position, position)?.x;
+      const positionY = getComponentValue(components.Position, position)?.y;
+      const entity = getComponentValue(components.EntityType, position)?.value;
+      if (positionX === x && positionY === y && entity) {
+        return entity;
+      }
+    });
+    return (
+      entitiesAtPosition?.find((b) => {
+        const entityType = getComponentValue(components.EntityType, b)?.value;
+        if (
+          entityType &&
+          (+entityType === Mapping.pdcShip.id ||
+            +entityType === Mapping.railGunShip.id ||
+            +entityType === Mapping.missileShip.id ||
+            +entityType === Mapping.laserShip.id)
+        ) {
+          const level = getComponentValue(components.Level, b)?.value;
+          return level && +level;
+        } else {
+          const item = getComponentValue(components.Position, b);
+          return item;
+        }
+      }) ?? entitiesAtPosition[0]
+    );
+  }
+
+  function getEntityIdAtPosition(x: number, y: number): EntityID | undefined {
+    const entityIndex = getEntityIndexAtPosition(x, y) as EntityIndex;
+    return entityIndex ? world.entities[entityIndex] : undefined;
+  }
+
   const context = {
     world,
     components: {
@@ -67,6 +102,7 @@ export const createNetworkLayer = async () => {
     network,
     systemCallStreams,
     actions,
+    helper: { getEntityIndexAtPosition, getEntityIdAtPosition },
     api: {
       initSystem,
       moveSystem,

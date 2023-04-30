@@ -3,6 +3,7 @@ import { nameSpaceWorld } from "./nameSpaceWorld";
 import { entityIndexes } from "./entityIndexes";
 
 export const components = {
+  SelectedEntity: defineComponent(nameSpaceWorld, { entityType: Type.OptionalEntity }, { id: "select" }),
   SelectedNftID: defineComponent(nameSpaceWorld, { value: Type.Number }, { id: "SelectedNftID" }),
   ShowModal: defineComponent(nameSpaceWorld, { modalName: Type.OptionalString }, { id: "ShowModal" }),
   ShowResults: defineComponent(nameSpaceWorld, { showResults: Type.Boolean }, { id: "ShowResults" }),
@@ -43,6 +44,7 @@ export const getValue = {
   ShowResults: () => getComponentValue(components.ShowResults, entityIndexes.userEntity)?.showResults,
   Build: () => getComponentValue(components.Build, entityIndexes.userEntity),
   BuildWall: () => getComponentValue(components.BuildWall, entityIndexes.userEntity),
+  SelectedEntity: () => getComponentValue(components.SelectedEntity, entityIndexes.userEntity)?.entityType,
 };
 
 export const setValue = {
@@ -111,4 +113,6 @@ export const setValue = {
       hoverX,
       hoverY,
     }),
+  SelectedEntity: (entityType?: number) =>
+    setComponent(components.SelectedEntity, entityIndexes.userEntity, { entityType }),
 };

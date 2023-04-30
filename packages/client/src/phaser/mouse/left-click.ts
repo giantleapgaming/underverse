@@ -1,11 +1,19 @@
 import { toast } from "sonner";
 import { NetworkLayer } from "../../network/types";
 import { PhaserLayer } from "../types";
+import { pixelCoordToTileCoord } from "@latticexyz/phaserx";
 
 export function leftClick(network: NetworkLayer, phaser: PhaserLayer) {
   const {
     scenes: {
-      Main: { input },
+      Main: {
+        input,
+        config: {
+          tilesets: {
+            Default: { tileHeight, tileWidth },
+          },
+        },
+      },
     },
     getValue,
     setValue,
@@ -13,10 +21,14 @@ export function leftClick(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
   const {
     api: { buildSystem },
+    helper: { getEntityIndexAtPosition },
   } = network;
-  input.click$.subscribe(async () => {
+  input.click$.subscribe(async (p) => {
+    const pointer = p as Phaser.Input.Pointer;
     const buildDetails = getValue.Build();
     const selectedNftID = getValue.SelectedNftID();
+    const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
+    const stationEntity = getEntityIndexAtPosition(x, y);
     if (
       buildDetails &&
       buildDetails.isBuilding &&
@@ -49,6 +61,8 @@ export function leftClick(network: NetworkLayer, phaser: PhaserLayer) {
           error: (e) => e.message,
         }
       );
+    } else if (stationEntity) {
+      setValue.SelectedEntity(stationEntity);
     }
   });
 }
