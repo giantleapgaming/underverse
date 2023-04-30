@@ -26,7 +26,10 @@ const ShipsButtonContainer = ({ layers }: { layers: Layers }) => {
           return (
             <Button
               buttonImg={ship.imageURL}
-              onClick={() => handleClick(ship.name)}
+              onClick={() => {
+                handleClick(ship.name);
+                console.log(ship.name);
+              }}
               isActive={getValue.ShowModal() === `${ship.name}`}
               onMouseEnter={() => {
                 input.disableInput();

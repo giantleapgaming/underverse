@@ -57,7 +57,7 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
       <ShipArrayContext.Provider value={shipDetails}>
         <ShipsMenu>
           <Border>
-            <Title onClick={onPlace}>
+            <Title>
               <p style={{ color: "black", marginLeft: "10px" }}>SHIPS</p>
               <p style={{ color: "white" }}>$50,000</p>
             </Title>

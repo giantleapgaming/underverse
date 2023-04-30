@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import Button from "../../build/Button";
 import { Layers } from "../../../../types";
 import DefenceArrayContext from "./DefenceDetailsContext";
+import MenuBotton from "../../build/MenuBotton";
 
 const DefenceButtonContainer = ({ layers }: { layers: Layers }) => {
   const {
@@ -24,19 +24,7 @@ const DefenceButtonContainer = ({ layers }: { layers: Layers }) => {
   return (
     <Buttons>
       {defenceDetails.map((defence, index) => {
-        return (
-          <Button
-            buttonImg={defence.imageURL}
-            onClick={() => handleClick(defence.name)}
-            isActive={getValue.ShowModal() === `${defence.name}`}
-            onMouseEnter={() => {
-              input.disableInput();
-            }}
-            onMouseLeave={() => {
-              input.enableInput();
-            }}
-          />
-        );
+        return <MenuBotton buttonImg={defence.imageURL} isActive={getValue.ShowModal() === `${defence.name}`} />;
       })}
     </Buttons>
   );
