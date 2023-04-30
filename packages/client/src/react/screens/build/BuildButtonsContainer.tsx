@@ -3,7 +3,7 @@ import Button from "./Button";
 import { Layers } from "../../../types";
 import styled from "styled-components";
 
-const BuildButtons = ({ layers }: { layers: Layers }) => {
+const BuildButtonsContainer = ({ layers }: { layers: Layers }) => {
   const {
     phaser: {
       setValue,
@@ -46,7 +46,7 @@ const BuildButtons = ({ layers }: { layers: Layers }) => {
   );
 };
 
-export default BuildButtons;
+export default BuildButtonsContainer;
 
 const Buttons = styled.div`
   display: flex;

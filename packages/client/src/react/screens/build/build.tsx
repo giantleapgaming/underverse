@@ -2,14 +2,14 @@ import { map, merge } from "rxjs";
 import { computedToStream } from "@latticexyz/utils";
 import { registerUIComponent } from "../../../layers/react/engine";
 import { checkLoggedIn } from "../../../helpers/checkLoggedIn";
-import BuildButtons from "./BuildButtons";
 import { Layers } from "../../../types";
 import styled from "styled-components";
+import BuildButtonsContainer from "./BuildButtonsContainer";
 
 const Build = ({ layers }: { layers: Layers }) => {
   return (
     <ButtonContainer>
-      <BuildButtons layers={layers} />
+      <BuildButtonsContainer layers={layers} />
     </ButtonContainer>
   );
 };

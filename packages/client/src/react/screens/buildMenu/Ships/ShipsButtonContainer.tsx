@@ -1,8 +1,8 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
-import Button from "../../build/Button";
 import { Layers } from "../../../../types";
 import ShipArrayContext from "./ShipDetailsContext";
+import MenuBotton from "../../build/MenuBotton";
 
 const ShipsButtonContainer = ({ layers }: { layers: Layers }) => {
   const {
@@ -23,22 +23,7 @@ const ShipsButtonContainer = ({ layers }: { layers: Layers }) => {
     <Buttons>
       <div>
         {shipDetails.map((ship, index) => {
-          return (
-            <Button
-              buttonImg={ship.imageURL}
-              onClick={() => {
-                handleClick(ship.name);
-                console.log(ship.name);
-              }}
-              isActive={getValue.ShowModal() === `${ship.name}`}
-              onMouseEnter={() => {
-                input.disableInput();
-              }}
-              onMouseLeave={() => {
-                input.enableInput();
-              }}
-            />
-          );
+          return <MenuBotton buttonImg={ship.imageURL} isActive={getValue.ShowModal() === `${ship.name}`} />;
         })}
       </div>
     </Buttons>
