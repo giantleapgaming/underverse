@@ -1,7 +1,18 @@
 import React from "react";
 import styled from "styled-components";
+import { Layers } from "../../../../types";
 
-const DefencePriceContainer = () => {
+const DefencePriceContainer = ({
+  layers,
+  selectedDefence,
+}: {
+  layers: Layers;
+  selectedDefence: number;
+  setSelectedDefence: (id: number) => void;
+}) => {
+  const {
+    phaser: { setValue },
+  } = layers;
   return (
     <Container>
       <Text>
@@ -29,7 +40,16 @@ const DefencePriceContainer = () => {
       </Text>
 
       <img src="/game-2/priceContainer.png" />
-      <Button>
+      <Button
+        onClick={() => {
+          if (selectedDefence) {
+            setValue.BuildWall({ type: "buildWall", showBuildWall: true, showHover: true });
+            setValue.ShowModal("");
+          } else {
+            // todo other logic here
+          }
+        }}
+      >
         <ButtonName>PLACE</ButtonName>
         <img src="/game-2/placeButton.png" />
       </Button>

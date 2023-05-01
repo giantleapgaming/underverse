@@ -1,26 +1,29 @@
 import React from "react";
 import styled from "styled-components";
 import DefenceUpgradesMenu from "./DefenceUpgradesMenu";
+import { defenceDetails } from "./DefenceButtonContainer";
 
-const DefenceInformation = () => {
-  return (
-    <Container>
-      <Description>
-        <Text>
-          <h2>WALL BLOCK</h2>
-          <P>
-            Sturdy, Versatile, Cheap. Everything you need in a wall. Place these down to create fortifications or to
-            funnel your enemies where you want them. Upgrade them so they last longer.
-          </P>
-        </Text>
-        <Image>
-          <p>$100 PER BLOCK</p>
-          <img src="/game-2/defence.png" style={{ width: "90px" }} />
-        </Image>
-      </Description>
-      <DefenceUpgradesMenu />
-    </Container>
-  );
+const DefenceInformation = ({ selectedDefence }: { selectedDefence: number }) => {
+  const details = defenceDetails.find((defence) => defence.id === selectedDefence);
+  if (details) {
+    return (
+      <Container>
+        <Description>
+          <Text>
+            <h2>{details.name}</h2>
+            <P>{details.description}</P>
+          </Text>
+          <Image>
+            <p>${details.price} PER BLOCK</p>
+            <img src={details.imageURL} style={{ width: "90px" }} />
+          </Image>
+        </Description>
+        <DefenceUpgradesMenu />
+      </Container>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default DefenceInformation;

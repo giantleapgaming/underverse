@@ -1,30 +1,45 @@
-import React, { useContext } from "react";
+import React from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
-import DefenceArrayContext from "./DefenceDetailsContext";
-import MenuBotton from "../../build/MenuBotton";
+import Button from "../../build/Button";
 
-const DefenceButtonContainer = ({ layers }: { layers: Layers }) => {
+const DefenceButtonContainer = ({
+  layers,
+  selectedDefence,
+  setSelectedDefence,
+}: {
+  layers: Layers;
+  selectedDefence: number;
+  setSelectedDefence: (id: number) => void;
+}) => {
   const {
     phaser: {
       setValue,
-      getValue,
       scenes: {
         Main: { input },
       },
     },
   } = layers;
 
-  const handleClick = (buttonId: string) => {
-    setValue.ShowModal(buttonId);
-  };
-
-  const defenceDetails = useContext(DefenceArrayContext);
-
   return (
     <Buttons>
-      {defenceDetails.map((defence, index) => {
-        return <MenuBotton buttonImg={defence.imageURL} isActive={getValue.ShowModal() === `${defence.name}`} />;
+      {defenceDetails.map((defence) => {
+        return (
+          <Button
+            buttonImg={defence.imageURL}
+            isActive={selectedDefence === defence.id}
+            key={defence.id}
+            onClick={() => {
+              setSelectedDefence(defence.id);
+            }}
+            onMouseEnter={() => {
+              input.disableInput();
+            }}
+            onMouseLeave={() => {
+              input.enableInput();
+            }}
+          />
+        );
       })}
     </Buttons>
   );
@@ -36,3 +51,14 @@ const Buttons = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
+export const defenceDetails = [
+  {
+    id: 10,
+    name: "wall",
+    title: "THE wall",
+    description: "wall details here...",
+    imageURL: "/game-2/defence.png",
+    price: "",
+  },
+];
