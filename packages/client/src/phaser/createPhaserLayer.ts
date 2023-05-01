@@ -3,7 +3,6 @@ import { createPhaserEngine } from "@latticexyz/phaserx";
 import { phaserConfig } from "./config";
 import { nameSpaceWorld } from "./nameSpaceWorld";
 import { components, getValue, setValue } from "./components";
-import { createMapSystem } from "./systems/circle";
 import { shrinkingRadius } from "./systems/shrinkingRadius";
 import { getComponentEntities, getComponentValueStrict } from "@latticexyz/recs";
 import { displayAsteroidSystem } from "./view/asteroids";
@@ -21,6 +20,9 @@ import { displayMissileSystem } from "./view/missile";
 import { displayRailGunSystem } from "./view/railGun";
 import { displayPdcSystem } from "./view/pdc";
 import { selectSystem } from "./view/select";
+import { drawLine } from "./mouse/right-click-move";
+import { initialRadius } from "./systems/initialRadius";
+import { buildArea } from "./systems/buildArea";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -60,8 +62,8 @@ export async function createPhaserLayer(network: NetworkLayer) {
 
   setInterval(() => {
     const showResult = getValue.ShowResults();
+    const currentTime = Math.floor(Date.now() / 1000);
     if (!showResult) {
-      const currentTime = Math.floor(Date.now() / 1000);
       const timerEntity = [...getComponentEntities(network.components.StartTime)][0];
       if (timerEntity) {
         const startTime = getComponentValueStrict(network.components.StartTime, timerEntity)?.value;
@@ -71,12 +73,15 @@ export async function createPhaserLayer(network: NetworkLayer) {
         }
       }
     }
+    setValue.Timer(currentTime);
   }, 1000);
 
   const context = { nameSpaceWorld, network, components, game, scenes, getValue, setValue, sounds };
 
-  createMapSystem(network, context);
+  buildArea(network, context);
   shrinkingRadius(network, context);
+  initialRadius(network, context);
+  drawLine(network, context);
 
   displayLaserSystem(network, context);
   displayMissileSystem(network, context);

@@ -1,4 +1,4 @@
-import { Type, defineComponent, getComponentValue, setComponent } from "@latticexyz/recs";
+import { EntityIndex, Type, defineComponent, getComponentValue, setComponent } from "@latticexyz/recs";
 import { nameSpaceWorld } from "./nameSpaceWorld";
 import { entityIndexes } from "./entityIndexes";
 
@@ -36,6 +36,41 @@ export const components = {
     },
     { id: "BuildWall" }
   ),
+  ShowLine: defineComponent(
+    nameSpaceWorld,
+    {
+      showLine: Type.Boolean,
+      x: Type.OptionalNumber,
+      y: Type.OptionalNumber,
+      type: Type.OptionalString,
+      action: Type.OptionalNumber,
+    },
+    { id: "ShowLine" }
+  ),
+  ObstacleHighlight: defineComponent(
+    nameSpaceWorld,
+    { selectedEntities: Type.NumberArray },
+    { id: "ObstacleHighlight" }
+  ),
+  ShowAnimation: defineComponent(
+    nameSpaceWorld,
+    {
+      showAnimation: Type.Boolean,
+      sourceX: Type.OptionalNumber,
+      sourceY: Type.OptionalNumber,
+      amount: Type.OptionalNumber,
+      destinationY: Type.OptionalNumber,
+      destinationX: Type.OptionalNumber,
+      faction: Type.OptionalNumber,
+      type: Type.OptionalString,
+      frame: Type.OptionalString,
+      systemStream: Type.Boolean,
+    },
+    { id: "ShowAnimation" }
+  ),
+  Timer: defineComponent(nameSpaceWorld, {
+    timer: Type.Number,
+  }),
 };
 
 export const getValue = {
@@ -45,6 +80,11 @@ export const getValue = {
   Build: () => getComponentValue(components.Build, entityIndexes.userEntity),
   BuildWall: () => getComponentValue(components.BuildWall, entityIndexes.userEntity),
   SelectedEntity: () => getComponentValue(components.SelectedEntity, entityIndexes.userEntity)?.entityType,
+  ShowLine: () => getComponentValue(components.ShowLine, entityIndexes.userEntity),
+  ObstacleHighlight: () =>
+    getComponentValue(components.ObstacleHighlight, entityIndexes.userEntity)?.selectedEntities || [],
+  ShowAnimation: () => getComponentValue(components.ShowAnimation, entityIndexes.userEntity),
+  Timer: () => getComponentValue(components.Timer, entityIndexes.userEntity)?.timer,
 };
 
 export const setValue = {
@@ -115,4 +155,64 @@ export const setValue = {
     }),
   SelectedEntity: (entityType?: number) =>
     setComponent(components.SelectedEntity, entityIndexes.userEntity, { entityType }),
+  ShowLine: ({
+    showLine,
+    x,
+    y,
+    type,
+    action,
+  }: {
+    showLine?: boolean;
+    x?: number;
+    y?: number;
+    type?: string;
+    action?: number;
+  }) =>
+    setComponent(components.ShowLine, entityIndexes.userEntity, {
+      showLine: !!showLine,
+      x,
+      y,
+      type,
+      action,
+    }),
+  ObstacleHighlight: (selectedEntities?: number[]) =>
+    setComponent(components.ObstacleHighlight, entityIndexes.userEntity, { selectedEntities: selectedEntities || [] }),
+  ShowAnimation: ({
+    amount,
+    destinationX,
+    destinationY,
+    showAnimation,
+    sourceX,
+    sourceY,
+    faction,
+    type,
+    frame,
+    entityID,
+    systemStream,
+  }: {
+    amount?: number;
+    destinationX?: number;
+    destinationY?: number;
+    showAnimation: boolean;
+    sourceX?: number;
+    sourceY?: number;
+    faction?: number;
+    type?: string;
+    frame?: string;
+    entityID: EntityIndex;
+    systemStream?: boolean;
+  }) =>
+    setComponent(components.ShowAnimation, entityID, {
+      amount,
+      destinationX,
+      destinationY,
+      showAnimation,
+      sourceX,
+      sourceY,
+      faction,
+      type,
+      frame,
+      systemStream: systemStream ? true : false,
+    }),
+  Timer: (timer: number) => setComponent(components.Timer, entityIndexes.userEntity, { timer }),
 };

@@ -14,6 +14,6 @@ export function registerUIComponents() {
   registerTostScreen();
   registerBuildScreen();
   registerBuildMenuScreen();
-  registerResultScreen();
+  // registerResultScreen();
   registerTimerScreen();
 }

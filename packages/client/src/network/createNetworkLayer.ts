@@ -7,6 +7,8 @@ import { createActionSystem, setupMUDNetwork } from "@latticexyz/std-client";
 import { EntityID, EntityIndex, getComponentValue, getComponentEntities } from "@latticexyz/recs";
 import { BigNumber } from "ethers";
 import { Mapping } from "../helpers/mapping";
+import { getNftData } from "../helpers/getNftData";
+import { checkNft } from "../helpers/checkNft";
 
 export const createNetworkLayer = async () => {
   const { gasLimit, gasPrice } = systemConfig;
@@ -90,6 +92,10 @@ export const createNetworkLayer = async () => {
     return entityIndex ? world.entities[entityIndex] : undefined;
   }
 
+  const walletNfts = await getNftData(network.connectedAddress.get());
+  const rookieNft = await checkNft("0xbAC949c145d7896085a90bD7B0F2333D0647D423", network.connectedAddress.get());
+  const cadetNft = await checkNft("0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3", network.connectedAddress.get());
+
   const context = {
     world,
     components: {
@@ -108,6 +114,11 @@ export const createNetworkLayer = async () => {
       moveSystem,
       buildSystem,
       wallSystem,
+    },
+    nft: {
+      walletNfts,
+      rookieNft,
+      cadetNft,
     },
   };
 
