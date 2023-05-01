@@ -16,6 +16,7 @@ import { getCurrentPosition, getPlayerCash, getDistanceBetweenCoordinatesWithMul
 import "../libraries/Math.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
 import { nftContract, startRadius, worldType, MULTIPLIER, defenceInitialAmount } from "../constants.sol";
+import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 
 uint256 constant ID = uint256(keccak256("system.Build"));
 
@@ -92,6 +93,7 @@ contract BuildSystem is System {
     DefenceComponent(getAddressById(components, DefenceComponentID)).set(godownEntity, defenceInitialAmount);
     LevelComponent(getAddressById(components, LevelComponentID)).set(godownEntity, 1);
     EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).set(godownEntity, entity_type);
+    OffenceComponent(getAddressById(components, OffenceComponentID)).set(godownEntity, 0);
 
     // update player data
     CashComponent(getAddressById(components, CashComponentID)).set(playerID, playerCash - godownCreationCost);
