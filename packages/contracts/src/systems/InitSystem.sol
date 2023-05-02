@@ -51,13 +51,13 @@ contract InitSystem is System {
       StartTimeComponent(getAddressById(components, StartTimeComponentID)).set(worldEntityId, block.timestamp);
 
       //We will also initialize some random asteroids around the map
-      for (uint256 i = 0; i < 3; i += 1) {
-        uint256 angle = i * 20;
-        int256 radius = 5 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 45);
-        int32 x = (int32(radius) * getCosValue(i)) / int32(1000);
-        int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * getSinValue(i)) / int32(1000);
-        createAsteroids(world, components, x, y);
-      }
+      // for (uint256 i = 0; i < 3; i += 1) {
+      //   uint256 angle = i * 20;
+      //   int256 radius = 5 + int256(uint256(keccak256(abi.encodePacked(block.timestamp, i))) % 45);
+      //   int32 x = (int32(radius) * getCosValue(i)) / int32(1000);
+      //   int32 y = (angle == 0 || angle == 180) ? int32(0) : (int32(-1) * int32(radius) * getSinValue(i)) / int32(1000);
+      //   createAsteroids(world, components, x, y);
+      // }
     }
     registeredPlayers[nftID] = true;
     playerCount += 1;
