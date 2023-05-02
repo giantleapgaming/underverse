@@ -77,6 +77,9 @@ export function displayLaserSystem(network: NetworkLayer, phaser: PhaserLayer) {
               gameObject.setOrigin(0.5, 0.5);
               gameObject.setScale(0.5);
               gameObject.setAngle(angle);
+              const color = generateColorsFromWalletAddress(`${ownedBy}`);
+              gameObject.setTint(color[0], color[1], color[2], color[3]);
+              gameObject.setScale(0.5);
             },
           });
           laserShipObjectTop2Layer.setComponent({
@@ -89,7 +92,7 @@ export function displayLaserSystem(network: NetworkLayer, phaser: PhaserLayer) {
               gameObject.setAngle(angle);
               gameObject.setScale(0.5);
               const color = generateColorsFromWalletAddress(`${ownedBy}`);
-              gameObject.setTint(color[0], color[1], color[2], color[3]);
+              // gameObject.setTint(color[0], color[1], color[2], color[3]);
               gameObject.setScale(0.5);
             },
           });
