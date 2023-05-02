@@ -50,7 +50,7 @@ export function buildMissileShipSystem(network: NetworkLayer, phaser: PhaserLaye
         id: `missile-top1-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-2-1.png`);
+          gameObject.setTexture("MainAtlas", `missileship-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -61,7 +61,7 @@ export function buildMissileShipSystem(network: NetworkLayer, phaser: PhaserLaye
         id: `missile-top2-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-2-2.png`);
+          gameObject.setTexture("MainAtlas", `missileship-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);

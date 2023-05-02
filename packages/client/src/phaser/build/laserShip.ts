@@ -50,7 +50,7 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
         id: `attack-top1-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-1-1.png`);
+          gameObject.setTexture("MainAtlas", `leadership-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -61,7 +61,7 @@ export function buildLaserShipSystem(network: NetworkLayer, phaser: PhaserLayer)
         id: `attack-top2-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-1-2.png`);
+          gameObject.setTexture("MainAtlas", `leadership-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);

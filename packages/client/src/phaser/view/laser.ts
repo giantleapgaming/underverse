@@ -71,7 +71,7 @@ export function displayLaserSystem(network: NetworkLayer, phaser: PhaserLayer) {
           laserShipObjectTop1Layer.setComponent({
             id: `laser-top1-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture("MainAtlas", `ship-1-1.png`);
+              gameObject.setTexture("MainAtlas", `leadership-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
@@ -82,7 +82,7 @@ export function displayLaserSystem(network: NetworkLayer, phaser: PhaserLayer) {
           laserShipObjectTop2Layer.setComponent({
             id: `laser-top2-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture("MainAtlas", `ship-1-2.png`);
+              gameObject.setTexture("MainAtlas", `leadership-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);

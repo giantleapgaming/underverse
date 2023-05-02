@@ -50,7 +50,7 @@ export function buildPdcShipSystem(network: NetworkLayer, phaser: PhaserLayer) {
         id: `pdc-top1-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-3-1.png`);
+          gameObject.setTexture("MainAtlas", `pdcship-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -61,7 +61,7 @@ export function buildPdcShipSystem(network: NetworkLayer, phaser: PhaserLayer) {
         id: `pdc-top2-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-3-2.png`);
+          gameObject.setTexture("MainAtlas", `pdcship-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);

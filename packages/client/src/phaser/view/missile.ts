@@ -71,7 +71,7 @@ export function displayMissileSystem(network: NetworkLayer, phaser: PhaserLayer)
           missileShipObjectTop1Layer.setComponent({
             id: `missile-top1-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture("MainAtlas", `ship-1-1.png`);
+              gameObject.setTexture("MainAtlas", `missileship-1.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(9);
               gameObject.setOrigin(0.5, 0.5);
@@ -82,7 +82,7 @@ export function displayMissileSystem(network: NetworkLayer, phaser: PhaserLayer)
           missileShipObjectTop2Layer.setComponent({
             id: `missile-top2-${entity}`,
             once: (gameObject) => {
-              gameObject.setTexture("MainAtlas", `ship-1-2.png`);
+              gameObject.setTexture("MainAtlas", `missileship-2.png`);
               gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
               gameObject.setDepth(5);
               gameObject.setOrigin(0.5, 0.5);

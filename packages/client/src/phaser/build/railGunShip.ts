@@ -49,7 +49,7 @@ export function buildRailGunShipSystem(network: NetworkLayer, phaser: PhaserLaye
         id: `rail-gun-top1-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-4-1.png`);
+          gameObject.setTexture("MainAtlas", `railgunship-1.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
@@ -60,7 +60,7 @@ export function buildRailGunShipSystem(network: NetworkLayer, phaser: PhaserLaye
         id: `rail-gun-top2-hover`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `ship-4-2.png`);
+          gameObject.setTexture("MainAtlas", `railgunship-2.png`);
           gameObject.setPosition(x + tileWidth / 2, y + tileWidth / 2);
           gameObject.setDepth(9);
           gameObject.setOrigin(0.5, 0.5);
