@@ -72,12 +72,12 @@ contract BuildWallSystem is System {
     //Check that the start point and end point are both within build zone
 
     require(
-      ((x1 ** 2 + y1 ** 2) <= startRadius ** 2) && ((x1 ** 2 + y1 ** 2) <= (startRadius / 2) ** 2),
+      ((x1 ** 2 + y1 ** 2) <= startRadius ** 2) && ((x1 ** 2 + y1 ** 2) >= (startRadius / 2) ** 2),
       "Start point of wall is outside allowed build zone"
     );
 
     require(
-      ((x2 ** 2 + y2 ** 2) <= startRadius ** 2) && ((x2 ** 2 + y2 ** 2) <= (startRadius / 2) ** 2),
+      ((x2 ** 2 + y2 ** 2) <= startRadius ** 2) && ((x2 ** 2 + y2 ** 2) >= (startRadius / 2) ** 2),
       "End point of wall is outside allowed build zone"
     );
 
