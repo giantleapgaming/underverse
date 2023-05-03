@@ -104,7 +104,7 @@ export function moveMissileShip(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(151);
           gameObject.setOrigin(0.5, 0);
-          gameObject.setScale(0.6);
+          gameObject.setScale(0.9);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
             targets: gameObject,
@@ -131,7 +131,7 @@ export function moveMissileShip(network: NetworkLayer, phaser: PhaserLayer) {
         id: `missile-gray-move-${entity}`,
         once: (gameObject) => {
           gameObject.setScale(0.5);
-          gameObject.setTexture("MainAtlas", `leadership-2.png`);
+          gameObject.setTexture("MainAtlas", `missileship-2.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileHeight / 2);
           gameObject.setDepth(151);
           gameObject.setOrigin(0.5, 0.5);
