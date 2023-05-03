@@ -9,11 +9,12 @@ import { BigNumber } from "ethers";
 import { Mapping } from "../helpers/mapping";
 import { getNftData } from "../helpers/getNftData";
 import { checkNft } from "../helpers/checkNft";
+import { setupDevSystems } from "./setupDevSystems";
 
 export const createNetworkLayer = async () => {
   const { gasLimit, gasPrice } = systemConfig;
 
-  const { txQueue, systems, txReduced$, network, startSync, systemCallStreams } = await setupMUDNetwork<
+  const { txQueue, systems, txReduced$, network, startSync, systemCallStreams, encoders } = await setupMUDNetwork<
     typeof components,
     SystemTypes
   >(productionConfig, world, components, SystemAbis, { fetchSystemCalls: true });
@@ -127,6 +128,7 @@ export const createNetworkLayer = async () => {
       rookieNft,
       cadetNft,
     },
+    dev: setupDevSystems(world, encoders, systems),
   };
 
   return context;

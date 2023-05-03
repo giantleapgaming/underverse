@@ -7,6 +7,7 @@ import { registerBuildMenuScreen } from "./screens/buildMenu/buildMenu";
 import { registerResultScreen } from "./screens/result/result";
 import { registerTimerScreen } from "./screens/timer/timer";
 import { registerDetails } from "./screens/details/details";
+import { registerComponentBrowser } from "./screens/dev/ComponentBrowser";
 
 export function registerUIComponents() {
   registerLoadingState();
@@ -18,4 +19,5 @@ export function registerUIComponents() {
   registerResultScreen();
   registerDetails();
   registerTimerScreen();
+  registerComponentBrowser();
 }
