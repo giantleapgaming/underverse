@@ -22,6 +22,12 @@
   ],
   "systems": [
     {
+      "name": "ComponentDevSystem",
+      "writeAccess": [
+        "*"
+      ]
+    },
+    {
       "name": "InitSystem",
       "writeAccess": [
         "LastUpdatedTimeComponent",
