@@ -8,7 +8,6 @@ export function shrinkingRadius(network: NetworkLayer, phaser: PhaserLayer) {
     scenes: {
       Main: {
         phaserScene,
-        objectPool,
         maps: {
           Main: { tileWidth, tileHeight },
         },
@@ -28,7 +27,7 @@ export function shrinkingRadius(network: NetworkLayer, phaser: PhaserLayer) {
     if (startTime) {
       const presentTime = Math.floor(Date.now() / 1000);
       const timeElapsed = presentTime - startTime;
-      if (timeElapsed > 0) {
+      if (timeElapsed > 600) {
         const radius = Math.sqrt(3100 - timeElapsed);
         const { x } = tileCoordToPixelCoord({ x: radius, y: radius }, tileWidth, tileHeight);
         shrinkingLayer.setRadius(x);

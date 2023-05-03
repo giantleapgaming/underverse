@@ -80,6 +80,22 @@ export const components = {
     },
     { id: "Logs" }
   ),
+  MultiSelect: defineComponent(
+    nameSpaceWorld,
+    {
+      entityIds: Type.NumberArray,
+    },
+    { id: "MultiSelect" }
+  ),
+  MoveStation: defineComponent(
+    nameSpaceWorld,
+    {
+      selected: Type.Boolean,
+      x: Type.OptionalNumber,
+      y: Type.OptionalNumber,
+    },
+    { id: "moveStation" }
+  ),
 };
 
 export const getValue = {
@@ -95,6 +111,8 @@ export const getValue = {
   ShowAnimation: () => getComponentValue(components.ShowAnimation, entityIndexes.userEntity),
   Timer: () => getComponentValue(components.Timer, entityIndexes.userEntity)?.timer,
   Logs: () => getComponentValue(components.Logs, entityIndexes.userEntity)?.logStrings,
+  MultiSelect: () => getComponentValue(components.MultiSelect, entityIndexes.userEntity)?.entityIds || [],
+  MoveStation: () => getComponentValue(components.MoveStation, entityIndexes.userEntity),
 };
 
 export const setValue = {
@@ -245,4 +263,8 @@ export const setValue = {
       }
     }
   },
+  MultiSelect: (entityIds: number[]) =>
+    setComponent(components.MultiSelect, entityIndexes.userEntity, { entityIds: entityIds || [] }),
+  MoveStation: (x?: number, y?: number, selected?: boolean) =>
+    setComponent(components.MoveStation, entityIndexes.userEntity, { x, y, selected: selected ? true : false }),
 };
