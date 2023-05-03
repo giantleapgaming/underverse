@@ -4,6 +4,7 @@ import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
 const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
   const [data, setData] = useState("");
+  const [message, setMessage] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       const params = new URLSearchParams(window.location.search);
@@ -23,6 +24,7 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
         const data = await response.json();
         if (data) {
           data.worldAddress ? setData(walletAddressLoginDisplay(data.worldAddress)) : setData(data.message);
+          data.message && setMessage(true);
           return data;
         } else {
           return [];
@@ -65,11 +67,20 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
             }}
           >
             <p style={{ color: "white", position: "absolute", left: "45px", bottom: "70px" }}>New World Address</p>
-            <img src="/img/copy.png" style={{ marginBottom: "12px" }} />
-            <WorldImage src="/ui/WorldAddBox.png" style={{ marginTop: "100px" }} />
-            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px", fontSize: "14px" }}>
-              {data}
-            </p>
+            {!message ? (
+              <>
+                <img src="/img/copy.png" style={{ marginBottom: "12px" }} />
+                <WorldImage src="/ui/WorldAddBox.png" style={{ marginTop: "100px" }} />
+                <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px", fontSize: "14px" }}>
+                  {data}
+                </p>
+              </>
+            ) : (
+              <>
+                <div style={{ marginTop: "100px" }} />
+                <p style={{ color: "white", width: "300px" }}>{data}</p>
+              </>
+            )}
           </div>
 
           <WorldImage src="/img/WorldSelect.png" />
