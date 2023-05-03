@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { walletAddressLoginDisplay, worldAddressDisplay } from "../utils/walletAddress";
+import { walletAddressLoginDisplay } from "../utils/walletAddress";
 
 const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
   const [data, setData] = useState("");
@@ -9,7 +9,6 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
       const params = new URLSearchParams(window.location.search);
       const chainIdString = params.get("chainId");
       try {
-        console.log("inside the post req", address);
         const response = await fetch("https://api.giantleap.gg/api/new-deployment", {
           method: "POST",
           body: JSON.stringify({
@@ -22,14 +21,14 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
           },
         });
         const data = await response.json();
-        console.log(data);
         if (data) {
-          data.worldAddress ? setData(data.worldAddress) : setData("Please try after 24 hours");
+          data.worldAddress ? setData(walletAddressLoginDisplay(data.worldAddress)) : setData(data.message);
           return data;
         } else {
           return [];
         }
       } catch (e) {
+        console.log(e);
         return [];
       }
     };
