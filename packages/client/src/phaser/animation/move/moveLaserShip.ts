@@ -105,7 +105,7 @@ export function moveLaserShip(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setTexture("MainAtlas", `flame.png`);
           gameObject.setPosition(sourcePixelX + tileWidth / 2, sourcePixelY + tileWidth / 2);
           gameObject.setDepth(151);
-          gameObject.setOrigin(0.5, 0);
+          gameObject.setOrigin(0.5, -0.2);
           gameObject.setScale(0.9);
           gameObject.setAngle(angle);
           phaserScene.add.tween({
