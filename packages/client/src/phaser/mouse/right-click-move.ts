@@ -178,12 +178,13 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                             entityID: selectedEntity,
                           });
                           setValue.ShowLine({ showLine: false });
-                          await moveSystem({
+                          const tx = await moveSystem({
                             entityType: world.entities[selectedEntity],
                             x,
                             y,
                             NftId: nftDetails.tokenId,
                           });
+                          await tx.wait();
                         } catch (e: any) {
                           throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                         }
