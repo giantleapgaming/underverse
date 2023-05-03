@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { walletAddressLoginDisplay } from "../utils/walletAddress";
+import { walletAddressLoginDisplay, worldAddressDisplay } from "../utils/walletAddress";
 
 const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
   const [data, setData] = useState("");
@@ -9,11 +9,12 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
       const params = new URLSearchParams(window.location.search);
       const chainIdString = params.get("chainId");
       try {
-        const response = await fetch("https://api.giantleap.gg/api/l1-nfts", {
+        console.log("inside the post req", address);
+        const response = await fetch("https://api.giantleap.gg/api/new-deployment", {
           method: "POST",
           body: JSON.stringify({
-            address: address,
-            nftContract: "0x382FdcB10d799E028a6337E12B0C9DE49F70504B",
+            userAddress: address,
+            type: "main",
             chainId: chainIdString,
           }),
           headers: {
@@ -21,10 +22,12 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
           },
         });
         const data = await response.json();
-        if (data.status) {
-          console.log(data);
-          setData(data.address);
-          return data.nftData.userWalletNftData;
+        console.log(worldAddressDisplay(data.address));
+        console.log(data);
+        if (data) {
+          setData(data.worldAddress);
+          data.worldAddress ? setData(data.worldAddress) : setData("Please try after 24 hours");
+          return data;
         } else {
           return [];
         }
@@ -40,7 +43,7 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
       <p
         style={{
           textAlign: "center",
-          fontSize: "26px",
+          fontSize: "12px",
           fontFamily: "sans-serif",
           letterSpacing: "1",
           fontWeight: "600",
@@ -64,11 +67,11 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
               position: "relative",
             }}
           >
-            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "70px" }}>World Address</p>
+            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "70px" }}>New World Address</p>
             <img src="/img/copy.png" style={{ marginBottom: "12px" }} />
             <WorldImage src="/ui/WorldAddBox.png" style={{ marginTop: "100px" }} />
-            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px", fontSize: "20pxs" }}>
-              {walletAddressLoginDisplay(data)}
+            <p style={{ color: "white", position: "absolute", left: "45px", bottom: "25px", fontSize: "14px" }}>
+              {data}
             </p>
           </div>
 
