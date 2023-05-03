@@ -10,13 +10,25 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
   const [selectedShip, setSelectedShip] = useState<number>(Mapping.pdcShip.id);
 
   const {
-    phaser: { setValue },
+    phaser: {
+      setValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
 
   return (
     <div>
       <ShipsMenu>
-        <Border>
+        <Border
+          onMouseEnter={() => {
+            input.disableInput();
+          }}
+          onMouseLeave={() => {
+            input.enableInput();
+          }}
+        >
           <Title>
             <p style={{ color: "black", marginLeft: "10px" }}>SHIPS</p>
             <p style={{ color: "white" }}>$50,000</p>
@@ -27,7 +39,20 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
             <ShipsPriceContainer layers={layers} selectedShip={selectedShip} />
           </Details>
         </Border>
-        <Button onClick={() => setValue.ShowModal("")}>X</Button>
+        <Button
+          onMouseEnter={() => {
+            input.disableInput();
+          }}
+          onMouseLeave={() => {
+            input.enableInput();
+          }}
+          onClick={() => {
+            setValue.ShowModal("");
+            input.enableInput();
+          }}
+        >
+          X
+        </Button>
       </ShipsMenu>
     </div>
   );

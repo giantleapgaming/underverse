@@ -7,15 +7,13 @@ export const getNftData = async (
     imageUrl: string;
   }[]
 > => {
-  const params = new URLSearchParams(window.location.search);
-  const chainIdString = params.get("chainId");
   try {
     const response = await fetch("https://api.giantleap.gg/api/user-nfts", {
       method: "POST",
       body: JSON.stringify({
         address: walletAddress,
-        nftContract: nftContract || "0xfA4F088838A53Cdcc6A9E233Ff60B86c1AFFb07d",
-        chainId: chainIdString,
+        nftContract: nftContract || "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3",
+        chainId: 344215,
       }),
       headers: {
         "Content-Type": "application/json",

@@ -7,8 +7,6 @@ export const useNFTData = (walletAddress?: string): { allNfts?: Image[]; loading
   const [allNfts, setAllNfts] = useState<Image[] | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const params = new URLSearchParams(window.location.search);
-  const chainIdString = params.get("chainId");
 
   useEffect(() => {
     if (walletAddress) {
@@ -24,7 +22,7 @@ export const useNFTData = (walletAddress?: string): { allNfts?: Image[]; loading
         body: JSON.stringify({
           address: walletAddress,
           nftContract: "0x113113aE1Bb7204453406c2228934737e5bBCc26",
-          chainId: chainIdString,
+          chainId: 344215,
         }),
         headers: {
           "Content-Type": "application/json",

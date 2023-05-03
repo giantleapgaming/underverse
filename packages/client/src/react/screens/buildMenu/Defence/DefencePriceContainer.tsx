@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Layers } from "../../../../types";
+import { Mapping } from "../../../../helpers/mapping";
 
 const DefencePriceContainer = ({
   layers,
@@ -11,7 +12,12 @@ const DefencePriceContainer = ({
   setSelectedDefence: (id: number) => void;
 }) => {
   const {
-    phaser: { setValue },
+    phaser: {
+      setValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
   return (
     <Container>
@@ -41,12 +47,21 @@ const DefencePriceContainer = ({
 
       <img src="/game-2/priceContainer.png" />
       <Button
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
         onClick={() => {
           if (selectedDefence) {
-            setValue.BuildWall({ type: "buildWall", showBuildWall: true, showHover: true });
-            setValue.ShowModal("");
-          } else {
-            // todo other logic here
+            if (selectedDefence === Mapping.wall.id) {
+              setValue.BuildWall({ type: "buildWall", showBuildWall: true, showHover: true });
+              setValue.ShowModal("");
+              input.enableInput();
+            } else {
+              // todo other logic here
+            }
           }
         }}
       >
@@ -97,6 +112,7 @@ const Price = styled.div`
 
 const Button = styled.div`
   position: relative;
+  cursor: pointer;
 `;
 
 const ButtonName = styled.div`

@@ -4,7 +4,12 @@ import { Layers } from "../../../../types";
 
 const ShipsPriceContainer = ({ layers, selectedShip }: { layers: Layers; selectedShip: number }) => {
   const {
-    phaser: { setValue },
+    phaser: {
+      setValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
   return (
     <Container>
@@ -33,6 +38,12 @@ const ShipsPriceContainer = ({ layers, selectedShip }: { layers: Layers; selecte
 
       <img src="/game-2/priceContainer.png" />
       <Button
+        onMouseEnter={() => {
+          input.disableInput();
+        }}
+        onMouseLeave={() => {
+          input.enableInput();
+        }}
         onClick={() => {
           if (selectedShip) {
             setValue.Build({
@@ -43,6 +54,7 @@ const ShipsPriceContainer = ({ layers, selectedShip }: { layers: Layers; selecte
               x: 0,
               y: 0,
             });
+            input.enableInput();
             setValue.ShowModal("");
           }
         }}

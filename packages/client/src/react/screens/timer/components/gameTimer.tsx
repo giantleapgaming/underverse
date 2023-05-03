@@ -52,7 +52,7 @@ export const GameTimer = ({ layers }: { layers: Layers }) => {
         textAlign: "center",
       }}
       animate={{ width: "10vw", height: "10vh", top: 0, left: 0, textAlign: "left" }}
-      transition={{ duration: 5 }}
+      transition={{ duration: 2 }}
       style={{ position: "absolute" }}
     >
       <motion.div initial={{ fontSize: 70 }} animate={{ fontSize: 16 }} transition={{ duration: 5 }}>

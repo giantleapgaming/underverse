@@ -58,6 +58,12 @@ export const createNetworkLayer = async () => {
     return systems["system.BuildWall"].executeTyped(x1, y1, x2, y2, nftId, { gasPrice, gasLimit });
   }
 
+  async function buyWeaponSystem(godownEntity: EntityID, kgs: number, nftId: number) {
+    return systems["system.BuyWeapon"].executeTyped(BigNumber.from(godownEntity), kgs, nftId, {
+      gasPrice: 1500000,
+      gasLimit: 5000000,
+    });
+  }
   function getEntityIndexAtPosition(x: number, y: number): EntityIndex | undefined {
     const entitiesAtPosition = [...getComponentEntities(components.Position)].filter((position) => {
       const positionX = getComponentValue(components.Position, position)?.x;
@@ -114,6 +120,7 @@ export const createNetworkLayer = async () => {
       moveSystem,
       buildSystem,
       wallSystem,
+      buyWeaponSystem,
     },
     nft: {
       walletNfts,

@@ -18,7 +18,7 @@ export const useNFTData = (id: number, walletAddress: string): { nftURL: string 
         body: JSON.stringify({
           address: walletAddress,
           nftContract: "0xE47118d4cD1F3f9FEEd93813e202364BEA8629b3",
-          chainId: chainIdString,
+          chainId: 344215,
           nftTokenId: id,
         }),
         headers: {

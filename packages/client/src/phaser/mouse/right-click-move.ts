@@ -74,7 +74,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
           gameObject.setColor("#ffffff");
         },
       });
-      setValue.ShowLine({ showLine: true, x, y, type: lineDetails.type });
+      setValue.ShowLine({ showLine: true, x, y, type: lineDetails.type, action: 1 });
       return;
     }
   });
@@ -120,6 +120,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const stationEntity = getEntityIndexAtPosition(x, y);
       const lineDetails = getValue.ShowLine();
       const selectedEntity = getValue.SelectedEntity();
+      console.log(lineDetails, stationEntity);
       if (lineDetails && lineDetails.showLine && selectedEntity && !stationEntity) {
         if (
           lineDetails &&
@@ -135,10 +136,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             if (!obstacleHighlight.length) {
               if (
                 entityType &&
-                (+entityType === Mapping.harvester.id ||
-                  +entityType === Mapping.attack.id ||
-                  +entityType === Mapping.refuel.id ||
-                  +entityType === Mapping.passenger.id)
+                (+entityType === Mapping.railGunShip.id ||
+                  +entityType === Mapping.pdcShip.id ||
+                  +entityType === Mapping.missileShip.id ||
+                  +entityType === Mapping.laserShip.id)
               ) {
                 const nftDetails = getNftId({ network, phaser });
                 if (nftDetails) {
@@ -155,10 +156,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                             sourceX: sourcePosition.x,
                             sourceY: sourcePosition.y,
                             type:
-                              (+entityType === Mapping.harvester.id && "moveHarvester") ||
-                              (+entityType === Mapping.attack.id && "moveAttackShip") ||
-                              (+entityType === Mapping.refuel.id && "moveRefueller") ||
-                              (+entityType === Mapping.passenger.id && "movePassenger") ||
+                              (+entityType === Mapping.railGunShip.id && "moveRailGunShip") ||
+                              (+entityType === Mapping.pdcShip.id && "movePDCShip") ||
+                              (+entityType === Mapping.laserShip.id && "moveLaserShip") ||
+                              (+entityType === Mapping.missileShip.id && "moveMissileShip") ||
                               "move",
                             entityID: selectedEntity,
                           });

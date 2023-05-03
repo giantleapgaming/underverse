@@ -6,8 +6,6 @@ export const useIdNFTData = (tokenId: number): { nftData?: Image; loading: boole
   const [nftData, setAllNfts] = useState<Image | undefined>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const params = new URLSearchParams(window.location.search);
-  const chainIdString = params.get("chainId");
 
   useEffect(() => {
     if (typeof tokenId === "number") {

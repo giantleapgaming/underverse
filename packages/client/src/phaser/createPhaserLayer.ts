@@ -23,6 +23,12 @@ import { selectSystem } from "./view/select";
 import { drawLine } from "./mouse/right-click-move";
 import { initialRadius } from "./systems/initialRadius";
 import { buildArea } from "./systems/buildArea";
+import { moveLaserShip } from "./animation/move/moveLaserShip";
+import { moveRailGunShip } from "./animation/move/moveRailGunShip";
+import { moveMissileShip } from "./animation/move/moveMissileShip";
+import { movePDCShip } from "./animation/move/movePDCShip";
+import { systemMoveShip } from "./system-stream/system.MoveShip";
+import { systemAttack } from "./system-stream/system.Attack";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -101,5 +107,12 @@ export async function createPhaserLayer(network: NetworkLayer) {
   rightClick(network, context);
   leftClick(network, context);
 
+  moveLaserShip(network, context);
+  moveRailGunShip(network, context);
+  moveMissileShip(network, context);
+  movePDCShip(network, context);
+
+  systemMoveShip(network, context);
+  systemAttack(network, context);
   return context;
 }

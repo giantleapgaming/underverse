@@ -10,11 +10,23 @@ import DefenceMenuContainer from "./Defence/DefenceMenuContainer";
 
 const BuildMenu = ({ layers }: { layers: Layers }) => {
   const {
-    phaser: { getValue },
+    phaser: {
+      getValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
   const showModal = getValue.ShowModal();
   return (
-    <Menu>
+    <Menu
+      onMouseEnter={() => {
+        input.disableInput();
+      }}
+      onMouseLeave={() => {
+        input.enableInput();
+      }}
+    >
       {showModal === "ship" && <ShipMenuContainer layers={layers} />}
       {showModal === "defence" && <DefenceMenuContainer layers={layers} />}
     </Menu>

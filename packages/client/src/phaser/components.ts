@@ -1,6 +1,8 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { EntityIndex, Type, defineComponent, getComponentValue, setComponent } from "@latticexyz/recs";
 import { nameSpaceWorld } from "./nameSpaceWorld";
 import { entityIndexes } from "./entityIndexes";
+import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
 
 export const components = {
   SelectedEntity: defineComponent(nameSpaceWorld, { entityType: Type.OptionalEntity }, { id: "select" }),
@@ -71,6 +73,13 @@ export const components = {
   Timer: defineComponent(nameSpaceWorld, {
     timer: Type.Number,
   }),
+  Logs: defineComponent(
+    nameSpaceWorld,
+    {
+      logStrings: Type.StringArray,
+    },
+    { id: "Logs" }
+  ),
 };
 
 export const getValue = {
@@ -85,6 +94,7 @@ export const getValue = {
     getComponentValue(components.ObstacleHighlight, entityIndexes.userEntity)?.selectedEntities || [],
   ShowAnimation: () => getComponentValue(components.ShowAnimation, entityIndexes.userEntity),
   Timer: () => getComponentValue(components.Timer, entityIndexes.userEntity)?.timer,
+  Logs: () => getComponentValue(components.Logs, entityIndexes.userEntity)?.logStrings,
 };
 
 export const setValue = {
@@ -215,4 +225,24 @@ export const setValue = {
       systemStream: systemStream ? true : false,
     }),
   Timer: (timer: number) => setComponent(components.Timer, entityIndexes.userEntity, { timer }),
+  Logs: (string: string, setScroll: (sourcePixelX: number, sourcePixelY: number) => void, x?: number, y?: number) => {
+    const existingLogs = getComponentValue(components.Logs, entityIndexes.userEntity)?.logStrings ?? [];
+    if (existingLogs.length >= 0) {
+      setComponent(components.Logs, entityIndexes.userEntity, { logStrings: [string, ...existingLogs] });
+      const setAction = () => {
+        if (typeof x === "number" && typeof y === "number") {
+          const { x: sourcePixelX, y: sourcePixelY } = tileCoordToPixelCoord({ x, y }, 256, 256);
+          setScroll(sourcePixelX, sourcePixelY);
+        }
+      };
+      // @ts-ignore
+      if (Array.isArray(window.LogActions)) {
+        // @ts-ignore
+        window.LogActions.unshift(setAction);
+      } else {
+        // @ts-ignore
+        window.LogActions = [setAction];
+      }
+    }
+  },
 };

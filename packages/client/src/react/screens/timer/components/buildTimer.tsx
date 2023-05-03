@@ -17,7 +17,7 @@ export const BuildTimer = ({ layers }: { layers: Layers }) => {
   useEffect(() => {
     setTimeout(() => {
       setReduceSize(true);
-    }, 2000);
+    }, 1000);
   }, []);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export const BuildTimer = ({ layers }: { layers: Layers }) => {
         textAlign: "center",
       }}
       animate={{ width: "10vw", height: "10vh", top: 0, left: 0, textAlign: "left" }}
-      transition={{ duration: 5 }}
+      transition={{ duration: 2 }}
       style={{ position: "absolute" }}
     >
       <motion.div initial={{ fontSize: 70 }} animate={{ fontSize: 16 }} transition={{ duration: 5 }}>

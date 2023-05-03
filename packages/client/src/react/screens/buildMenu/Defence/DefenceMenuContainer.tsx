@@ -9,13 +9,24 @@ import { Mapping } from "../../../../helpers/mapping";
 const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
   const [selectedDefence, setSelectedDefence] = useState(Mapping.wall.id);
   const {
-    phaser: { setValue },
+    phaser: {
+      setValue,
+      scenes: {
+        Main: { input },
+      },
+    },
   } = layers;
-
   return (
     <div>
       <DefencesMenu>
-        <Border>
+        <Border
+          onMouseEnter={() => {
+            input.disableInput();
+          }}
+          onMouseLeave={() => {
+            input.enableInput();
+          }}
+        >
           <Title>
             <p style={{ color: "black" }}>DEFENCES</p>
             <p style={{ color: "white" }}>$50,000</p>
@@ -34,7 +45,20 @@ const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
             />
           </Details>
         </Border>
-        <Button onClick={() => setValue.ShowModal("")}>X</Button>
+        <Button
+          onMouseEnter={() => {
+            input.disableInput();
+          }}
+          onMouseLeave={() => {
+            input.enableInput();
+          }}
+          onClick={() => {
+            setValue.ShowModal("");
+            input.enableInput();
+          }}
+        >
+          X
+        </Button>
       </DefencesMenu>
     </div>
   );
