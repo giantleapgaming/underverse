@@ -22,10 +22,8 @@ const CreateWorld = ({ pk, address }: { pk: string; address: string }) => {
           },
         });
         const data = await response.json();
-        console.log(worldAddressDisplay(data.address));
         console.log(data);
         if (data) {
-          setData(data.worldAddress);
           data.worldAddress ? setData(data.worldAddress) : setData("Please try after 24 hours");
           return data;
         } else {
