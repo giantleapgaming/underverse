@@ -70,7 +70,7 @@ contract MoveShipSystem is System {
     //You can not access ships that are outside the new boundary radius
     //Nor can you move to locations which are outside boundary
 
-    require(elapsedTime > 3100, "Game time is over");
+    require(elapsedTime <= 3100, "Game time is over");
 
     uint256 currentOuterRadiusSq = 2500 + 600 - elapsedTime;
 
