@@ -40,10 +40,10 @@ contract BuyWeaponSystem is System {
 
     require(getElapsedTime(components) < 600, "Build phase is over");
 
-    require(
-      EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(godownEntity) == 4,
-      "Source has to be an Attack ship"
-    );
+    // require(
+    //   EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(godownEntity) == 4,
+    //   "Source has to be an Attack ship"
+    // );
 
     uint256 entity_type = EntityTypeComponent(getAddressById(components, EntityTypeComponentID)).getValue(godownEntity);
 
