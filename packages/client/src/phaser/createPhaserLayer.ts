@@ -29,6 +29,7 @@ import { moveMissileShip } from "./animation/move/moveMissileShip";
 import { movePDCShip } from "./animation/move/movePDCShip";
 import { systemMoveShip } from "./system-stream/system.MoveShip";
 import { systemAttack } from "./system-stream/system.Attack";
+import { displayWallSystem } from "./view/wall";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -94,6 +95,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayRailGunSystem(network, context);
   displayPdcSystem(network, context);
   displayAsteroidSystem(network, context);
+  displayWallSystem(network, context);
 
   buildLaserShipSystem(network, context);
   buildMissileShipSystem(network, context);

@@ -19,5 +19,5 @@ export function registerUIComponents() {
   registerResultScreen();
   registerDetails();
   registerTimerScreen();
-  registerComponentBrowser();
+  // registerComponentBrowser();
 }

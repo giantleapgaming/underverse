@@ -27,18 +27,21 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
   } = phaser;
   const {
     world,
-    components: { Position, EntityType, Level },
+    components: { Position, EntityType },
     helper: { getEntityIndexAtPosition },
     api: { moveSystem },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(8, 0xffffff, 1);
 
+  const radius = phaserScene.add.circle(0, 0);
+
   const key = input.keyboard$.subscribe((p) => {
     const keyboard = p as Phaser.Input.Keyboard.Key;
     if (keyboard.isDown && keyboard.keyCode === 27) {
       setValue.ShowLine({ showLine: false });
       objectPool.remove("fuel-text-white");
+      radius.setAlpha(0);
       for (let index = 0; index < 100; index++) {
         objectPool.remove(`fuel-text-white-multi-select-${index}`);
       }
@@ -61,14 +64,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const arrayOfPointsOnThePath = segmentPoints(sourcePosition.x, sourcePosition.y, x, y);
       const obstacleEntityIndexList = getObstacleListWhileMove(arrayOfPointsOnThePath, { network, phaser });
       setValue.ObstacleHighlight(obstacleEntityIndexList);
-      const fuelCost = Math.round(Math.pow(distance(sourcePosition.x, sourcePosition.y, x, y), 2));
-
       textWhite.setComponent({
         id: "white-build-text",
         once: (gameObject) => {
           gameObject.setPosition(pointer.worldX + 10, pointer.worldY - 30);
           gameObject.depth = 4;
-          gameObject.setText(`H Cost - ${fuelCost}`);
+          gameObject.setText(`Distance - ${Math.floor(distance(sourcePosition.x, sourcePosition.y, x, y))}`);
           gameObject.setFontSize(100);
           gameObject.setFontStyle("bold");
           gameObject.setColor("#ffffff");
@@ -88,7 +89,9 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const selectedEntity = getValue.SelectedEntity();
         if (selectedEntity) {
           const entityType = getComponentValue(EntityType, selectedEntity)?.value;
+          const position = getComponentValue(Position, selectedEntity);
           if (
+            position &&
             entityType &&
             (+entityType === Mapping.railGunShip.id ||
               +entityType === Mapping.pdcShip.id ||
@@ -98,6 +101,16 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
             const pointer = e.pointer as Phaser.Input.Pointer;
             const { x, y } = pixelCoordToTileCoord({ x: pointer.worldX, y: pointer.worldY }, tileWidth, tileHeight);
             setValue.ShowLine({ showLine: true, x, y, type: "move", action: 1 });
+
+            const { x: xPosition, y: yPosition } = tileCoordToPixelCoord(
+              { x: position.x, y: position.x },
+              tileWidth,
+              tileHeight
+            );
+            radius.setAlpha(1);
+            radius.setPosition(xPosition, yPosition);
+            radius.setRadius(entityType * 2 * tileWidth);
+            radius.setStrokeStyle(40, 0xffffff);
           }
         }
       } else {
@@ -109,6 +122,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         objectPool.remove(`fuel-text-white`);
         objectPool.remove(`prospect-text-white`);
         objectPool.remove(`attack-region`);
+        radius.setAlpha(0);
       }
     }
   });
@@ -120,7 +134,6 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const stationEntity = getEntityIndexAtPosition(x, y);
       const lineDetails = getValue.ShowLine();
       const selectedEntity = getValue.SelectedEntity();
-      console.log(lineDetails, stationEntity);
       if (lineDetails && lineDetails.showLine && selectedEntity && !stationEntity) {
         if (
           lineDetails &&
@@ -149,6 +162,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                         try {
                           objectPool.remove(`fuel-text-white`);
                           objectPool.remove(`prospect-text-white`);
+                          radius.setAlpha(0);
                           setValue.ShowAnimation({
                             showAnimation: true,
                             destinationX: x,
@@ -185,12 +199,14 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                     objectPool.remove(`fuel-text-white`);
                     objectPool.remove(`prospect-text-white`);
                     toast.error("Cannot move beyond 50 orbits");
+                    radius.setAlpha(0);
                     return;
                   }
                 }
               }
             } else {
               toast.error("Obstacle on the way");
+              radius.setAlpha(0);
               return;
             }
           }

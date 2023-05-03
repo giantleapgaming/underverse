@@ -5,6 +5,9 @@ import ShipsButtonContainer from "./ShipsButtonContainer";
 import ShipsInformation from "./ShipsInformation";
 import ShipsPriceContainer from "./ShipsPriceContainer";
 import { Mapping } from "../../../../helpers/mapping";
+import { getComponentEntities, getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
+import { getNftId } from "../../../../helpers/getNftId";
+import { convertPrice } from "../../../../helpers/priceConverter";
 
 const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
   const [selectedShip, setSelectedShip] = useState<number>(Mapping.pdcShip.id);
@@ -16,8 +19,19 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
         Main: { input },
       },
     },
+    network: {
+      components: { NFTID, Cash },
+    },
   } = layers;
-
+  const nftDetails = getNftId(layers);
+  if (!nftDetails) {
+    return null;
+  }
+  const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+    return nftIdValue && +nftIdValue === nftDetails.tokenId;
+  });
+  const cash = getComponentValue(Cash, ownedByIndex)?.value;
   return (
     <div>
       <ShipsMenu>
@@ -31,7 +45,7 @@ const ShipMenuContainer = ({ layers }: { layers: Layers }) => {
         >
           <Title>
             <p style={{ color: "black", marginLeft: "10px" }}>SHIPS</p>
-            <p style={{ color: "white" }}>$50,000</p>
+            <p style={{ color: "white" }}>{cash && convertPrice(+cash / 100_000)}</p>
           </Title>
           <Details>
             <ShipsButtonContainer layers={layers} setSelectedShip={setSelectedShip} selectedShip={selectedShip} />

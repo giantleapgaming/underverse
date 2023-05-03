@@ -32,7 +32,7 @@ export function buildArea(network: NetworkLayer, phaser: PhaserLayer) {
         const presentTime = Math.floor(Date.now() / 1000);
         const timeElapsed = presentTime - startTime;
         if (timeElapsed < 600) {
-          const { x, y } = tileCoordToPixelCoord({ x: 25, y: 50 }, tileWidth, tileHeight);
+          const { x, y } = tileCoordToPixelCoord({ x: 25.5, y: 50.5 }, tileWidth, tileHeight);
 
           if (joinedNumber === 1) {
             vertical.lineStyle(100, 0xffffff, 1);

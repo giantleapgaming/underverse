@@ -5,6 +5,10 @@ import DefenceButtonContainer from "./DefenceButtonContainer";
 import DefenceInformation from "./DefenceInformation";
 import DefencePriceContainer from "./DefencePriceContainer";
 import { Mapping } from "../../../../helpers/mapping";
+import { convertPrice } from "../../../../helpers/priceConverter";
+import { getComponentEntities } from "@latticexyz/recs";
+import { getNftId } from "../../../../helpers/getNftId";
+import { getComponentValue, getComponentValueStrict } from "@latticexyz/recs";
 
 const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
   const [selectedDefence, setSelectedDefence] = useState(Mapping.wall.id);
@@ -15,7 +19,20 @@ const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
         Main: { input },
       },
     },
+    network: {
+      components: { NFTID, Cash },
+    },
   } = layers;
+  const nftDetails = getNftId(layers);
+  if (!nftDetails) {
+    return null;
+  }
+  const ownedByIndex = [...getComponentEntities(NFTID)].find((nftId) => {
+    const nftIdValue = getComponentValueStrict(NFTID, nftId)?.value;
+    return nftIdValue && +nftIdValue === nftDetails.tokenId;
+  });
+  const cash = getComponentValue(Cash, ownedByIndex)?.value;
+
   return (
     <div>
       <DefencesMenu>
@@ -29,7 +46,7 @@ const DefenceMenuContainer = ({ layers }: { layers: Layers }) => {
         >
           <Title>
             <p style={{ color: "black" }}>DEFENCES</p>
-            <p style={{ color: "white" }}>$50,000</p>
+            <p style={{ color: "white" }}>{cash && convertPrice(+cash / 100_000)}</p>
           </Title>
           <Details>
             <DefenceButtonContainer

@@ -45,7 +45,7 @@ export const registerBuildMenuScreen = () => {
     (layers) => {
       const {
         network: {
-          components: { NFTID },
+          components: { NFTID, Cash },
           network: { connectedAddress },
         },
         phaser: {
@@ -53,7 +53,13 @@ export const registerBuildMenuScreen = () => {
           getValue,
         },
       } = layers;
-      return merge(computedToStream(connectedAddress), NFTID.update$, SelectedNftID.update$, ShowModal.update$).pipe(
+      return merge(
+        computedToStream(connectedAddress),
+        NFTID.update$,
+        SelectedNftID.update$,
+        ShowModal.update$,
+        Cash.update$
+      ).pipe(
         map(() => {
           const showMenu = getValue.ShowModal();
           const doesNftExist = checkLoggedIn(layers);
