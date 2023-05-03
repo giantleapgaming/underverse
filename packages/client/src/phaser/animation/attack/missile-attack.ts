@@ -1,5 +1,5 @@
 import { tileCoordToPixelCoord } from "@latticexyz/phaserx";
-import { defineSystem, Has } from "@latticexyz/recs";
+import { defineSystem, getComponentValue, Has } from "@latticexyz/recs";
 import { NetworkLayer } from "../../../network/types";
 import { PhaserLayer } from "../../types";
 import { Animations } from "../../constants";
@@ -17,13 +17,13 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
         },
       },
     },
-    getValue,
   } = phaser;
 
   const { world } = network;
 
   defineSystem(world, [Has(ShowAnimation)], ({ entity }) => {
-    const animation = getValue.ShowAnimation();
+    const animation = getComponentValue(ShowAnimation, entity);
+    console.log(animation);
     const sourceX = animation && animation?.sourceX;
     const sourceY = animation && animation?.sourceY;
     const destinationX = animation && animation?.destinationX;

@@ -94,6 +94,24 @@ export const createNetworkLayer = async () => {
     );
   }
 
+  const attackSystem = async (
+    srcGodownEntity: EntityID,
+    destinationGodownEntity: EntityID,
+    kgsToTransfer: number,
+    nftId: number
+  ) => {
+    return systems["system.AttackLocation"].executeTyped(
+      BigNumber.from(srcGodownEntity),
+      BigNumber.from(destinationGodownEntity),
+      kgsToTransfer,
+      nftId,
+      {
+        gasPrice: 1500000,
+        gasLimit: 5000000,
+      }
+    );
+  };
+
   function getEntityIdAtPosition(x: number, y: number): EntityID | undefined {
     const entityIndex = getEntityIndexAtPosition(x, y) as EntityIndex;
     return entityIndex ? world.entities[entityIndex] : undefined;
@@ -122,6 +140,7 @@ export const createNetworkLayer = async () => {
       buildSystem,
       wallSystem,
       buyWeaponSystem,
+      attackSystem,
     },
     nft: {
       walletNfts,

@@ -166,8 +166,6 @@ contract AttackLocationSystem is System {
   function executeTyped(
     uint256 sourceEntity,
     uint256 destinationEntity,
-    int32 x,
-    int32 y,
     uint256 amount,
     uint256 nftID
   ) public returns (bytes memory) {

@@ -29,7 +29,7 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
     world,
     components: { Position, EntityType },
     helper: { getEntityIndexAtPosition },
-    api: { moveSystem },
+    api: { moveSystem, attackSystem },
   } = network;
   const graphics = phaserScene.add.graphics();
   graphics.lineStyle(8, 0xffffff, 1);
@@ -134,11 +134,10 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       const stationEntity = getEntityIndexAtPosition(x, y);
       const lineDetails = getValue.ShowLine();
       const selectedEntity = getValue.SelectedEntity();
-      if (lineDetails && lineDetails.showLine && selectedEntity && !stationEntity) {
+      if (lineDetails && lineDetails.showLine && selectedEntity) {
         if (
           lineDetails &&
           lineDetails.showLine &&
-          !stationEntity &&
           lineDetails.type === "move" &&
           selectedEntity &&
           lineDetails.action
@@ -157,44 +156,91 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                 const nftDetails = getNftId({ network, phaser });
                 if (nftDetails) {
                   if (Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)) < 51) {
-                    toast.promise(
-                      async () => {
-                        try {
-                          objectPool.remove(`fuel-text-white`);
-                          objectPool.remove(`prospect-text-white`);
-                          radius.setAlpha(0);
-                          setValue.ShowAnimation({
-                            showAnimation: true,
-                            destinationX: x,
-                            destinationY: y,
-                            sourceX: sourcePosition.x,
-                            sourceY: sourcePosition.y,
-                            type:
-                              (+entityType === Mapping.railGunShip.id && "moveRailGunShip") ||
-                              (+entityType === Mapping.pdcShip.id && "movePDCShip") ||
-                              (+entityType === Mapping.laserShip.id && "moveLaserShip") ||
-                              (+entityType === Mapping.missileShip.id && "moveMissileShip") ||
-                              "move",
-                            entityID: selectedEntity,
-                          });
-                          setValue.ShowLine({ showLine: false });
-                          const tx = await moveSystem({
-                            entityType: world.entities[selectedEntity],
-                            x,
-                            y,
-                            NftId: nftDetails.tokenId,
-                          });
-                          await tx.wait();
-                        } catch (e: any) {
-                          throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                    if (stationEntity) {
+                      toast.promise(
+                        async () => {
+                          try {
+                            objectPool.remove(`fuel-text-white`);
+                            objectPool.remove(`prospect-text-white`);
+                            radius.setAlpha(0);
+                            setValue.ShowAnimation({
+                              showAnimation: true,
+                              destinationX: x,
+                              destinationY: y,
+                              sourceX: sourcePosition.x,
+                              sourceY: sourcePosition.y,
+                              type: "attackMissile",
+                              amount: 10,
+                              entityID: selectedEntity,
+                            });
+                            console.log({
+                              showAnimation: true,
+                              destinationX: x,
+                              destinationY: y,
+                              sourceX: sourcePosition.x,
+                              sourceY: sourcePosition.y,
+                              type: "attackMissile",
+                              amount: 10,
+                              entityID: selectedEntity,
+                            });
+                            setValue.ShowLine({ showLine: false });
+                            const tx = await attackSystem(
+                              world.entities[selectedEntity],
+                              world.entities[stationEntity],
+                              10,
+                              nftDetails.tokenId
+                            );
+                            await tx.wait();
+                          } catch (e: any) {
+                            throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                          }
+                        },
+                        {
+                          loading: "Transaction in progress",
+                          success: `Transaction successful`,
+                          error: (e) => e.message,
                         }
-                      },
-                      {
-                        loading: "Transaction in progress",
-                        success: `Transaction successful`,
-                        error: (e) => e.message,
-                      }
-                    );
+                      );
+                    } else {
+                      toast.promise(
+                        async () => {
+                          try {
+                            objectPool.remove(`fuel-text-white`);
+                            objectPool.remove(`prospect-text-white`);
+                            radius.setAlpha(0);
+                            setValue.ShowAnimation({
+                              showAnimation: true,
+                              destinationX: x,
+                              destinationY: y,
+                              sourceX: sourcePosition.x,
+                              sourceY: sourcePosition.y,
+                              type:
+                                (+entityType === Mapping.railGunShip.id && "moveRailGunShip") ||
+                                (+entityType === Mapping.pdcShip.id && "movePDCShip") ||
+                                (+entityType === Mapping.laserShip.id && "moveLaserShip") ||
+                                (+entityType === Mapping.missileShip.id && "moveMissileShip") ||
+                                "move",
+                              entityID: selectedEntity,
+                            });
+                            setValue.ShowLine({ showLine: false });
+                            const tx = await moveSystem({
+                              entityType: world.entities[selectedEntity],
+                              x,
+                              y,
+                              NftId: nftDetails.tokenId,
+                            });
+                            await tx.wait();
+                          } catch (e: any) {
+                            throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
+                          }
+                        },
+                        {
+                          loading: "Transaction in progress",
+                          success: `Transaction successful`,
+                          error: (e) => e.message,
+                        }
+                      );
+                    }
                   } else {
                     setValue.ShowLine({ showLine: false });
                     objectPool.remove(`fuel-text-white`);
