@@ -265,6 +265,6 @@ export const setValue = {
   },
   MultiSelect: (entityIds: number[]) =>
     setComponent(components.MultiSelect, entityIndexes.userEntity, { entityIds: entityIds || [] }),
-  MoveStation: (x?: number, y?: number, selected?: boolean) =>
+  MoveStation: (selected?: boolean, x?: number, y?: number) =>
     setComponent(components.MoveStation, entityIndexes.userEntity, { x, y, selected: selected ? true : false }),
 };

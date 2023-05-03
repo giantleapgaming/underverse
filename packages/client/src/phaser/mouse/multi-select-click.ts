@@ -70,7 +70,6 @@ export function multiSelectClickSystem(network: NetworkLayer, phaser: PhaserLaye
             +defence
           ) {
             const index = existingEntities.indexOf(stationEntity);
-            console.log(existingEntities, stationEntity);
             if (index > -1) {
               existingEntities.splice(index, 1);
               setValue.MultiSelect([...existingEntities]);

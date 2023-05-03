@@ -32,6 +32,7 @@ import { systemAttack } from "./system-stream/system.Attack";
 import { displayWallSystem } from "./view/wall";
 import { multiSelectClickSystem } from "./mouse/multi-select-click";
 import { multiSelectSystem } from "./view/multi-select";
+import { multiMoveDrawLine } from "./mouse/multi-move-draw-line";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -99,6 +100,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   displayAsteroidSystem(network, context);
   displayWallSystem(network, context);
   multiSelectSystem(network, context);
+  multiMoveDrawLine(network, context);
 
   buildLaserShipSystem(network, context);
   buildMissileShipSystem(network, context);
