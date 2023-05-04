@@ -4,8 +4,8 @@
 			"image": "atlas.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 1802,
-				"h": 1540
+				"w": 1990,
+				"h": 1992
 			},
 			"scale": 1,
 			"frames": [
@@ -45,10 +45,199 @@
 						"h": 768
 					},
 					"frame": {
-						"x": 1,
-						"y": 771,
+						"x": 771,
+						"y": 1,
 						"w": 768,
 						"h": 768
+					}
+				},
+				{
+					"filename": "explosion-7.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 62,
+						"y": 104,
+						"w": 448,
+						"h": 403
+					},
+					"frame": {
+						"x": 1541,
+						"y": 1,
+						"w": 448,
+						"h": 403
+					}
+				},
+				{
+					"filename": "explosion-6.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 74,
+						"y": 104,
+						"w": 414,
+						"h": 403
+					},
+					"frame": {
+						"x": 1541,
+						"y": 406,
+						"w": 414,
+						"h": 403
+					}
+				},
+				{
+					"filename": "explosion-9.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 12,
+						"y": 60,
+						"w": 529,
+						"h": 486
+					},
+					"frame": {
+						"x": 1,
+						"y": 771,
+						"w": 529,
+						"h": 486
+					}
+				},
+				{
+					"filename": "explosion-10.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 43,
+						"w": 548,
+						"h": 439
+					},
+					"frame": {
+						"x": 532,
+						"y": 771,
+						"w": 548,
+						"h": 439
+					}
+				},
+				{
+					"filename": "explosion-5.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 93,
+						"y": 118,
+						"w": 387,
+						"h": 370
+					},
+					"frame": {
+						"x": 1082,
+						"y": 771,
+						"w": 387,
+						"h": 370
+					}
+				},
+				{
+					"filename": "flame.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 60,
+						"h": 135
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 60,
+						"h": 134
+					},
+					"frame": {
+						"x": 1471,
+						"y": 771,
+						"w": 60,
+						"h": 134
+					}
+				},
+				{
+					"filename": "explosion-8.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 43,
+						"y": 79,
+						"w": 484,
+						"h": 465
+					},
+					"frame": {
+						"x": 1471,
+						"y": 907,
+						"w": 484,
+						"h": 465
+					}
+				},
+				{
+					"filename": "explosion-4.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 132,
+						"y": 154,
+						"w": 312,
+						"h": 290
+					},
+					"frame": {
+						"x": 1082,
+						"y": 1143,
+						"w": 312,
+						"h": 290
+					}
+				},
+				{
+					"filename": "explosion-11.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 26,
+						"y": 132,
+						"w": 509,
+						"h": 359
+					},
+					"frame": {
+						"x": 1396,
+						"y": 1374,
+						"w": 509,
+						"h": 359
 					}
 				},
 				{
@@ -66,8 +255,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 771,
-						"y": 1,
+						"x": 532,
+						"y": 1212,
 						"w": 256,
 						"h": 256
 					}
@@ -87,8 +276,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1029,
-						"y": 1,
+						"x": 790,
+						"y": 1212,
 						"w": 256,
 						"h": 256
 					}
@@ -108,8 +297,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1287,
-						"y": 1,
+						"x": 1048,
+						"y": 1435,
 						"w": 256,
 						"h": 256
 					}
@@ -129,8 +318,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1545,
-						"y": 1,
+						"x": 1,
+						"y": 1259,
 						"w": 256,
 						"h": 256
 					}
@@ -150,8 +339,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 771,
-						"y": 259,
+						"x": 259,
+						"y": 1259,
 						"w": 256,
 						"h": 256
 					}
@@ -171,8 +360,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1029,
-						"y": 259,
+						"x": 517,
+						"y": 1470,
 						"w": 256,
 						"h": 256
 					}
@@ -192,8 +381,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1287,
-						"y": 259,
+						"x": 775,
+						"y": 1470,
 						"w": 256,
 						"h": 256
 					}
@@ -213,8 +402,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1545,
-						"y": 259,
+						"x": 1033,
+						"y": 1693,
 						"w": 256,
 						"h": 256
 					}
@@ -234,8 +423,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 771,
-						"y": 517,
+						"x": 1291,
+						"y": 1735,
 						"w": 256,
 						"h": 256
 					}
@@ -255,157 +444,31 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 771,
-						"y": 775,
+						"x": 1549,
+						"y": 1735,
 						"w": 256,
 						"h": 256
 					}
 				},
 				{
-					"filename": "Ship-3-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 771,
-						"y": 1033,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "flame.png",
+					"filename": "explosion-2.png",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 60,
-						"h": 135
+						"w": 556,
+						"h": 556
 					},
 					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 60,
-						"h": 134
+						"x": 174,
+						"y": 226,
+						"w": 161,
+						"h": 170
 					},
 					"frame": {
-						"x": 771,
-						"y": 1291,
-						"w": 60,
-						"h": 134
-					}
-				},
-				{
-					"filename": "Ship-3-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1029,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-5-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1287,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-5-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1545,
-						"y": 517,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-6-1.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1029,
-						"y": 775,
-						"w": 256,
-						"h": 256
-					}
-				},
-				{
-					"filename": "Ship-6-2.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 256,
-						"h": 256
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 256,
-						"h": 256
-					},
-					"frame": {
-						"x": 1029,
-						"y": 1033,
-						"w": 256,
-						"h": 256
+						"x": 1807,
+						"y": 1735,
+						"w": 161,
+						"h": 170
 					}
 				},
 				{
@@ -423,8 +486,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1287,
-						"y": 775,
+						"x": 1,
+						"y": 1517,
 						"w": 256,
 						"h": 256
 					}
@@ -444,8 +507,8 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1545,
-						"y": 775,
+						"x": 259,
+						"y": 1517,
 						"w": 256,
 						"h": 256
 					}
@@ -465,10 +528,73 @@
 						"h": 256
 					},
 					"frame": {
-						"x": 1287,
-						"y": 1033,
+						"x": 517,
+						"y": 1728,
 						"w": 256,
 						"h": 256
+					}
+				},
+				{
+					"filename": "explosion-3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 149,
+						"y": 196,
+						"w": 233,
+						"h": 214
+					},
+					"frame": {
+						"x": 775,
+						"y": 1728,
+						"w": 233,
+						"h": 214
+					}
+				},
+				{
+					"filename": "missile.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 128,
+						"h": 128
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 128,
+						"h": 128
+					},
+					"frame": {
+						"x": 1,
+						"y": 1775,
+						"w": 128,
+						"h": 128
+					}
+				},
+				{
+					"filename": "explosion-1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 556,
+						"h": 556
+					},
+					"spriteSourceSize": {
+						"x": 204,
+						"y": 249,
+						"w": 112,
+						"h": 136
+					},
+					"frame": {
+						"x": 131,
+						"y": 1775,
+						"w": 112,
+						"h": 136
 					}
 				}
 			]
@@ -477,6 +603,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:5fcac06586754f0f75c1cc3bddd97ae5:93c3f320a7a3bebc2eb77237685594bf:cbce6b53f0f49e0bf15173c25c41f876$"
+		"smartupdate": "$TexturePacker:SmartUpdate:580538232c427a1604094ddc5f6719c8:fae84a267f3ed388e4164e49810fc6cb:cbce6b53f0f49e0bf15173c25c41f876$"
 	}
 }

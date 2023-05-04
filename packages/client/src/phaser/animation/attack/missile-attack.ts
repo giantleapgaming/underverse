@@ -23,7 +23,6 @@ export function missileAttackSystem(network: NetworkLayer, phaser: PhaserLayer) 
 
   defineSystem(world, [Has(ShowAnimation)], ({ entity }) => {
     const animation = getComponentValue(ShowAnimation, entity);
-    console.log(animation);
     const sourceX = animation && animation?.sourceX;
     const sourceY = animation && animation?.sourceY;
     const destinationX = animation && animation?.destinationX;
