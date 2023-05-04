@@ -67,7 +67,7 @@ contract BuyWeaponSystem is System {
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
     // BUT NOW - its just 1000. Same price at any cell
-    uint256 totalPrice = MULTIPLIER * buyQuantity * entity_type; // To convert in 10^6 format
+    uint256 totalPrice = (MULTIPLIER * buyQuantity * entity_type) / 10; // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such weapon quantity");
 
