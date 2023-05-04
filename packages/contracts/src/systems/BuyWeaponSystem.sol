@@ -9,7 +9,7 @@ import { OwnedByComponent, ID as OwnedByComponentID } from "../components/OwnedB
 import { LevelComponent, ID as LevelComponentID } from "../components/LevelComponent.sol";
 import { OffenceComponent, ID as OffenceComponentID } from "../components/OffenceComponent.sol";
 import { getCurrentPosition, getPlayerCash } from "../utils.sol";
-import { MULTIPLIER2, MISSILE_COST } from "../constants.sol";
+import { MULTIPLIER, MISSILE_COST } from "../constants.sol";
 import "../libraries/Math.sol";
 import { EntityTypeComponent, ID as EntityTypeComponentID } from "../components/EntityTypeComponent.sol";
 import { NFTIDComponent, ID as NFTIDComponentID } from "../components/NFTIDComponent.sol";
@@ -67,7 +67,7 @@ contract BuyWeaponSystem is System {
     uint256 playerCash = getPlayerCash(CashComponent(getAddressById(components, CashComponentID)), playerID);
 
     // BUT NOW - its just 1000. Same price at any cell
-    uint256 totalPrice = MULTIPLIER2 * buyQuantity * entity_type; // To convert in 10^6 format
+    uint256 totalPrice = MULTIPLIER * buyQuantity * entity_type; // To convert in 10^6 format
 
     require(playerCash >= totalPrice, "Not enough money to buy such weapon quantity");
 
@@ -77,7 +77,7 @@ contract BuyWeaponSystem is System {
     // You get 100 Ammo for each bought unit
     OffenceComponent(getAddressById(components, OffenceComponentID)).set(
       godownEntity,
-      godownExisitingWeaponQuantity + (buyQuantity / 10)
+      godownExisitingWeaponQuantity + buyQuantity
     );
   }
 
