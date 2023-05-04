@@ -22,7 +22,7 @@ export const PolygonToL2NftBridge = async (
   const l2Wallet: Wallet = new ethers.Wallet(L2_PRIVATE_KEY, l2Provider);
 
   const protocol = window.location.protocol;
-  const domainName = window.location.hostname;
+  const domainName = window.location.host;
   const jsonPath = "/addresses.json";
   const addresses = `${protocol}//${domainName}${jsonPath}`;
 
@@ -61,6 +61,7 @@ export const PolygonToL2NftBridge = async (
       data: hex,
       l2GasLimit: 800000,
       overrides: {
+        recipient: l2Wallet.address,
         gasLimit: 1000000,
         gasPrice: await l1Provider.getGasPrice(),
       },
