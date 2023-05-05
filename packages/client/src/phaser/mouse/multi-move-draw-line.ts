@@ -153,21 +153,6 @@ export function multiMoveDrawLine(network: NetworkLayer, phaser: PhaserLayer) {
       typeof lineDetails?.x === "number" &&
       typeof lineDetails?.y === "number"
     ) {
-      const { x: destinationX, y: destinationY } = tileCoordToPixelCoord(
-        { x: lineDetails.x + 0.5, y: lineDetails.y + 0.5 },
-        tileWidth,
-        tileHeight
-      );
-      const radius = objectPool.get("move-multi-box-radius", "Sprite");
-      radius.setComponent({
-        id: "move-multi-box-radius",
-        once: (gameObject) => {
-          gameObject.setTexture("MainAtlas", `yellow-circle.png`);
-          gameObject.setPosition(destinationX, destinationY);
-          gameObject.setOrigin(0.5, 0.5);
-          gameObject.setDepth(4);
-        },
-      });
       const list = generateGrid(lineDetails.x, lineDetails.y);
       const allPositions = [...getComponentEntities(Position)].map((entity) => {
         const position = getComponentValueStrict(Position, entity);
@@ -189,6 +174,7 @@ export function multiMoveDrawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const obstacleEntityIndexList = getObstacleListWhileMove(arrayOfPointsOnThePath, { network, phaser });
         hightLight.push(...obstacleEntityIndexList);
         graphics.lineStyle(10, obstacleEntityIndexList.length ? 0xff0000 : 0xeeeeee, 1);
+
         const { x: sourceX, y: sourceY } = tileCoordToPixelCoord(
           { x: source.x + 0.5, y: source.y + 0.5 },
           tileWidth,
@@ -204,6 +190,17 @@ export function multiMoveDrawLine(network: NetworkLayer, phaser: PhaserLayer) {
         const y1 = sourceY;
         const x2 = destX;
         const y2 = destY;
+        const highlightMove = objectPool.get(`multi-highlightMove-${index}`, "Sprite");
+
+        highlightMove.setComponent({
+          id: `highlightMove`,
+          once: (gameObject) => {
+            gameObject.setTexture("MainAtlas", `wall-highlight-green.png`);
+            gameObject.setPosition(x2, y2);
+            gameObject.setDepth(5);
+            gameObject.setOrigin(0.5, 0.5);
+          },
+        });
         const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
         const dotSize = 10;
         const gapSize = 30;

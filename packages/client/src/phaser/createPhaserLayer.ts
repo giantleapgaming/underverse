@@ -34,6 +34,7 @@ import { multiSelectClickSystem } from "./mouse/multi-select-click";
 import { multiSelectSystem } from "./view/multi-select";
 import { multiMoveDrawLine } from "./mouse/multi-move-draw-line";
 import { missileAttackSystem } from "./animation/attack/missile-attack";
+import { winArea } from "./systems/win-area";
 
 export async function createPhaserLayer(network: NetworkLayer) {
   const { game, scenes, dispose: disposePhaser } = await createPhaserEngine(phaserConfig);
@@ -93,6 +94,7 @@ export async function createPhaserLayer(network: NetworkLayer) {
   shrinkingRadius(network, context);
   initialRadius(network, context);
   drawLine(network, context);
+  winArea(network, context);
 
   displayLaserSystem(network, context);
   displayMissileSystem(network, context);

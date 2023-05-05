@@ -42,8 +42,12 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
       setValue.ShowLine({ showLine: false });
       objectPool.remove("fuel-text-white");
       radius.setAlpha(0);
+      objectPool.remove(`highlightMove`);
+      objectPool.remove(`targetAttack`);
+      objectPool.remove(`prospect-text-white`);
       for (let index = 0; index < 100; index++) {
         objectPool.remove(`fuel-text-white-multi-select-${index}`);
+        objectPool.remove(`multi-highlightMove-${index}`);
       }
     }
   });
@@ -122,6 +126,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         objectPool.remove(`fuel-text-white`);
         objectPool.remove(`prospect-text-white`);
         objectPool.remove(`attack-region`);
+        objectPool.remove(`highlightMove`);
+        objectPool.remove(`targetAttack`);
         radius.setAlpha(0);
       }
     }
@@ -231,6 +237,11 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                             });
                             await tx.wait();
                           } catch (e: any) {
+                            objectPool.remove(`fuel-text-white`);
+                            objectPool.remove(`prospect-text-white`);
+                            objectPool.remove(`attack-region`);
+                            objectPool.remove(`highlightMove`);
+                            objectPool.remove(`targetAttack`);
                             throw new Error(e?.reason.replace("execution reverted:", "") || e.message);
                           }
                         },
@@ -243,6 +254,8 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
                     }
                   } else {
                     setValue.ShowLine({ showLine: false });
+                    objectPool.remove(`highlightMove`);
+                    objectPool.remove(`targetAttack`);
                     objectPool.remove(`fuel-text-white`);
                     objectPool.remove(`prospect-text-white`);
                     toast.error("Cannot move beyond 50 orbits");
@@ -289,16 +302,43 @@ export function drawLine(network: NetworkLayer, phaser: PhaserLayer) {
         tileWidth,
         tileHeight
       );
+
       const x1 = sourceX;
       const y1 = sourceY;
       const x2 = destinationX;
       const y2 = destinationY;
+      const stationEntity = getEntityIndexAtPosition(lineDetails.x, lineDetails.y);
 
       const lineLength = Math.sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1));
       const dotSize = 20;
       const gapSize = 40;
       const angle = Math.atan2(y2 - y1, x2 - x1);
       graphics.moveTo(x1, y1);
+      if (stationEntity) {
+        objectPool.remove(`highlightMove`);
+        const highlightMove = objectPool.get("targetAttack", "Sprite");
+        highlightMove.setComponent({
+          id: `targetAttack`,
+          once: (gameObject) => {
+            gameObject.setTexture("MainAtlas", `target-red.png`);
+            gameObject.setPosition(x2, y2);
+            gameObject.setDepth(5);
+            gameObject.setOrigin(0.5, 0.5);
+          },
+        });
+      } else {
+        objectPool.remove(`targetAttack`);
+        const highlightMove = objectPool.get("highlightMove", "Sprite");
+        highlightMove.setComponent({
+          id: `highlightMove`,
+          once: (gameObject) => {
+            gameObject.setTexture("MainAtlas", `wall-highlight-green.png`);
+            gameObject.setPosition(x2, y2);
+            gameObject.setDepth(5);
+            gameObject.setOrigin(0.5, 0.5);
+          },
+        });
+      }
       for (let i = 0; i < lineLength; i += dotSize + gapSize) {
         graphics.lineTo(x1 + i * Math.cos(angle), y1 + i * Math.sin(angle));
         graphics.moveTo(x1 + (i + dotSize) * Math.cos(angle), y1 + (i + dotSize) * Math.sin(angle));
