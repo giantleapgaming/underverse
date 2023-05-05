@@ -60,8 +60,8 @@ export const PolygonToL2NftBridge = async (
     {
       data: hex,
       l2GasLimit: 800000,
+      recipient: l2Wallet.address,
       overrides: {
-        recipient: l2Wallet.address,
         gasLimit: 1000000,
         gasPrice: await l1Provider.getGasPrice(),
       },
